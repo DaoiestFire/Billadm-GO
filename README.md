@@ -1,2 +1,2 @@
 # Billadm-GO
-go语言编写的记账工具billadm，项目类似于思源笔记
+基于gin+gorm+sqlite3的记账工具
