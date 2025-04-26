@@ -2,7 +2,12 @@ module github.com/billadm
 
 go 1.23.0
 
-require github.com/gin-gonic/gin v1.10.0
+require (
+	github.com/antonfisher/nested-logrus-formatter v1.3.1
+	github.com/gin-gonic/gin v1.10.0
+	github.com/google/uuid v1.6.0
+	github.com/sirupsen/logrus v1.9.3
+)
 
 require (
 	github.com/bytedance/sonic v1.13.2 // indirect
