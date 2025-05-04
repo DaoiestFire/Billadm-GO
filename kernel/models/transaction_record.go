@@ -32,3 +32,7 @@ type TransactionRecord struct {
 	CreatedAt     time.Time `gorm:"type:datetime;autoCreateTime;not null;comment:创建时间"`
 	UpdatedAt     time.Time `gorm:"type:datetime;autoUpdateTime;not null;comment:更新时间"`
 }
+
+func (tr *TransactionRecord) TableName() string {
+	return "tbl_billadm_transaction_record"
+}
