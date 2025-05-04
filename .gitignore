@@ -1,1 +1,2 @@
-./kernel/test
+kernel/test/*
+!kernel/test/.gitkeep
