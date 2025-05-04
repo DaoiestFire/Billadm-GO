@@ -20,7 +20,6 @@ type DatabaseConfig struct {
 var (
 	once   sync.Once
 	db     *gorm.DB
-	err    error
 	Config DatabaseConfig
 )
 
@@ -28,13 +27,16 @@ func GetInstance() (*gorm.DB, error) {
 	if db != nil {
 		return db, nil
 	}
+
+	var err error
 	once.Do(func() {
-		var err error
+
 		db, err = gorm.Open(sqlite.Open(Config.DatabasePath), &gorm.Config{})
 		if err != nil {
 			fmt.Println("连接数据库失败：", err)
 		}
 	})
+
 	if db != nil {
 		fmt.Println("连接数据库成功")
 		return db, nil

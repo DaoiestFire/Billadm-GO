@@ -11,11 +11,13 @@ import (
 func TestLedger_CRUD(t *testing.T) {
 	initSqlPath := filepath.Join(util.GetTestDir(), "init.sql")
 	dbPath := filepath.Join(util.GetTestDir(), util.GetRandomString(8)+".db")
+
 	_, err := db.OpenAndInit(dbPath, initSqlPath)
 	if err != nil {
 		t.Errorf("Error execute script in database, sqlPath: %s, dbPath: %s, err: %v", initSqlPath, dbPath, err)
 		return
 	}
+
 	db.Config.DatabasePath = dbPath
 	DB, err := db.GetInstance()
 	if err != nil {
@@ -33,7 +35,7 @@ func TestLedger_CRUD(t *testing.T) {
 
 	// 查询
 	var queryData Ledger
-	DB.First(&queryData, "name = ?", "test_ledger")
+	DB.Where("name = ?", "test_ledger").First(&queryData)
 	t.Logf("inserted data: %+v", queryData)
 	if queryData.Name != "test_ledger" {
 		t.Errorf("Name not correct, got: %s, want: %s.", queryData.Name, "test_ledger")
@@ -44,7 +46,7 @@ func TestLedger_CRUD(t *testing.T) {
 	id := queryData.ID
 	var modifyData Ledger
 	DB.Model(&Ledger{}).Where("id = ?", id).Update("name", "new_ledger")
-	DB.First(&modifyData, "id = ?", id)
+	DB.Where("id = ?", id).First(&modifyData)
 	t.Logf("modified data: %+v", modifyData)
 	if modifyData.Name != "new_ledger" {
 		t.Errorf("Name not correct, got: %s, want: %s.", modifyData.Name, "new_ledger")
@@ -53,8 +55,8 @@ func TestLedger_CRUD(t *testing.T) {
 
 	// 删除
 	var deleteData Ledger
-	DB.Delete(&deleteData, "id = ?", id)
-	DB.First(&deleteData, "id = ?", id)
+	DB.Where("id = ?", id).Delete(&Ledger{})
+	DB.Where("id = ?", id).First(&deleteData)
 	t.Logf("deleted data: %+v", deleteData)
 	if deleteData.Name == "new_ledger" {
 		t.Errorf("Name not correct, got: %s, want: %s.", deleteData.Name, "")

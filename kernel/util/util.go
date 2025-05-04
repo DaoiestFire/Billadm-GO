@@ -2,8 +2,8 @@ package util
 
 import (
 	"math/rand"
-	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/google/uuid"
 )
@@ -16,8 +16,8 @@ func GetUUID() string {
 }
 
 func GetTestDir() string {
-	dir, _ := os.Getwd()
-	dir = filepath.Dir(dir)
+	_, filename, _, _ := runtime.Caller(0)
+	dir := filepath.Dir(filepath.Dir(filename))
 	return filepath.Join(dir, "test")
 }
 
