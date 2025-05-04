@@ -36,11 +36,12 @@ func GetInstance() (*gorm.DB, error) {
 		}
 	})
 
-	if db != nil {
-		logger.Info("连接数据库成功, db path: %s", Config.DatabasePath)
-		return db, nil
+	if err != nil {
+		return nil, err
 	}
-	return nil, err
+
+	logger.Info("连接数据库成功, db path: %s", Config.DatabasePath)
+	return db, nil
 }
 
 // OpenAndInit 打开数据库并执行初始化脚本
