@@ -22,6 +22,7 @@ func GetTestDir() string {
 	return filepath.Join(dir, "test")
 }
 
+// GetRootDir billadm的后端二进制目录的服务即软件的根目录
 func GetRootDir() string {
 	exe, err := os.Executable()
 	if err != nil {
@@ -35,6 +36,11 @@ func GetRootDir() string {
 	}
 
 	return filepath.Dir(filepath.Dir(realPath))
+}
+
+// GetConfDir 根目录下的配置目录conf
+func GetConfDir() string {
+	return filepath.Join(GetRootDir(), "conf")
 }
 
 func GetRandomString(l int) string {
