@@ -21,7 +21,7 @@ var (
 	once   sync.Once
 	db     *gorm.DB
 	err    error
-	config DatabaseConfig
+	Config DatabaseConfig
 )
 
 func GetInstance() (*gorm.DB, error) {
@@ -30,7 +30,7 @@ func GetInstance() (*gorm.DB, error) {
 	}
 	once.Do(func() {
 		var err error
-		db, err = gorm.Open(sqlite.Open(config.DatabasePath), &gorm.Config{})
+		db, err = gorm.Open(sqlite.Open(Config.DatabasePath), &gorm.Config{})
 		if err != nil {
 			fmt.Println("连接数据库失败：", err)
 		}
