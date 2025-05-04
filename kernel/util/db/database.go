@@ -1,13 +1,13 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 	"strings"
 	"sync"
 
-	"database/sql"
-
+	"github.com/billadm/kernel/logger"
 	_ "github.com/mattn/go-sqlite3"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -30,15 +30,14 @@ func GetInstance() (*gorm.DB, error) {
 
 	var err error
 	once.Do(func() {
-
 		db, err = gorm.Open(sqlite.Open(Config.DatabasePath), &gorm.Config{})
 		if err != nil {
-			fmt.Println("连接数据库失败：", err)
+			logger.Error("连接数据库失败, db path: %s, err: %v", Config.DatabasePath, err)
 		}
 	})
 
 	if db != nil {
-		fmt.Println("连接数据库成功")
+		logger.Info("连接数据库成功, db path: %s", Config.DatabasePath)
 		return db, nil
 	}
 	return nil, err
@@ -46,12 +45,12 @@ func GetInstance() (*gorm.DB, error) {
 
 // OpenAndInit 打开数据库并执行初始化脚本
 func OpenAndInit(dbPath string, initScriptPath string) (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", dbPath)
+	database, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("打开数据库失败: %w", err)
 	}
 
-	if err = db.Ping(); err != nil {
+	if err = database.Ping(); err != nil {
 		return nil, fmt.Errorf("数据库连接验证失败: %w", err)
 	}
 
@@ -60,12 +59,12 @@ func OpenAndInit(dbPath string, initScriptPath string) (*sql.DB, error) {
 		return nil, fmt.Errorf("读取初始化脚本失败: %w", err)
 	}
 
-	if err = executeInitScript(db, string(script)); err != nil {
-		db.Close()
+	if err = executeInitScript(database, string(script)); err != nil {
+		database.Close()
 		return nil, fmt.Errorf("执行初始化脚本失败: %w", err)
 	}
 
-	return db, nil
+	return database, nil
 }
 
 // executeInitScript 执行初始化 SQL 脚本
