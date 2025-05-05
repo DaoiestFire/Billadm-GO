@@ -31,7 +31,8 @@ func TestLedger_CRUD(t *testing.T) {
 		UserID: util.GetUUID(),
 		Name:   "test_ledger",
 	}
-	DB.Create(insertData)
+	ret := DB.Create(insertData)
+	t.Logf("insert ret: %+v", ret)
 
 	// 查询
 	var queryData Ledger
