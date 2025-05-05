@@ -19,11 +19,7 @@ func TestLedger_CRUD(t *testing.T) {
 	}
 
 	db.Config.DatabasePath = dbPath
-	DB, err := db.GetInstance()
-	if err != nil {
-		t.Errorf("Error connecting to database, dbPath: %s, error: %v", dbPath, err)
-		return
-	}
+	DB := db.GetInstance()
 
 	// 插入
 	insertData := &Ledger{

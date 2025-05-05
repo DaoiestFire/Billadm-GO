@@ -1,13 +1,29 @@
 package dao
 
 import (
+	"sync"
+
 	"gorm.io/gorm"
 
 	"github.com/billadm/kernel/models"
+	"github.com/billadm/kernel/util/db"
+)
+
+var (
+	ledgerDao     LedgerDao
+	ledgerDaoOnce sync.Once
 )
 
 func GetLedgerDao() LedgerDao {
-	return nil
+	if ledgerDao != nil {
+		return ledgerDao
+	}
+	ledgerDaoOnce.Do(func() {
+		ledgerDao = &LedgerDaoImpl{
+			db: db.GetInstance(),
+		}
+	})
+	return ledgerDao
 }
 
 type LedgerDao interface {

@@ -2,5 +2,5 @@ global:
   port: "31943"
 release:
   log_level: "info"
-test:
+debug:
   log_level: "debug"

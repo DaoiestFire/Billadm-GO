@@ -7,10 +7,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/billadm/kernel/logger"
 	_ "github.com/mattn/go-sqlite3"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	"github.com/billadm/kernel/logger"
 )
 
 type DatabaseConfig struct {
@@ -23,9 +24,9 @@ var (
 	Config DatabaseConfig
 )
 
-func GetInstance() (*gorm.DB, error) {
+func GetInstance() *gorm.DB {
 	if db != nil {
-		return db, nil
+		return db
 	}
 
 	var err error
@@ -37,11 +38,11 @@ func GetInstance() (*gorm.DB, error) {
 	})
 
 	if err != nil {
-		return nil, err
+		panic(fmt.Sprintf("连接数据库失败, db path: %s, err: %v", Config.DatabasePath, err))
 	}
 
 	logger.Info("连接数据库成功, db path: %s", Config.DatabasePath)
-	return db, nil
+	return db
 }
 
 // OpenAndInit 打开数据库并执行初始化脚本

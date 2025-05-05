@@ -5,12 +5,14 @@ import (
 	"path/filepath"
 	"runtime"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/billadm/kernel/constant"
 )
 
 // GetRootDir billadm的后端二进制目录的服务即软件的根目录
 func GetRootDir() string {
-	if constant.Mode == constant.Test {
+	if constant.Mode == gin.DebugMode {
 		_, filename, _, _ := runtime.Caller(0)
 		dir := filepath.Dir(filepath.Dir(filename))
 		return dir
