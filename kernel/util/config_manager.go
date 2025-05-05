@@ -68,6 +68,8 @@ func newConfigManager() *ConfigManager {
 	mergeMaps(finalConfig, globalConfig)
 	mergeMaps(finalConfig, modeConfig)
 
+	logger.Info("final config: %v", finalConfig)
+
 	return &ConfigManager{
 		configMap: finalConfig,
 	}

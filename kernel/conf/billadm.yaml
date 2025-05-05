@@ -1,5 +1,6 @@
-profile:
-  global:
-    port: "31943"
-  release:
-  test:
+global:
+  port: "31943"
+release:
+  log_level: "info"
+test:
+  log_level: "debug"
