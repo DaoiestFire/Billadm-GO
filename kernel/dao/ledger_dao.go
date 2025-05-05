@@ -7,7 +7,7 @@ import (
 )
 
 func GetLedgerDao() LedgerDao {
-
+	return nil
 }
 
 type LedgerDao interface {

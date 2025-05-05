@@ -12,7 +12,7 @@ func main() {
 	ginServer := server.NewGinServer()
 	err := ginServer.Run(":" + port)
 	if err != nil {
-		logger.Error("start billadm err:", err)
+		logger.Error("start billadm err: %v", err)
 		return
 	}
 	logger.Info("--------- end billadm ---------")

@@ -42,15 +42,15 @@ func newConfigManager() *ConfigManager {
 	filePath := filepath.Join(GetConfDir(), constant.YamlFile)
 	data, err := os.ReadFile(filePath)
 	if err != nil {
-		logger.Error("读取文件%s失败: %w", filePath, err)
-		panic(fmt.Errorf("读取文件%s失败: %w", filePath, err))
+		logger.Error("读取文件%s失败: %v", filePath, err)
+		panic(fmt.Errorf("读取文件%s失败: %v", filePath, err))
 	}
 
 	// 解析YAML内容
 	var fileContent map[string]map[string]string
 	if err := yaml.Unmarshal(data, &fileContent); err != nil {
-		logger.Error("解析YAML文件%s失败: %w", filePath, err)
-		panic(fmt.Errorf("解析YAML文件%s失败: %w", filePath, err))
+		logger.Error("解析YAML文件%s失败: %v", filePath, err)
+		panic(fmt.Errorf("解析YAML文件%s失败: %v", filePath, err))
 	}
 
 	// 合并global配置
