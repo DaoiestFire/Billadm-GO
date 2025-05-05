@@ -10,7 +10,6 @@ import (
 	"github.com/billadm/kernel/logger"
 	"github.com/billadm/kernel/models"
 	"github.com/billadm/kernel/service"
-	"github.com/billadm/kernel/util"
 )
 
 func getLedger(c *gin.Context) {
@@ -21,7 +20,7 @@ func createLedger(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
-	arg, ok := util.JsonArg(c, ret)
+	arg, ok := JsonArg(c, ret)
 	if !ok {
 		return
 	}

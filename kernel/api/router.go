@@ -1,6 +1,10 @@
 package api
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+
+	"github.com/billadm/kernel/models"
+)
 
 func ServeAPI(ginServer *gin.Engine) {
 	// ledger
@@ -13,4 +17,16 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/tr", createTransactionRecord)
 	ginServer.PUT("/api/v1/tr", updateTransactionRecord)
 	ginServer.DELETE("/api/v1/tr", deleteTransactionRecord)
+}
+
+func JsonArg(c *gin.Context, result *models.Result) (arg map[string]interface{}, ok bool) {
+	arg = map[string]interface{}{}
+	if err := c.BindJSON(&arg); nil != err {
+		result.Code = -1
+		result.Msg = "parses request failed"
+		return
+	}
+
+	ok = true
+	return
 }

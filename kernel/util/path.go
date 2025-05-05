@@ -4,16 +4,17 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-)
 
-func GetTestDir() string {
-	_, filename, _, _ := runtime.Caller(0)
-	dir := filepath.Dir(filepath.Dir(filename))
-	return filepath.Join(dir, "test")
-}
+	"github.com/billadm/kernel/constant"
+)
 
 // GetRootDir billadm的后端二进制目录的服务即软件的根目录
 func GetRootDir() string {
+	if constant.Mode == constant.Test {
+		_, filename, _, _ := runtime.Caller(0)
+		dir := filepath.Dir(filepath.Dir(filename))
+		return dir
+	}
 	exe, err := os.Executable()
 	if err != nil {
 		panic(err)
@@ -26,6 +27,10 @@ func GetRootDir() string {
 	}
 
 	return filepath.Dir(filepath.Dir(realPath))
+}
+
+func GetTestDir() string {
+	return filepath.Join(GetRootDir(), "test")
 }
 
 // GetConfDir 根目录下的配置目录conf
