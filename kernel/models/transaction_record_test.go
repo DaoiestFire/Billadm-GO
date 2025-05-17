@@ -10,17 +10,15 @@ import (
 )
 
 func TestTR_CRUD(t *testing.T) {
-	initSqlPath := filepath.Join(util.GetTestDir(), "init.sql")
 	dbPath := filepath.Join(util.GetTestDir(), util.GetRandomString(8)+".db")
-
-	_, err := db.openAndInit(dbPath, initSqlPath)
+	err := db.Init(dbPath)
 	if err != nil {
-		t.Errorf("Error execute script in database, sqlPath: %s, dbPath: %s, err: %v", initSqlPath, dbPath, err)
+		t.Errorf("Error execute script in database, dbPath: %s, err: %v", dbPath, err)
 		return
 	}
 
-	db.Config.DatabasePath = dbPath
 	DB := db.GetInstance()
+
 	// 插入
 	id := util.GetUUID()
 	insertData := &TransactionRecord{

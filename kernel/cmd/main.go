@@ -22,11 +22,13 @@ func main() {
 		fmt.Printf("初始化日志模块失败 %v\n", err)
 	}
 	// 初始化数据库连接
-	dbName := util.GetConfigManager().Get("db_name", "billadm.db")
-	var dbPath string
+
+	var dbName, dbPath string
 	if util.IsDebugMode() {
+		dbName = util.GetRandomString(8) + ".db"
 		dbPath = filepath.Join(util.GetTestDir(), dbName)
 	} else {
+		dbName = util.GetConfigManager().Get("db_name", "billadm.db")
 		dbPath = filepath.Join(util.GetRootDir(), dbName)
 	}
 	if err := db.Init(dbPath); err != nil {

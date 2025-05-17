@@ -1,3 +1,2 @@
 kernel/test/*
 !kernel/test/.gitkeep
-!kernel/test/init.sql
