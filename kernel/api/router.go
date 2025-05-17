@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 
 	"github.com/billadm/kernel/models"
@@ -23,7 +24,7 @@ func JsonArg(c *gin.Context, result *models.Result) (arg map[string]interface{},
 	arg = map[string]interface{}{}
 	if err := c.BindJSON(&arg); nil != err {
 		result.Code = -1
-		result.Msg = "parses request failed"
+		result.Msg = fmt.Sprintf("parses request failed: %v", err)
 		return
 	}
 

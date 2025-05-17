@@ -25,7 +25,7 @@ func main() {
 
 	var dbName, dbPath string
 	if util.IsDebugMode() {
-		dbName = util.GetRandomString(8) + ".db"
+		dbName = util.GetConfigManager().Get("db_name", "billadm.db")
 		dbPath = filepath.Join(util.GetTestDir(), dbName)
 	} else {
 		dbName = util.GetConfigManager().Get("db_name", "billadm.db")
