@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS tbl_billadm_ledger
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL
 );
+
 -- 创建交易记录表
 CREATE TABLE IF NOT EXISTS tbl_billadm_transaction_record
 (
