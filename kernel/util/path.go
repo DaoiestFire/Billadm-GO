@@ -10,9 +10,13 @@ import (
 	"github.com/billadm/kernel/constant"
 )
 
+func IsDebugMode() bool {
+	return constant.Mode == gin.DebugMode
+}
+
 // GetRootDir billadm的后端二进制目录的服务即软件的根目录
 func GetRootDir() string {
-	if constant.Mode == gin.DebugMode {
+	if IsDebugMode() {
 		_, filename, _, _ := runtime.Caller(0)
 		dir := filepath.Dir(filepath.Dir(filename))
 		return dir
@@ -38,4 +42,9 @@ func GetTestDir() string {
 // GetConfDir 根目录下的配置目录conf
 func GetConfDir() string {
 	return filepath.Join(GetRootDir(), "conf")
+}
+
+// GetLogDir 根目录下的日志目录log
+func GetLogDir() string {
+	return filepath.Join(GetRootDir(), "log")
 }

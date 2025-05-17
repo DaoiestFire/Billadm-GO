@@ -5,8 +5,8 @@ import (
 )
 
 func Test_newConfigManager(t *testing.T) {
-	manager := newConfigManager()
-	if manager == nil {
+	_, err := newConfigManager()
+	if err != nil {
 		t.Fatal("newConfigManager failed")
 	}
 }
