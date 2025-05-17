@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -22,7 +23,7 @@ func getLedger(c *gin.Context) {
 		return
 	}
 
-	ledger_id, ok := arg["ledger_id"].(string)
+	ledgerId, ok := arg["ledger_id"].(string)
 	if !ok {
 		ret.Code = -1
 		ret.Msg = "ledger_id field not exist in request body"
@@ -37,22 +38,46 @@ func getLedger(c *gin.Context) {
 	}
 
 	// 返回全部的账本信息
-	if ledger_id == constant.All {
-		ledgers, err := service.GetLedgerService().ListAllLedger(userId)
+	var ledgers []models.Ledger
+	var err error
+	var jsonData []byte
+	if ledgerId == constant.All {
+		ledgers, err = service.GetLedgerService().ListAllLedger(userId)
 		if err != nil {
 			ret.Code = -1
 			ret.Msg = err.Error()
 			return
 		}
-		jsonData, err := json.Marshal(ledgers)
-		if err != nil {
-			ret.Code = -1
-			ret.Msg = err.Error()
-			return
+
+	} else {
+		ledgerIds := strings.Split(ledgerId, ",")
+		for _, id := range ledgerIds {
+			id = strings.TrimSpace(id)
+			ledger, err := service.GetLedgerService().QueryLedgerById(id)
+			if err != nil {
+				logger.Error("query ledger by id: %s err: %v", id, err)
+				continue
+			}
+			ledgers = append(ledgers, *ledger)
 		}
-		ret.Data = string(jsonData)
 	}
 
+	if len(ledgers) == 1 {
+		jsonData, err = json.Marshal(ledgers[0])
+		if err != nil {
+			ret.Code = -1
+			ret.Msg = err.Error()
+			return
+		}
+	} else {
+		jsonData, err = json.Marshal(ledgers)
+		if err != nil {
+			ret.Code = -1
+			ret.Msg = err.Error()
+			return
+		}
+	}
+	ret.Data = string(jsonData)
 	ret.Msg = "success"
 
 	return

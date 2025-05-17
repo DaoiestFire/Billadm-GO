@@ -31,6 +31,7 @@ func GetLedgerService() LedgerService {
 type LedgerService interface {
 	CreateLedger(ledgerName, userId string) (string, error)
 	ListAllLedger(userId string) ([]models.Ledger, error)
+	QueryLedgerById(ledgerId string) (*models.Ledger, error)
 }
 
 type LedgerServiceImpl struct {
@@ -69,5 +70,19 @@ func (l *LedgerServiceImpl) ListAllLedger(userId string) ([]models.Ledger, error
 	}
 
 	logger.Info("end to list all ledgers, user id: %s, len: %d", userId, len(ledgers))
+	return ledgers, nil
+}
+
+// QueryLedgerById 查询单个账本
+func (l *LedgerServiceImpl) QueryLedgerById(ledgerId string) (*models.Ledger, error) {
+	logger.Info("start to query ledger by id, id: %s", ledgerId)
+
+	ledgers, err := l.ledgerDao.QueryLedgerById(ledgerId)
+	if err != nil {
+		logger.Error("query ledger by id failed, id: %s, err: %v", ledgerId, err)
+		return nil, err
+	}
+
+	logger.Info("end to query ledger by id, id: %s", ledgerId)
 	return ledgers, nil
 }

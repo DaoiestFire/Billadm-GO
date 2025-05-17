@@ -29,6 +29,7 @@ func GetLedgerDao() LedgerDao {
 type LedgerDao interface {
 	CreateLedger(ledger *models.Ledger) error
 	ListAllLedger(userId string) ([]models.Ledger, error)
+	QueryLedgerById(ledgerId string) (*models.Ledger, error)
 }
 
 type LedgerDaoImpl struct {
@@ -52,4 +53,13 @@ func (l *LedgerDaoImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
 	}
 
 	return ledgers, nil
+}
+
+func (l *LedgerDaoImpl) QueryLedgerById(ledgerId string) (*models.Ledger, error) {
+	var ledger models.Ledger
+	if err := l.db.First(&ledger, ledgerId).Error; err != nil {
+		return nil, err
+	}
+
+	return &ledger, nil
 }
