@@ -8,8 +8,8 @@ import (
 )
 
 func TestDbConnect(t *testing.T) {
-	Config.DatabasePath = filepath.Join(util.GetTestDir(), util.GetRandomString(8)+".db")
-	if _, err := GetInstance(); err != nil {
+	dbPath := filepath.Join(util.GetTestDir(), util.GetRandomString(8)+".db")
+	if _, err := newDbInstance(dbPath); err != nil {
 		t.Error("Error connecting to database")
 	}
 }
@@ -17,7 +17,7 @@ func TestDbConnect(t *testing.T) {
 func TestOpenAndInit(t *testing.T) {
 	initSqlPath := filepath.Join(util.GetTestDir(), "init.sql")
 	dbPath := filepath.Join(util.GetTestDir(), util.GetRandomString(8)+".db")
-	if _, err := OpenAndInit(dbPath, initSqlPath); err != nil {
+	if err := openAndInit(dbPath, initSqlPath); err != nil {
 		t.Errorf("Error execute script in database, dbPath: %s, initSqlPath: %s, err: %v", dbPath, initSqlPath, err)
 	}
 }

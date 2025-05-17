@@ -12,7 +12,7 @@ func TestLedger_CRUD(t *testing.T) {
 	initSqlPath := filepath.Join(util.GetTestDir(), "init.sql")
 	dbPath := filepath.Join(util.GetTestDir(), util.GetRandomString(8)+".db")
 
-	_, err := db.OpenAndInit(dbPath, initSqlPath)
+	_, err := db.openAndInit(dbPath, initSqlPath)
 	if err != nil {
 		t.Errorf("Error execute script in database, sqlPath: %s, dbPath: %s, err: %v", initSqlPath, dbPath, err)
 		return

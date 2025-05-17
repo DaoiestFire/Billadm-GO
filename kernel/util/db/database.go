@@ -4,69 +4,70 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
-	"sync"
 
 	_ "github.com/mattn/go-sqlite3"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
 	"github.com/billadm/kernel/logger"
+	"github.com/billadm/kernel/util"
 )
 
-type DatabaseConfig struct {
-	DatabasePath string
-}
-
-var (
-	once   sync.Once
-	db     *gorm.DB
-	Config DatabaseConfig
-)
+var db *gorm.DB
 
 func GetInstance() *gorm.DB {
-	if db != nil {
-		return db
-	}
-
-	var err error
-	once.Do(func() {
-		db, err = gorm.Open(sqlite.Open(Config.DatabasePath), &gorm.Config{})
-		if err != nil {
-			logger.Error("连接数据库失败, db path: %s, err: %v", Config.DatabasePath, err)
-		}
-	})
-
-	if err != nil {
-		panic(fmt.Sprintf("连接数据库失败, db path: %s, err: %v", Config.DatabasePath, err))
-	}
-
-	logger.Info("连接数据库成功, db path: %s", Config.DatabasePath)
 	return db
 }
 
-// OpenAndInit 打开数据库并执行初始化脚本
-func OpenAndInit(dbPath string, initScriptPath string) (*sql.DB, error) {
+func Init(dbPath string) error {
+	initScriptPath := filepath.Join(util.GetConfDir(), "sql", "billadm.sql")
+	if err := openAndInit(dbPath, initScriptPath); err != nil {
+		return err
+	}
+
+	ins, err := newDbInstance(dbPath)
+	if err != nil {
+		return err
+	}
+	db = ins
+	return nil
+}
+
+func newDbInstance(dbPath string) (*gorm.DB, error) {
+	var err error
+	db, err = gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
+	if err != nil {
+		logger.Error("连接数据库失败, db path: %s, err: %v", dbPath, err)
+		return nil, fmt.Errorf("连接数据库失败, db path: %s, err: %v", dbPath, err)
+	}
+	logger.Info("连接数据库成功, db path: %s", dbPath)
+	return db, nil
+}
+
+// 打开数据库并执行初始化脚本
+func openAndInit(dbPath, initScriptPath string) error {
 	database, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		return nil, fmt.Errorf("打开数据库失败: %w", err)
+		return fmt.Errorf("打开数据库失败: %w", err)
 	}
 
 	if err = database.Ping(); err != nil {
-		return nil, fmt.Errorf("数据库连接验证失败: %w", err)
+		return fmt.Errorf("数据库连接验证失败: %w", err)
 	}
 
 	script, err := os.ReadFile(initScriptPath)
 	if err != nil {
-		return nil, fmt.Errorf("读取初始化脚本失败: %w", err)
+		return fmt.Errorf("读取初始化脚本失败: %w", err)
 	}
 
 	if err = executeInitScript(database, string(script)); err != nil {
 		database.Close()
-		return nil, fmt.Errorf("执行初始化脚本失败: %w", err)
+		return fmt.Errorf("执行初始化脚本失败: %w", err)
 	}
 
-	return database, nil
+	return nil
 }
 
 // executeInitScript 执行初始化 SQL 脚本
