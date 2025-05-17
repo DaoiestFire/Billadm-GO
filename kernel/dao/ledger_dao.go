@@ -48,7 +48,7 @@ func (l *LedgerDaoImpl) CreateLedger(ledger *models.Ledger) error {
 
 func (l *LedgerDaoImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
 	ledgers := make([]models.Ledger, 0)
-	if err := l.db.Find(&ledgers, "user_id", userId).Error; err != nil {
+	if err := l.db.Where("user_id = ?", userId).Find(&ledgers).Error; err != nil {
 		return nil, err
 	}
 
@@ -57,7 +57,7 @@ func (l *LedgerDaoImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
 
 func (l *LedgerDaoImpl) QueryLedgerById(ledgerId string) (*models.Ledger, error) {
 	var ledger models.Ledger
-	if err := l.db.First(&ledger, ledgerId).Error; err != nil {
+	if err := l.db.Where("id = ?", ledgerId).First(&ledger).Error; err != nil {
 		return nil, err
 	}
 

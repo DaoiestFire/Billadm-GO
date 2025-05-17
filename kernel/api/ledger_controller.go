@@ -56,7 +56,9 @@ func getLedger(c *gin.Context) {
 			ledger, err := service.GetLedgerService().QueryLedgerById(id)
 			if err != nil {
 				logger.Error("query ledger by id: %s err: %v", id, err)
-				continue
+				ret.Code = -1
+				ret.Msg = fmt.Sprintf("ledger not found, id: %s", id)
+				return
 			}
 			ledgers = append(ledgers, *ledger)
 		}
