@@ -48,7 +48,6 @@ func getLedger(c *gin.Context) {
 			ret.Msg = err.Error()
 			return
 		}
-
 	} else {
 		ledgerIds := strings.Split(ledgerId, ",")
 		for _, id := range ledgerIds {
