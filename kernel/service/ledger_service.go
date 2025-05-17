@@ -30,6 +30,7 @@ func GetLedgerService() LedgerService {
 
 type LedgerService interface {
 	CreateLedger(ledgerName, userId string) (string, error)
+	ListAllLedger(userId string) ([]models.Ledger, error)
 }
 
 type LedgerServiceImpl struct {
@@ -41,7 +42,6 @@ var _ LedgerService = &LedgerServiceImpl{}
 // CreateLedger 创建成功返回创建成功的账本id
 func (l *LedgerServiceImpl) CreateLedger(ledgerName, userId string) (string, error) {
 	logger.Info("start to create ledger, name: %s, user id: %s", ledgerName, userId)
-	// TODO:校验userID是否合法
 	// 账本名称可以重复，不需要校验账本名称
 	ledger := &models.Ledger{
 		ID:     util.GetUUID(),
@@ -56,4 +56,18 @@ func (l *LedgerServiceImpl) CreateLedger(ledgerName, userId string) (string, err
 
 	logger.Info("create ledger success, name: %s, user id: %s", ledgerName, userId)
 	return ledger.ID, nil
+}
+
+// ListAllLedger 查询用户的所有账本
+func (l *LedgerServiceImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
+	logger.Info("start to list all ledgers, user id: %s", userId)
+
+	ledgers, err := l.ledgerDao.ListAllLedger(userId)
+	if err != nil {
+		logger.Error("list all ledgers failed, user id: %s, err: %v", userId, err)
+		return nil, err
+	}
+
+	logger.Info("end to list all ledgers, user id: %s, len: %d", userId, len(ledgers))
+	return ledgers, nil
 }
