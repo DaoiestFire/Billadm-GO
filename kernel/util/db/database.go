@@ -15,6 +15,10 @@ import (
 	"github.com/billadm/kernel/util"
 )
 
+const (
+	SqlFileName = "billadm.sql"
+)
+
 var db *gorm.DB
 
 func GetInstance() *gorm.DB {
@@ -22,7 +26,7 @@ func GetInstance() *gorm.DB {
 }
 
 func Init(dbPath string) error {
-	initScriptPath := filepath.Join(util.GetConfDir(), "sql", "billadm.sql")
+	initScriptPath := filepath.Join(util.GetConfDir(), "sql", SqlFileName)
 	if err := openAndInit(dbPath, initScriptPath); err != nil {
 		return err
 	}

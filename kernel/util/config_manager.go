@@ -2,13 +2,23 @@ package util
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
 
+	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 
 	"github.com/billadm/kernel/constant"
+)
+
+const (
+	YamlFile = "billadm.yaml"
+	Global   = "global"
+
+	Port     = "port"
+	DbName   = "db_name"
+	LogLevel = "log_level"
+	LogFile  = "log_file"
 )
 
 var configManager *ConfigManager
@@ -35,7 +45,7 @@ func newConfigManager() (*ConfigManager, error) {
 	globalConfig := make(map[string]string)
 	modeConfig := make(map[string]string)
 
-	filePath := filepath.Join(GetConfDir(), constant.YamlFile)
+	filePath := filepath.Join(GetConfDir(), YamlFile)
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		logrus.Errorf("读取文件%s失败: %v", filePath, err)
@@ -49,7 +59,7 @@ func newConfigManager() (*ConfigManager, error) {
 	}
 
 	// 合并global配置
-	if globalSection, exists := fileContent["global"]; exists {
+	if globalSection, exists := fileContent[Global]; exists {
 		mergeMaps(globalConfig, globalSection)
 	}
 

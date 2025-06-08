@@ -19,25 +19,25 @@ func main() {
 		panic(fmt.Sprintf("初始化配置管理器失败 %v", err))
 	}
 	// 初始化日志配置
-	logLevel := util.GetConfigManager().Get("log_level", "info")
-	logFile := util.GetConfigManager().Get("log_file", "billadm.log")
+	logLevel := util.GetConfigManager().Get(util.LogLevel, "info")
+	logFile := util.GetConfigManager().Get(util.LogFile, "billadm.log")
 	if err := logger.Init(logLevel, util.GetLogDir(), logFile); err != nil {
 		panic(fmt.Sprintf("初始化日志模块失败 %v", err))
 	}
 	// 初始化数据库连接
-
 	var dbName, dbPath string
-	dbName = util.GetConfigManager().Get("db_name", "billadm.db")
+	dbName = util.GetConfigManager().Get(util.DbName, "billadm.db")
 	if util.IsDebugMode() {
 		dbPath = filepath.Join(util.GetTestDir(), dbName)
 	} else {
 		dbPath = filepath.Join(util.GetRootDir(), dbName)
 	}
 	if err := db.Init(dbPath); err != nil {
-		fmt.Printf("初始化数据库连接失败 %v\n", err)
+		panic(fmt.Sprintf("初始化数据库连接失败 %v", err))
 	}
+	// 启动服务器
 	logrus.Info("--------- start billadm ---------")
-	port := util.GetConfigManager().Get("port", "31943")
+	port := util.GetConfigManager().Get(util.Port, "31943")
 	ginServer := server.NewGinServer()
 	if !util.IsDebugMode() {
 		gin.SetMode(gin.ReleaseMode)
