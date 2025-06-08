@@ -113,7 +113,8 @@ func createLedger(c *gin.Context) {
 		return
 	}
 
-	ret.Msg = fmt.Sprintf("create ledger successfully, ledger id: %s", ledgerId)
+	ret.Msg = "success"
+	ret.Data = ledgerId
 
 	return
 }

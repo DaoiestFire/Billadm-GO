@@ -19,7 +19,7 @@ func GetLedgerDao() LedgerDao {
 		return ledgerDao
 	}
 	ledgerDaoOnce.Do(func() {
-		ledgerDao = &LedgerDaoImpl{
+		ledgerDao = &ledgerDaoImpl{
 			db: db.GetInstance(),
 		}
 	})
@@ -32,13 +32,13 @@ type LedgerDao interface {
 	QueryLedgerById(ledgerId string) (*models.Ledger, error)
 }
 
-type LedgerDaoImpl struct {
+var _ LedgerDao = &ledgerDaoImpl{}
+
+type ledgerDaoImpl struct {
 	db *gorm.DB
 }
 
-var _ LedgerDao = &LedgerDaoImpl{}
-
-func (l *LedgerDaoImpl) CreateLedger(ledger *models.Ledger) error {
+func (l *ledgerDaoImpl) CreateLedger(ledger *models.Ledger) error {
 	if err := l.db.Create(ledger).Error; err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (l *LedgerDaoImpl) CreateLedger(ledger *models.Ledger) error {
 	return nil
 }
 
-func (l *LedgerDaoImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
+func (l *ledgerDaoImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
 	ledgers := make([]models.Ledger, 0)
 	if err := l.db.Where("user_id = ?", userId).Find(&ledgers).Error; err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (l *LedgerDaoImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
 	return ledgers, nil
 }
 
-func (l *LedgerDaoImpl) QueryLedgerById(ledgerId string) (*models.Ledger, error) {
+func (l *ledgerDaoImpl) QueryLedgerById(ledgerId string) (*models.Ledger, error) {
 	var ledger models.Ledger
 	if err := l.db.Where("id = ?", ledgerId).First(&ledger).Error; err != nil {
 		return nil, err

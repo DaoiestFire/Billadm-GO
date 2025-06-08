@@ -21,7 +21,7 @@ func GetLedgerService() LedgerService {
 	}
 
 	ledgerServiceOnce.Do(func() {
-		ledgerService = &LedgerServiceImpl{
+		ledgerService = &ledgerServiceImpl{
 			ledgerDao: dao.GetLedgerDao(),
 		}
 	})
@@ -35,14 +35,14 @@ type LedgerService interface {
 	QueryLedgerById(ledgerId string) (*models.Ledger, error)
 }
 
-type LedgerServiceImpl struct {
+var _ LedgerService = &ledgerServiceImpl{}
+
+type ledgerServiceImpl struct {
 	ledgerDao dao.LedgerDao
 }
 
-var _ LedgerService = &LedgerServiceImpl{}
-
-// CreateLedger 创建成功返回创建成功的账本id
-func (l *LedgerServiceImpl) CreateLedger(ledgerName, userId string) (string, error) {
+// CreateLedger 创建成功返回创建账本id
+func (l *ledgerServiceImpl) CreateLedger(ledgerName, userId string) (string, error) {
 	logrus.Infof("start to create ledger, name: %s, user id: %s", ledgerName, userId)
 	// 账本名称可以重复，不需要校验账本名称
 	ledger := &models.Ledger{
@@ -61,7 +61,7 @@ func (l *LedgerServiceImpl) CreateLedger(ledgerName, userId string) (string, err
 }
 
 // ListAllLedger 查询用户的所有账本
-func (l *LedgerServiceImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
+func (l *ledgerServiceImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
 	logrus.Infof("start to list all ledgers, user id: %s", userId)
 
 	ledgers, err := l.ledgerDao.ListAllLedger(userId)
@@ -75,7 +75,7 @@ func (l *LedgerServiceImpl) ListAllLedger(userId string) ([]models.Ledger, error
 }
 
 // QueryLedgerById 查询单个账本
-func (l *LedgerServiceImpl) QueryLedgerById(ledgerId string) (*models.Ledger, error) {
+func (l *ledgerServiceImpl) QueryLedgerById(ledgerId string) (*models.Ledger, error) {
 	logrus.Infof("start to query ledger by id, id: %s", ledgerId)
 
 	ledgers, err := l.ledgerDao.QueryLedgerById(ledgerId)

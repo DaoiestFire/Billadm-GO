@@ -1,0 +1,66 @@
+package dto
+
+import (
+	"encoding/json"
+	"fmt"
+	"time"
+
+	"github.com/gin-gonic/gin"
+
+	"github.com/billadm/kernel/models"
+)
+
+func JsonTransactionRecordDto(c *gin.Context, result *models.Result) (*TransactionRecordDto, bool) {
+	ret := &TransactionRecordDto{}
+	if err := c.BindJSON(ret); nil != err {
+		result.Code = -1
+		result.Msg = fmt.Sprintf("parses request failed: %v", err)
+		return nil, false
+	}
+	return ret, true
+}
+
+type TransactionRecordDto struct {
+	LedgerID string `json:"ledger_id"`
+
+	// 交易核心信息
+	Price           float64 `json:"price"`
+	TransactionType string  ` json:"transaction_type"`
+
+	// 分类与描述
+	CategoryID  string ` json:"category_id"`
+	Description string ` json:"description"`
+	Tags        string ` json:"tags"`
+
+	// 时间信息
+	TransactionAt int64 `json:"transaction_at"`
+}
+
+func (dto *TransactionRecordDto) Validate(result *models.Result) bool {
+	// TODO:校验账本ID是否合法
+	// 校验交易类型是否合法
+	if dto.TransactionType != models.Income && dto.TransactionType != models.Expense && dto.TransactionType != models.Transfer {
+		result.Code = -1
+		result.Msg = fmt.Sprintf("invalid transaction type: %s", dto.TransactionType)
+		return false
+	}
+	// TODO: 校验类型ID是否合法
+	return true
+}
+
+func (dto *TransactionRecordDto) Vo(result *models.Result) (*models.TransactionRecord, bool) {
+	tr := &models.TransactionRecord{}
+	tr.LedgerID = dto.LedgerID
+	tr.Price = dto.Price
+	tr.TransactionType = dto.TransactionType
+	tr.CategoryID = dto.CategoryID
+	tr.Description = dto.Description
+	tr.Tags = models.StringSlice{}
+	if err := json.Unmarshal([]byte(dto.Tags), &tr.Tags); err != nil {
+		result.Code = -1
+		result.Msg = err.Error()
+		return nil, false
+	}
+	tr.TransactionAt = time.Unix(dto.TransactionAt/1000, (dto.TransactionAt%1000)*int64(time.Millisecond))
+	return tr, true
+}

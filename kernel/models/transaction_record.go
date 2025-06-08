@@ -4,13 +4,10 @@ import (
 	"time"
 )
 
-// TransactionType 交易类型枚举
-type TransactionType string
-
 const (
-	Income   TransactionType = "income"
-	Expense  TransactionType = "expense"
-	Transfer TransactionType = "transfer"
+	Income   = "income"
+	Expense  = "expense"
+	Transfer = "transfer"
 )
 
 // TransactionRecord 消费记录结构体
@@ -19,8 +16,8 @@ type TransactionRecord struct {
 	LedgerID      string `gorm:"not null;index;comment:关联账本ID" json:"ledger_id"`
 
 	// 交易核心信息
-	Price           float64         `gorm:"not null;comment:交易金额" json:"price"`
-	TransactionType TransactionType `gorm:"not null;index;comment:交易类型" json:"transaction_type"`
+	Price           float64 `gorm:"not null;comment:交易金额" json:"price"`
+	TransactionType string  `gorm:"not null;index;comment:交易类型" json:"transaction_type"`
 
 	// 分类与描述
 	CategoryID  string      `gorm:"not null;index;comment:分类ID" json:"category_id"`
