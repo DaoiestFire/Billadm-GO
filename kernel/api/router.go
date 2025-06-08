@@ -14,7 +14,7 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.PUT("/api/v1/ledger", updateLedger)
 	ginServer.DELETE("/api/v1/ledger", deleteLedger)
 	// transaction record
-	ginServer.GET("/api/v1/ledger/:id/tr", getTransactionRecord)
+	ginServer.GET("/api/v1/tr", getTransactionRecord)
 	ginServer.POST("/api/v1/tr", createTransactionRecord)
 	ginServer.PUT("/api/v1/tr", updateTransactionRecord)
 	ginServer.DELETE("/api/v1/tr", deleteTransactionRecord)
