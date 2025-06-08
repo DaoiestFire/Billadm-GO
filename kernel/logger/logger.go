@@ -2,38 +2,19 @@
 package logger
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
+	"strconv"
 
 	"github.com/sirupsen/logrus"
 )
 
-var log *logrus.Logger
-
-type CustomFormatter struct{}
-
-func (f *CustomFormatter) Format(entry *logrus.Entry) ([]byte, error) {
-	timestamp := entry.Time.Format("2006-01-02 15:04:05")
-	level := strings.ToUpper(entry.Level.String())[:4]
-	file := entry.Data["file"]
-	line := entry.Data["line"]
-	msg := entry.Message
-	fl := fmt.Sprintf("[%s:%v]", file, line)
-
-	logLine := fmt.Sprintf("%s [%s] %s %s\n",
-		timestamp,
-		level,
-		fl,
-		msg,
-	)
-	return []byte(logLine), nil
-}
+var log = logrus.StandardLogger()
 
 func init() {
-	log = logrus.New()
 	log.SetOutput(os.Stdout)
 	log.SetLevel(logrus.DebugLevel)
 	log.SetFormatter(&CustomFormatter{})
@@ -51,7 +32,7 @@ func Init(level, path, name string) error {
 	// 设置输出目标
 	if path != "" && name != "" {
 		fullPath := filepath.Join(path, name)
-		file, err := os.OpenFile(fullPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		file, err := os.OpenFile(fullPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
 		if err != nil {
 			return err
 		}
@@ -60,51 +41,24 @@ func Init(level, path, name string) error {
 	return nil
 }
 
-// 获取调用者信息
-func getCaller(skip int) (file string, line int) {
-	_, filePath, line, ok := runtime.Caller(skip)
-	if !ok {
-		return "unknown", 0
+type CustomFormatter struct{}
+
+func (f *CustomFormatter) Format(entry *logrus.Entry) ([]byte, error) {
+	timestamp := entry.Time.Format("2006-01-02 15:04:05")
+	var logLine string
+	if entry.HasCaller() {
+		logLine = fmt.Sprintf("[%s] [%s] [goroutine-%d] [%s:%d] %s\n", timestamp, entry.Level.String(), getGoID(), entry.Caller.File, entry.Caller.Line, entry.Message)
+	} else {
+		logLine = fmt.Sprintf("[%s] [%s] [goroutine-%d] %s\n", timestamp, entry.Level.String(), getGoID(), entry.Message)
 	}
-	return filepath.Base(filePath), line
+	return []byte(logLine), nil
 }
 
-func Debug(format string, args ...interface{}) {
-	if log.IsLevelEnabled(logrus.DebugLevel) {
-		file, line := getCaller(2)
-		log.WithFields(logrus.Fields{
-			"file": file,
-			"line": line,
-		}).Debugf(format, args...)
-	}
-}
-
-func Info(format string, args ...interface{}) {
-	if log.IsLevelEnabled(logrus.InfoLevel) {
-		file, line := getCaller(2)
-		log.WithFields(logrus.Fields{
-			"file": file,
-			"line": line,
-		}).Infof(format, args...)
-	}
-}
-
-func Warn(format string, args ...interface{}) {
-	if log.IsLevelEnabled(logrus.WarnLevel) {
-		file, line := getCaller(2)
-		log.WithFields(logrus.Fields{
-			"file": file,
-			"line": line,
-		}).Warnf(format, args...)
-	}
-}
-
-func Error(format string, args ...interface{}) {
-	if log.IsLevelEnabled(logrus.ErrorLevel) {
-		file, line := getCaller(2)
-		log.WithFields(logrus.Fields{
-			"file": file,
-			"line": line,
-		}).Errorf(format, args...)
-	}
+func getGoID() uint64 {
+	b := make([]byte, 64)
+	b = b[:runtime.Stack(b, false)]
+	b = bytes.TrimPrefix(b, []byte("goroutine "))
+	b = b[:bytes.IndexByte(b, ' ')]
+	n, _ := strconv.ParseUint(string(b), 10, 64)
+	return n
 }

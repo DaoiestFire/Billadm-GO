@@ -1,17 +1,20 @@
 package logger
 
-import "testing"
+import (
+	"github.com/sirupsen/logrus"
+	"testing"
+)
 
 func TestLogger(t *testing.T) {
-	Debug("test debug")
-	Debug("test debug: %s", "string")
+	logrus.Debug("test debug")
+	logrus.Debugf("test debug: %s", "string")
 
-	Warn("test warn")
-	Warn("test warn: %s", "string")
+	logrus.Warn("test warn")
+	logrus.Warnf("test warn: %s", "string")
 
-	Info("test info")
-	Info("test info: %s", "string")
+	logrus.Info("test info")
+	logrus.Infof("test info: %s", "string")
 
-	Error("test error")
-	Error("test error: %s", "string")
+	logrus.Error("test error")
+	logrus.Errorf("test error: %s", "string")
 }

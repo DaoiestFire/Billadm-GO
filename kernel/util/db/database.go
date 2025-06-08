@@ -8,10 +8,10 @@ import (
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"github.com/billadm/kernel/logger"
 	"github.com/billadm/kernel/util"
 )
 
@@ -39,10 +39,10 @@ func newDbInstance(dbPath string) (*gorm.DB, error) {
 	var err error
 	db, err = gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
-		logger.Error("连接数据库失败, db path: %s, err: %v", dbPath, err)
+		logrus.Errorf("连接数据库失败, db path: %s, err: %v", dbPath, err)
 		return nil, fmt.Errorf("连接数据库失败, db path: %s, err: %v", dbPath, err)
 	}
-	logger.Info("连接数据库成功, db path: %s", dbPath)
+	logrus.Infof("连接数据库成功, db path: %s", dbPath)
 	return db, nil
 }
 

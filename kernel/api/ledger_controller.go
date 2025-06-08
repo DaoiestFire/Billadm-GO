@@ -3,13 +3,13 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 
 	"github.com/billadm/kernel/constant"
-	"github.com/billadm/kernel/logger"
 	"github.com/billadm/kernel/models"
 	"github.com/billadm/kernel/service"
 )
@@ -33,7 +33,7 @@ func getLedger(c *gin.Context) {
 	userId := constant.DefaultUUID
 	userName, ok := arg["username"].(string)
 	if ok {
-		logger.Info("create ledger with username: %v", userName)
+		logrus.Infof("create ledger with username: %v", userName)
 		// TODO: 检查用户是否存在，如果存在则使用指定用户的用户id
 	}
 
@@ -54,7 +54,7 @@ func getLedger(c *gin.Context) {
 			id = strings.TrimSpace(id)
 			ledger, err := service.GetLedgerService().QueryLedgerById(id)
 			if err != nil {
-				logger.Error("query ledger by id: %s err: %v", id, err)
+				logrus.Errorf("query ledger by id: %s err: %v", id, err)
 				ret.Code = -1
 				ret.Msg = fmt.Sprintf("ledger not found, id: %s", id)
 				return
@@ -103,7 +103,7 @@ func createLedger(c *gin.Context) {
 	userId := constant.DefaultUUID
 	userName, ok := arg["username"].(string)
 	if ok {
-		logger.Info("create ledger with username: %v", userName)
+		logrus.Infof("create ledger with username: %v", userName)
 		// TODO: 检查用户是否存在，如果存在则使用指定用户的用户id
 	}
 	ledgerId, err := service.GetLedgerService().CreateLedger(ledgerName, userId)

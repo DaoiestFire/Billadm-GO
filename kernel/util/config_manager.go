@@ -2,13 +2,13 @@ package util
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
 
 	"gopkg.in/yaml.v3"
 
 	"github.com/billadm/kernel/constant"
-	"github.com/billadm/kernel/logger"
 )
 
 var configManager *ConfigManager
@@ -38,13 +38,13 @@ func newConfigManager() (*ConfigManager, error) {
 	filePath := filepath.Join(GetConfDir(), constant.YamlFile)
 	data, err := os.ReadFile(filePath)
 	if err != nil {
-		logger.Error("读取文件%s失败: %v", filePath, err)
+		logrus.Errorf("读取文件%s失败: %v", filePath, err)
 		return nil, fmt.Errorf("读取文件%s失败: %v", filePath, err)
 	}
 
 	var fileContent map[string]map[string]string
 	if err := yaml.Unmarshal(data, &fileContent); err != nil {
-		logger.Error("解析YAML文件%s失败: %v", filePath, err)
+		logrus.Errorf("解析YAML文件%s失败: %v", filePath, err)
 		return nil, fmt.Errorf("解析YAML文件%s失败: %v", filePath, err)
 	}
 
@@ -63,7 +63,7 @@ func newConfigManager() (*ConfigManager, error) {
 	mergeMaps(finalConfig, globalConfig)
 	mergeMaps(finalConfig, modeConfig)
 
-	logger.Info("final config: %+v", finalConfig)
+	logrus.Infof("final config: %+v", finalConfig)
 
 	return &ConfigManager{
 		configMap: finalConfig,
