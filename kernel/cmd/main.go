@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+
 	"github.com/billadm/kernel/logger"
 	"github.com/billadm/kernel/server"
 	"github.com/billadm/kernel/util"
 	"github.com/billadm/kernel/util/db"
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -37,6 +39,9 @@ func main() {
 	logrus.Info("--------- start billadm ---------")
 	port := util.GetConfigManager().Get("port", "31943")
 	ginServer := server.NewGinServer()
+	if !util.IsDebugMode() {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	err := ginServer.Run(":" + port)
 	if err != nil {
 		logrus.Errorf("start billadm err: %v", err)
