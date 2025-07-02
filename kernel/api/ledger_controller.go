@@ -31,24 +31,26 @@ func getLedger(c *gin.Context) {
 	}
 
 	userId := constant.DefaultUUID
-	userName, ok := arg["username"].(string)
+	id, ok := arg["user_id"].(string)
 	if ok {
-		logrus.Infof("create ledger with username: %v", userName)
-		// TODO: 检查用户是否存在，如果存在则使用指定用户的用户id
+		logrus.Infof("get ledger with user id: %v", id)
+		// TODO: 检查用户是否存在，如果存在则使用指定的用户id
+		userId = id
 	}
 
-	// 返回全部的账本信息
 	var ledgers []models.Ledger
 	var err error
 	var jsonData []byte
 	if ledgerId == constant.All {
-		ledgers, err = service.GetLedgerService().ListAllLedger(userId)
+		// 返回全部的账本信息
+		ledgers, err = service.GetLedgerService().ListAllLedgerByUserId(userId)
 		if err != nil {
 			ret.Code = -1
 			ret.Msg = err.Error()
 			return
 		}
 	} else {
+		// 查询指定id的账本
 		ledgerIds := strings.Split(ledgerId, ",")
 		for _, id := range ledgerIds {
 			id = strings.TrimSpace(id)
@@ -78,6 +80,7 @@ func getLedger(c *gin.Context) {
 			return
 		}
 	}
+
 	ret.Data = string(jsonData)
 	ret.Msg = "success"
 
@@ -101,11 +104,13 @@ func createLedger(c *gin.Context) {
 	}
 
 	userId := constant.DefaultUUID
-	userName, ok := arg["username"].(string)
+	id, ok := arg["user_id"].(string)
 	if ok {
-		logrus.Infof("create ledger with username: %v", userName)
-		// TODO: 检查用户是否存在，如果存在则使用指定用户的用户id
+		logrus.Infof("create ledger with user id: %v", id)
+		// TODO: 检查用户是否存在，如果存在则使用指定的用户id
+		userId = id
 	}
+	// 在指定用户下创建账本
 	ledgerId, err := service.GetLedgerService().CreateLedger(ledgerName, userId)
 	if err != nil {
 		ret.Code = -1
@@ -113,8 +118,8 @@ func createLedger(c *gin.Context) {
 		return
 	}
 
-	ret.Msg = "success"
 	ret.Data = ledgerId
+	ret.Msg = "success"
 
 	return
 }

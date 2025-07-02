@@ -30,6 +30,7 @@ func GetTrDao() TransactionRecordDao {
 
 type TransactionRecordDao interface {
 	CreateTr(*models.TransactionRecord) error
+	ListAllTrByLedgerId(string) ([]*models.TransactionRecord, error)
 }
 
 var _ TransactionRecordDao = &transactionRecordDaoImpl{}
@@ -39,6 +40,18 @@ type transactionRecordDaoImpl struct {
 }
 
 func (t transactionRecordDaoImpl) CreateTr(record *models.TransactionRecord) error {
-	//TODO implement me
+	if err := t.db.Create(record).Error; err != nil {
+		return err
+	}
+
 	return nil
+}
+
+func (t transactionRecordDaoImpl) ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error) {
+	trs := make([]*models.TransactionRecord, 0)
+	if err := t.db.Where("ledger_id = ?", ledgerId).Find(&trs).Error; err != nil {
+		return nil, err
+	}
+
+	return trs, nil
 }

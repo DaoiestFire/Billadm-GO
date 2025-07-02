@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
@@ -16,13 +15,13 @@ import (
 func main() {
 	// 初始化配置管理器
 	if err := util.InitConfigManager(); err != nil {
-		panic(fmt.Sprintf("初始化配置管理器失败 %v", err))
+		logrus.Fatalf("初始化配置管理器失败 %v", err)
 	}
 	// 初始化日志配置
 	logLevel := util.GetConfigManager().Get(util.LogLevel, "info")
 	logFile := util.GetConfigManager().Get(util.LogFile, "billadm.log")
 	if err := logger.Init(logLevel, util.GetLogDir(), logFile); err != nil {
-		panic(fmt.Sprintf("初始化日志模块失败 %v", err))
+		logrus.Fatalf("初始化日志模块失败 %v", err)
 	}
 	// 初始化数据库连接
 	var dbName, dbPath string
@@ -33,7 +32,7 @@ func main() {
 		dbPath = filepath.Join(util.GetRootDir(), dbName)
 	}
 	if err := db.Init(dbPath); err != nil {
-		panic(fmt.Sprintf("初始化数据库连接失败 %v", err))
+		logrus.Fatalf("初始化数据库连接失败 %v", err)
 	}
 	// 启动服务器
 	logrus.Info("--------- start billadm ---------")

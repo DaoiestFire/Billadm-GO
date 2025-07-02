@@ -28,7 +28,7 @@ func GetLedgerDao() LedgerDao {
 
 type LedgerDao interface {
 	CreateLedger(ledger *models.Ledger) error
-	ListAllLedger(userId string) ([]models.Ledger, error)
+	ListAllLedgerByUserId(userId string) ([]models.Ledger, error)
 	QueryLedgerById(ledgerId string) (*models.Ledger, error)
 }
 
@@ -46,7 +46,7 @@ func (l *ledgerDaoImpl) CreateLedger(ledger *models.Ledger) error {
 	return nil
 }
 
-func (l *ledgerDaoImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
+func (l *ledgerDaoImpl) ListAllLedgerByUserId(userId string) ([]models.Ledger, error) {
 	ledgers := make([]models.Ledger, 0)
 	if err := l.db.Where("user_id = ?", userId).Find(&ledgers).Error; err != nil {
 		return nil, err

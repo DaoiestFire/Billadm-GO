@@ -31,6 +31,7 @@ func GetTrService() TransactionRecordService {
 
 type TransactionRecordService interface {
 	CreateTr(*models.TransactionRecord) (string, error)
+	ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error)
 }
 
 var _ TransactionRecordService = &transactionRecordServiceImpl{}
@@ -40,7 +41,7 @@ type transactionRecordServiceImpl struct {
 }
 
 // CreateTr 创建成功返回交易记录的id
-func (t transactionRecordServiceImpl) CreateTr(record *models.TransactionRecord) (string, error) {
+func (t *transactionRecordServiceImpl) CreateTr(record *models.TransactionRecord) (string, error) {
 	logrus.Infof("start to create transaction record, ledger id: %s, description: %s", record.LedgerID, record.Description)
 
 	record.TransactionID = util.GetUUID()
@@ -52,4 +53,16 @@ func (t transactionRecordServiceImpl) CreateTr(record *models.TransactionRecord)
 
 	logrus.Infof("create transaction record success, ledger id: %s,description: %s", record.LedgerID, record.Description)
 	return record.TransactionID, nil
+}
+
+func (t *transactionRecordServiceImpl) ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error) {
+	logrus.Infof("start to list all transaction record, ledger id: %s", ledgerId)
+
+	trs, err := t.trDao.ListAllTrByLedgerId(ledgerId)
+	if err != nil {
+		return nil, err
+	}
+
+	logrus.Infof("list all transaction record success, ledger id: %s, len: %d", ledgerId, len(trs))
+	return trs, err
 }

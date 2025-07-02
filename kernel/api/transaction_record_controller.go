@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,40 @@ import (
 )
 
 func getTransactionRecord(c *gin.Context) {
+	ret := models.NewResult()
+	defer c.JSON(http.StatusOK, ret)
 
+	arg, ok := JsonArg(c, ret)
+	if !ok {
+		return
+	}
+
+	ledgerId, ok := arg["ledger_id"].(string)
+	if !ok {
+		ret.Code = -1
+		ret.Msg = "ledger_id field not exist in request body"
+		return
+	}
+
+	//TODO 当前仅能查询账本中的所有的账单
+	trs, err := service.GetTrService().ListAllTrByLedgerId(ledgerId)
+	if err != nil {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	}
+
+	jsonData, err := json.Marshal(trs)
+	if err != nil {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	}
+
+	ret.Data = string(jsonData)
+	ret.Code = http.StatusOK
+
+	return
 }
 
 func createTransactionRecord(c *gin.Context) {
@@ -45,8 +79,8 @@ func createTransactionRecord(c *gin.Context) {
 		return
 	}
 
-	ret.Msg = "success"
 	ret.Data = trId
+	ret.Msg = "success"
 
 	return
 }

@@ -31,7 +31,7 @@ func GetLedgerService() LedgerService {
 
 type LedgerService interface {
 	CreateLedger(ledgerName, userId string) (string, error)
-	ListAllLedger(userId string) ([]models.Ledger, error)
+	ListAllLedgerByUserId(userId string) ([]models.Ledger, error)
 	QueryLedgerById(ledgerId string) (*models.Ledger, error)
 }
 
@@ -60,11 +60,11 @@ func (l *ledgerServiceImpl) CreateLedger(ledgerName, userId string) (string, err
 	return ledger.ID, nil
 }
 
-// ListAllLedger 查询用户的所有账本
-func (l *ledgerServiceImpl) ListAllLedger(userId string) ([]models.Ledger, error) {
+// ListAllLedgerByUserId 查询用户的所有账本
+func (l *ledgerServiceImpl) ListAllLedgerByUserId(userId string) ([]models.Ledger, error) {
 	logrus.Infof("start to list all ledgers, user id: %s", userId)
 
-	ledgers, err := l.ledgerDao.ListAllLedger(userId)
+	ledgers, err := l.ledgerDao.ListAllLedgerByUserId(userId)
 	if err != nil {
 		logrus.Errorf("list all ledgers failed, user id: %s, err: %v", userId, err)
 		return nil, err
