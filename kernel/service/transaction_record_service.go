@@ -51,7 +51,7 @@ func (t *transactionRecordServiceImpl) CreateTr(record *models.TransactionRecord
 		return "", err
 	}
 
-	logrus.Infof("create transaction record success, ledger id: %s,description: %s", record.LedgerID, record.Description)
+	logrus.Infof("create transaction record success, ledger id: %s, description: %s", record.LedgerID, record.Description)
 	return record.TransactionID, nil
 }
 
