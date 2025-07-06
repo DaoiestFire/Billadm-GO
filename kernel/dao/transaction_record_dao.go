@@ -58,7 +58,7 @@ func (t transactionRecordDaoImpl) ListAllTrByLedgerId(ledgerId string) ([]*model
 }
 
 func (t transactionRecordDaoImpl) DeleteTrById(trId string) error {
-	if err := t.db.Where("tr_id = ?", trId).Delete(&models.TransactionRecord{}).Error; err != nil {
+	if err := t.db.Where("transaction_id = ?", trId).Delete(&models.TransactionRecord{}).Error; err != nil {
 		return err
 	}
 	return nil
