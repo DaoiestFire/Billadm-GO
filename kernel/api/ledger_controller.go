@@ -129,5 +129,29 @@ func updateLedger(c *gin.Context) {
 }
 
 func deleteLedger(c *gin.Context) {
+	ret := models.NewResult()
+	defer c.JSON(http.StatusOK, ret)
 
+	arg, ok := JsonArg(c, ret)
+	if !ok {
+		return
+	}
+
+	trId, ok := arg["ledger_id"].(string)
+	if !ok {
+		ret.Code = -1
+		ret.Msg = "ledger_id field not exist in request body"
+		return
+	}
+
+	err := service.GetLedgerService().DeleteLedgerById(trId)
+	if err != nil {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	}
+
+	ret.Msg = "success"
+
+	return
 }

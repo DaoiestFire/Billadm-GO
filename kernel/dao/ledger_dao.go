@@ -30,6 +30,7 @@ type LedgerDao interface {
 	CreateLedger(ledger *models.Ledger) error
 	ListAllLedgerByUserId(userId string) ([]models.Ledger, error)
 	QueryLedgerById(ledgerId string) (*models.Ledger, error)
+	DeleteLedgerById(ledgerId string) error
 }
 
 var _ LedgerDao = &ledgerDaoImpl{}
@@ -62,4 +63,12 @@ func (l *ledgerDaoImpl) QueryLedgerById(ledgerId string) (*models.Ledger, error)
 	}
 
 	return &ledger, nil
+}
+
+func (l *ledgerDaoImpl) DeleteLedgerById(ledgerId string) error {
+	if err := l.db.Where("id = ?", ledgerId).Delete(&models.Ledger{}).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
