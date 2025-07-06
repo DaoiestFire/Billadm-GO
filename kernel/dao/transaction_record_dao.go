@@ -31,6 +31,7 @@ func GetTrDao() TransactionRecordDao {
 type TransactionRecordDao interface {
 	CreateTr(*models.TransactionRecord) error
 	ListAllTrByLedgerId(string) ([]*models.TransactionRecord, error)
+	DeleteTrById(string) error
 }
 
 var _ TransactionRecordDao = &transactionRecordDaoImpl{}
@@ -54,4 +55,11 @@ func (t transactionRecordDaoImpl) ListAllTrByLedgerId(ledgerId string) ([]*model
 	}
 
 	return trs, nil
+}
+
+func (t transactionRecordDaoImpl) DeleteTrById(trId string) error {
+	if err := t.db.Where("tr_id = ?", trId).Delete(&models.TransactionRecord{}).Error; err != nil {
+		return err
+	}
+	return nil
 }

@@ -44,7 +44,7 @@ func getTransactionRecord(c *gin.Context) {
 	}
 
 	ret.Data = string(jsonData)
-	ret.Code = http.StatusOK
+	ret.Msg = "success"
 
 	return
 }
@@ -90,5 +90,29 @@ func updateTransactionRecord(c *gin.Context) {
 }
 
 func deleteTransactionRecord(c *gin.Context) {
+	ret := models.NewResult()
+	defer c.JSON(http.StatusOK, ret)
 
+	arg, ok := JsonArg(c, ret)
+	if !ok {
+		return
+	}
+
+	trId, ok := arg["tr_id"].(string)
+	if !ok {
+		ret.Code = -1
+		ret.Msg = "tr_id field not exist in request body"
+		return
+	}
+
+	err := service.GetTrService().DeleteTrById(trId)
+	if err != nil {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	}
+
+	ret.Msg = "success"
+
+	return
 }

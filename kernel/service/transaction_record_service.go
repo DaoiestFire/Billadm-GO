@@ -32,6 +32,7 @@ func GetTrService() TransactionRecordService {
 type TransactionRecordService interface {
 	CreateTr(*models.TransactionRecord) (string, error)
 	ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error)
+	DeleteTrById(string) error
 }
 
 var _ TransactionRecordService = &transactionRecordServiceImpl{}
@@ -65,4 +66,16 @@ func (t *transactionRecordServiceImpl) ListAllTrByLedgerId(ledgerId string) ([]*
 
 	logrus.Infof("list all transaction record success, ledger id: %s, len: %d", ledgerId, len(trs))
 	return trs, err
+}
+
+func (t *transactionRecordServiceImpl) DeleteTrById(trId string) error {
+	logrus.Infof("start to delete transaction record, tr id: %s", trId)
+
+	err := t.trDao.DeleteTrById(trId)
+	if err != nil {
+		return err
+	}
+
+	logrus.Infof("delete transaction record success, tr id: %s", trId)
+	return nil
 }
