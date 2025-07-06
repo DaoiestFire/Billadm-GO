@@ -7,7 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/billadm/kernel/models"
+	"github.com/billadm/models"
 )
 
 func JsonTransactionRecordDto(c *gin.Context, result *models.Result) (*TransactionRecordDto, bool) {

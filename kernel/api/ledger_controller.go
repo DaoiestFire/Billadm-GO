@@ -9,9 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/billadm/kernel/constant"
-	"github.com/billadm/kernel/models"
-	"github.com/billadm/kernel/service"
+	"github.com/billadm/constant"
+	"github.com/billadm/models"
+	"github.com/billadm/service"
 )
 
 func getLedger(c *gin.Context) {

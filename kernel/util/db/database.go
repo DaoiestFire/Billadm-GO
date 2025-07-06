@@ -12,7 +12,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"github.com/billadm/kernel/util"
+	"github.com/billadm/util"
 )
 
 const (

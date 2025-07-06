@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 
-	"github.com/billadm/kernel/constant"
+	"github.com/billadm/constant"
 )
 
 const (

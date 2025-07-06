@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 
-	"github.com/billadm/kernel/models"
+	"github.com/billadm/models"
 )
 
 func ServeAPI(ginServer *gin.Engine) {

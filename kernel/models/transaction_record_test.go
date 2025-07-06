@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/billadm/kernel/util"
-	"github.com/billadm/kernel/util/db"
+	"github.com/billadm/util"
+	"github.com/billadm/util/db"
 )
 
 func TestTR_CRUD(t *testing.T) {

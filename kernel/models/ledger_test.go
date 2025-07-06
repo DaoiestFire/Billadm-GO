@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/billadm/kernel/util"
-	"github.com/billadm/kernel/util/db"
+	"github.com/billadm/util"
+	"github.com/billadm/util/db"
 )
 
 func TestLedger_CRUD(t *testing.T) {

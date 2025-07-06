@@ -6,10 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/billadm/kernel/logger"
-	"github.com/billadm/kernel/server"
-	"github.com/billadm/kernel/util"
-	"github.com/billadm/kernel/util/db"
+	"github.com/billadm/logger"
+	"github.com/billadm/server"
+	"github.com/billadm/util"
+	"github.com/billadm/util/db"
 )
 
 func main() {

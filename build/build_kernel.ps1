@@ -34,9 +34,6 @@ foreach ($target in $targets) {
     $env:GOOS = $goos
     $env:GOARCH = $goarch
 
-    # 编译参数（可选）
-    $ldflags = "-s -w -X 'constant.Mode=release'"
-
     # 构建输出文件名
     $filename = "$projectName-$goos-$goarch"
     if ($goos -eq "windows") {
@@ -48,7 +45,7 @@ foreach ($target in $targets) {
     Write-Host "Building for $goos/$goarch..."
 
     # 执行 go build 命令
-    go build -o $outputFile -ldflags $ldflags .
+    go build -o $outputFile -ldflags "-s -w -X github.com/billadm/constant.Mode=release" .
 
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Build failed for $goos/$goarch."

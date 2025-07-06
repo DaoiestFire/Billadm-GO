@@ -5,9 +5,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/billadm/kernel/dao"
-	"github.com/billadm/kernel/models"
-	"github.com/billadm/kernel/util"
+	"github.com/billadm/dao"
+	"github.com/billadm/models"
+	"github.com/billadm/util"
 )
 
 var (

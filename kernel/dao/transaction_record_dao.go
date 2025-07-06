@@ -5,8 +5,8 @@ import (
 
 	"gorm.io/gorm"
 
-	"github.com/billadm/kernel/models"
-	"github.com/billadm/kernel/util/db"
+	"github.com/billadm/models"
+	"github.com/billadm/util/db"
 )
 
 var (

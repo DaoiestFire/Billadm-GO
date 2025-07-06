@@ -7,9 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/billadm/kernel/api/dto"
-	"github.com/billadm/kernel/models"
-	"github.com/billadm/kernel/service"
+	"github.com/billadm/api/dto"
+	"github.com/billadm/models"
+	"github.com/billadm/service"
 )
 
 func getTransactionRecord(c *gin.Context) {

@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/billadm/kernel/api"
-	"github.com/billadm/kernel/constant"
+	"github.com/billadm/api"
+	"github.com/billadm/constant"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )

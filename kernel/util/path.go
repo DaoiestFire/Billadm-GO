@@ -7,7 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/billadm/kernel/constant"
+	"github.com/billadm/constant"
 )
 
 func IsDebugMode() bool {

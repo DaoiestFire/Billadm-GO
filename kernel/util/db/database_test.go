@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/billadm/kernel/util"
+	"github.com/billadm/util"
 )
 
 func TestDbConnect(t *testing.T) {
