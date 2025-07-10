@@ -30,20 +30,12 @@ func getLedger(c *gin.Context) {
 		return
 	}
 
-	userId := constant.DefaultUUID
-	id, ok := arg["user_id"].(string)
-	if ok {
-		logrus.Infof("get ledger with user id: %v", id)
-		// TODO: 检查用户是否存在，如果存在则使用指定的用户id
-		userId = id
-	}
-
 	var ledgers []models.Ledger
 	var err error
 	var jsonData []byte
 	if ledgerId == constant.All {
 		// 返回全部的账本信息
-		ledgers, err = service.GetLedgerService().ListAllLedgerByUserId(userId)
+		ledgers, err = service.GetLedgerService().ListAllLedger()
 		if err != nil {
 			ret.Code = -1
 			ret.Msg = err.Error()
@@ -103,15 +95,8 @@ func createLedger(c *gin.Context) {
 		return
 	}
 
-	userId := constant.DefaultUUID
-	id, ok := arg["user_id"].(string)
-	if ok {
-		logrus.Infof("create ledger with user id: %v", id)
-		// TODO: 检查用户是否存在，如果存在则使用指定的用户id
-		userId = id
-	}
 	// 在指定用户下创建账本
-	ledgerId, err := service.GetLedgerService().CreateLedger(ledgerName, userId)
+	ledgerId, err := service.GetLedgerService().CreateLedger(ledgerName)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()

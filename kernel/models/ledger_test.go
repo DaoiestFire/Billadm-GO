@@ -20,9 +20,8 @@ func TestLedger_CRUD(t *testing.T) {
 
 	// 插入
 	insertData := &Ledger{
-		ID:     util.GetUUID(),
-		UserID: util.GetUUID(),
-		Name:   "test_ledger",
+		ID:   util.GetUUID(),
+		Name: "test_ledger",
 	}
 	ret := DB.Create(insertData)
 	t.Logf("insert ret: %+v", ret)

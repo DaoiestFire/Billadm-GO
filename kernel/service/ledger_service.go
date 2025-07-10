@@ -31,8 +31,8 @@ func GetLedgerService() LedgerService {
 }
 
 type LedgerService interface {
-	CreateLedger(ledgerName, userId string) (string, error)
-	ListAllLedgerByUserId(userId string) ([]models.Ledger, error)
+	CreateLedger(ledgerName string) (string, error)
+	ListAllLedger() ([]models.Ledger, error)
 	QueryLedgerById(ledgerId string) (*models.Ledger, error)
 	DeleteLedgerById(ledgerId string) error
 }
@@ -45,35 +45,34 @@ type ledgerServiceImpl struct {
 }
 
 // CreateLedger 创建成功返回创建账本id
-func (l *ledgerServiceImpl) CreateLedger(ledgerName, userId string) (string, error) {
-	logrus.Infof("start to create ledger, name: %s, user id: %s", ledgerName, userId)
+func (l *ledgerServiceImpl) CreateLedger(ledgerName string) (string, error) {
+	logrus.Infof("start to create ledger, name: %s", ledgerName)
 	// 账本名称可以重复，不需要校验账本名称
 	ledger := &models.Ledger{
-		ID:     util.GetUUID(),
-		UserID: userId,
-		Name:   ledgerName,
+		ID:   util.GetUUID(),
+		Name: ledgerName,
 	}
 
 	if err := l.ledgerDao.CreateLedger(ledger); err != nil {
-		logrus.Errorf("create ledger failed, name: %s, user id: %s, err: %v", ledgerName, userId, err)
+		logrus.Errorf("create ledger failed, name: %s, err: %v", ledgerName, err)
 		return "", err
 	}
 
-	logrus.Infof("create ledger success, name: %s, user id: %s", ledgerName, userId)
+	logrus.Infof("create ledger success, name: %s", ledgerName)
 	return ledger.ID, nil
 }
 
-// ListAllLedgerByUserId 查询用户的所有账本
-func (l *ledgerServiceImpl) ListAllLedgerByUserId(userId string) ([]models.Ledger, error) {
-	logrus.Infof("start to list all ledgers, user id: %s", userId)
+// ListAllLedger 查询所有账本
+func (l *ledgerServiceImpl) ListAllLedger() ([]models.Ledger, error) {
+	logrus.Infof("start to list all ledgers")
 
-	ledgers, err := l.ledgerDao.ListAllLedgerByUserId(userId)
+	ledgers, err := l.ledgerDao.ListAllLedger()
 	if err != nil {
-		logrus.Errorf("list all ledgers failed, user id: %s, err: %v", userId, err)
+		logrus.Errorf("list all ledgers failed, err: %v", err)
 		return nil, err
 	}
 
-	logrus.Infof("end to list all ledgers, user id: %s, len: %d", userId, len(ledgers))
+	logrus.Infof("end to list all ledgers, len: %d", len(ledgers))
 	return ledgers, nil
 }
 
