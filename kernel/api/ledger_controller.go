@@ -119,7 +119,6 @@ func createLedger(c *gin.Context) {
 	}
 
 	ret.Data = ledgerId
-	ret.Msg = "success"
 
 	return
 }
