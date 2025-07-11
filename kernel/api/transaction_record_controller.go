@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -36,17 +35,7 @@ func getTransactionRecord(c *gin.Context) {
 		return
 	}
 
-	jsonData, err := json.Marshal(trs)
-	if err != nil {
-		ret.Code = -1
-		ret.Msg = err.Error()
-		return
-	}
-
-	ret.Data = string(jsonData)
-	ret.Msg = "success"
-
-	return
+	ret.Data = trs
 }
 
 func createTransactionRecord(c *gin.Context) {
@@ -80,9 +69,6 @@ func createTransactionRecord(c *gin.Context) {
 	}
 
 	ret.Data = trId
-	ret.Msg = "success"
-
-	return
 }
 
 func updateTransactionRecord(c *gin.Context) {
@@ -111,8 +97,4 @@ func deleteTransactionRecord(c *gin.Context) {
 		ret.Msg = err.Error()
 		return
 	}
-
-	ret.Msg = "success"
-
-	return
 }

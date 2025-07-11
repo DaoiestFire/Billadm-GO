@@ -56,8 +56,6 @@ func getLedger(c *gin.Context) {
 	}
 
 	ret.Data = ledgers
-
-	return
 }
 
 func createLedger(c *gin.Context) {
@@ -85,8 +83,6 @@ func createLedger(c *gin.Context) {
 	}
 
 	ret.Data = ledgerId
-
-	return
 }
 
 func updateLedger(c *gin.Context) {
@@ -115,6 +111,4 @@ func deleteLedger(c *gin.Context) {
 		ret.Msg = err.Error()
 		return
 	}
-
-	return
 }
