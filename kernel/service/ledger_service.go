@@ -91,7 +91,7 @@ func (l *ledgerServiceImpl) QueryLedgerById(ledgerId string) (*models.Ledger, er
 }
 
 func (l *ledgerServiceImpl) DeleteLedgerById(ledgerId string) error {
-	logrus.Infof("start to v ledger by id, id: %s", ledgerId)
+	logrus.Infof("start to delete ledger by id, id: %s", ledgerId)
 
 	if err := l.ledgerDao.DeleteLedgerById(ledgerId); err != nil {
 		logrus.Errorf("delete ledger by id failed, id: %s, err: %v", ledgerId, err)
@@ -110,6 +110,6 @@ func (l *ledgerServiceImpl) DeleteLedgerById(ledgerId string) error {
 		return err
 	}
 
-	logrus.Infof("end to b ledger by id, id: %s", ledgerId)
+	logrus.Infof("end to delete ledger by id, id: %s", ledgerId)
 	return nil
 }

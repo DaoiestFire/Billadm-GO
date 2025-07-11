@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -32,7 +31,6 @@ func getLedger(c *gin.Context) {
 
 	var ledgers []models.Ledger
 	var err error
-	var jsonData []byte
 	if ledgerId == constant.All {
 		// 返回全部的账本信息
 		ledgers, err = service.GetLedgerService().ListAllLedger()
@@ -57,24 +55,7 @@ func getLedger(c *gin.Context) {
 		}
 	}
 
-	if len(ledgers) == 1 {
-		jsonData, err = json.Marshal(ledgers[0])
-		if err != nil {
-			ret.Code = -1
-			ret.Msg = err.Error()
-			return
-		}
-	} else {
-		jsonData, err = json.Marshal(ledgers)
-		if err != nil {
-			ret.Code = -1
-			ret.Msg = err.Error()
-			return
-		}
-	}
-
-	ret.Data = string(jsonData)
-	ret.Msg = "success"
+	ret.Data = ledgers
 
 	return
 }
@@ -134,8 +115,6 @@ func deleteLedger(c *gin.Context) {
 		ret.Msg = err.Error()
 		return
 	}
-
-	ret.Msg = "success"
 
 	return
 }
