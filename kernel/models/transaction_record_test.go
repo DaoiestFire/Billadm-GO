@@ -26,7 +26,7 @@ func TestTR_CRUD(t *testing.T) {
 		LedgerID:        util.GetUUID(),
 		Price:           114.514,
 		TransactionType: "",
-		CategoryID:      util.GetUUID(),
+		Category:        "",
 		Description:     "this is a test tr",
 		//Tags:            StringSlice{"tags1", "tags2"},
 		Tags:          nil,

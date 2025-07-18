@@ -11,9 +11,12 @@
     - [查询指定ID的账本](#查询指定id的账本)
 - [消费记录](#消费记录)
   - [增加 POST](#增加-post-1)
+    - [创建消费记录](#创建消费记录)
   - [删除 DELETE](#删除-delete-1)
+    - [删除指定ID的消费记录](#删除指定id的消费记录)
   - [修改 PUT](#修改-put-1)
   - [查询 GET](#查询-get-1)
+    - [查询指定账本中的所有消费记录](#查询指定账本中的所有消费记录)
 
 ## 规范
 
@@ -154,8 +157,109 @@
 
 ### 增加 POST
 
+#### 创建消费记录
+
+* 参数
+  
+  ```json
+  {
+    "ledger_id": "{{LEDGER_ID}}",
+    "price": 3433,
+    "transaction_type": "expense",
+    "category": "",
+    "description": "test des",
+    "tags": "[\"tags1\",\"tags2\"]",
+    "transaction_at": {{$date.millisecondsTimestamp}}
+  }
+  ```
+  * `ledger_id`：账本ID
+  * `price`：消费价格
+  * `transaction_type`：消费类型，取值范围['expense','income','trasfer']，分别表示消费，收入，转账
+
+* 返回值
+
+  ```json
+  {
+    "code": 0,
+    "msg": "",
+    "data": null
+  }
+  ```
+
 ### 删除 DELETE
+
+#### 删除指定ID的消费记录
+
+* 参数
+  
+  ```json
+  {
+    "tr_id": "{{TR_ID}}"
+  }
+  ```
+  * `tr_id`：消费记录ID
+
+* 返回值
+
+  ```json
+  {
+    "code": 0,
+    "msg": "",
+    "data": null
+  }
+  ```
 
 ### 修改 PUT
 
 ### 查询 GET
+
+#### 查询指定账本中的所有消费记录
+
+* 参数
+  
+  ```json
+  {
+    "ledger_id": "id1"
+  }
+  ```
+  * `ledger_id`：账本ID
+
+* 返回值
+
+  ```json
+  {
+    "code": 0,
+    "msg": "",
+    "data": [
+        {
+            "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
+            "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
+            "price": 4.5,
+            "transaction_type": "expense",
+            "category": "餐饮美食",
+            "description": "早餐",
+            "tags": [
+                "三餐"
+            ],
+            "transaction_at": "2025-07-19T00:15:32.563+08:00",
+            "created_at": "2025-07-19T00:15:32.5755985+08:00",
+            "updated_at": "2025-07-19T00:15:32.5755985+08:00"
+        },
+        {
+            "transaction_id": "01981e51-cf73-7789-a913-bcb1e2016b04",
+            "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
+            "price": 4.5,
+            "transaction_type": "expense",
+            "category": "餐饮美食",
+            "description": "早餐",
+            "tags": [
+                "三餐"
+            ],
+            "transaction_at": "2025-07-19T00:15:34.742+08:00",
+            "created_at": "2025-07-19T00:15:34.771494+08:00",
+            "updated_at": "2025-07-19T00:15:34.771494+08:00"
+        }
+    ]
+  }
+  ```
+  * `data`：消费记录列表

@@ -1,7 +1,6 @@
 package dto
 
 import (
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -28,9 +27,9 @@ type TransactionRecordDto struct {
 	TransactionType string  ` json:"transaction_type"`
 
 	// 分类与描述
-	CategoryID  string ` json:"category_id"`
-	Description string ` json:"description"`
-	Tags        string ` json:"tags"`
+	Category    string   ` json:"category"`
+	Description string   ` json:"description"`
+	Tags        []string ` json:"tags"`
 
 	// 时间信息
 	TransactionAt int64 `json:"transaction_at"`
@@ -53,14 +52,9 @@ func (dto *TransactionRecordDto) Vo(result *models.Result) (*models.TransactionR
 	tr.LedgerID = dto.LedgerID
 	tr.Price = dto.Price
 	tr.TransactionType = dto.TransactionType
-	tr.CategoryID = dto.CategoryID
+	tr.Category = dto.Category
 	tr.Description = dto.Description
-	tr.Tags = models.StringSlice{}
-	if err := json.Unmarshal([]byte(dto.Tags), &tr.Tags); err != nil {
-		result.Code = -1
-		result.Msg = err.Error()
-		return nil, false
-	}
+	tr.Tags = dto.Tags
 	tr.TransactionAt = time.Unix(dto.TransactionAt/1000, (dto.TransactionAt%1000)*int64(time.Millisecond))
 	return tr, true
 }

@@ -20,7 +20,7 @@ type TransactionRecord struct {
 	TransactionType string  `gorm:"not null;index;comment:交易类型" json:"transaction_type"`
 
 	// 分类与描述
-	CategoryID  string      `gorm:"not null;index;comment:分类ID" json:"category_id"`
+	Category    string      `gorm:"not null;index;comment:分类ID" json:"category"`
 	Description string      `gorm:"comment:交易描述" json:"description"`
 	Tags        StringSlice `gorm:"comment:标签列表" json:"tags"`
 
