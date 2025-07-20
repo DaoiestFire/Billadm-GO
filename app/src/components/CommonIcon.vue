@@ -42,15 +42,15 @@ const props = defineProps({
     },
     color: {
         type: String,
-        default: '#333'
+        default: '#7a7a7a'
     },
     bgColor: {
         type: String,
-        default: '#fff'
+        default: '#f5f5f5'
     },
     hoverBgColor: {
         type: String,
-        default: 'rgba(0, 0, 0, 0.2)'
+        default: '#e0e0e0'
     },
     hoverStyle: {
         type: String,
