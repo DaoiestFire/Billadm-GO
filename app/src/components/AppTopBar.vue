@@ -1,19 +1,17 @@
 <template>
     <div class="menu-bar">
         <div class="left-groups">
-            <CommonIcon :icon="homeIcon" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+            <CommonIcon :icon="iconMenu" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
                 :hoverBgColor="hoverBgColor" hoverStyle="rect" />
         </div>
         <div class="center-groups">
-            <CommonIcon :icon="homeIcon" width="40" height="30" :color="iconColor" :bgColor="minorBgColor"
-                :hoverBgColor="hoverBgColor" hoverStyle="rect" />
         </div>
         <div class="right-groups">
-            <CommonIcon :icon="homeIcon" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+            <CommonIcon :icon="iconZoomOut" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
                 :hoverBgColor="hoverBgColor" hoverStyle="rect" />
-            <CommonIcon :icon="homeIcon" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+            <CommonIcon :icon="iconZoomIn" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
                 :hoverBgColor="hoverBgColor" hoverStyle="rect" />
-            <CommonIcon :icon="homeIcon" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+            <CommonIcon :icon="iconClose" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
                 :hoverBgColor="hoverBgColor" hoverStyle="rect" />
         </div>
     </div>
@@ -21,6 +19,10 @@
 
 <script setup>
 import { useCssVariables } from '@/css/css'
+import iconMenu from '@/assets/icons/menu.svg?raw'
+import iconZoomOut from '@/assets/icons/zoom-out.svg?raw'
+import iconZoomIn from '@/assets/icons/zoom-in.svg?raw'
+import iconClose from '@/assets/icons/close.svg?raw'
 import CommonIcon from '@/components/CommonIcon.vue'
 
 // css variables

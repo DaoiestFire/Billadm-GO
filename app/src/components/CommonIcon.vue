@@ -28,6 +28,18 @@ const props = defineProps({
         type: [String, Number],
         default: 24
     },
+    iconWidth: {
+        type: [String, Number],
+        default: 20
+    },
+    iconHeight: {
+        type: [String, Number],
+        default: 20
+    },
+    strokeWidth: {
+        type: [String, Number],
+        default: 0.1
+    },
     color: {
         type: String,
         default: '#333'
@@ -76,8 +88,9 @@ const buttonStyle = computed(() => {
 const iconStyle = computed(() => {
     return {
         color: props.color,
-        width: `${props.width}px`,
-        height: `${props.height}px`
+        width: `${props.iconWidth}px`,
+        height: `${props.iconHeight}px`,
+        strokeWidth: `${props.strokeWidth}px`
     }
 })
 </script>
