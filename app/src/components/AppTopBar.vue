@@ -27,14 +27,6 @@ import CommonIcon from '@/components/CommonIcon.vue'
 
 // css variables
 const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
-
-// props
-const props = defineProps({
-    title: {
-        type: String,
-        default: '默认标题'
-    }
-})
 </script>
 
 <style scoped>
