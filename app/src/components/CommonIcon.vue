@@ -30,11 +30,11 @@ const props = defineProps({
     },
     iconWidth: {
         type: [String, Number],
-        default: 20
+        default: 18
     },
     iconHeight: {
         type: [String, Number],
-        default: 20
+        default: 18
     },
     strokeWidth: {
         type: [String, Number],

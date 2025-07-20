@@ -2,16 +2,14 @@
   <div class="layout">
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
-      <AppTopBar title="我的项目" />
+      <AppTopBar />
     </div>
 
     <!-- 中间栏：左中右 -->
     <div class="middle-section">
       <!-- 左侧功能栏 -->
       <div class="left-panel">
-        <button v-for="item in navItems" :key="item.path" @click="navigate(item.path)">
-          {{ item.title }}
-        </button>
+        <AppLeftBar title="我的项目" />
       </div>
 
       <!-- 中间阅览区 -->
@@ -33,14 +31,9 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import AppTopBar from '@/components/AppTopBar.vue'
+import AppLeftBar from '@/components/AppLeftBar.vue'
 
 const router = useRouter();
-
-const navItems = [
-  { title: '主页', path: '/home' },
-  { title: '仪表盘', path: '/dashboard' },
-  { title: '设置', path: '/settings' },
-];
 
 const navigate = (path) => {
   router.push(path);
