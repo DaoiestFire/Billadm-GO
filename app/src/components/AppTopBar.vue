@@ -28,12 +28,6 @@ import CommonIcon from '@/components/CommonIcon.vue'
 // css variables
 const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
 
-const homeIcon = `
-  <svg viewBox="0 0 24 24" width="24" height="24">
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/>
-  </svg>
-`
-
 // props
 const props = defineProps({
     title: {
