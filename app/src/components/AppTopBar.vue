@@ -1,17 +1,17 @@
 <template>
     <div class="menu-bar">
         <div class="left-groups">
-            <CommonIcon :icon="iconMenu" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+            <CommonIcon :icon="iconMenu" label="菜单" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
                 :hoverBgColor="hoverBgColor" hoverStyle="rect" />
         </div>
         <div class="center-groups">
         </div>
         <div class="right-groups">
-            <CommonIcon :icon="iconZoomOut" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+            <CommonIcon :icon="iconZoomOut" label="最小化" width="41" height="30" :color="iconColor"
+                :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="rect" />
+            <CommonIcon :icon="iconZoomIn" label="最大化" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
                 :hoverBgColor="hoverBgColor" hoverStyle="rect" />
-            <CommonIcon :icon="iconZoomIn" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                :hoverBgColor="hoverBgColor" hoverStyle="rect" />
-            <CommonIcon :icon="iconClose" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+            <CommonIcon :icon="iconClose" label="关闭" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
                 :hoverBgColor="hoverBgColor" hoverStyle="rect" />
         </div>
     </div>
