@@ -29,15 +29,8 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
 import AppTopBar from '@/components/AppTopBar.vue'
 import AppLeftBar from '@/components/AppLeftBar.vue'
-
-const router = useRouter();
-
-const navigate = (path) => {
-  router.push(path);
-};
 </script>
 
 <style scoped>

@@ -2,7 +2,6 @@ import { createRouter, createMemoryHistory } from 'vue-router';
 import Layout from '@/components/Layout.vue';
 import HomeView from '@/views/HomeView.vue';
 import DashboardView from '@/views/DashboardView.vue';
-import SettingsView from '@/views/SettingsView.vue';
 
 const routes = [
   {
@@ -12,7 +11,6 @@ const routes = [
       { path: '', redirect: '/home' },
       { path: 'home', component: HomeView },
       { path: 'dashboard', component: DashboardView },
-      { path: 'settings', component: SettingsView },
     ]
   }
 ];
