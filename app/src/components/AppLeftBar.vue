@@ -1,9 +1,9 @@
 <template>
     <div class="menu-bar">
-        <CommonIcon :icon="iconBills" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
+        <CommonIcon :icon="iconBills" label="消费记录" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
             :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('home')" />
-        <CommonIcon :icon="iconStatistic" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
-            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('dashboard')" />
+        <CommonIcon :icon="iconStatistic" label="数据分析" width="40" height="40" :color="iconColor"
+            :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('dashboard')" />
     </div>
 </template>
 
