@@ -1,10 +1,10 @@
 :root {
     /* 窗口的颜色 */
-    --billadm-color-major-backgroud-color: #fff;
-    --billadm-color-minor-backgroud-color: #f4f4f4;
-    --billadm-color-window-border-color: #ccc;
+    --billadm-color-major-backgroud-color: #ffffff;
+    --billadm-color-minor-backgroud-color: #f5f5f5;
+    --billadm-color-window-border-color: #cccccc;
 
     /* 按钮的颜色 */
-    --billadm-color-icon-color: #9d9d9d;
+    --billadm-color-icon-color: #7a7a7a;
     --billadm-color-icon-hover-bg-color: #e0e0e0;
 }
