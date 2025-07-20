@@ -2,8 +2,7 @@
   <div class="layout">
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
-      <CommonIcon :icon="homeIcon" width="40" height="30" :color="iconColor" :bgColor="bgColor"
-        :hoverBgColor="hoverBgColor" hoverStyle="rect" />
+      <AppTopBar title="我的项目" />
     </div>
 
     <!-- 中间栏：左中右 -->
@@ -32,15 +31,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import CommonIcon from '@/components/CommonIcon.vue'
-
-const homeIcon = `
-  <svg viewBox="0 0 24 24" width="24" height="24">
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/>
-  </svg>
-`
+import AppTopBar from '@/components/AppTopBar.vue'
 
 const router = useRouter();
 
@@ -53,24 +45,6 @@ const navItems = [
 const navigate = (path) => {
   router.push(path);
 };
-
-const bgColor = ref(
-  getComputedStyle(document.documentElement)
-    .getPropertyValue('--billadm-color-minor-backgroud-color')
-    .trim()
-);
-
-const hoverBgColor = ref(
-  getComputedStyle(document.documentElement)
-    .getPropertyValue('--billadm-color-icon-hover-bg-color')
-    .trim()
-);
-
-const iconColor = ref(
-  getComputedStyle(document.documentElement)
-    .getPropertyValue('--billadm-color-icon-color')
-    .trim()
-);
 </script>
 
 <style scoped>
