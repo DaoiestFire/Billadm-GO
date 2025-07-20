@@ -2,7 +2,6 @@
   <div class="layout">
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
-      <h2>菜单栏</h2>
     </div>
 
     <!-- 中间栏：左中右 -->
@@ -21,15 +20,11 @@
 
       <!-- 右侧功能栏 -->
       <div class="right-panel">
-        <button v-for="btn in rightButtons" :key="btn.name" @click="handleRightClick(btn.action)">
-          {{ btn.name }}
-        </button>
       </div>
     </div>
 
     <!-- 下栏：详情栏 -->
     <div class="bottom-bar">
-      <p>这里是详情栏，显示一些数据。</p>
     </div>
   </div>
 </template>
@@ -45,17 +40,8 @@ const navItems = [
   { title: '设置', path: '/settings' },
 ];
 
-const rightButtons = [
-  { name: '刷新', action: 'refresh' },
-  { name: '保存', action: 'save' },
-];
-
 const navigate = (path) => {
   router.push(path);
-};
-
-const handleRightClick = (action) => {
-  alert(`执行操作: ${action}`);
 };
 </script>
 
@@ -67,10 +53,9 @@ const handleRightClick = (action) => {
 }
 
 .top-bar {
-  background: #333;
-  color: white;
-  padding: 10px;
-  text-align: center;
+  background: var(--billadm-color-minor-backgroud-color);
+  height: 30px;
+  border-bottom: 1px solid var(--billadm-color-window-border-color);
 }
 
 .middle-section {
@@ -80,18 +65,16 @@ const handleRightClick = (action) => {
 }
 
 .left-panel, .right-panel {
-  width: 150px;
-  background: #f4f4f4;
-  padding: 10px;
-  border-right: 1px solid #ccc;
+  width: 40px;
+  background: var(--billadm-color-minor-backgroud-color);
 }
 
 .left-panel {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--billadm-color-window-border-color);
 }
 
 .right-panel {
-  border-left: 1px solid #ccc;
+  border-left: 1px solid var(--billadm-color-window-border-color);
 }
 
 .center-panel {
@@ -101,9 +84,8 @@ const handleRightClick = (action) => {
 }
 
 .bottom-bar {
-  background: #eee;
-  padding: 10px;
-  text-align: center;
-  border-top: 1px solid #ccc;
+  background: var(--billadm-color-minor-backgroud-color);
+  height: 30px;
+  border-top: 1px solid var(--billadm-color-window-border-color);
 }
 </style>
