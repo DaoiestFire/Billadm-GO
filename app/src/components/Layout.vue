@@ -9,7 +9,7 @@
     <div class="middle-section">
       <!-- 左侧功能栏 -->
       <div class="left-panel">
-        <AppLeftBar title="我的项目" />
+        <AppLeftBar />
       </div>
 
       <!-- 中间阅览区 -->

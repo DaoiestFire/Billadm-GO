@@ -131,12 +131,10 @@ const iconStyle = computed(() => {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 120%;
-    height: 120%;
-    max-width: calc(100% + 10px);
-    max-height: calc(100% + 10px);
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
+    width: 70%;
+    height: 70%;
+    background-color: var(--hover-bg-color);
+    border-radius: 20%;
     z-index: 1;
     transition: background-color 0.3s ease;
 }

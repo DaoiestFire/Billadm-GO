@@ -1,9 +1,9 @@
 <template>
     <div class="menu-bar">
         <CommonIcon :icon="iconBills" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
-            :hoverBgColor="hoverBgColor" hoverStyle="rect" @click="navigate('home')" />
+            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('home')" />
         <CommonIcon :icon="iconStatistic" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
-            :hoverBgColor="hoverBgColor" hoverStyle="rect" @click="navigate('dashboard')" />
+            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('dashboard')" />
     </div>
 </template>
 
