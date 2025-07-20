@@ -1,5 +1,9 @@
-:root{
+:root {
+    /* 窗口的颜色 */
     --billadm-color-major-backgroud-color: #fff;
     --billadm-color-minor-backgroud-color: #f4f4f4;
     --billadm-color-window-border-color: #ccc;
+
+    /* 按钮的颜色 */
+    --billadm-color-icon-hover-bg-color: #cacaca;
 }

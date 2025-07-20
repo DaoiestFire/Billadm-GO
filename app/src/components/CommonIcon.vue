@@ -122,7 +122,7 @@ const iconStyle = computed(() => {
     height: 120%;
     max-width: calc(100% + 10px);
     max-height: calc(100% + 10px);
-    background-color: var(--hover-bg-color);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 50%;
     z-index: 1;
     transition: background-color 0.3s ease;

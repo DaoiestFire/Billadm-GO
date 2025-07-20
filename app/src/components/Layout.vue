@@ -2,7 +2,8 @@
   <div class="layout">
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
-      <CommonIcon :icon="homeIcon" width="40" height="30" color="#007BFF" bgColor="#f4f4f4" hoverBgColor="#000" hoverStyle="circle" />
+      <CommonIcon :icon="homeIcon" width="40" height="30" color="#007BFF" :bgColor="bgColor" :hoverBgColor="hoverBgColor"
+        hoverStyle="circle" />
     </div>
 
     <!-- 中间栏：左中右 -->
@@ -31,6 +32,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import CommonIcon from '@/components/CommonIcon.vue'
 
@@ -51,6 +53,18 @@ const navItems = [
 const navigate = (path) => {
   router.push(path);
 };
+
+const bgColor = ref(
+  getComputedStyle(document.documentElement)
+    .getPropertyValue('--billadm-color-minor-backgroud-color')
+    .trim()
+);
+
+const hoverBgColor = ref(
+  getComputedStyle(document.documentElement)
+    .getPropertyValue('--billadm-color-icon-hover-bg-color')
+    .trim()
+);
 </script>
 
 <style scoped>
