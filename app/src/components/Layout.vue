@@ -2,6 +2,7 @@
   <div class="layout">
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
+      <CommonIcon :icon="homeIcon" width="40" height="30" color="#007BFF" bgColor="#f4f4f4" hoverBgColor="#000" hoverStyle="circle" />
     </div>
 
     <!-- 中间栏：左中右 -->
@@ -31,6 +32,13 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import CommonIcon from '@/components/CommonIcon.vue'
+
+const homeIcon = `
+  <svg viewBox="0 0 24 24" width="24" height="24">
+    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/>
+  </svg>
+`
 
 const router = useRouter();
 
@@ -64,7 +72,8 @@ const navigate = (path) => {
   overflow: hidden;
 }
 
-.left-panel, .right-panel {
+.left-panel,
+.right-panel {
   width: 40px;
   background: var(--billadm-color-minor-backgroud-color);
 }
