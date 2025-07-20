@@ -2,8 +2,8 @@
   <div class="layout">
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
-      <CommonIcon :icon="homeIcon" width="40" height="30" color="#007BFF" :bgColor="bgColor" :hoverBgColor="hoverBgColor"
-        hoverStyle="circle" />
+      <CommonIcon :icon="homeIcon" width="40" height="30" :color="iconColor" :bgColor="bgColor"
+        :hoverBgColor="hoverBgColor" hoverStyle="rect" />
     </div>
 
     <!-- 中间栏：左中右 -->
@@ -63,6 +63,12 @@ const bgColor = ref(
 const hoverBgColor = ref(
   getComputedStyle(document.documentElement)
     .getPropertyValue('--billadm-color-icon-hover-bg-color')
+    .trim()
+);
+
+const iconColor = ref(
+  getComputedStyle(document.documentElement)
+    .getPropertyValue('--billadm-color-icon-color')
     .trim()
 );
 </script>
