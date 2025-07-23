@@ -1,5 +1,5 @@
 <template>
-  <TransactionRecordTable :items="sampleData" />
+  <TransactionRecordTable :items="sampleData" headerHeight="40" rowHeight="40" />
 </template>
 
 <script setup>

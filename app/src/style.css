@@ -5,6 +5,11 @@
     --billadm-color-window-border-color: #cccccc;
 
     /* 按钮的颜色 */
-    --billadm-color-icon-color: #7a7a7a;
-    --billadm-color-icon-hover-bg-color: #e0e0e0;
+    --billadm-color-icon-color: #7b7b7b;
+    --billadm-color-icon-hover-bg-color: #dddddd;
+
+    /* 表格的颜色 */
+    --billadm-color-table-header-bg-color: #e9e9e9;
+    --billadm-color-table-odd-row-bg-color: #fafafa;
+    --billadm-color-table-even-row-bg-color: #f0f0f0;
 }
