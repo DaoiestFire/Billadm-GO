@@ -30,20 +30,24 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
+const props = defineProps({
+  items: {
+    type: Array,
+    required: true
+  }
+})
+
 const displayedItems = ref([])
 const rowHeight = 40 // 每一行的高度，单位 px
 const maxRows = ref(10)
 
 // 计算当前窗口高度下能显示的行数
 const calculateMaxRows = () => {
-  const availableHeight = window.innerHeight - 200 // 预留头部、底部空间
+  const availableHeight = window.innerHeight - 62 - rowHeight // 预留头部、底部空间
+  console.log(availableHeight)
   maxRows.value = Math.floor(availableHeight / rowHeight)
-  displayedItems.value = displayedItems.value.slice(0, maxRows.value)
-}
-
-// 导出函数：设置列表数据
-const setTrList = (trList) => {
-  displayedItems.value = trList
+  console.log(maxRows.value)
+  displayedItems.value = props.items.slice(0, maxRows.value)
 }
 
 // 格式化交易类型
@@ -76,15 +80,12 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', onResize)
 })
-
-// 将导出函数暴露给父组件
-defineExpose({ setTrList: setTrList })
 </script>
 
 <style scoped>
 .tr-table-container {
   overflow-y: auto;
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 62px);
 }
 
 .tr-table {

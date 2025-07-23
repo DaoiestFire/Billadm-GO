@@ -1,13 +1,9 @@
 <template>
-  <TransactionRecordTable ref="trTableRef" />
-  <button @click="loadData">加载数据</button>
+  <TransactionRecordTable :items="sampleData" />
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
-
-const trTableRef = ref()
 
 const sampleData = [
   {
@@ -29,7 +25,7 @@ const sampleData = [
     "transaction_type": "expense",
     "category": "餐饮美食",
     "description": "早餐",
-    "tags": ["三餐"],
+    "tags": ["三餐","test"],
     "transaction_at": "2025-07-19T00:15:32.563+08:00",
     "created_at": "2025-07-19T00:15:32.5755985+08:00",
     "updated_at": "2025-07-19T00:15:32.5755985+08:00"
@@ -119,8 +115,4 @@ const sampleData = [
     "updated_at": "2025-07-19T00:15:32.5755985+08:00"
   },
 ]
-
-const loadData = () => {
-  trTableRef.value.setTrList(sampleData)
-}
 </script>
