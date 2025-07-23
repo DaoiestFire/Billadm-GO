@@ -15,7 +15,7 @@
       <tbody>
         <tr v-for="(item, index) in displayedItems" :key="item.transaction_id">
           <td>{{ index + 1 }}</td>
-          <td>{{ item.price }}</td>
+          <td :style="getPriceStyle(item.transaction_type)">{{ item.price }}</td>
           <td>{{ formatTransactionType(item.transaction_type) }}</td>
           <td>{{ item.category }}</td>
           <td>{{ item.description }}</td>
@@ -28,31 +28,45 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 const props = defineProps({
   items: {
     type: Array,
     required: true
+  },
+  rowHeight: {
+    type: Number,
+    default: 40 // 默认行高
   }
 })
 
 const displayedItems = ref([])
-const rowHeight = 40 // 每一行的高度，单位 px
 const maxRows = ref(10)
 
 // 计算当前窗口高度下能显示的行数
 const calculateMaxRows = () => {
-  const availableHeight = window.innerHeight - 62 - rowHeight // 预留头部、底部空间
-  console.log(availableHeight)
-  maxRows.value = Math.floor(availableHeight / rowHeight)
-  console.log(maxRows.value)
+  const availableHeight = window.innerHeight - 62 - props.rowHeight // 预留头部、底部空间
+  maxRows.value = Math.floor(availableHeight / props.rowHeight)
   displayedItems.value = props.items.slice(0, maxRows.value)
+}
+
+// 获取价格样式
+const getPriceStyle = (type) => {
+  let color = ''
+  if (type === 'expense') {
+    color = 'red'
+  } else if (type === 'income') {
+    color = 'green'
+  } else if (type === 'transfer') {
+    color = 'orange'
+  }
+  return { color }
 }
 
 // 格式化交易类型
 const formatTransactionType = (type) => {
-  return type === 'expense' ? '支出' : '收入'
+  return type === 'expense' ? '支出' : type === 'income' ? '收入' : '转账'
 }
 
 // 格式化标签数组为字符串
