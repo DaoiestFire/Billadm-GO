@@ -4,23 +4,23 @@
       <thead>
         <tr :style="headerRowStyle">
           <th>序号</th>
-          <th>价格</th>
+          <th>交易时间</th>
           <th>交易类型</th>
           <th>消费类型</th>
           <th>描述</th>
           <th>标签</th>
-          <th>交易时间</th>
+          <th>价格</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in displayedItems" :key="item.transaction_id" :style="rowStyle">
           <td>{{ index + 1 }}</td>
-          <td :style="getPriceStyle(item.transaction_type)">{{ item.price }}</td>
+          <td>{{ formatTime(item.transaction_at) }}</td>
           <td>{{ formatTransactionType(item.transaction_type) }}</td>
           <td>{{ item.category }}</td>
           <td>{{ item.description }}</td>
           <td>{{ formatTags(item.tags) }}</td>
-          <td>{{ formatTime(item.transaction_at) }}</td>
+          <td :style="getPriceStyle(item.transaction_type)">{{ item.price }}</td>
         </tr>
       </tbody>
     </table>
