@@ -1,13 +1,13 @@
 <template>
-  <BillTable ref="billTableRef" />
+  <TransactionRecordTable ref="trTableRef" />
   <button @click="loadData">加载数据</button>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import BillTable from '@/components/BillTable.vue'
+import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
 
-const billTableRef = ref()
+const trTableRef = ref()
 
 const sampleData = [
   {
@@ -121,6 +121,6 @@ const sampleData = [
 ]
 
 const loadData = () => {
-  billTableRef.value.setBillList(sampleData)
+  trTableRef.value.setTrList(sampleData)
 }
 </script>

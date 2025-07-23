@@ -1,6 +1,6 @@
 <template>
-  <div class="bill-table-container">
-    <table class="bill-table">
+  <div class="tr-table-container">
+    <table class="tr-table">
       <thead>
         <tr>
           <th>序号</th>
@@ -42,8 +42,8 @@ const calculateMaxRows = () => {
 }
 
 // 导出函数：设置列表数据
-const setBillList = (billList) => {
-  displayedItems.value = billList
+const setTrList = (trList) => {
+  displayedItems.value = trList
 }
 
 // 格式化交易类型
@@ -78,25 +78,23 @@ onUnmounted(() => {
 })
 
 // 将导出函数暴露给父组件
-defineExpose({ setBillList })
+defineExpose({ setTrList: setTrList })
 </script>
 
 <style scoped>
-.bill-table-container {
+.tr-table-container {
   overflow-y: auto;
   max-height: calc(100vh - 150px);
-  margin: 20px;
 }
 
-.bill-table {
+.tr-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
-.bill-table th,
-.bill-table td {
-  border: 1px solid #ddd;
+.tr-table th,
+.tr-table td {
   padding: 8px;
   text-align: center;
   white-space: nowrap;
@@ -104,7 +102,7 @@ defineExpose({ setBillList })
   text-overflow: ellipsis;
 }
 
-.bill-table th {
+.tr-table th {
   background-color: #f5f5f5;
 }
 </style>

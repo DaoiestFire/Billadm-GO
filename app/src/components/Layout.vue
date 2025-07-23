@@ -68,7 +68,6 @@ import AppLeftBar from '@/components/AppLeftBar.vue'
 
 .center-panel {
   flex: 1;
-  padding: 10px;
   overflow-y: auto;
 }
 
