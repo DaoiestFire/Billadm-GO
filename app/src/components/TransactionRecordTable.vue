@@ -104,8 +104,28 @@ onUnmounted(() => {
 
 .tr-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate; /* 改为 separate 以便设置表头与内容之间的边框 */
+  border-spacing: 0; /* 保持单元格之间无间隙 */
   table-layout: fixed;
+}
+
+.tr-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: var(--billadm-color-minor-backgroud-color);
+  z-index: 1;
+  /* 表头下方的 1px 边框 */
+  border-bottom: 1px solid var(--billadm-color-window-border-color);
+}
+
+/* 斑马纹样式：奇数行 */
+.tr-table tbody tr:nth-child(odd) {
+  background-color: var(--billadm-color-minor-backgroud-color);
+}
+
+/* 偶数行 */
+.tr-table tbody tr:nth-child(even) {
+  background-color: var(--billadm-color-major-backgroud-color);
 }
 
 .tr-table th,
@@ -115,9 +135,5 @@ onUnmounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.tr-table th {
-  background-color: #f5f5f5;
 }
 </style>
