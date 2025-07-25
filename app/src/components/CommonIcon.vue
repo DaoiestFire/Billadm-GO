@@ -139,7 +139,7 @@ const iconStyle = computed(() => {
     width: 70%;
     height: 70%;
     background-color: var(--hover-bg-color);
-    border-radius: 20%;
+    border-radius: 4px;
     z-index: 1;
     transition: background-color 0.3s ease;
 }

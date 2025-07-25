@@ -1,7 +1,7 @@
 <template>
     <div class="menu-bar">
         <CommonIcon :icon="iconBills" label="消费记录" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
-            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('home')" />
+            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('tr_view')" />
         <CommonIcon :icon="iconStatistic" label="数据分析" width="40" height="40" :color="iconColor"
             :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('dashboard')" />
     </div>

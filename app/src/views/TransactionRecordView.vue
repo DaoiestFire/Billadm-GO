@@ -11,6 +11,7 @@
 
     <!-- 下栏：分页组件 -->
     <div class="bottom-bar">
+      <Pagination :pages="15"/>
     </div>
   </div>
 
@@ -18,6 +19,7 @@
 
 <script setup>
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
+import Pagination from '@/components/Pagination.vue';
 
 const sampleData = [
   {
@@ -260,8 +262,11 @@ const sampleData = [
 
 .bottom-bar {
   background: var(--billadm-color-minor-backgroud-color);
-  height: 30px;
+  height: 40px;
   border-top: 1px solid var(--billadm-color-window-border-color);
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>
