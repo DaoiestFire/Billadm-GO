@@ -248,7 +248,7 @@ const sampleData = [
 
 .top-bar {
   background: var(--billadm-color-minor-backgroud-color);
-  height: 30px;
+  height: 40px;
   border-bottom: 1px solid var(--billadm-color-window-border-color);
   flex-shrink: 0;
 }
