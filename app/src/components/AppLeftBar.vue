@@ -4,7 +4,7 @@
             :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('tr_view')"
             :isActive="route.path === '/tr_view'" />
         <CommonIcon :icon="iconStatistic" label="数据分析" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
-            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('dashboard')" :isActive="route.path === '/dashboard'" />
+            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('da_view')" :isActive="route.path === '/da_view'" />
     </div>
 </template>
 
