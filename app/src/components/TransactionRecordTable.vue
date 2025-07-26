@@ -35,7 +35,7 @@ const props = defineProps({
     type: Array,
     required: true
   },
-   headerHeight: {
+  headerHeight: {
     type: Number,
     default: 50 // 默认表头高度
   },
@@ -53,7 +53,7 @@ const displayedItems = ref([])
 
 // 动态计算最大显示行数
 const calculateMaxRows = () => {
-  const availableHeight = window.innerHeight - 62 - props.headerHeight-1
+  const availableHeight = window.innerHeight - 62 - props.headerHeight - 1
   const maxRowsCount = Math.floor(availableHeight / props.rowHeight)
   displayedItems.value = props.items.slice(0, maxRowsCount)
 }
@@ -124,7 +124,7 @@ const rowStyle = {
 <style scoped>
 .tr-table-container {
   overflow-y: auto;
-  max-height: calc(100vh - 62px);
+  height: 100%;
 }
 
 .tr-table {
@@ -135,7 +135,7 @@ const rowStyle = {
 
 .tr-table th,
 .tr-table td {
-  padding: 0; /* 调整内边距为0，因为line-height已经处理了垂直居中 */
+  padding: 0;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;

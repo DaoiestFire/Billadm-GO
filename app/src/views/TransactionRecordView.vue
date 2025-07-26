@@ -313,7 +313,7 @@ const sampleData = [
 
 .middle-section {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .bottom-bar {
