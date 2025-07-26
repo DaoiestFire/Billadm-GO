@@ -7,6 +7,8 @@
       <div class="center-groups">
       </div>
       <div class="right-groups">
+        <CommonIcon :icon="iconAdd" label="新增消费记录" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
+          :hoverBgColor="hoverBgColor" hoverStyle="circle" />
       </div>
     </div>
 
@@ -26,10 +28,17 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useCssVariables } from '@/css/css'
+import iconAdd from '@/assets/icons/add.svg?raw'
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
 import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
+import CommonIcon from '@/components/CommonIcon.vue'
 
+// css variables
+const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
+
+// 表格最大行数
 const maxRows = ref(10)
 
 watch(() => maxRows.value,
@@ -45,6 +54,7 @@ const options = [
   { label: '每页50行', value: 50 }
 ]
 
+// 表格数据
 const sampleData = [
   {
     "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
