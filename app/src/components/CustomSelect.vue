@@ -109,6 +109,8 @@ function selectOption(option) {
 .option {
     padding: 5px;
     cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .option:hover {
