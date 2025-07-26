@@ -11,15 +11,33 @@
 
     <!-- 下栏：分页组件 -->
     <div class="bottom-bar">
-      <Pagination :pages="15"/>
+      <CustomSelect v-model="maxRows" :options="options" direction="up" />
+      <Pagination :pages="15" />
     </div>
   </div>
 
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
-import Pagination from '@/components/Pagination.vue';
+import Pagination from '@/components/Pagination.vue'
+import CustomSelect from '@/components/CustomSelect.vue'
+
+const maxRows = ref(10)
+
+watch(() => maxRows.value,
+  (newValue) => {
+    console.log(newValue)
+  },
+  { immediate: true })
+
+
+const options = [
+  { label: '每页10行', value: 10 },
+  { label: '每页20行', value: 20 },
+  { label: '每页50行', value: 50 }
+]
 
 const sampleData = [
   {
@@ -266,7 +284,7 @@ const sampleData = [
   border-top: 1px solid var(--billadm-color-window-border-color);
   flex-shrink: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
 }
 </style>
