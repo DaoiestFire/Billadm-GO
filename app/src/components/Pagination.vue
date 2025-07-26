@@ -122,7 +122,7 @@ function handlePageChange(page) {
 
 .page-item.active {
     background-color: var(--billadm-color-icon-active-color);
-    color: var(--billadm-color-icon-fg-color);
+    color: var(--billadm-color-icon-active-fg-color);
     border-color: var(--billadm-color-icon-active-color);
 }
 

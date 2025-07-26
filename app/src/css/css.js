@@ -15,10 +15,12 @@ export function useCssVariables() {
   const minorBgColor = ref(getCssVariable('--billadm-color-minor-backgroud-color'));
   const hoverBgColor = ref(getCssVariable('--billadm-color-icon-hover-bg-color'));
   const iconColor = ref(getCssVariable('--billadm-color-icon-color'));
+  const iconActiveFgColor = ref(getCssVariable('--billadm-color-icon-active-fg-color'));
 
   return {
     minorBgColor,
     hoverBgColor,
-    iconColor
+    iconColor,
+    iconActiveFgColor
   };
 }

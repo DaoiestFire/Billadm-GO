@@ -1,14 +1,15 @@
 <template>
     <div class="menu-bar">
         <CommonIcon :icon="iconBills" label="消费记录" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
-            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('tr_view')" />
-        <CommonIcon :icon="iconStatistic" label="数据分析" width="40" height="40" :color="iconColor"
-            :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('dashboard')" />
+            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('tr_view')"
+            :isActive="route.path === '/tr_view'" />
+        <CommonIcon :icon="iconStatistic" label="数据分析" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
+            :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="navigate('dashboard')" :isActive="route.path === '/dashboard'" />
     </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router'
 import { useCssVariables } from '@/css/css'
 import iconBills from '@/assets/icons/bills.svg?raw'
 import iconStatistic from '@/assets/icons/statistic.svg?raw'
@@ -17,11 +18,12 @@ import CommonIcon from '@/components/CommonIcon.vue'
 // css variables
 const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
 
-const router = useRouter();
+const router = useRouter()
+const route = useRoute()
 
 const navigate = (path) => {
     router.push(path);
-};
+}
 </script>
 
 <style scoped>

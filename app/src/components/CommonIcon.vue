@@ -16,6 +16,10 @@
 <script setup>
 import { computed, ref } from 'vue'
 import ToolTip from '@/components/ToolTip.vue'
+import { useCssVariables } from '@/css/css'
+
+
+const { iconActiveFgColor } = useCssVariables()
 
 const props = defineProps({
     icon: {
@@ -92,7 +96,7 @@ const buttonStyle = computed(() => {
 
 const iconStyle = computed(() => {
     return {
-        color: props.color,
+        color: props.isActive ? iconActiveFgColor.value : props.color,
         width: `${props.iconWidth}px`,
         height: `${props.iconHeight}px`,
         strokeWidth: `${props.strokeWidth}px`
@@ -124,8 +128,15 @@ const iconStyle = computed(() => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--hover-bg-color);
     z-index: 1;
+}
+
+.common-icon--rect.is-hovered::after {
+    background-color: var(--hover-bg-color);
+}
+
+.common-icon--rect.is-active::after {
+    background-color: var(--billadm-color-icon-active-color);
 }
 
 /* circle 模式：悬停或 active 时圆形背景 */
@@ -138,10 +149,17 @@ const iconStyle = computed(() => {
     transform: translate(-50%, -50%);
     width: 70%;
     height: 70%;
-    background-color: var(--hover-bg-color);
     border-radius: 4px;
     z-index: 1;
     transition: background-color 0.3s ease;
+}
+
+.common-icon--circle.is-hovered::after {
+    background-color: var(--hover-bg-color);
+}
+
+.common-icon--circle.is-active::after {
+    background-color: var(--billadm-color-icon-active-color);
 }
 
 .icon {
