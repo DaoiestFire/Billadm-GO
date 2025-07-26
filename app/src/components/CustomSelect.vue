@@ -57,7 +57,7 @@ function selectOption(option) {
     selectedValue.value = option.value;
     selectedLabel.value = option.label;
     isOpen.value = false;
-    
+
 }
 </script>
 
@@ -65,13 +65,18 @@ function selectOption(option) {
 .custom-select {
     position: relative;
     width: 200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .select-button {
+    height: 28px;
     width: 100%;
-    padding: 10px;
     text-align: left;
-    border: 1px solid #ccc;
+    border: 1px solid var(--billadm-color-window-border-color);
+    border-radius: 4px;
     background: white;
     cursor: pointer;
 }
@@ -79,31 +84,26 @@ function selectOption(option) {
 .dropdown {
     position: absolute;
     width: 100%;
-    max-height: 200px;
     overflow-y: auto;
-    border: 1px solid #ccc;
+    border: 1px solid var(--billadm-color-window-border-color);
+    border-radius: 4px;
     background: white;
-    z-index: 100;
 }
 
 .dropdown-down {
-    top: 100%;
-    border-top: none;
-    margin-top: 2px;
+    top: 110%;
 }
 
 .dropdown-up {
-    bottom: 100%;
-    border-bottom: none;
-    margin-bottom: 2px;
+    bottom: 120%;
 }
 
 .option {
-    padding: 10px;
+    padding: 5px;
     cursor: pointer;
 }
 
 .option:hover {
-    background-color: #f0f0f0;
+    background-color: var(--billadm-color-icon-hover-bg-color);
 }
 </style>
