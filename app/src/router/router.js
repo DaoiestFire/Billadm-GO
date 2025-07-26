@@ -9,8 +9,8 @@ const routes = [
     component: Layout,
     children: [
       { path: '', redirect: '/tr_view' },
-      { path: 'tr_view', component: TransactionRecordView },
-      { path: 'dashboard', component: DashboardView },
+      { name: '消费记录', path: 'tr_view', component: TransactionRecordView },
+      { name: '数据分析', path: 'dashboard', component: DashboardView },
     ]
   }
 ];

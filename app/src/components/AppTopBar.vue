@@ -3,8 +3,10 @@
         <div class="left-groups">
             <CommonIcon :icon="iconMenu" label="菜单" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
                 :hoverBgColor="hoverBgColor" hoverStyle="rect" />
+            <CustomSelect v-model="currentLedger" :options="ledgers" height="24px" />
         </div>
         <div class="center-groups">
+            Billadm-{{ route.name }}
         </div>
         <div class="right-groups">
             <CommonIcon :icon="iconZoomOut" label="最小化" width="41" height="30" :color="iconColor"
@@ -18,15 +20,37 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useCssVariables } from '@/css/css'
 import iconMenu from '@/assets/icons/menu.svg?raw'
 import iconZoomOut from '@/assets/icons/zoom-out.svg?raw'
 import iconZoomIn from '@/assets/icons/zoom-in.svg?raw'
 import iconClose from '@/assets/icons/close.svg?raw'
 import CommonIcon from '@/components/CommonIcon.vue'
+import CustomSelect from '@/components/CustomSelect.vue'
+
+// 当前视图
+const route = useRoute()
 
 // css variables
 const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
+
+const currentLedger = ref('')
+
+watch(() => currentLedger.value,
+    (newValue) => {
+        console.log(newValue)
+    },
+    { immediate: true })
+
+
+const ledgers = [
+    { label: '刘敬威的账本', value: '刘敬威的账本' },
+    { label: '证券账本', value: '证券账本' },
+]
+
+
 </script>
 
 <style scoped>
@@ -39,6 +63,8 @@ const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
 /* 左边按钮 将它与后面的元素隔开 */
 .left-groups {
     margin-right: auto;
+    display: flex;
+    gap: 4px;
 }
 
 /* 中间按钮 */

@@ -95,6 +95,7 @@ function selectOption(option) {
     border: 1px solid var(--billadm-color-window-border-color);
     border-radius: 4px;
     background: white;
+    z-index: 10;
 }
 
 .dropdown-down {
