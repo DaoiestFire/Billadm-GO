@@ -2,6 +2,12 @@
   <div class="layout">
     <!-- 上栏：工具栏 -->
     <div class="top-bar">
+      <div class="left-groups">
+      </div>
+      <div class="center-groups">
+      </div>
+      <div class="right-groups">
+      </div>
     </div>
 
     <!-- 中间栏：消费记录表 -->
@@ -271,6 +277,28 @@ const sampleData = [
   height: 40px;
   border-bottom: 1px solid var(--billadm-color-window-border-color);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* 左边按钮 将它与后面的元素隔开 */
+.left-groups {
+  margin-right: auto;
+  display: flex;
+  gap: 4px;
+}
+
+/* 中间按钮 */
+.center-groups {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* 右边按钮组 */
+.right-groups {
+  display: flex;
 }
 
 .middle-section {
