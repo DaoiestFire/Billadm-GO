@@ -1,6 +1,6 @@
 <template>
-    <div class="custom-select">
-        <button @click="toggleDropdown" class="select-button">
+    <div class="custom-select" :style="{ width: width }">
+        <button @click="toggleDropdown" class="select-button" :style="{ height: height }">
             {{ selectedLabel || placeholder }}
         </button>
         <div v-show="isOpen" :class="['dropdown', direction === 'up' ? 'dropdown-up' : 'dropdown-down']">
@@ -30,6 +30,16 @@ const props = defineProps({
         type: String,
         default: 'down',
         validator: value => ['down', 'up'].includes(value)
+    },
+    // 新增：控制下拉容器宽度
+    width: {
+        type: [String, Number],
+        default: '100px'
+    },
+    // 新增：控制按钮高度
+    height: {
+        type: [String, Number],
+        default: '28px'
     }
 });
 
@@ -64,17 +74,14 @@ function selectOption(option) {
 <style scoped>
 .custom-select {
     position: relative;
-    width: 200px;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .select-button {
-    height: 28px;
     width: 100%;
-    text-align: left;
+    text-align: center;
     border: 1px solid var(--billadm-color-window-border-color);
     border-radius: 4px;
     background: white;
