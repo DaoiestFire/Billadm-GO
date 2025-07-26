@@ -3,7 +3,7 @@
         <div class="left-groups">
             <CommonIcon :icon="iconMenu" label="菜单" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
                 :hoverBgColor="hoverBgColor" hoverStyle="rect" />
-            <CustomSelect v-model="currentLedger" :options="ledgers" height="24px" />
+            <CustomSelect v-model="currentLedger" :options="ledgers" height="24px" width="120px" />
         </div>
         <div class="center-groups">
             Billadm-{{ route.name }}
