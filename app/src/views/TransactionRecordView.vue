@@ -45,7 +45,9 @@ watch(() => maxRows.value,
   (newValue) => {
     console.log(newValue)
   },
-  { immediate: true })
+  { immediate: true }
+)
+
 
 
 const options = [
