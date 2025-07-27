@@ -14,7 +14,7 @@
 
     <!-- 中间栏：消费记录表 -->
     <div class="middle-section">
-      <TransactionRecordTable :items="sampleData" :headerHeight="40" :rowHeight="40" />
+      <TransactionRecordTable :items="sampleData" :columnStyles="columnStyles" :headerHeight="40" :rowHeight="40" />
     </div>
 
     <!-- 下栏：分页组件 -->
@@ -52,6 +52,44 @@ const options = [
   { label: '每页10行', value: 10 },
   { label: '每页20行', value: 20 },
   { label: '每页50行', value: 50 }
+]
+
+// 表格风格设置
+const columnStyles = [
+  {
+    field: 'index',
+    name: '序号',
+    width: '100px',
+  },
+  {
+    field: 'transaction_at',
+    name: '交易时间',
+    width: '200px',
+  },
+  {
+    field: 'transaction_type',
+    name: '交易类型',
+    width: '100px',
+  },
+  {
+    field: 'category',
+    name: '消费类型',
+    width: '100px',
+  },
+  {
+    field: 'description',
+    name: '描述',
+    width: 'auto',
+  },
+  {
+    field: 'tags',
+    name: '标签',
+    width: 'auto',
+  },
+  {
+    field: 'price',
+    name: '价格',
+  }
 ]
 
 // 表格数据

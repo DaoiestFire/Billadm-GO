@@ -3,24 +3,17 @@
     <table class="tr-table">
       <thead>
         <tr :style="headerRowStyle">
-          <th>序号</th>
-          <th>交易时间</th>
-          <th>交易类型</th>
-          <th>消费类型</th>
-          <th>描述</th>
-          <th>标签</th>
-          <th>价格</th>
+          <th v-for="styleItem in columnStyles" :key="styleItem.field" :style="getColumnStyle(styleItem)">
+            {{ styleItem.name }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in items" :key="item.transaction_id" :style="rowStyle">
-          <td>{{ index + 1 }}</td>
-          <td>{{ formatTime(item.transaction_at) }}</td>
-          <td>{{ formatTransactionType(item.transaction_type) }}</td>
-          <td>{{ item.category }}</td>
-          <td>{{ item.description }}</td>
-          <td>{{ formatTags(item.tags) }}</td>
-          <td :style="getPriceStyle(item.transaction_type)">{{ item.price }}</td>
+          <td v-for="styleItem in columnStyles" :key="styleItem.field"
+            :style="formatCellStyle(styleItem.field, item)">
+            {{ styleItem.field === 'index' ? index + 1 : formatCell(styleItem.field, item[styleItem.field]) }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -35,16 +28,40 @@ const props = defineProps({
   },
   headerHeight: {
     type: Number,
-    default: 50 // 默认表头高度
+    default: 50
   },
   rowHeight: {
     type: Number,
-    default: 40 // 默认行高
-  }
+    default: 40
+  },
+  columnStyles: {
+    type: Array,
+    default: []
+  },
 })
 
+// 获取表头风格
+const getColumnStyle = (item) => {
+  const width = item.width || 'auto'
+  return {
+    width,
+    minWidth: width === 'auto' ? 'auto' : undefined,
+    maxWidth: width === 'auto' ? 'none' : undefined
+  }
+}
+
+// 获取表格样式
+const formatCellStyle = (field, item) => {
+  switch (field) {
+    case 'price':
+      return formatPriceStyle(item.transaction_type)
+    default:
+      return {}
+  }
+}
+
 // 获取价格样式
-const getPriceStyle = (type) => {
+const formatPriceStyle = (type) => {
   let color = ''
   if (type === 'expense') {
     color = 'red'
@@ -54,6 +71,27 @@ const getPriceStyle = (type) => {
     color = 'orange'
   }
   return { color }
+}
+
+// 格式化数据
+const formatCell = (field, value) => {
+  switch (field) {
+    case 'transaction_at':
+      return formatTime(value)
+    case 'transaction_type':
+      return formatTransactionType(value)
+    case 'tags':
+      return formatTags(value)
+    default:
+      return value
+  }
+}
+
+// 格式化时间
+const formatTime = (timeStr) => {
+  if (!timeStr) return ''
+  const date = new Date(timeStr)
+  return date.toLocaleString()
 }
 
 // 格式化交易类型
@@ -66,29 +104,19 @@ const formatTags = (tags) => {
   return tags && tags.length ? tags.join('，') : ''
 }
 
-// 格式化时间（去掉毫秒）
-const formatTime = (timeStr) => {
-  if (!timeStr) return ''
-  const date = new Date(timeStr)
-  return date.toLocaleString()
-}
-
 const containerStyle = {
   '--row-height': `${props.rowHeight}px`,
   '--header-height': `${props.headerHeight}px`,
-  '--font-size': props.fontSize
 }
 
 const headerRowStyle = {
   height: 'var(--header-height)',
   lineHeight: 'var(--header-height)',
-  fontSize: 'var(--font-size)'
 }
 
 const rowStyle = {
   height: 'var(--row-height)',
   lineHeight: 'var(--row-height)',
-  fontSize: 'var(--font-size)'
 }
 </script>
 
