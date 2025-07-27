@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in displayedItems" :key="item.transaction_id" :style="rowStyle">
+        <tr v-for="(item, index) in items" :key="item.transaction_id" :style="rowStyle">
           <td>{{ index + 1 }}</td>
           <td>{{ formatTime(item.transaction_at) }}</td>
           <td>{{ formatTransactionType(item.transaction_type) }}</td>
@@ -28,8 +28,6 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-
 const props = defineProps({
   items: {
     type: Array,
@@ -42,21 +40,8 @@ const props = defineProps({
   rowHeight: {
     type: Number,
     default: 40 // 默认行高
-  },
-  fontSize: {
-    type: String,
-    default: '14px' // 默认字体大小
   }
 })
-
-const displayedItems = ref([])
-
-// 动态计算最大显示行数
-const calculateMaxRows = () => {
-  const availableHeight = window.innerHeight - 62 - props.headerHeight - 1
-  const maxRowsCount = Math.floor(availableHeight / props.rowHeight)
-  displayedItems.value = props.items.slice(0, maxRowsCount)
-}
 
 // 获取价格样式
 const getPriceStyle = (type) => {
@@ -68,7 +53,7 @@ const getPriceStyle = (type) => {
   } else if (type === 'transfer') {
     color = 'orange'
   }
-  return { color, fontSize: props.fontSize }
+  return { color }
 }
 
 // 格式化交易类型
@@ -87,20 +72,6 @@ const formatTime = (timeStr) => {
   const date = new Date(timeStr)
   return date.toLocaleString()
 }
-
-// 监听窗口变化
-const onResize = () => {
-  calculateMaxRows()
-}
-
-onMounted(() => {
-  calculateMaxRows()
-  window.addEventListener('resize', onResize)
-})
-
-watch(() => [props.items, props.rowHeight, props.headerHeight], () => {
-  calculateMaxRows()
-})
 
 const containerStyle = {
   '--row-height': `${props.rowHeight}px`,
