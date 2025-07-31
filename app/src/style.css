@@ -9,6 +9,8 @@
     --billadm-color-icon-hover-bg-color: #dddddd;
     --billadm-color-icon-active-color: #007bff;
     --billadm-color-icon-active-fg-color: #ffffff;
+    --billadm-color-icon-edit-bg-color: #007bff;
+    --billadm-color-icon-delete-bg-color: #f56c6c;
 
     /* 表格的颜色 */
     --billadm-color-table-header-bg-color: #e9e9e9;

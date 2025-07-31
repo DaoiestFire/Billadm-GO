@@ -10,9 +10,16 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in items" :key="item.transaction_id" :style="rowStyle">
-          <td v-for="styleItem in columnStyles" :key="styleItem.field"
-            :style="formatCellStyle(styleItem.field, item)">
-            {{ styleItem.field === 'index' ? index + 1 : formatCell(styleItem.field, item[styleItem.field]) }}
+          <td v-for="styleItem in columnStyles" :key="styleItem.field" :style="formatCellStyle(styleItem.field, item)">
+            <template v-if="styleItem.field === 'actions'">
+              <div class="action-buttons">
+                <button class="btn-edit">编辑</button>
+                <button class="btn-delete">删除</button>
+              </div>
+            </template>
+            <template v-else>
+              {{ styleItem.field === 'index' ? index + 1 : formatCell(styleItem.field, item[styleItem.field]) }}
+            </template>
           </td>
         </tr>
       </tbody>
@@ -53,15 +60,15 @@ const getColumnStyle = (item) => {
 // 获取表格样式
 const formatCellStyle = (field, item) => {
   switch (field) {
-    case 'price':
-      return formatPriceStyle(item.transaction_type)
+    case 'transaction_type':
+      return formatTransactionTypeStyle(item.transaction_type)
     default:
       return {}
   }
 }
 
 // 获取价格样式
-const formatPriceStyle = (type) => {
+const formatTransactionTypeStyle = (type) => {
   let color = ''
   if (type === 'expense') {
     color = 'red'
@@ -121,6 +128,44 @@ const rowStyle = {
 </script>
 
 <style scoped>
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+}
+
+.action-buttons button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background-color: var(--billadm-color-icon-edit-bg-color);
+  color: var(--billadm-color-icon-active-fg-color);
+}
+
+.btn-edit:hover {
+  /* 假设 edit-bg-color 是浅色，hover 时加深 */
+  background-color: color-mix(in srgb, var(--billadm-color-icon-edit-bg-color) 80%, #000);
+  /* 或者你可以定义一个专门的 hover 变量，更可控 */
+  transform: scale(1.05); /* 轻微放大，可选 */
+}
+
+.btn-delete {
+  background-color: var(--billadm-color-icon-delete-bg-color);
+  color: var(--billadm-color-icon-active-fg-color);
+}
+
+.btn-delete:hover {
+  /* 删除按钮 hover 时加深红色 */
+  background-color: color-mix(in srgb, var(--billadm-color-icon-delete-bg-color) 80%, #900);
+  transform: scale(1.05);
+}
+
 .tr-table-container {
   overflow-y: auto;
   height: 100%;

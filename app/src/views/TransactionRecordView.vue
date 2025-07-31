@@ -91,6 +91,11 @@ const columnStyles = [
   {
     field: 'price',
     name: '价格',
+  },
+  {
+    field: 'actions',
+    name: '操作',
+    width: '120px',
   }
 ]
 
