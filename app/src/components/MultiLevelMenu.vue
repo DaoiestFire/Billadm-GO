@@ -1,6 +1,6 @@
 <template>
     <div class="menu-container" ref="menuContainer">
-        <ul v-if="showMenu" class="menu" :style="menuStyle" ref="menu">
+        <ul v-if="showMenu" class="menu" :style="menuStyle">
             <MenuItem v-for="(item, index) in menuItems" :key="index" :item="item" :depth="0" @close-menu="closeMenu" />
         </ul>
     </div>
@@ -55,7 +55,6 @@ const showMenu = ref(false);
 
 // 菜单容器和触发按钮的引用
 const menuContainer = ref(null);
-const menu = ref(null);
 
 // 计算菜单位置（默认在触发按钮右侧）
 const menuStyle = computed(() => {
@@ -110,27 +109,12 @@ defineExpose({
     display: inline-block;
 }
 
-.trigger-button {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s ease;
-}
-
-.trigger-button:hover {
-    background-color: #0056b3;
-}
-
 .menu {
     list-style: none;
     margin: 0;
     padding: 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: white;
+    border: 1px solid var(--billadm-color-window-border-color);
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     min-width: 160px;
