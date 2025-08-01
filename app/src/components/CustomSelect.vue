@@ -1,5 +1,5 @@
 <template>
-    <div class="custom-select" :style="{ width: width }">
+    <div class="custom-select" :style="{ width: width }" ref="selectWrapper">
         <button @click="toggleDropdown" class="select-button" :style="{ height: height }">
             {{ selectedLabel || placeholder }}
         </button>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 
 const selectedValue = defineModel()
 
@@ -46,6 +46,7 @@ const props = defineProps({
 // Data
 const isOpen = ref(false);
 const selectedLabel = ref('');
+const selectWrapper = ref(null);
 
 // Watch modelValue to update selected label
 watch(
@@ -69,6 +70,24 @@ function selectOption(option) {
     isOpen.value = false;
 
 }
+
+// 关闭下拉框的函数
+function closeDropdown(event) {
+    // 如果点击在组件外部，则关闭
+    if (selectWrapper.value && !selectWrapper.value.contains(event.target)) {
+        isOpen.value = false;
+    }
+}
+
+// 组件挂载后添加事件监听
+onMounted(() => {
+    document.addEventListener('click', closeDropdown);
+});
+
+// 组件卸载前移除事件监听，防止内存泄漏
+onUnmounted(() => {
+    document.removeEventListener('click', closeDropdown);
+});
 </script>
 
 <style scoped>
