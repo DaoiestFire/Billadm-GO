@@ -83,11 +83,20 @@ const closeMenu = () => {
 
 // 处理点击外部关闭菜单
 const handleClickOutside = (event) => {
-    confirm.log(event)
     if (menuContainer.value && !menuContainer.value.contains(event.target)) {
         closeMenu();
     }
 };
+
+// 监听点击外部事件
+onMounted(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+});
+
+// 移除事件监听器
+onUnmounted(() => {
+    document.removeEventListener('mousedown', handleClickOutside);
+});
 
 defineExpose({
     toggleMenu,
