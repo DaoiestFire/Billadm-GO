@@ -31,8 +31,6 @@ const showTooltip = (event) => {
     const target = event.target
     const rect = target.getBoundingClientRect()
 
-    console.log(rect)
-
     // 获取视口宽度（viewport width）
     const windowWidth = window.innerWidth
 

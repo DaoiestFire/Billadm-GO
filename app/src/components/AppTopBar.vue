@@ -2,7 +2,8 @@
     <div class="menu-bar">
         <div class="left-groups">
             <CommonIcon :icon="iconMenu" label="菜单" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                :hoverBgColor="hoverBgColor" hoverStyle="rect" />
+                :hoverBgColor="hoverBgColor" hoverStyle="rect" @click="billadmMenu.toggleMenu()" />
+            <MultiLevelMenu ref="billadmMenu" />
             <CustomSelect v-model="currentLedger" :options="ledgers" height="24px" width="120px" placeholder="选择账本" />
         </div>
         <div class="center-groups">
@@ -29,6 +30,7 @@ import iconZoomIn from '@/assets/icons/zoom-in.svg?raw'
 import iconClose from '@/assets/icons/close.svg?raw'
 import CommonIcon from '@/components/CommonIcon.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
+import MultiLevelMenu from '@/components/MultiLevelMenu.vue'
 
 // 当前视图
 const route = useRoute()
@@ -36,6 +38,10 @@ const route = useRoute()
 // css variables
 const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
 
+// 菜单
+const billadmMenu = ref(null)
+
+// 账本选择框
 const currentLedger = ref('')
 
 watch(() => currentLedger.value,
