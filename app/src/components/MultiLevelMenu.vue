@@ -50,9 +50,6 @@ const menuItems = ref([
     { label: '帮助', action: () => console.log('帮助') },
 ]);
 
-// 触发按钮文本
-const triggerText = ref('打开菜单');
-
 // 菜单显示状态
 const showMenu = ref(false);
 
