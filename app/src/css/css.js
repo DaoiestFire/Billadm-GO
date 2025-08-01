@@ -24,3 +24,16 @@ export function useCssVariables() {
     iconActiveFgColor
   };
 }
+
+export function getPlacements() {
+  return [
+    'top',
+    'bottom',
+    'left',
+    'right',
+    'top-left',
+    'top-right',
+    'bottom-left',
+    'bottom-right'
+  ];
+}

@@ -1,7 +1,7 @@
 <!-- GlobalTooltip.vue -->
 <template>
     <teleport to="body">
-        <span v-if="isVisible" class="global-tooltip" :style="{ left: x + 'px', top: y + 'px' }">
+        <span v-if="isVisible" class="global-tooltip" :style="loc">
             {{ content }}
         </span>
     </teleport>
@@ -14,18 +14,47 @@ const props = defineProps({
     content: {
         type: String,
         default: ''
+    },
+    placement: {
+        type: String,
+        default: 'right-bottom',
     }
 })
 
-const x = ref(0)
-const y = ref(0)
+
+const loc = ref({})
 const isVisible = ref(false)
 
 const showTooltip = (event) => {
     if (!props.content) return
-    const rect = event.target.getBoundingClientRect()
-    x.value = rect.left + window.scrollX + rect.width
-    y.value = rect.top + rect.height / 2
+
+    const target = event.target
+    const rect = target.getBoundingClientRect()
+
+    console.log(rect)
+
+    // 获取视口宽度（viewport width）
+    const windowWidth = window.innerWidth
+
+    // 获取视口高度（viewport height）
+    const windowHeight = window.innerHeight
+
+    switch (props.placement) {
+        case 'bottom-left':
+            loc.value = {
+                right: (windowWidth - rect.right) + 'px',
+                top: (rect.top + rect.height) + 'px',
+            }
+            break
+
+        case 'right-bottom':
+            loc.value = {
+                left: (rect.left + rect.width) + 'px',
+                top: (rect.top + rect.height / 2) + 'px',
+            }
+            break
+    }
+
     isVisible.value = true
 }
 
@@ -51,6 +80,5 @@ defineExpose({
     z-index: 99999;
     pointer-events: none;
     transition: opacity 0.2s ease-in-out;
-    font-family: sans-serif;
 }
 </style>

@@ -9,7 +9,7 @@
         { 'is-active': isActive }
     ]">
         <span class="icon" :style="iconStyle" v-html="icon"></span>
-        <ToolTip ref="tooltip" :content="label" />
+        <ToolTip ref="tooltip" :content="label" :placement="tooltipPlacement" />
     </button>
 </template>
 
@@ -70,6 +70,10 @@ const props = defineProps({
     isActive: {
         type: Boolean,
         default: false
+    },
+    tooltipPlacement: {
+        type: String,
+        default: 'right-bottom',
     }
 })
 

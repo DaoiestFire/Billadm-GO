@@ -10,11 +10,11 @@
         </div>
         <div class="right-groups">
             <CommonIcon :icon="iconZoomOut" label="最小化" width="41" height="30" :color="iconColor"
-                :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="rect" />
+                :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-left" />
             <CommonIcon :icon="iconZoomIn" label="最大化" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                :hoverBgColor="hoverBgColor" hoverStyle="rect" />
+                :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-left" />
             <CommonIcon :icon="iconClose" label="关闭" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                :hoverBgColor="hoverBgColor" hoverStyle="rect" />
+                :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-left" />
         </div>
     </div>
 </template>

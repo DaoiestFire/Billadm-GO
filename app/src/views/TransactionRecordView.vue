@@ -8,7 +8,7 @@
       </div>
       <div class="right-groups">
         <CommonIcon :icon="iconAdd" label="新增消费记录" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
-          :hoverBgColor="hoverBgColor" hoverStyle="circle" />
+          :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-left" />
       </div>
     </div>
 
