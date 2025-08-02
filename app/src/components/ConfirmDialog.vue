@@ -122,7 +122,7 @@ function handleConfirm() {
 /* 确认框主体样式 */
 .confirm-dialog {
     background-color: white;
-    border-radius: 4px;
+    border-radius: 8px;
     padding: 20px;
     margin-top: calc(100vh / 4);
     min-width: 300px;

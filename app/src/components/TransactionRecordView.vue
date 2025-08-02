@@ -5,7 +5,7 @@
         <div v-if="visible" class="transaction-overlay" @click="close">
             <div class="transaction-dialog" @click.stop>
                 <!-- 标题 -->
-                <h2 class="dialog-title">{{ title }}</h2>
+                <span class="dialog-title">{{ title }}</span>
 
                 <!-- 表单内容 -->
                 <div class="form-container">
@@ -25,8 +25,8 @@
                         </select>
                     </div>
 
-                    <!-- 消费类型（可结合交易类型动态变化，此处为静态示例） -->
-                    <div v-if="formData.type === 'expense'" class="form-item">
+                    <!-- 消费类型 -->
+                    <div class="form-item">
                         <label>消费类型</label>
                         <input v-model="formData.category" type="text" class="form-input" placeholder="如：餐饮、交通" />
                     </div>
@@ -57,10 +57,8 @@
 
                 <!-- 按钮区域 -->
                 <div class="button-container">
-                    <button class="dialog-button cancel" @click="close">{{ cancelLabel }}</button>
-                    <button class="dialog-button confirm" :style="{ color: confirmColor }" @click="handleSubmit">
-                        {{ confirmLabel }}
-                    </button>
+                    <button class="dialog-button cancel" @click="close">取消</button>
+                    <button class="dialog-button confirm" @click="handleSubmit">确认</button>
                 </div>
             </div>
         </div>
@@ -78,21 +76,8 @@ const props = defineProps({
     },
     title: {
         type: String,
-        default: '填写交易记录'
+        default: '自定义标题'
     },
-    cancelLabel: {
-        type: String,
-        default: '取消'
-    },
-    confirmLabel: {
-        type: String,
-        default: '确认'
-    },
-    confirmColor: {
-        type: String,
-        default: '#007bff'
-    },
-    // 交易类型选项，可自定义
     typeOptions: {
         type: Array,
         default: () => [
@@ -101,17 +86,14 @@ const props = defineProps({
             { label: '转账', value: 'transfer' }
         ]
     },
-    // 标签选项
     tagOptions: {
         type: Array,
         default: () => ['餐饮', '交通', '购物', '娱乐', '工资', '理财', '房租', '医疗']
     },
-    // 初始表单数据
     modelValue: {
         type: Object,
         default: () => ({})
     },
-    // 确认回调
     onConfirm: {
         type: Function
     }
@@ -182,15 +164,14 @@ function handleSubmit() {
     padding: 24px;
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .dialog-title {
     font-size: 20px;
     font-weight: bold;
     text-align: left;
-    margin: 0 0 20px 0;
-    color: #333;
+    margin-bottom: 24px;
+    display: block;
 }
 
 .form-container {
@@ -227,7 +208,6 @@ function handleSubmit() {
 
 .form-select[multiple] {
     height: 100px;
-    /* 多选下拉框高度 */
 }
 
 .form-input:focus,
@@ -245,28 +225,25 @@ function handleSubmit() {
 
 .dialog-button {
     padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+    outline: none;
 }
 
 .dialog-button.cancel {
-    background-color: #f1f1f1;
-    color: #666;
-}
-
-.dialog-button.cancel:hover {
-    background-color: #e0e0e0;
+    color: var(--billadm-color-negative-color);
 }
 
 .dialog-button.confirm {
-    background-color: transparent;
+    color: var(--billadm-color-positive-color);
 }
 
-.dialog-button.confirm:hover {
-    text-decoration: underline;
+/* 按钮 hover 效果 */
+.dialog-button:hover {
+    background-color: var(--billadm-color-icon-hover-bg-color);
 }
 </style>
