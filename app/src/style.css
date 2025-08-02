@@ -7,9 +7,9 @@
     /* 按钮的颜色 */
     --billadm-color-icon-color: #7b7b7b;
     --billadm-color-icon-hover-bg-color: #dddddd;
-    --billadm-color-icon-active-color: #007bff;
+    --billadm-color-icon-active-color: #409eff;
     --billadm-color-icon-active-fg-color: #ffffff;
-    --billadm-color-icon-edit-bg-color: #007bff;
+    --billadm-color-icon-edit-bg-color: #409eff;
     --billadm-color-icon-delete-bg-color: #f56c6c;
 
     /* 表格的颜色 */
@@ -18,7 +18,7 @@
     --billadm-color-table-even-row-bg-color: #f0f0f0;
 
     /* 常用颜色 */
-    --billadm-color-positive-color: #007bff;
+    --billadm-color-positive-color: #409eff;
     --billadm-color-negative-color: #f56c6c;
 }
 

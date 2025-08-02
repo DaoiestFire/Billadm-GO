@@ -23,7 +23,7 @@
       <Pagination :pages="15" />
     </div>
   </div>
-  <TransactionRecordView v-model="recordData" v-model:visible="showDialog" title="新增消费记录" :onConfirm="handleConfirm" />
+  <TransactionRecordOperation v-model="recordData" v-model:visible="showDialog" title="新增消费记录" :onConfirm="handleConfirm" />
 </template>
 
 <script setup>
@@ -34,7 +34,7 @@ import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
 import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
 import CommonIcon from '@/components/CommonIcon.vue'
-import TransactionRecordView from '@/components/TransactionRecordView.vue'
+import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
 
 // css variables
 const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
