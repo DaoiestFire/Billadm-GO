@@ -3,7 +3,7 @@
         @mouseleave="handleMouseLeave" @click="handleClick" ref="menuItem">
         <DisplayIcon :rawSvg="leftIcon" />
         <span class="item-label">{{ item.label }}</span>
-        <DisplayIcon v-if="item.children" :rawSvg="iconChevronRight" />
+        <DisplayIcon v-if="item.children" :rawSvg="iconMoreV" />
 
         <!-- 子菜单 -->
         <ul v-if="item.children && showChildren" class="submenu" :style="submenuStyle">
@@ -16,7 +16,7 @@
 <script setup>
 import { ref, computed, defineEmits, defineProps } from 'vue'
 import DisplayIcon from '@/components/DisplayIcon.vue'
-import iconChevronRight from '@/assets/icons/chevron-right.svg?raw'
+import iconMoreV from '@/assets/icons/more-v.svg?raw'
 
 // 定义 props
 const props = defineProps({
