@@ -1,7 +1,8 @@
 <template>
     <div class="menu-container" ref="menuContainer">
         <ul v-if="showMenu" class="menu" :style="menuStyle">
-            <MenuItem v-for="(item, index) in menuItems" :key="index" :item="item" :depth="0" @close-menu="closeMenu" />
+            <MenuItem v-for="(item, index) in menuItems" :key="index" :item="item" :leftIcon="item.icon" :depth="0"
+                @close-menu="closeMenu" />
         </ul>
     </div>
 </template>
@@ -9,16 +10,19 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import MenuItem from '@/components/MenuItem.vue';
+import iconBook from '@/assets/icons/book.svg?raw'
+import iconInfo from '@/assets/icons/info.svg?raw'
+
 // 定义菜单项类型
 const menuItems = ref([
     {
-        label: '账本', children: [
+        label: '账本', icon: iconBook, children: [
             { label: '新建账本', action: () => console.log('新建文件') },
             { label: '删除账本', action: () => console.log('删除账本') },
         ]
     },
     {
-        label: '关于', action: () => console.log('关于')
+        label: '关于', icon: iconInfo, action: () => console.log('关于')
     },
 ]);
 

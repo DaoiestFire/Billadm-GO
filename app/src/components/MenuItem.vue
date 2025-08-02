@@ -1,18 +1,22 @@
 <template>
     <li class="menu-item" :class="{ 'has-children': item.children }" @mouseenter="handleMouseEnter"
         @mouseleave="handleMouseLeave" @click="handleClick" ref="menuItem">
+        <DisplayIcon :rawSvg="leftIcon" />
         <span class="item-label">{{ item.label }}</span>
+        <DisplayIcon v-if="item.children" :rawSvg="iconChevronRight" />
 
         <!-- 子菜单 -->
         <ul v-if="item.children && showChildren" class="submenu" :style="submenuStyle">
-            <MenuItem v-for="(child, index) in item.children" :key="index" :item="child" :depth="depth + 1"
-                @close-menu="$emit('close-menu')" />
+            <MenuItem v-for="(child, index) in item.children" :key="index" :item="child" :leftIcon="child.icon"
+                :depth="depth + 1" @close-menu="$emit('close-menu')" />
         </ul>
     </li>
 </template>
 
 <script setup>
-import { ref, computed, defineEmits, defineProps } from 'vue';
+import { ref, computed, defineEmits, defineProps } from 'vue'
+import DisplayIcon from '@/components/DisplayIcon.vue'
+import iconChevronRight from '@/assets/icons/chevron-right.svg?raw'
 
 // 定义 props
 const props = defineProps({
@@ -23,6 +27,10 @@ const props = defineProps({
     depth: {
         type: Number,
         default: 0,
+    },
+    leftIcon: {
+        type: String,
+        default: '',
     },
 });
 
@@ -72,24 +80,11 @@ const handleClick = (event) => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-right: 20px;
     height: 40px;
 }
 
 .menu-item:hover {
     background-color: var(--billadm-color-icon-hover-bg-color);
-}
-
-/* 使用 ::after 伪元素创建箭头 */
-.menu-item.has-children::after {
-    content: '▶';
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.7em;
-    color: var(--billadm-color-icon-color);
-    pointer-events: none;
 }
 
 /* 子菜单样式 */
