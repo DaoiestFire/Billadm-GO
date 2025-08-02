@@ -12,30 +12,31 @@
                     <!-- 交易时间 -->
                     <div class="form-item">
                         <label>交易时间</label>
-                        <el-date-picker v-model="formData.time" type="datetime" placeholder="Select date and time"
+                        <el-date-picker v-model="formData.time" type="datetime" placeholder="选择交易时间"
                             style="width: 100%;" />
                     </div>
 
                     <!-- 交易类型 -->
                     <div class="form-item">
                         <label>交易类型</label>
-                        <select v-model="formData.type" class="form-select">
-                            <option v-for="type in typeOptions" :key="type.value" :value="type.value">
-                                {{ type.label }}
-                            </option>
-                        </select>
+                        <el-select v-model="formData.type" placeholder="选择交易类型" style="width: 100%">
+                            <el-option v-for="type in typeOptions" :key="type.value" :label="type.label"
+                                :value="type.value" />
+                        </el-select>
                     </div>
 
                     <!-- 消费类型 -->
                     <div class="form-item">
                         <label>消费类型</label>
-                        <input v-model="formData.category" type="text" class="form-input" placeholder="如：餐饮、交通" />
+                        <el-select v-model="formData.category" placeholder="选择消费类型" style="width: 100%">
+                            <el-option v-for="category in categoryOptions" :key="category" :value="category" />
+                        </el-select>
                     </div>
 
                     <!-- 描述 -->
                     <div class="form-item">
                         <label>描述</label>
-                        <input v-model="formData.description" type="text" class="form-input" placeholder="简要说明" />
+                        <el-input v-model="formData.description" style="width: 100%" placeholder="简要说明" clearable />
                     </div>
 
                     <!-- 标签（多选下拉） -->
@@ -51,8 +52,7 @@
                     <!-- 价格 -->
                     <div class="form-item">
                         <label>价格</label>
-                        <input v-model.number="formData.amount" type="number" step="5" min="0" class="form-input"
-                            placeholder="请输入金额" />
+                        <el-input-number v-model="formData.amount" :min="0" style="width: 100%" />
                     </div>
                 </div>
 
@@ -86,6 +86,10 @@ const props = defineProps({
             { label: '收入', value: 'income' },
             { label: '转账', value: 'transfer' }
         ]
+    },
+    categoryOptions: {
+        type: Array,
+        default: () => ['餐饮', '交通', '购物', '娱乐', '工资', '理财', '房租', '医疗']
     },
     tagOptions: {
         type: Array,
