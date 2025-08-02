@@ -1,9 +1,15 @@
 <template>
     <li class="menu-item" :class="{ 'has-children': item.children }" @mouseenter="handleMouseEnter"
         @mouseleave="handleMouseLeave" @click="handleClick" ref="menuItem">
-        <DisplayIcon :rawSvg="leftIcon" />
-        <span class="item-label">{{ item.label }}</span>
-        <DisplayIcon v-if="item.children" :rawSvg="iconMoreV" />
+
+        <!-- 左侧内容：图标 + 标签 -->
+        <div class="menu-item-left">
+            <DisplayIcon :rawSvg="leftIcon" />
+            <span class="item-label">{{ item.label }}</span>
+        </div>
+
+        <!-- 右侧图标（仅在有子菜单时显示） -->
+        <DisplayIcon v-if="item.children" :rawSvg="iconMoreV" class="menu-item-right-icon" />
 
         <!-- 子菜单 -->
         <ul v-if="item.children && showChildren" class="submenu" :style="submenuStyle">
@@ -79,6 +85,7 @@ const handleClick = (event) => {
     cursor: pointer;
     display: flex;
     justify-content: space-between;
+    /* 主轴分布：左右撑开 */
     align-items: center;
     height: 40px;
 }
@@ -87,7 +94,26 @@ const handleClick = (event) => {
     background-color: var(--billadm-color-icon-hover-bg-color);
 }
 
-/* 子菜单样式 */
+/* 左侧内容：图标 + 文字 */
+.menu-item-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    white-space: nowrap;
+}
+
+/* 右侧下拉箭头图标 */
+.menu-item-right-icon {
+    margin-left: auto;
+    /* 关键：将右侧图标推到最右边 */
+    display: flex;
+    align-items: center;
+    color: #999;
+    /* 可选：调整颜色 */
+    opacity: 0.7;
+}
+
+/* 子菜单样式（不变） */
 .submenu {
     list-style: none;
     margin: 0;
@@ -97,5 +123,9 @@ const handleClick = (event) => {
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     min-width: 160px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
 }
 </style>
