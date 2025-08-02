@@ -17,6 +17,12 @@
                 <button class="btn-delete">删除</button>
               </div>
             </template>
+            <template v-if="styleItem.field === 'tags'">
+              <el-space size="small"
+                style="display: flex; align-items: center; height: 100%; width: 100%; justify-content: center;">
+                <el-tag v-for="tag in item[styleItem.field]" type="primary">{{ tag }}</el-tag>
+              </el-space>
+            </template>
             <template v-else>
               {{ styleItem.field === 'index' ? index + 1 : formatCell(styleItem.field, item[styleItem.field]) }}
             </template>
@@ -87,8 +93,6 @@ const formatCell = (field, value) => {
       return formatTime(value)
     case 'transaction_type':
       return formatTransactionType(value)
-    case 'tags':
-      return formatTags(value)
     default:
       return value
   }
@@ -152,7 +156,8 @@ const rowStyle = {
   /* 假设 edit-bg-color 是浅色，hover 时加深 */
   background-color: color-mix(in srgb, var(--billadm-color-icon-edit-bg-color) 80%, #000);
   /* 或者你可以定义一个专门的 hover 变量，更可控 */
-  transform: scale(1.05); /* 轻微放大，可选 */
+  transform: scale(1.05);
+  /* 轻微放大，可选 */
 }
 
 .btn-delete {

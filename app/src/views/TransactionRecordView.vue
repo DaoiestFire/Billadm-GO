@@ -23,7 +23,8 @@
       <Pagination :pages="15" />
     </div>
   </div>
-  <TransactionRecordOperation v-model="recordData" v-model:visible="showDialog" title="新增消费记录" :onConfirm="handleConfirm" />
+  <TransactionRecordOperation v-model="recordData" v-model:visible="showDialog" title="新增消费记录"
+    :onConfirm="handleConfirm" />
 </template>
 
 <script setup>
@@ -178,7 +179,7 @@ const sampleData = [
     "transaction_type": "expense",
     "category": "餐饮美食",
     "description": "早餐",
-    "tags": ["三餐"],
+    "tags": ["三餐", "11", "22"],
     "transaction_at": "2025-07-19T00:15:32.563+08:00",
     "created_at": "2025-07-19T00:15:32.5755985+08:00",
     "updated_at": "2025-07-19T00:15:32.5755985+08:00"

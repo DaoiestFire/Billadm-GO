@@ -195,30 +195,6 @@ function handleSubmit() {
     font-weight: 500;
 }
 
-.form-input,
-.form-select {
-    padding: 10px 12px;
-    border: 1px solid var(--billadm-color-window-border-color);
-    border-radius: 6px;
-    font-size: 14px;
-    outline: none;
-    background-color: #fff;
-}
-
-.form-select {
-    height: auto;
-}
-
-.form-select[multiple] {
-    height: 100px;
-}
-
-.form-input:focus,
-.form-select:focus {
-    border-color: var(--billadm-color-positive-color);
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
-}
-
 .button-container {
     display: flex;
     justify-content: flex-end;
