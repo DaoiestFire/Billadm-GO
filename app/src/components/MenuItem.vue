@@ -68,12 +68,12 @@ const handleClick = (event) => {
 <style scoped>
 .menu-item {
     position: relative;
-    padding: 8px 12px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-right: 20px;
+    height: 40px;
 }
 
 .menu-item:hover {
