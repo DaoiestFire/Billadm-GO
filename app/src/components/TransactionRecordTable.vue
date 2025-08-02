@@ -71,11 +71,11 @@ const formatCellStyle = (field, item) => {
 const formatTransactionTypeStyle = (type) => {
   let color = ''
   if (type === 'expense') {
-    color = 'red'
+    color = '#F56C6C'
   } else if (type === 'income') {
-    color = 'green'
+    color = '#67C23A'
   } else if (type === 'transfer') {
-    color = 'orange'
+    color = '#409EFF'
   }
   return { color }
 }
