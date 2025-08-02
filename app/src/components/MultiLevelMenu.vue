@@ -20,16 +20,20 @@ const menuItems = ref([
     {
         label: '账本', icon: iconBook, children: [
             {
-                label: '新建账本', icon: iconAdd, children: [
+                label: '新建账本', icon: iconAdd
+            },
+            {
+                label: '删除账本', icon: iconTrash, children: [
                     {
-                        label: '刘敬威的账本'
+                        label: '刘敬威的账本',
+                        action: () => console.log('删除刘敬威的账本')
                     },
                     {
-                        label: '默认账本'
+                        label: '默认账本',
+                        action: () => console.log('删除默认账本')
                     }
                 ]
             },
-            { label: '删除账本', icon: iconTrash },
         ]
     },
     {
