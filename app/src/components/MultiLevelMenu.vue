@@ -12,42 +12,14 @@ import MenuItem from '@/components/MenuItem.vue';
 // 定义菜单项类型
 const menuItems = ref([
     {
-        label: '文件', children: [
-            { label: '新建', action: () => console.log('新建文件') },
-            { label: '打开', action: () => console.log('打开文件') },
-            { label: '保存', action: () => console.log('保存文件') },
-            { label: '另存为...', action: () => console.log('另存为') },
-            {
-                label: '导出', children: [
-                    { label: 'PDF', action: () => console.log('导出为 PDF') },
-                    { label: 'Word', action: () => console.log('导出为 Word') },
-                    {
-                        label: '图片', children: [
-                            { label: 'PNG', action: () => console.log('导出为 PNG') },
-                            { label: 'JPG', action: () => console.log('导出为 JPG') },
-                        ]
-                    }
-                ]
-            }
+        label: '账本', children: [
+            { label: '新建账本', action: () => console.log('新建文件') },
+            { label: '删除账本', action: () => console.log('删除账本') },
         ]
     },
     {
-        label: '编辑', children: [
-            { label: '撤销', action: () => console.log('撤销') },
-            { label: '重做', action: () => console.log('重做') },
-            { label: '剪切', action: () => console.log('剪切') },
-            { label: '复制', action: () => console.log('复制') },
-            { label: '粘贴', action: () => console.log('粘贴') },
-        ]
+        label: '关于', action: () => console.log('关于')
     },
-    {
-        label: '视图', children: [
-            { label: '放大', action: () => console.log('放大') },
-            { label: '缩小', action: () => console.log('缩小') },
-            { label: '全屏', action: () => console.log('全屏') },
-        ]
-    },
-    { label: '帮助', action: () => console.log('帮助') },
 ]);
 
 // 菜单显示状态
