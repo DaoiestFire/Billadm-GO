@@ -5,12 +5,14 @@
                 @close-menu="closeMenu" />
         </ul>
     </div>
-    <ConfirmDialog v-model:visible="showDeleteLedgerConfirmDialog" message="确定要执行此操作吗?" cancel-color="#007bff"
-        confirm-label="删除" confirm-color="#f56c6c" @confirm="" />
+    <ConfirmDialog v-model:visible="showLedgerConfirmDialog" :showInput="showLedgerInput" :message="message"
+        :cancel-color="cancelColor" :confirm-label="confirmLabel" :confirm-color="confirmColor"
+        @confirm="confirmFunc" />
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useCssVariables } from '@/css/css'
 import MenuItem from '@/components/MenuItem.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import iconBook from '@/assets/icons/book.svg?raw'
@@ -18,33 +20,66 @@ import iconInfo from '@/assets/icons/info.svg?raw'
 import iconAdd from '@/assets/icons/add.svg?raw'
 import iconTrash from '@/assets/icons/trash.svg?raw'
 
+// 引用颜色
+const { positiveColor, negativeColor } = useCssVariables()
+
 
 // 各种框的控制变量
-const showDeleteLedgerConfirmDialog = ref(false)
+const showLedgerConfirmDialog = ref(false)
+const showLedgerInput = ref(false)
+const currentLedger = ref('')
+const message = ref('')
+const confirmLabel = ref('确认')
+const confirmColor = ref('')
+const cancelColor = ref('')
+const confirmFunc = ref(null)
+
+
+// 账本操作函数
+const createLedgerByName = (name) => {
+    if (!name) return
+    console.log(name)
+}
+
+const showCreateLedger = () => {
+    message.value = '输出账本名称'
+    confirmLabel.value = '创建'
+    confirmColor.value = positiveColor.value
+    cancelColor.value = negativeColor.value
+    confirmFunc.value = createLedgerByName
+    showLedgerInput.value = true
+    showLedgerConfirmDialog.value = true
+}
+
+
 
 // 定义菜单项类型
 const menuItems = ref([
     {
         label: '账本', icon: iconBook, children: [
             {
-                label: '新建账本', icon: iconAdd
+                label: '新建账本',
+                icon: iconAdd,
+                action: showCreateLedger,
             },
             {
-                label: '删除账本', icon: iconTrash, children: [
+                label: '删除账本',
+                icon: iconTrash,
+                children: [
                     {
                         label: '刘敬威的账本',
-                        action: () => showDeleteLedgerConfirmDialog.value = true
                     },
                     {
                         label: '默认账本',
-                        action: () => showDeleteLedgerConfirmDialog.value = true
                     }
                 ]
             },
         ]
     },
     {
-        label: '关于', icon: iconInfo, action: () => console.log('关于')
+        label: '关于',
+        icon: iconInfo,
+        action: () => console.log('关于'),
     },
 ]);
 

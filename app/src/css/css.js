@@ -16,12 +16,16 @@ export function useCssVariables() {
   const hoverBgColor = ref(getCssVariable('--billadm-color-icon-hover-bg-color'));
   const iconColor = ref(getCssVariable('--billadm-color-icon-color'));
   const iconActiveFgColor = ref(getCssVariable('--billadm-color-icon-active-fg-color'));
+  const positiveColor = ref(getCssVariable('--billadm-color-positive-color'));
+  const negativeColor = ref(getCssVariable('--billadm-color-negative-color'));
 
   return {
     minorBgColor,
     hoverBgColor,
     iconColor,
-    iconActiveFgColor
+    iconActiveFgColor,
+    positiveColor,
+    negativeColor,
   };
 }
 

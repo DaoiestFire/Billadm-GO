@@ -16,6 +16,10 @@
     --billadm-color-table-header-bg-color: #e9e9e9;
     --billadm-color-table-odd-row-bg-color: #fafafa;
     --billadm-color-table-even-row-bg-color: #f0f0f0;
+
+    /* 常用颜色 */
+    --billadm-color-positive-color: #007bff;
+    --billadm-color-negative-color: #f56c6c;
 }
 
 /* 中文字体 */
@@ -31,7 +35,7 @@
 }
 
 body {
-    font-family: 'SourceHanSans','Roboto';
+    font-family: 'SourceHanSans', 'Roboto';
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
