@@ -12,7 +12,8 @@
                     <!-- 交易时间 -->
                     <div class="form-item">
                         <label>交易时间</label>
-                        <input v-model="formData.time" type="datetime-local" class="form-input" />
+                        <el-date-picker v-model="formData.time" type="datetime" placeholder="Select date and time"
+                            style="width: 100%;" />
                     </div>
 
                     <!-- 交易类型 -->
@@ -50,7 +51,7 @@
                     <!-- 价格 -->
                     <div class="form-item">
                         <label>价格</label>
-                        <input v-model.number="formData.amount" type="number" step="0.01" min="0" class="form-input"
+                        <input v-model.number="formData.amount" type="number" step="5" min="0" class="form-input"
                             placeholder="请输入金额" />
                     </div>
                 </div>
@@ -188,14 +189,14 @@ function handleSubmit() {
 
 .form-item label {
     font-size: 14px;
-    color: #555;
+    color: var(--billadm-color-icon-color);
     font-weight: 500;
 }
 
 .form-input,
 .form-select {
     padding: 10px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--billadm-color-window-border-color);
     border-radius: 6px;
     font-size: 14px;
     outline: none;
@@ -212,7 +213,7 @@ function handleSubmit() {
 
 .form-input:focus,
 .form-select:focus {
-    border-color: v-bind(confirmColor);
+    border-color: var(--billadm-color-positive-color);
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
 
