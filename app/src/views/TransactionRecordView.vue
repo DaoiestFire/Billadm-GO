@@ -8,7 +8,7 @@
       </div>
       <div class="right-groups">
         <CommonIcon :icon="iconAdd" label="新增消费记录" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
-          :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-left" />
+          :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-left" @click="showDialog = true" />
       </div>
     </div>
 
@@ -23,7 +23,7 @@
       <Pagination :pages="15" />
     </div>
   </div>
-
+  <TransactionRecordView v-model="recordData" v-model:visible="showDialog" title="新增消费记录" :onConfirm="handleConfirm" />
 </template>
 
 <script setup>
@@ -34,6 +34,7 @@ import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
 import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
 import CommonIcon from '@/components/CommonIcon.vue'
+import TransactionRecordView from '@/components/TransactionRecordView.vue'
 
 // css variables
 const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
@@ -98,6 +99,15 @@ const columnStyles = [
     width: '120px',
   }
 ]
+
+// 消费记录创建表单
+const showDialog = ref(false);
+const recordData = ref({});
+
+function handleConfirm(data) {
+  console.log('提交的数据：', data);
+  // 发送请求等
+}
 
 // 表格数据
 const sampleData = [
