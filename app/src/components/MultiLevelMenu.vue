@@ -27,7 +27,6 @@ const { positiveColor, negativeColor } = useCssVariables()
 // 各种框的控制变量
 const showLedgerConfirmDialog = ref(false)
 const showLedgerInput = ref(false)
-const currentLedger = ref('')
 const message = ref('')
 const confirmLabel = ref('确认')
 const confirmColor = ref('')
@@ -42,13 +41,29 @@ const createLedgerByName = (name) => {
 }
 
 const showCreateLedger = () => {
-    message.value = '输出账本名称'
+    message.value = '输入账本名称'
     confirmLabel.value = '创建'
     confirmColor.value = positiveColor.value
     cancelColor.value = negativeColor.value
     confirmFunc.value = createLedgerByName
     showLedgerInput.value = true
     showLedgerConfirmDialog.value = true
+}
+
+const deleteLedgerById = (id) => {
+    console.log(id)
+}
+
+const getShowDeleteLedgerFunc = (id) => {
+    return () => {
+        message.value = '确认删除账本吗？'
+        confirmLabel.value = '删除'
+        confirmColor.value = negativeColor.value
+        cancelColor.value = positiveColor.value
+        confirmFunc.value = () => deleteLedgerById(id)
+        showLedgerInput.value = false
+        showLedgerConfirmDialog.value = true
+    }
 }
 
 
@@ -68,9 +83,11 @@ const menuItems = ref([
                 children: [
                     {
                         label: '刘敬威的账本',
+                        action: getShowDeleteLedgerFunc('id1'),
                     },
                     {
                         label: '默认账本',
+                        action: getShowDeleteLedgerFunc('id2'),
                     }
                 ]
             },
