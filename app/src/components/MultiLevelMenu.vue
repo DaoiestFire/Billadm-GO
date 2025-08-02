@@ -5,15 +5,22 @@
                 @close-menu="closeMenu" />
         </ul>
     </div>
+    <ConfirmDialog v-model:visible="showDeleteLedgerConfirmDialog" message="确定要执行此操作吗?" cancel-color="#007bff"
+        confirm-label="删除" confirm-color="#f56c6c" @confirm="" />
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import MenuItem from '@/components/MenuItem.vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import MenuItem from '@/components/MenuItem.vue'
+import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import iconBook from '@/assets/icons/book.svg?raw'
 import iconInfo from '@/assets/icons/info.svg?raw'
 import iconAdd from '@/assets/icons/add.svg?raw'
 import iconTrash from '@/assets/icons/trash.svg?raw'
+
+
+// 各种框的控制变量
+const showDeleteLedgerConfirmDialog = ref(false)
 
 // 定义菜单项类型
 const menuItems = ref([
@@ -26,11 +33,11 @@ const menuItems = ref([
                 label: '删除账本', icon: iconTrash, children: [
                     {
                         label: '刘敬威的账本',
-                        action: () => console.log('删除刘敬威的账本')
+                        action: () => showDeleteLedgerConfirmDialog.value = true
                     },
                     {
                         label: '默认账本',
-                        action: () => console.log('删除默认账本')
+                        action: () => showDeleteLedgerConfirmDialog.value = true
                     }
                 ]
             },
