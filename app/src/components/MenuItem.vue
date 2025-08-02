@@ -1,10 +1,10 @@
 <template>
-    <li class="menu-item" :class="{ 'has-children': item.children }" @mouseenter="handleMouseEnter"
-        @mouseleave="handleMouseLeave" @click="handleClick" ref="menuItem">
+    <li class="menu-item" :class="{ 'has-children': item.children, 'no-icons': !leftIcon && !item.children }"
+        @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" @click="handleClick" ref="menuItem">
 
         <!-- 左侧内容：图标 + 标签 -->
         <div class="menu-item-left">
-            <DisplayIcon :rawSvg="leftIcon" />
+            <DisplayIcon v-if="leftIcon" :rawSvg="leftIcon" />
             <span class="item-label">{{ item.label }}</span>
         </div>
 
@@ -84,10 +84,16 @@ const handleClick = (event) => {
     position: relative;
     cursor: pointer;
     display: flex;
-    justify-content: space-between;
-    /* 主轴分布：左右撑开 */
     align-items: center;
     height: 40px;
+}
+
+.menu-item:not(.no-icons) {
+    justify-content: space-between;
+}
+
+.menu-item.no-icons {
+    justify-content: center;
 }
 
 .menu-item:hover {
@@ -98,19 +104,12 @@ const handleClick = (event) => {
 .menu-item-left {
     display: flex;
     align-items: center;
-    flex: 1;
     white-space: nowrap;
 }
 
 /* 右侧下拉箭头图标 */
 .menu-item-right-icon {
     margin-left: auto;
-    /* 关键：将右侧图标推到最右边 */
-    display: flex;
-    align-items: center;
-    color: #999;
-    /* 可选：调整颜色 */
-    opacity: 0.7;
 }
 
 /* 子菜单样式（不变） */

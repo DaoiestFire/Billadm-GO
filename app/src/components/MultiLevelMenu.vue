@@ -12,13 +12,24 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import MenuItem from '@/components/MenuItem.vue';
 import iconBook from '@/assets/icons/book.svg?raw'
 import iconInfo from '@/assets/icons/info.svg?raw'
+import iconAdd from '@/assets/icons/add.svg?raw'
+import iconTrash from '@/assets/icons/trash.svg?raw'
 
 // 定义菜单项类型
 const menuItems = ref([
     {
         label: '账本', icon: iconBook, children: [
-            { label: '新建账本', action: () => console.log('新建文件') },
-            { label: '删除账本', action: () => console.log('删除账本') },
+            {
+                label: '新建账本', icon: iconAdd, children: [
+                    {
+                        label: '刘敬威的账本'
+                    },
+                    {
+                        label: '默认账本'
+                    }
+                ]
+            },
+            { label: '删除账本', icon: iconTrash },
         ]
     },
     {
