@@ -1,35 +1,39 @@
 <template>
   <div class="tr-table-container" :style="containerStyle">
-    <table class="tr-table">
-      <thead>
-        <tr :style="headerRowStyle">
-          <th v-for="styleItem in columnStyles" :key="styleItem.field" :style="getColumnStyle(styleItem)">
-            {{ styleItem.name }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in items" :key="item.transaction_id" :style="rowStyle">
-          <td v-for="styleItem in columnStyles" :key="styleItem.field" :style="formatCellStyle(styleItem.field, item)">
-            <template v-if="styleItem.field === 'actions'">
-              <div class="action-buttons">
-                <button class="btn-edit">编辑</button>
-                <button class="btn-delete">删除</button>
-              </div>
-            </template>
-            <template v-if="styleItem.field === 'tags'">
-              <el-space size="small"
-                style="display: flex; align-items: center; height: 100%; width: 100%; justify-content: center;">
-                <el-tag v-for="tag in item[styleItem.field]" type="primary">{{ tag }}</el-tag>
-              </el-space>
-            </template>
-            <template v-else>
-              {{ styleItem.field === 'index' ? index + 1 : formatCell(styleItem.field, item[styleItem.field]) }}
-            </template>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <el-scrollbar>
+      <table class="tr-table">
+        <thead>
+          <tr :style="headerRowStyle">
+            <th v-for="styleItem in columnStyles" :key="styleItem.field" :style="getColumnStyle(styleItem)">
+              {{ styleItem.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in items" :key="item.transaction_id" :style="rowStyle">
+            <td v-for="styleItem in columnStyles" :key="styleItem.field"
+              :style="formatCellStyle(styleItem.field, item)">
+              <template v-if="styleItem.field === 'actions'">
+                <div class="action-buttons">
+                  <button class="btn-edit">编辑</button>
+                  <button class="btn-delete">删除</button>
+                </div>
+              </template>
+              <template v-if="styleItem.field === 'tags'">
+                <el-space size="small"
+                  style="display: flex; align-items: center; height: 100%; width: 100%; justify-content: center;">
+                  <el-tag v-for="tag in item[styleItem.field]" type="primary">{{ tag }}</el-tag>
+                </el-space>
+              </template>
+              <template v-else>
+                {{ styleItem.field === 'index' ? index + 1 : formatCell(styleItem.field, item[styleItem.field]) }}
+              </template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </el-scrollbar>
+
   </div>
 </template>
 
