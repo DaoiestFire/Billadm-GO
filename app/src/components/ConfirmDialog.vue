@@ -10,8 +10,8 @@
 
                 <!-- 可选输入框 -->
                 <div v-if="showInput" class="input-container">
-                    <input ref="inputRef" v-model="inputValue" type="text" :placeholder="inputPlaceholder"
-                        class="confirm-input" @keydown.enter="handleConfirm" />
+                    <el-input v-model="inputValue" style="width: 100%" placeholder="输入账本名称" clearable
+                        @keydown.enter="handleConfirm" />
                 </div>
 
                 <!-- 按钮容器 -->

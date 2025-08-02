@@ -16,7 +16,7 @@
               <template v-if="styleItem.field === 'actions'">
                 <div class="action-buttons">
                   <button class="btn-edit">编辑</button>
-                  <button class="btn-delete">删除</button>
+                  <button class="btn-delete" @click="getShowDeleteTrFunc(item.transaction_id)()">删除</button>
                 </div>
               </template>
               <template v-if="styleItem.field === 'tags'">
@@ -33,11 +33,18 @@
         </tbody>
       </table>
     </el-scrollbar>
-
+    <ConfirmDialog v-model:visible="showTrConfirmDialog" :message="message" :cancel-color="cancelColor"
+      :confirm-label="confirmLabel" :confirm-color="confirmColor" @confirm="confirmFunc" />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useCssVariables } from '@/css/css'
+
+// 引用颜色
+const { positiveColor, negativeColor } = useCssVariables()
+
 const props = defineProps({
   items: {
     type: Array,
@@ -56,6 +63,31 @@ const props = defineProps({
     default: []
   },
 })
+
+// 各种框的控制变量
+const showTrConfirmDialog = ref(false)
+const message = ref('')
+const confirmLabel = ref('确认')
+const confirmColor = ref('')
+const cancelColor = ref('')
+const confirmFunc = ref(null)
+
+
+// 消费记录操作函数
+const deleteTrById = (id) => {
+  console.log(id)
+}
+
+const getShowDeleteTrFunc = (id) => {
+  return () => {
+    message.value = '确认删除消费记录吗？'
+    confirmLabel.value = '删除'
+    confirmColor.value = negativeColor.value
+    cancelColor.value = positiveColor.value
+    confirmFunc.value = () => deleteTrById(id)
+    showTrConfirmDialog.value = true
+  }
+}
 
 // 获取表头风格
 const getColumnStyle = (item) => {
