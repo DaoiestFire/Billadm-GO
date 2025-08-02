@@ -115,7 +115,7 @@ function handleConfirm() {
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     z-index: 1000;
 }
 
@@ -124,8 +124,8 @@ function handleConfirm() {
     background-color: white;
     border-radius: 4px;
     padding: 20px;
+    margin-top: calc(100vh / 4);
     min-width: 300px;
-    pointer-events: auto;
 }
 
 /* 提示信息样式 */
