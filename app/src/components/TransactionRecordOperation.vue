@@ -42,11 +42,9 @@
                     <!-- 标签（多选下拉） -->
                     <div class="form-item">
                         <label>标签</label>
-                        <select v-model="formData.tags" multiple class="form-select">
-                            <option v-for="tag in tagOptions" :key="tag" :value="tag">
-                                {{ tag }}
-                            </option>
-                        </select>
+                        <el-select v-model="formData.tags" multiple placeholder="添加标签" style="width: 100%">
+                            <el-option v-for="tag in tagOptions" :key="tag" :value="tag" />
+                        </el-select>
                     </div>
 
                     <!-- 价格 -->
