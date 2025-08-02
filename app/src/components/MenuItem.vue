@@ -1,15 +1,12 @@
 <template>
-    <li class="menu-item" :class="{ 'has-children': item.children, 'no-icons': !leftIcon && !item.children }"
-        @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" @click="handleClick" ref="menuItem">
+    <li class="menu-item" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" @click="handleClick"
+        ref="menuItem">
 
-        <!-- 左侧内容：图标 + 标签 -->
-        <div class="menu-item-left">
+        <div class="menu-item-content" :class="{ 'centered': !leftIcon && !item.children }">
             <DisplayIcon v-if="leftIcon" :rawSvg="leftIcon" />
             <span class="item-label">{{ item.label }}</span>
+            <DisplayIcon v-if="item.children" :rawSvg="iconMoreV" class="menu-item-right-icon" />
         </div>
-
-        <!-- 右侧图标（仅在有子菜单时显示） -->
-        <DisplayIcon v-if="item.children" :rawSvg="iconMoreV" class="menu-item-right-icon" />
 
         <!-- 子菜单 -->
         <ul v-if="item.children && showChildren" class="submenu" :style="submenuStyle">
@@ -88,31 +85,25 @@ const handleClick = (event) => {
     height: 40px;
 }
 
-.menu-item:not(.no-icons) {
-    justify-content: space-between;
-}
-
-.menu-item.no-icons {
-    justify-content: center;
-}
-
 .menu-item:hover {
     background-color: var(--billadm-color-icon-hover-bg-color);
 }
 
-/* 左侧内容：图标 + 文字 */
-.menu-item-left {
+.menu-item-content {
     display: flex;
     align-items: center;
-    white-space: nowrap;
+    flex: 1;
 }
 
-/* 右侧下拉箭头图标 */
+.menu-item-content.centered {
+    justify-content: center;
+}
+
+/* 右侧图标靠右 */
 .menu-item-right-icon {
     margin-left: auto;
 }
 
-/* 子菜单样式（不变） */
 .submenu {
     list-style: none;
     margin: 0;
