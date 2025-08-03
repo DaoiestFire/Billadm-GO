@@ -28,9 +28,7 @@ func TestTR_CRUD(t *testing.T) {
 		TransactionType: "",
 		Category:        "",
 		Description:     "this is a test tr",
-		//Tags:            StringSlice{"tags1", "tags2"},
-		Tags:          nil,
-		TransactionAt: time.Now(),
+		TransactionAt:   time.Now().Unix(),
 	}
 	DB.Create(insertData)
 
@@ -45,13 +43,9 @@ func TestTR_CRUD(t *testing.T) {
 
 	// 修改
 	var modifyData TransactionRecord
-	DB.Model(&TransactionRecord{}).Where("transaction_id = ?", id).Update("tags", StringSlice{"new_tags"})
+	DB.Model(&TransactionRecord{}).Where("transaction_id = ?", id).Update("price", 3442.5)
 	DB.Where("transaction_id = ?", id).First(&modifyData)
 	t.Logf("modified data: %+v", modifyData)
-	if len(modifyData.Tags) != 1 {
-		t.Errorf("modified data should have 1 tag, but got %d", len(modifyData.Tags))
-		return
-	}
 
 	// 删除
 	var deleteData TransactionRecord

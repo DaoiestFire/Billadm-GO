@@ -2,7 +2,6 @@ package dto
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -54,7 +53,6 @@ func (dto *TransactionRecordDto) Vo(result *models.Result) (*models.TransactionR
 	tr.TransactionType = dto.TransactionType
 	tr.Category = dto.Category
 	tr.Description = dto.Description
-	tr.Tags = dto.Tags
-	tr.TransactionAt = time.Unix(dto.TransactionAt/1000, (dto.TransactionAt%1000)*int64(time.Millisecond))
+	tr.TransactionAt = dto.TransactionAt
 	return tr, true
 }
