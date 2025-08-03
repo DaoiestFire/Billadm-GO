@@ -14,7 +14,7 @@
 
     <!-- 中间栏：消费记录表 -->
     <div class="middle-section">
-      <TransactionRecordTable :items="sampleData" :columnStyles="columnStyles" :headerHeight="40" :rowHeight="40" />
+      <TransactionRecordTable :items="tableData" :columnStyles="columnStyles" :headerHeight="40" :rowHeight="40" />
     </div>
 
     <!-- 下栏：分页组件 -->
@@ -36,29 +36,15 @@ import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
 import CommonIcon from '@/components/CommonIcon.vue'
 import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
+import { getTrsByLimit } from '@/backend/ledger'
 
-// css variables
-const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
-
-// 表格最大行数
-const maxRows = ref(10)
-
-watch(() => maxRows.value,
-  (newValue) => {
-    console.log(newValue)
-  },
-  { immediate: true }
-)
-
-
-
+// 视图常量
 const options = [
   { label: '每页10行', value: 10 },
   { label: '每页20行', value: 20 },
   { label: '每页50行', value: 50 }
 ]
 
-// 表格风格设置
 const columnStyles = [
   {
     field: 'index',
@@ -101,6 +87,23 @@ const columnStyles = [
   }
 ]
 
+// css variables
+const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
+
+// 表格数据
+const tableData = ref([])
+
+// 表格最大行数
+const maxRows = ref(10)
+
+watch(() => maxRows.value,
+  (newValue) => {
+    tableData.value = getTrsByLimit(newValue)
+  },
+  { immediate: true }
+)
+
+
 // 消费记录创建表单
 const showDialog = ref(false);
 const recordData = ref({});
@@ -109,226 +112,6 @@ function handleConfirm(data) {
   console.log('提交的数据：', data);
   // 发送请求等
 }
-
-// 表格数据
-const sampleData = [
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐", "test"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "income",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "transfer",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐", "11", "22"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐", "test"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "income",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "transfer",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-  {
-    "transaction_id": "01981e51-c6df-716f-953f-dc8771370af8",
-    "ledger_id": "01981e51-b02f-7730-9644-774491b459e4",
-    "price": 4.5,
-    "transaction_type": "expense",
-    "category": "餐饮美食",
-    "description": "早餐",
-    "tags": ["三餐"],
-    "transaction_at": "2025-07-19T00:15:32.563+08:00",
-    "created_at": "2025-07-19T00:15:32.5755985+08:00",
-    "updated_at": "2025-07-19T00:15:32.5755985+08:00"
-  },
-]
 </script>
 
 <style scoped>
