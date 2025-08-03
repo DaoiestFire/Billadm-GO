@@ -46,7 +46,7 @@ func (dto *TransactionRecordDto) Validate(result *models.Result) bool {
 	return true
 }
 
-func (dto *TransactionRecordDto) ToTransactionRecord() (*models.TransactionRecord, bool) {
+func (dto *TransactionRecordDto) ToTransactionRecord() *models.TransactionRecord {
 	tr := &models.TransactionRecord{}
 	tr.LedgerID = dto.LedgerID
 	tr.Price = dto.Price
@@ -54,5 +54,5 @@ func (dto *TransactionRecordDto) ToTransactionRecord() (*models.TransactionRecor
 	tr.Category = dto.Category
 	tr.Description = dto.Description
 	tr.TransactionAt = dto.TransactionAt
-	return tr, true
+	return tr
 }

@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/billadm/api/dto"
 	"github.com/billadm/models"
+	"github.com/billadm/models/dto"
 	"github.com/billadm/service"
 )
 
@@ -53,15 +53,7 @@ func createTransactionRecord(c *gin.Context) {
 		return
 	}
 
-	tr, ok := trDto.ToTransactionRecord()
-	if !ok {
-		logrus.Errorf("convert transaction record dto to vo error, err: %v", ret.Msg)
-		return
-	}
-
-	logrus.Debugf("tr vo: %v", tr)
-
-	trId, err := service.GetTrService().CreateTr(tr)
+	trId, err := service.GetTrService().CreateTr(trDto)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()

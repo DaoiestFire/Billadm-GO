@@ -5,6 +5,8 @@ import (
 	"sync"
 
 	"github.com/billadm/util/db"
+
+	"github.com/billadm/models"
 )
 
 var (
@@ -27,6 +29,8 @@ func GetTrTagDao() TrTagDao {
 }
 
 type TrTagDao interface {
+	CreateTrTags([]*models.TrTag) error
+	DeleteTrTagByLedgerId(ledgerId string) error
 	DeleteTrTagByTrId(trId string) error
 }
 
@@ -34,6 +38,16 @@ var _ TrTagDao = &trTagDaoImpl{}
 
 type trTagDaoImpl struct {
 	db *gorm.DB
+}
+
+func (t *trTagDaoImpl) CreateTrTags(tags []*models.TrTag) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (t *trTagDaoImpl) DeleteTrTagByLedgerId(ledgerId string) error {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (t *trTagDaoImpl) DeleteTrTagByTrId(trId string) error {

@@ -7,6 +7,7 @@ import (
 
 	"github.com/billadm/dao"
 	"github.com/billadm/models"
+	"github.com/billadm/models/dto"
 	"github.com/billadm/util"
 )
 
@@ -31,7 +32,7 @@ func GetTrService() TransactionRecordService {
 }
 
 type TransactionRecordService interface {
-	CreateTr(*models.TransactionRecord) (string, error)
+	CreateTr(dto *dto.TransactionRecordDto) (string, error)
 	ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error)
 	DeleteTrById(string) error
 }
@@ -44,18 +45,36 @@ type transactionRecordServiceImpl struct {
 }
 
 // CreateTr 创建成功返回交易记录的id
-func (t *transactionRecordServiceImpl) CreateTr(record *models.TransactionRecord) (string, error) {
-	logrus.Infof("start to create transaction record, ledger id: %s, description: %s", record.LedgerID, record.Description)
+func (t *transactionRecordServiceImpl) CreateTr(trDto *dto.TransactionRecordDto) (string, error) {
+	logrus.Infof("start to create transaction record, ledger id: %s, description: %s", trDto.LedgerID, trDto.Description)
 
-	record.TransactionID = util.GetUUID()
+	transactionID := util.GetUUID()
 
+	// 先创建消费记录
+	record := trDto.ToTransactionRecord()
+	record.TransactionID = transactionID
 	if err := t.trDao.CreateTr(record); err != nil {
 		logrus.Errorf("create transaction record failed, ledger id: %s, description: %s, err: %v", record.LedgerID, record.Description, err)
 		return "", err
 	}
 
-	logrus.Infof("create transaction record success, ledger id: %s, description: %s", record.LedgerID, record.Description)
-	return record.TransactionID, nil
+	// 再插入消费记录的tag
+	trTags := make([]*models.TrTag, 0, len(trDto.Tags))
+	for _, tag := range trDto.Tags {
+		trTag := &models.TrTag{
+			LedgerID:      trDto.LedgerID,
+			TransactionID: transactionID,
+			Tag:           tag,
+		}
+		trTags = append(trTags, trTag)
+	}
+	if err := t.trTagDao.CreateTrTags(trTags); err != nil {
+		logrus.Errorf("create trTags failed, ledger id: %s, description: %s, err: %v", record.LedgerID, record.Description, err)
+		return "", err
+	}
+
+	logrus.Infof("create transaction record success, ledger id: %s, description: %s", trDto.LedgerID, trDto.Description)
+	return transactionID, nil
 }
 
 func (t *transactionRecordServiceImpl) ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error) {

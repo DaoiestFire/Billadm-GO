@@ -24,6 +24,7 @@ func GetLedgerService() LedgerService {
 		ledgerService = &ledgerServiceImpl{
 			ledgerDao: dao.GetLedgerDao(),
 			trDao:     dao.GetTrDao(),
+			trTagDao:  dao.GetTrTagDao(),
 		}
 	})
 
@@ -42,6 +43,7 @@ var _ LedgerService = &ledgerServiceImpl{}
 type ledgerServiceImpl struct {
 	ledgerDao dao.LedgerDao
 	trDao     dao.TransactionRecordDao
+	trTagDao  dao.TrTagDao
 }
 
 // CreateLedger 创建成功返回创建账本id
@@ -93,11 +95,13 @@ func (l *ledgerServiceImpl) QueryLedgerById(ledgerId string) (*models.Ledger, er
 func (l *ledgerServiceImpl) DeleteLedgerById(ledgerId string) error {
 	logrus.Infof("start to delete ledger by id, id: %s", ledgerId)
 
-	if err := l.ledgerDao.DeleteLedgerById(ledgerId); err != nil {
-		logrus.Errorf("delete ledger by id failed, id: %s, err: %v", ledgerId, err)
+	// 删除账本中消费记录的所有tag
+	if err := l.trTagDao.DeleteTrTagByLedgerId(ledgerId); err != nil {
+		logrus.Errorf("delete all trTags by id failed, id: %s, err: %v", ledgerId, err)
 		return err
 	}
 
+	// 删除账本中的所有消费记录
 	cnt, err := l.trDao.CountTrByLedgerId(ledgerId)
 	if err != nil {
 		logrus.Errorf("get count of trs from ledger by id failed, id: %s, err: %v", ledgerId, err)
@@ -107,6 +111,12 @@ func (l *ledgerServiceImpl) DeleteLedgerById(ledgerId string) error {
 
 	if err := l.trDao.DeleteAllTrByLedgerId(ledgerId); err != nil {
 		logrus.Errorf("delete all tr by ledger id failed, id: %s, err: %v", ledgerId, err)
+		return err
+	}
+
+	// 删除账本
+	if err := l.ledgerDao.DeleteLedgerById(ledgerId); err != nil {
+		logrus.Errorf("delete ledger by id failed, id: %s, err: %v", ledgerId, err)
 		return err
 	}
 
