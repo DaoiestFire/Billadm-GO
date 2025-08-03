@@ -33,7 +33,7 @@ func GetTrService() TransactionRecordService {
 
 type TransactionRecordService interface {
 	CreateTr(dto *dto.TransactionRecordDto) (string, error)
-	ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error)
+	ListAllTrByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error)
 	DeleteTrById(string) error
 }
 
@@ -77,16 +77,33 @@ func (t *transactionRecordServiceImpl) CreateTr(trDto *dto.TransactionRecordDto)
 	return transactionID, nil
 }
 
-func (t *transactionRecordServiceImpl) ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error) {
+func (t *transactionRecordServiceImpl) ListAllTrByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error) {
 	logrus.Infof("start to list all transaction record, ledger id: %s", ledgerId)
 
+	var err error
+	// 先查询到所有的tr
 	trs, err := t.trDao.ListAllTrByLedgerId(ledgerId)
 	if err != nil {
 		return nil, err
 	}
 
+	// 再查询tr的tags进行组装
+	trDtos := make([]*dto.TransactionRecordDto, 0, len(trs))
+	for _, tr := range trs {
+		trTags, err := t.trTagDao.QueryTrTagsByTrId(tr.TransactionID)
+		if err != nil {
+			return nil, err
+		}
+		trDto := &dto.TransactionRecordDto{}
+		trDto.FromTransactionRecord(tr)
+		for _, tag := range trTags {
+			trDto.Tags = append(trDto.Tags, tag.Tag)
+		}
+		trDtos = append(trDtos, trDto)
+	}
+
 	logrus.Infof("list all transaction record success, ledger id: %s, len: %d", ledgerId, len(trs))
-	return trs, err
+	return trDtos, err
 }
 
 func (t *transactionRecordServiceImpl) DeleteTrById(trId string) error {

@@ -32,6 +32,7 @@ type TrTagDao interface {
 	CreateTrTags([]*models.TrTag) error
 	DeleteTrTagByLedgerId(ledgerId string) error
 	DeleteTrTagByTrId(trId string) error
+	QueryTrTagsByTrId(trId string) ([]*models.TrTag, error)
 }
 
 var _ TrTagDao = &trTagDaoImpl{}
@@ -51,6 +52,11 @@ func (t *trTagDaoImpl) DeleteTrTagByLedgerId(ledgerId string) error {
 }
 
 func (t *trTagDaoImpl) DeleteTrTagByTrId(trId string) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (t *trTagDaoImpl) QueryTrTagsByTrId(trId string) ([]*models.TrTag, error) {
 	//TODO implement me
 	panic("implement me")
 }

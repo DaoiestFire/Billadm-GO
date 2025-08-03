@@ -19,7 +19,8 @@ func JsonTransactionRecordDto(c *gin.Context, result *models.Result) (*Transacti
 }
 
 type TransactionRecordDto struct {
-	LedgerID string `json:"ledger_id"`
+	LedgerID      string `json:"ledger_id"`
+	TransactionID string `json:"transaction_id"`
 
 	// 交易核心信息
 	Price           float64 `json:"price"`
@@ -55,4 +56,15 @@ func (dto *TransactionRecordDto) ToTransactionRecord() *models.TransactionRecord
 	tr.Description = dto.Description
 	tr.TransactionAt = dto.TransactionAt
 	return tr
+}
+
+func (dto *TransactionRecordDto) FromTransactionRecord(tr *models.TransactionRecord) {
+	dto.LedgerID = tr.LedgerID
+	dto.TransactionID = tr.TransactionID
+	dto.Price = tr.Price
+	dto.TransactionType = tr.TransactionType
+	dto.Category = tr.Category
+	dto.Description = tr.Description
+	dto.Tags = make([]string, 0)
+	dto.TransactionAt = tr.TransactionAt
 }
