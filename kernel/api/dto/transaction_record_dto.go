@@ -46,7 +46,7 @@ func (dto *TransactionRecordDto) Validate(result *models.Result) bool {
 	return true
 }
 
-func (dto *TransactionRecordDto) Vo(result *models.Result) (*models.TransactionRecord, bool) {
+func (dto *TransactionRecordDto) ToTransactionRecord() (*models.TransactionRecord, bool) {
 	tr := &models.TransactionRecord{}
 	tr.LedgerID = dto.LedgerID
 	tr.Price = dto.Price

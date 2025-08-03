@@ -22,7 +22,8 @@ func GetTrService() TransactionRecordService {
 
 	trServiceOnce.Do(func() {
 		trService = &transactionRecordServiceImpl{
-			trDao: dao.GetTrDao(),
+			trDao:    dao.GetTrDao(),
+			trTagDao: dao.GetTrTagDao(),
 		}
 	})
 
@@ -38,7 +39,8 @@ type TransactionRecordService interface {
 var _ TransactionRecordService = &transactionRecordServiceImpl{}
 
 type transactionRecordServiceImpl struct {
-	trDao dao.TransactionRecordDao
+	trDao    dao.TransactionRecordDao
+	trTagDao dao.TrTagDao
 }
 
 // CreateTr 创建成功返回交易记录的id
@@ -71,8 +73,13 @@ func (t *transactionRecordServiceImpl) ListAllTrByLedgerId(ledgerId string) ([]*
 func (t *transactionRecordServiceImpl) DeleteTrById(trId string) error {
 	logrus.Infof("start to delete transaction record, tr id: %s", trId)
 
-	err := t.trDao.DeleteTrById(trId)
-	if err != nil {
+	// 先删除消费记录的tags
+	if err := t.trTagDao.DeleteTrTagByTrId(trId); err != nil {
+		return err
+	}
+
+	// 再删除对应的消费记录
+	if err := t.trDao.DeleteTrById(trId); err != nil {
 		return err
 	}
 

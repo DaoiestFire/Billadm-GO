@@ -42,7 +42,7 @@ type transactionRecordDaoImpl struct {
 	db *gorm.DB
 }
 
-func (t transactionRecordDaoImpl) CreateTr(record *models.TransactionRecord) error {
+func (t *transactionRecordDaoImpl) CreateTr(record *models.TransactionRecord) error {
 	if err := t.db.Create(record).Error; err != nil {
 		return err
 	}
@@ -50,7 +50,7 @@ func (t transactionRecordDaoImpl) CreateTr(record *models.TransactionRecord) err
 	return nil
 }
 
-func (t transactionRecordDaoImpl) ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error) {
+func (t *transactionRecordDaoImpl) ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error) {
 	trs := make([]*models.TransactionRecord, 0)
 	if err := t.db.Where("ledger_id = ?", ledgerId).Find(&trs).Error; err != nil {
 		return nil, err
@@ -59,14 +59,14 @@ func (t transactionRecordDaoImpl) ListAllTrByLedgerId(ledgerId string) ([]*model
 	return trs, nil
 }
 
-func (t transactionRecordDaoImpl) DeleteTrById(trId string) error {
+func (t *transactionRecordDaoImpl) DeleteTrById(trId string) error {
 	if err := t.db.Where("transaction_id = ?", trId).Delete(&models.TransactionRecord{}).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t transactionRecordDaoImpl) CountTrByLedgerId(ledgerId string) (int64, error) {
+func (t *transactionRecordDaoImpl) CountTrByLedgerId(ledgerId string) (int64, error) {
 	var count int64
 	err := t.db.Model(&models.TransactionRecord{}).Where("ledger_id = ?", ledgerId).Count(&count).Error
 	if err != nil {
@@ -75,7 +75,7 @@ func (t transactionRecordDaoImpl) CountTrByLedgerId(ledgerId string) (int64, err
 	return count, nil
 }
 
-func (t transactionRecordDaoImpl) DeleteAllTrByLedgerId(ledgerId string) error {
+func (t *transactionRecordDaoImpl) DeleteAllTrByLedgerId(ledgerId string) error {
 	if err := t.db.Where("ledger_id = ?", ledgerId).Delete(&models.TransactionRecord{}).Error; err != nil {
 		return err
 	}

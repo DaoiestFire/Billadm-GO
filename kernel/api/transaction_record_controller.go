@@ -53,7 +53,7 @@ func createTransactionRecord(c *gin.Context) {
 		return
 	}
 
-	tr, ok := trDto.Vo(ret)
+	tr, ok := trDto.ToTransactionRecord()
 	if !ok {
 		logrus.Errorf("convert transaction record dto to vo error, err: %v", ret.Msg)
 		return
