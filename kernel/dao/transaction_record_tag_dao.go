@@ -42,8 +42,10 @@ type trTagDaoImpl struct {
 }
 
 func (t *trTagDaoImpl) CreateTrTags(tags []*models.TrTag) error {
-	//TODO implement me
-	panic("implement me")
+	if err := t.db.Create(tags).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (t *trTagDaoImpl) DeleteTrTagByLedgerId(ledgerId string) error {
