@@ -1,110 +1,45 @@
 -- 创建账本表
-CREATE TABLE
-    IF NOT EXISTS tbl_billadm_ledger
+CREATE TABLE IF NOT EXISTS tbl_billadm_ledger
 (
-    id
-        TEXT
-        PRIMARY
-            KEY,
-    name
-        TEXT
-        NOT
-            NULL,
-    created_at
-        INTEGER
-        NOT
-            NULL,
-    updated_at
-        INTEGER
-        NOT
-            NULL
+    id         TEXT PRIMARY KEY,
+    name       TEXT    NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
 );
 
 -- 创建交易记录表
-CREATE TABLE
-    IF NOT EXISTS tbl_billadm_transaction_record
+CREATE TABLE IF NOT EXISTS tbl_billadm_transaction_record
 (
-    transaction_id
-        TEXT
-        PRIMARY
-            KEY,
-    ledger_id
-        TEXT
-        NOT
-            NULL,
-    price
-        REAL
-        NOT
-            NULL,
-    transaction_type
-        TEXT
-        NOT
-            NULL,
-    category
-        TEXT
-        NOT
-            NULL,
-    description
-        TEXT,
-    transaction_at
-        INTEGER
-        NOT
-            NULL,
-    created_at
-        INTEGER
-        NOT
-            NULL,
-    updated_at
-        INTEGER
-        NOT
-            NULL
+    transaction_id   TEXT PRIMARY KEY,
+    ledger_id        TEXT    NOT NULL,
+    price            REAL    NOT NULL,
+    transaction_type TEXT    NOT NULL,
+    category         TEXT    NOT NULL,
+    description      TEXT,
+    transaction_at   INTEGER NOT NULL,
+    created_at       INTEGER NOT NULL,
+    updated_at       INTEGER NOT NULL
 );
 
 -- 创建交易记录标签表
-CREATE TABLE
-    IF NOT EXISTS tbl_billadm_transaction_record_tag
+CREATE TABLE IF NOT EXISTS tbl_billadm_transaction_record_tag
 (
-    ledger_id
-        TEXT
-        NOT
-            NULL,
-    transaction_id
-        TEXT
-        NOT
-            NULL,
-    tag
-        TEXT
-        NOT
-            NULL
+    ledger_id      TEXT NOT NULL,
+    transaction_id TEXT NOT NULL,
+    tag            TEXT NOT NULL
 );
 
 -- 创建消费分类表
-CREATE TABLE
-    IF NOT EXISTS tbl_billadm_category
+CREATE TABLE IF NOT EXISTS tbl_billadm_category
 (
-    name
-        TEXT
-        PRIMARY
-            KEY,
-    scope
-        TEXT
-        NOT
-            NULL
+    name  TEXT PRIMARY KEY,
+    scope TEXT NOT NULL
 );
 
 -- 更新内置消费分类
 DELETE
 FROM tbl_billadm_category
-WHERE name in (
-               '餐饮美食',
-               '交通出行',
-               '购物消费',
-               '娱乐休闲',
-               '生活缴费',
-               '医疗健康',
-               '人情往来',
-               '教育学习'
-    );
+WHERE name in ('餐饮美食', '交通出行', '购物消费', '娱乐休闲', '生活缴费', '医疗健康', '人情往来', '教育学习');
 
 INSERT INTO tbl_billadm_category (name, scope)
 VALUES ('餐饮美食', 'system'),
@@ -117,24 +52,16 @@ VALUES ('餐饮美食', 'system'),
        ('教育学习', 'system');
 
 -- 创建消费标签表
-CREATE TABLE
-    IF NOT EXISTS tbl_billadm_tag
+CREATE TABLE IF NOT EXISTS tbl_billadm_tag
 (
-    name
-        TEXT
-        PRIMARY
-            KEY,
-    scope
-        TEXT
-        NOT
-            NULL
+    name  TEXT PRIMARY KEY,
+    scope TEXT NOT NULL
 );
 
 -- 更新内置的消费标签
 DELETE
 FROM tbl_billadm_tag
-WHERE name in (
-               '三餐',
+WHERE name in ('三餐',
                '外卖',
                '奶茶',
                '零食',
