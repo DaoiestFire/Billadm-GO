@@ -63,6 +63,9 @@ func (t *trTagDaoImpl) DeleteTrTagByTrId(trId string) error {
 }
 
 func (t *trTagDaoImpl) QueryTrTagsByTrId(trId string) ([]*models.TrTag, error) {
-	//TODO implement me
-	panic("implement me")
+	trTags := make([]*models.TrTag, 0)
+	if err := t.db.Where("transaction_id = ?", trId).Find(&trTags).Error; err != nil {
+		return nil, err
+	}
+	return trTags, nil
 }
