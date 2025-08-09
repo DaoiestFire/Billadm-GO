@@ -49,8 +49,10 @@ func (t *trTagDaoImpl) CreateTrTags(tags []*models.TrTag) error {
 }
 
 func (t *trTagDaoImpl) DeleteTrTagByLedgerId(ledgerId string) error {
-	//TODO implement me
-	panic("implement me")
+	if err := t.db.Delete(&models.TrTag{}, "ledger_id = ?", ledgerId).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (t *trTagDaoImpl) DeleteTrTagByTrId(trId string) error {
