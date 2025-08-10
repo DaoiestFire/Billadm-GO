@@ -2,7 +2,7 @@ package api
 
 import (
 	"fmt"
-	
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/billadm/models"
@@ -10,15 +10,15 @@ import (
 
 func ServeAPI(ginServer *gin.Engine) {
 	// ledger
-	ginServer.GET("/api/v1/ledger", getLedger)
-	ginServer.POST("/api/v1/ledger", createLedger)
-	ginServer.PUT("/api/v1/ledger", updateLedger)
-	ginServer.DELETE("/api/v1/ledger", deleteLedger)
+	ginServer.POST("/api/v1/ledger/get", getLedger)
+	ginServer.POST("/api/v1/ledger/post", createLedger)
+	ginServer.POST("/api/v1/ledger/put", updateLedger)
+	ginServer.POST("/api/v1/ledger/delete", deleteLedger)
 	// transaction record
-	ginServer.GET("/api/v1/tr", getTransactionRecord)
-	ginServer.POST("/api/v1/tr", createTransactionRecord)
-	ginServer.PUT("/api/v1/tr", updateTransactionRecord)
-	ginServer.DELETE("/api/v1/tr", deleteTransactionRecord)
+	ginServer.POST("/api/v1/tr/get", getTransactionRecord)
+	ginServer.POST("/api/v1/tr/post", createTransactionRecord)
+	ginServer.POST("/api/v1/tr/put", updateTransactionRecord)
+	ginServer.POST("/api/v1/tr/delete", deleteTransactionRecord)
 }
 
 func JsonArg(c *gin.Context, result *models.Result) (arg map[string]interface{}, ok bool) {
