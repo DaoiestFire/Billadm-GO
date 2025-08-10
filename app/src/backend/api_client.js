@@ -21,7 +21,6 @@ const api = {
         return apiClient.get(url, {params})
             .then(response => response.data) // 直接返回响应体中的 data
             .catch(error => {
-                // 简单抛出错误，由调用方处理
                 throw error;
             });
     },

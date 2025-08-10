@@ -1,29 +1,32 @@
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vitePluginRaw from 'vite-plugin-raw';
-import { resolve } from 'path';
+import {resolve} from 'path';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vitePluginRaw({
-      match: /\.svg$/,
-      exclude: [new RegExp(resolve(__dirname, './src/assets/icons'))]
-    }),
-    AutoImport({
-      resolvers: [ElementPlusResolver()],
-    }),
-    Components({
-      resolvers: [ElementPlusResolver()],
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'),
+    plugins: [
+        vue(),
+        vitePluginRaw({
+            match: /\.svg$/,
+            exclude: [new RegExp(resolve(__dirname, './src/assets/icons'))]
+        }),
+        AutoImport({
+            resolvers: [ElementPlusResolver()],
+        }),
+        Components({
+            resolvers: [ElementPlusResolver()],
+        }),
+    ],
+    resolve: {
+        alias: {
+            '@': resolve(__dirname, './src'),
+        }
+    },
+    test: {
+        environment: 'jsdom',
+        globals: true,
     }
-  },
 });
