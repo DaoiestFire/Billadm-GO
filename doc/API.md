@@ -154,13 +154,13 @@
     "transaction_type": "expense",
     "category": "",
     "description": "test des",
-    "tags": "[\"tags1\",\"tags2\"]",
-    "transaction_at": {{$date.millisecondsTimestamp}}
+    "tags": ["tags1","tags2"],
+    "transaction_at": "秒级时间戳"
   }
   ```
     * `ledger_id`：账本ID
     * `price`：消费价格
-    * `transaction_type`：消费类型，取值范围['expense','income','trasfer']，分别表示消费，收入，转账
+    * `transaction_type`：消费类型，取值范围['expense','income','transfer']，分别表示消费，收入，转账
 
 * 返回值
 
