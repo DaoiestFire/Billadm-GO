@@ -1,40 +1,40 @@
 <template>
-    <li class="menu-item" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" @click="handleClick"
-        ref="menuItem">
+  <li class="menu-item" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" @click="handleClick"
+      ref="menuItem">
 
-        <div class="menu-item-content" :class="{ 'centered': !leftIcon && !item.children }">
-            <DisplayIcon v-if="leftIcon" :rawSvg="leftIcon" />
-            <span class="item-label">{{ item.label }}</span>
-            <DisplayIcon v-if="item.children" :rawSvg="iconMoreV" class="menu-item-right-icon" />
-        </div>
+    <div class="menu-item-content" :class="{ 'centered': !leftIcon && !item.children }">
+      <DisplayIcon v-if="leftIcon" :rawSvg="leftIcon"/>
+      <span class="item-label">{{ item.label }}</span>
+      <DisplayIcon v-if="item.children" :rawSvg="iconMoreV" class="menu-item-right-icon"/>
+    </div>
 
-        <!-- 子菜单 -->
-        <ul v-if="item.children && showChildren" class="submenu" :style="submenuStyle">
-            <MenuItem v-for="(child, index) in item.children" :key="index" :item="child" :leftIcon="child.icon"
-                :depth="depth + 1" @close-menu="$emit('close-menu')" />
-        </ul>
-    </li>
+    <!-- 子菜单 -->
+    <ul v-if="item.children && showChildren" class="submenu" :style="submenuStyle">
+      <MenuItem v-for="(child, index) in item.children" :key="index" :item="child" :leftIcon="child.icon"
+                :depth="depth + 1" @close-menu="$emit('close-menu')"/>
+    </ul>
+  </li>
 </template>
 
 <script setup>
-import { ref, computed, defineEmits, defineProps } from 'vue'
+import {computed, ref} from 'vue'
 import DisplayIcon from '@/components/DisplayIcon.vue'
 import iconMoreV from '@/assets/icons/more-v.svg?raw'
 
 // 定义 props
 const props = defineProps({
-    item: {
-        type: Object,
-        required: true,
-    },
-    depth: {
-        type: Number,
-        default: 0,
-    },
-    leftIcon: {
-        type: String,
-        default: '',
-    },
+  item: {
+    type: Object,
+    required: true,
+  },
+  depth: {
+    type: Number,
+    default: 0,
+  },
+  leftIcon: {
+    type: String,
+    default: '',
+  },
 });
 
 // 定义 emit
@@ -46,76 +46,76 @@ const showChildren = ref(false);
 // 计算子菜单的位置（在父菜单项右侧，顶部对齐）
 const menuItem = ref(null);
 const submenuStyle = computed(() => {
-    if (!showChildren.value || !menuItem.value) return {};
-    const parentRect = menuItem.value.getBoundingClientRect();
-    return {
-        position: 'absolute',
-        top: `0px`,
-        left: `${parentRect.width}px`,
-        zIndex: 1000 + props.depth,
-    };
+  if (!showChildren.value || !menuItem.value) return {};
+  const parentRect = menuItem.value.getBoundingClientRect();
+  return {
+    position: 'absolute',
+    top: `0px`,
+    left: `${parentRect.width}px`,
+    zIndex: 1000 + props.depth,
+  };
 });
 
 // 鼠标进入（Hover）
 const handleMouseEnter = () => {
-    showChildren.value = true;
+  showChildren.value = true;
 };
 
 // 鼠标离开
 const handleMouseLeave = () => {
-    showChildren.value = false;
+  showChildren.value = false;
 };
 
 // 点击菜单项
 const handleClick = (event) => {
-    event.stopPropagation(); // 阻止事件冒泡到父级
-    if (props.item.action) {
-        props.item.action();
-        emit('close-menu'); // 执行动作后关闭整个菜单
-    }
+  event.stopPropagation(); // 阻止事件冒泡到父级
+  if (props.item.action) {
+    props.item.action();
+    emit('close-menu'); // 执行动作后关闭整个菜单
+  }
 };
 </script>
 
 <style scoped>
 .menu-item {
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    height: 40px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 40px;
 }
 
 .menu-item:hover {
-    background-color: var(--billadm-color-icon-hover-bg-color);
+  background-color: var(--billadm-color-icon-hover-bg-color);
 }
 
 .menu-item-content {
-    display: flex;
-    align-items: center;
-    flex: 1;
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
 
 .menu-item-content.centered {
-    justify-content: center;
+  justify-content: center;
 }
 
 /* 右侧图标靠右 */
 .menu-item-right-icon {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .submenu {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    background-color: white;
-    border: 1px solid var(--billadm-color-window-border-color);
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    min-width: 160px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  border: 1px solid var(--billadm-color-window-border-color);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-width: 160px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
 }
 </style>
