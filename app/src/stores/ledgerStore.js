@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import {createLedgerByName, getAllLedgers} from "@/backend/ledger.js";
+import {createLedgerByName, deleteLedgerById, getAllLedgers} from "@/backend/ledger.js";
 
 // 定义账本对象的类型 (JavaScript 中主要用于文档和类型提示，TypeScript 中更严格)
 /**
@@ -28,14 +28,16 @@ export const useLedgerStore = defineStore('ledger', () => {
         try {
             const ledgersFromServer = await getAllLedgers()
             if (ledgersFromServer && Array.isArray(ledgersFromServer) && ledgersFromServer.length > 0) {
+                ledgers.value = []
                 ledgersFromServer.forEach(ledger => {
-                    ledgers.value = []
                     ledgers.value.push(ledger)
                 })
             }
-            setCurrentLedger(currentLedger.value.id)
+            if (currentLedger.value != null) {
+                setCurrentLedger(currentLedger.value.id)
+            }
         } catch (error) {
-            console.log('更新账本缓存失败')
+            console.log('更新账本缓存失败', error)
         }
     }
 
@@ -45,7 +47,17 @@ export const useLedgerStore = defineStore('ledger', () => {
             await createLedgerByName(name)
             await updateLedgers()
         } catch (error) {
-            console.log('新增账本失败')
+            console.log('新增账本失败', error)
+        }
+    }
+
+    // 删除账本
+    const deleteLedger = async (id) => {
+        try {
+            await deleteLedgerById(id)
+            await updateLedgers()
+        } catch (error) {
+            console.log('删除账本失败', error)
         }
     }
 
@@ -72,6 +84,7 @@ export const useLedgerStore = defineStore('ledger', () => {
         currentLedgerAction,
         updateLedgers,
         createLedger,
+        deleteLedger,
         setCurrentLedger,
         clearCurrentLedger // 可选
     }

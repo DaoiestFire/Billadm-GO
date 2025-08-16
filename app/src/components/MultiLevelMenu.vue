@@ -47,22 +47,25 @@ const showCreateLedger = () => {
   showLedgerConfirmDialog.value = true
 }
 
-const deleteLedgerById = (id) => {
-  console.log(id)
-}
-
 const getShowDeleteLedgerFunc = (id) => {
   return () => {
     message.value = '确认删除账本吗？'
     confirmLabel.value = '删除'
     confirmColor.value = negativeColor.value
     cancelColor.value = positiveColor.value
-    confirmFunc.value = () => deleteLedgerById(id)
+    confirmFunc.value = () => ledgerStore.deleteLedger(id)
     showLedgerInput.value = false
     showLedgerConfirmDialog.value = true
   }
 }
 
+// 响应式计算删除账本的菜单项
+const deleteLedgers = computed(() => {
+  return ledgerStore.ledgers.map(l => ({
+    label: l.name,
+    action: getShowDeleteLedgerFunc(l.id)
+  }))
+})
 
 // 定义菜单项类型
 const menuItems = ref([
@@ -76,16 +79,7 @@ const menuItems = ref([
       {
         label: '删除账本',
         icon: iconTrash,
-        children: [
-          {
-            label: '刘敬威的账本',
-            action: getShowDeleteLedgerFunc('id1'),
-          },
-          {
-            label: '默认账本',
-            action: getShowDeleteLedgerFunc('id2'),
-          }
-        ]
+        children: deleteLedgers,
       },
     ]
   },
@@ -137,6 +131,7 @@ const handleClickOutside = (event) => {
 // 监听点击外部事件
 onMounted(() => {
   document.addEventListener('mousedown', handleClickOutside);
+  ledgerStore.updateLedgers()
 });
 
 // 移除事件监听器
