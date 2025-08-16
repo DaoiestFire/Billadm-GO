@@ -131,7 +131,6 @@ const handleClickOutside = (event) => {
 // 监听点击外部事件
 onMounted(() => {
   document.addEventListener('mousedown', handleClickOutside);
-  ledgerStore.updateLedgers()
 });
 
 // 移除事件监听器

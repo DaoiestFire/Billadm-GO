@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import {onMounted, onUnmounted, ref} from 'vue';
+import {onMounted, onUnmounted, ref, watch} from 'vue';
 
 const selectedValue = defineModel()
 
@@ -58,6 +58,21 @@ function selectOption(option) {
   isOpen.value = false;
 
 }
+
+watch(
+    () => props.options,
+    (newOptions) => {
+      // 如果没有选中值，无需处理
+      if (selectedLabel.value === undefined || selectedLabel.value === null) return
+
+      const exists = newOptions.some(option => option.label === selectedLabel.value)
+
+      if (!exists) {
+        selectedLabel.value = ''
+      }
+    },
+    {deep: true, immediate: false}
+)
 
 // 关闭下拉框的函数
 function closeDropdown(event) {

@@ -2,19 +2,19 @@
   <div class="layout">
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
-      <AppTopBar />
+      <AppTopBar/>
     </div>
 
     <!-- 中间栏：左中右 -->
     <div class="middle-section">
       <!-- 左侧功能栏 -->
       <div class="left-panel">
-        <AppLeftBar />
+        <AppLeftBar/>
       </div>
 
       <!-- 中间阅览区 -->
       <div class="center-panel">
-        <router-view />
+        <router-view/>
       </div>
 
       <!-- 右侧功能栏 -->
@@ -29,8 +29,16 @@
 </template>
 
 <script setup>
+import {onMounted} from "vue";
 import AppTopBar from '@/components/AppTopBar.vue'
 import AppLeftBar from '@/components/AppLeftBar.vue'
+import {useLedgerStore} from "@/stores/ledgerStore.js";
+
+const ledgerStore = useLedgerStore()
+
+onMounted(async () => {
+  await ledgerStore.updateLedgers()
+})
 </script>
 
 <style scoped>
