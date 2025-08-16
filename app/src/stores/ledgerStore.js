@@ -27,7 +27,7 @@ export const useLedgerStore = defineStore('ledger', () => {
     const updateLedgers = async () => {
         try {
             const ledgersFromServer = await getAllLedgers()
-            if (ledgersFromServer && Array.isArray(ledgersFromServer) && ledgersFromServer.length > 0) {
+            if (ledgersFromServer && Array.isArray(ledgersFromServer)) {
                 ledgers.value = []
                 ledgersFromServer.forEach(ledger => {
                     ledgers.value.push(ledger)
@@ -53,6 +53,7 @@ export const useLedgerStore = defineStore('ledger', () => {
 
     // 删除账本
     const deleteLedger = async (id) => {
+        console.log('delete', id)
         try {
             await deleteLedgerById(id)
             await updateLedgers()
