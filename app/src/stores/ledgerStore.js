@@ -15,10 +15,6 @@ export const useLedgerStore = defineStore('ledger', () => {
     const ledgers = ref([])
     const currentLedger = ref(null)
 
-    const allLedgersAction = computed(() => {
-        return ledgers.value
-    })
-
     const currentLedgerAction = computed(() => {
         return currentLedger.value
     })
@@ -80,7 +76,6 @@ export const useLedgerStore = defineStore('ledger', () => {
     return {
         ledgers,
         currentLedger,
-        allLedgersAction,
         currentLedgerAction,
         updateLedgers,
         createLedger,
