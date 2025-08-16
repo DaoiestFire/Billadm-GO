@@ -146,11 +146,6 @@ const formatTransactionType = (type) => {
   return type === 'expense' ? '支出' : type === 'income' ? '收入' : '转账'
 }
 
-// 格式化标签数组为字符串
-const formatTags = (tags) => {
-  return tags && tags.length ? tags.join('，') : ''
-}
-
 const containerStyle = {
   '--row-height': `${props.rowHeight}px`,
   '--header-height': `${props.headerHeight}px`,

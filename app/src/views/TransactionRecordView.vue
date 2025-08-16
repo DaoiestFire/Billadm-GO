@@ -25,7 +25,7 @@
       <Pagination :pages="15"/>
     </div>
   </div>
-  <TransactionRecordOperation v-model="recordData" v-model:visible="showDialog" title="新增消费记录"
+  <TransactionRecordOperation v-model:modelValue="recordData" v-model:visible="showDialog" title="新增消费记录"
                               :onConfirm="handleConfirm"/>
 </template>
 
@@ -101,7 +101,7 @@ watch(() => maxRows.value,
     (newValue) => {
       tableData.value = []
     },
-    {immediate: true}
+    {immediate: false}
 )
 
 
@@ -111,7 +111,6 @@ const recordData = ref({});
 
 function handleConfirm(data) {
   console.log('提交的数据：', data);
-  // 发送请求等
 }
 </script>
 
