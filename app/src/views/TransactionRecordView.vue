@@ -7,42 +7,43 @@
       <div class="center-groups">
       </div>
       <div class="right-groups">
-        <CommonIcon :icon="iconAdd" label="新增消费记录" width="40" height="40" :color="iconColor" :bgColor="minorBgColor"
-          :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-left" @click="showDialog = true" />
+        <CommonIcon :icon="iconAdd" label="新增消费记录" width="40" height="40" :color="iconColor"
+                    :bgColor="minorBgColor"
+                    :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-left"
+                    @click="showDialog = true"/>
       </div>
     </div>
 
     <!-- 中间栏：消费记录表 -->
     <div class="middle-section">
-      <TransactionRecordTable :items="tableData" :columnStyles="columnStyles" :headerHeight="40" :rowHeight="40" />
+      <TransactionRecordTable :items="tableData" :columnStyles="columnStyles" :headerHeight="40" :rowHeight="40"/>
     </div>
 
     <!-- 下栏：分页组件 -->
     <div class="bottom-bar">
-      <CustomSelect v-model="maxRows" :options="options" direction="up" />
-      <Pagination :pages="15" />
+      <CustomSelect v-model="maxRows" :options="options" direction="up"/>
+      <Pagination :pages="15"/>
     </div>
   </div>
   <TransactionRecordOperation v-model="recordData" v-model:visible="showDialog" title="新增消费记录"
-    :onConfirm="handleConfirm" />
+                              :onConfirm="handleConfirm"/>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { useCssVariables } from '@/css/css'
+import {ref, watch} from 'vue'
+import {useCssVariables} from '@/css/css'
 import iconAdd from '@/assets/icons/add.svg?raw'
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
 import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
 import CommonIcon from '@/components/CommonIcon.vue'
 import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
-import { getTrsByLimit } from '@/backend/ledger'
 
 // 视图常量
 const options = [
-  { label: '每页10行', value: 10 },
-  { label: '每页20行', value: 20 },
-  { label: '每页50行', value: 50 }
+  {label: '每页10行', value: 10},
+  {label: '每页20行', value: 20},
+  {label: '每页50行', value: 50}
 ]
 
 const columnStyles = [
@@ -88,7 +89,7 @@ const columnStyles = [
 ]
 
 // css variables
-const { minorBgColor, hoverBgColor, iconColor } = useCssVariables()
+const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
 
 // 表格数据
 const tableData = ref([])
@@ -97,10 +98,10 @@ const tableData = ref([])
 const maxRows = ref(10)
 
 watch(() => maxRows.value,
-  (newValue) => {
-    tableData.value = getTrsByLimit(newValue)
-  },
-  { immediate: true }
+    (newValue) => {
+      tableData.value = []
+    },
+    {immediate: true}
 )
 
 
