@@ -15,8 +15,12 @@ export const useLedgerStore = defineStore('ledger', () => {
     const ledgers = ref([])
     const currentLedger = ref(null)
 
-    const currentLedgerAction = computed(() => {
-        return currentLedger.value
+    const currentLedgerIdAction = computed(() => {
+        return currentLedger.value ? currentLedger.value.id : ''
+    })
+
+    const currentLedgerNameAction = computed(() => {
+        return currentLedger.value ? currentLedger.value.name : ''
     })
 
     // 访问后端更新账本
@@ -63,9 +67,9 @@ export const useLedgerStore = defineStore('ledger', () => {
         if (ledger) {
             currentLedger.value = {...ledger} // 创建副本，避免直接引用
         } else {
-            console.warn(`未找到 ID 为 ${id} 的账本`)
             currentLedger.value = null
         }
+        console.log('current ledger', currentLedger.value)
     }
 
     // 清除当前账本
@@ -76,7 +80,8 @@ export const useLedgerStore = defineStore('ledger', () => {
     return {
         ledgers,
         currentLedger,
-        currentLedgerAction,
+        currentLedgerIdAction,
+        currentLedgerNameAction,
         updateLedgers,
         createLedger,
         deleteLedger,
