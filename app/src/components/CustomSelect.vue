@@ -7,6 +7,9 @@
       <div v-for="option in options" :key="option.value" class="option" @click="selectOption(option)">
         {{ option.label }}
       </div>
+      <div v-if="options.length===0" class="option">
+        无账本
+      </div>
     </div>
   </div>
 </template>
@@ -56,22 +59,25 @@ function selectOption(option) {
   selectedValue.value = option.value;
   selectedLabel.value = option.label;
   isOpen.value = false;
-
 }
 
 watch(
     () => props.options,
     (newOptions) => {
       // 如果没有选中值，无需处理
-      if (selectedLabel.value === undefined || selectedLabel.value === null) return
-
-      const exists = newOptions.some(option => option.label === selectedLabel.value)
-
-      if (!exists) {
+      if (selectedValue.value === undefined || selectedValue.value === null || !selectedValue.value) {
         selectedLabel.value = ''
+        return
+      }
+
+      const option = newOptions.find(option => option.value === selectedValue.value)
+      if (option) {
+        selectedLabel.value = option.label
+      } else {
+        selectedValue.value = ''
       }
     },
-    {deep: true, immediate: false}
+    {deep: true, immediate: true}
 )
 
 // 关闭下拉框的函数
