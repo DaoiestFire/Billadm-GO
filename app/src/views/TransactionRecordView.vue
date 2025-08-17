@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {useCssVariables} from '@/css/css'
 import iconAdd from '@/assets/icons/add.svg?raw'
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
@@ -122,6 +122,10 @@ async function handleConfirm(data) {
     NotificationUtil.error(`创建消费记录失败 ${error}`)
   }
 }
+
+watch(() => ledgerStore.currentLedger, () => {
+  refreshTableData()
+}, {immediate: false})
 
 onMounted(() => {
   refreshTableData()
