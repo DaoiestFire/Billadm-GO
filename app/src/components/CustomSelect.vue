@@ -64,6 +64,10 @@ function selectOption(option) {
 watch(
     () => props.options,
     (newOptions) => {
+      if (newOptions.length === 0) {
+        selectedLabel.value = ''
+        return;
+      }
       // 如果没有选中值，无需处理
       if (selectedValue.value === undefined || selectedValue.value === null || !selectedValue.value) {
         selectedLabel.value = ''

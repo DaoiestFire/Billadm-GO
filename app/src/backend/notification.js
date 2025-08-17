@@ -86,7 +86,6 @@ class NotificationUtil {
         if (!config.type && type !== 'normal') {
             config.type = type
         }
-        console.log('saxs')
         ElNotification(config)
     }
 }

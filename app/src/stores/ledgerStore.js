@@ -27,15 +27,19 @@ export const useLedgerStore = defineStore('ledger', () => {
     // 访问后端更新账本
     const updateLedgers = async () => {
         try {
+            ledgers.value = []
             const ledgersFromServer = await getAllLedgers()
             if (ledgersFromServer && Array.isArray(ledgersFromServer)) {
-                ledgers.value = []
                 ledgersFromServer.forEach(ledger => {
                     ledgers.value.push(ledger)
                 })
+                ledgers.value.sort((a, b) => a.name.localeCompare(b.name));
             }
-            if (currentLedger.value != null) {
+            if (currentLedger.value !== null) {
                 setCurrentLedger(currentLedger.value.id)
+            }
+            if (currentLedger.value === null && ledgers.value.length > 0) {
+                setCurrentLedger(ledgers.value[0].id)
             }
         } catch (error) {
             NotificationUtil.error(`请求全部账本失败 ${error}`)
@@ -55,7 +59,6 @@ export const useLedgerStore = defineStore('ledger', () => {
 
     // 删除账本
     const deleteLedger = async (id) => {
-        console.log('delete', id)
         try {
             await deleteLedgerById(id)
             await updateLedgers()
