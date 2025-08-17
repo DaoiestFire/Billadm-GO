@@ -38,6 +38,12 @@ import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
 import CommonIcon from '@/components/CommonIcon.vue'
 import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
+import {useLedgerStore} from "@/stores/ledgerStore.js";
+import NotificationUtil from "@/backend/notification.js";
+import {buildTransactionRecordDto, createTrForLedger} from "@/backend/tr.js";
+
+// store
+const ledgerStore = useLedgerStore()
 
 // 视图常量
 const options = [
@@ -104,13 +110,18 @@ watch(() => maxRows.value,
     {immediate: false}
 )
 
-
 // 消费记录创建表单
 const showDialog = ref(false);
 const recordData = ref({});
 
-function handleConfirm(data) {
-  console.log('提交的数据：', data);
+async function handleConfirm(data) {
+  const ledgerId = ledgerStore.currentLedgerIdAction
+  try {
+    const transactionRecord = buildTransactionRecordDto(data, ledgerId)
+    await createTrForLedger(transactionRecord)
+  } catch (error) {
+    NotificationUtil.error(`创建消费记录失败 ${error}`)
+  }
 }
 </script>
 

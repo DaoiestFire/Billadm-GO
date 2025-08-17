@@ -87,20 +87,24 @@ const props = defineProps({
   },
   categoryOptions: {
     type: Array,
-    default: () => ['餐饮', '交通', '购物', '娱乐', '工资', '理财', '房租', '医疗']
+    default: () => ['餐饮', '交通']
   },
   tagOptions: {
     type: Array,
-    default: () => ['餐饮', '交通', '购物', '娱乐', '工资', '理财', '房租', '医疗']
+    default: () => ['餐饮', '交通']
   },
   modelValue: {
     type: Object,
     default: () => ({})
+  },
+  onConfirm: {
+    type: Function,
+    default: null
   }
 });
 
 // --- Emits ---
-const emit = defineEmits(['update:visible', 'update:modelValue']);
+const emit = defineEmits(['update:visible']);
 
 // --- 本地状态 ---
 const formData = ref({...props.modelValue});
@@ -113,6 +117,7 @@ watch(
       if (newVal) {
         // 合并默认值与传入的 modelValue
         formData.value = {
+          id: '',
           time: new Date(), // 默认当前时间
           type: 'expense',
           category: '',
@@ -131,7 +136,9 @@ function close() {
 }
 
 function handleSubmit() {
-  emit('update:modelValue', formData.value);
+  if (typeof props.onConfirm === 'function') {
+    props.onConfirm(formData.value);
+  }
   close();
 }
 </script>

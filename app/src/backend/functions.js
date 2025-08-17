@@ -21,3 +21,12 @@ export function isResponseSuccess(response) {
     // 根据code判断响应是否正常
     return response.code === 0;
 }
+
+export function dateToUnixTimestamp(date) {
+    // 检查输入是否为有效的 Date 对象
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+        return getUnixTimestampInSeconds
+    }
+    // getTime() 返回毫秒，除以 1000 并取整得到秒
+    return Math.floor(date.getTime() / 1000);
+}

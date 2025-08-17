@@ -1,38 +1,45 @@
 import api_client from "@/backend/api_client.js";
-import {getUnixTimestampInSeconds} from "@/backend/functions.js";
+import {dateToUnixTimestamp, isResponseSuccess} from "@/backend/functions.js";
 
 export async function getAllTrsFromLedgerById(id) {
     return await api_client.post('/v1/tr/get', {'ledger_id': id});
 }
 
 export async function createTrForLedger(data) {
-    return await api_client.post('/v1/tr/post', data);
+    const resp = await api_client.post('/v1/tr/post', data);
+    if (!isResponseSuccess(resp)) {
+        throw "createTrForLedger 响应错误"
+    }
 }
 
 export async function deleteTrById(id) {
-    return await api_client.post('/v1/tr/delete', {'tr_id': id});
+    const resp = await api_client.post('/v1/tr/delete', {'tr_id': id});
+    if (!isResponseSuccess(resp)) {
+        throw "deleteTrById 响应错误"
+    }
 }
 
 /**
- * 构造符合后端 TransactionRecordDto 的请求对象
+ * 构造符合后端 TransactionRecordDto 的请求对象 表单数据转化为dto
  * @param {Object} data - 输入数据，字段可选
+ * @param ledgerId
  * @returns {Object} 符合后端结构的对象
  */
-export function buildTransactionRecordDto(data = {}) {
+export function buildTransactionRecordDto(data = {}, ledgerId = '') {
 
     const transactionRecord = {
-        ledger_id: data.ledger_id || '',           // string，默认为空字符串
-        transaction_id: data.transaction_id || '', // string，默认为空字符串
+        ledger_id: data.ledger_id || ledgerId,           // string，默认为空字符串
+        transaction_id: data.id || '', // string，默认为空字符串
 
         // 交易核心信息
         price: typeof data.price === 'number' ? data.price : 0.0,        // float64，默认 0.0
-        transaction_type: data.transaction_type || '',                   // string，默认空字符串
+        transaction_type: data.type || '',                   // string，默认空字符串
 
         // 分类与描述
         category: data.category || '',                                   // string，默认空字符串
         description: data.description || '',                           // string，默认空字符串
         tags: Array.isArray(data.tags) ? data.tags : [],                // []string，默认空数组
-        transaction_at: getUnixTimestampInSeconds(),
+        transaction_at: dateToUnixTimestamp(data.time),
     };
 
     if (data.transaction_at !== undefined && !isNaN(data.transaction_at)) {
