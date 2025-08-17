@@ -22,7 +22,7 @@
     <!-- 下栏：分页组件 -->
     <div class="bottom-bar">
       <CustomSelect v-model="maxRows" :options="options" direction="up"/>
-      <Pagination :pages="15"/>
+      <Pagination v-model:current-page="currentPage" :pages="15"/>
     </div>
   </div>
   <TransactionRecordOperation v-model:modelValue="recordData" v-model:visible="showDialog" title="新增消费记录"
@@ -40,7 +40,7 @@ import CommonIcon from '@/components/CommonIcon.vue'
 import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import NotificationUtil from "@/backend/notification.js";
-import {buildTransactionRecordDto, createTrForLedger, getAllTrsFromLedgerById} from "@/backend/tr.js";
+import {buildTransactionRecordDto, createTrForLedger, getTrsByPage} from "@/backend/tr.js";
 
 // store
 const ledgerStore = useLedgerStore()
@@ -101,13 +101,17 @@ const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
 const tableData = ref([])
 // 表格最大行数
 const maxRows = ref(10)
+const currentPage = ref(0)
 // 消费记录创建表单
 const showDialog = ref(false);
 const recordData = ref({});
 
 const refreshTableData = async () => {
   try {
-    tableData.value = await getAllTrsFromLedgerById(ledgerStore.currentLedgerIdAction)
+    const limit = maxRows.value
+    const start = (currentPage.value - 1) * limit
+
+    tableData.value = await getTrsByPage(ledgerStore.currentLedgerIdAction, start, limit)
   } catch (error) {
     NotificationUtil.error(`数据显示刷新失败 ${error}`)
   }
@@ -124,6 +128,10 @@ async function handleConfirm(data) {
 }
 
 watch(() => ledgerStore.currentLedger, () => {
+  refreshTableData()
+}, {immediate: false})
+
+watch(() => currentPage.value, (newPage) => {
   refreshTableData()
 }, {immediate: false})
 
