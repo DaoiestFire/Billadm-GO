@@ -38,7 +38,7 @@ export const useLedgerStore = defineStore('ledger', () => {
                 setCurrentLedger(currentLedger.value.id)
             }
         } catch (error) {
-            console.log('更新账本缓存失败', error)
+            NotificationUtil.error(`请求全部账本失败 ${error}`)
         }
     }
 
@@ -49,7 +49,7 @@ export const useLedgerStore = defineStore('ledger', () => {
             await updateLedgers()
             NotificationUtil.success(`账本 ${name} 创建成功`)
         } catch (error) {
-            console.log('新增账本失败', error)
+            NotificationUtil.error(`账本 ${name} 创建失败 ${error}`)
         }
     }
 
@@ -59,25 +59,24 @@ export const useLedgerStore = defineStore('ledger', () => {
         try {
             await deleteLedgerById(id)
             await updateLedgers()
+            NotificationUtil.success(`账本创建成功`)
         } catch (error) {
-            console.log('删除账本失败', error)
+            NotificationUtil.error(`账本删除失败`)
         }
     }
 
     // 设置当前账本
     const setCurrentLedger = (id) => {
+        if (id === null) {
+            currentLedger.value = null
+            return
+        }
         const ledger = ledgers.value.find(l => l.id === id)
         if (ledger) {
             currentLedger.value = {...ledger} // 创建副本，避免直接引用
         } else {
             currentLedger.value = null
         }
-        console.log('current ledger', currentLedger.value)
-    }
-
-    // 清除当前账本
-    const clearCurrentLedger = () => {
-        currentLedger.value = null
     }
 
     return {
@@ -88,7 +87,6 @@ export const useLedgerStore = defineStore('ledger', () => {
         updateLedgers,
         createLedger,
         deleteLedger,
-        setCurrentLedger,
-        clearCurrentLedger // 可选
+        setCurrentLedger
     }
 })
