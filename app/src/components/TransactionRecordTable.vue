@@ -3,47 +3,47 @@
     <el-scrollbar>
       <table class="tr-table">
         <thead>
-          <tr :style="headerRowStyle">
-            <th v-for="styleItem in columnStyles" :key="styleItem.field" :style="getColumnStyle(styleItem)">
-              {{ styleItem.name }}
-            </th>
-          </tr>
+        <tr :style="headerRowStyle">
+          <th v-for="styleItem in columnStyles" :key="styleItem.field" :style="getColumnStyle(styleItem)">
+            {{ styleItem.name }}
+          </th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in items" :key="item.transaction_id" :style="rowStyle">
-            <td v-for="styleItem in columnStyles" :key="styleItem.field"
+        <tr v-for="(item, index) in items" :key="item.transaction_id" :style="rowStyle">
+          <td v-for="styleItem in columnStyles" :key="styleItem.field"
               :style="formatCellStyle(styleItem.field, item)">
-              <template v-if="styleItem.field === 'actions'">
-                <div class="action-buttons">
-                  <button class="btn-edit">编辑</button>
-                  <button class="btn-delete" @click="getShowDeleteTrFunc(item.transaction_id)()">删除</button>
-                </div>
-              </template>
-              <template v-if="styleItem.field === 'tags'">
-                <el-space size="small"
-                  style="display: flex; align-items: center; height: 100%; width: 100%; justify-content: center;">
-                  <el-tag v-for="tag in item[styleItem.field]" type="primary">{{ tag }}</el-tag>
-                </el-space>
-              </template>
-              <template v-else>
-                {{ styleItem.field === 'index' ? index + 1 : formatCell(styleItem.field, item[styleItem.field]) }}
-              </template>
-            </td>
-          </tr>
+            <template v-if="styleItem.field === 'actions'">
+              <div class="action-buttons">
+                <button class="btn-edit">编辑</button>
+                <button class="btn-delete" @click="getShowDeleteTrFunc(item.transaction_id)()">删除</button>
+              </div>
+            </template>
+            <template v-if="styleItem.field === 'tags'">
+              <el-space size="small"
+                        style="display: flex; align-items: center; height: 100%; width: 100%; justify-content: center;">
+                <el-tag v-for="tag in item[styleItem.field]" type="primary">{{ tag }}</el-tag>
+              </el-space>
+            </template>
+            <template v-else>
+              {{ styleItem.field === 'index' ? index + 1 : formatCell(styleItem.field, item[styleItem.field]) }}
+            </template>
+          </td>
+        </tr>
         </tbody>
       </table>
     </el-scrollbar>
     <ConfirmDialog v-model:visible="showTrConfirmDialog" :message="message" :cancel-color="cancelColor"
-      :confirm-label="confirmLabel" :confirm-color="confirmColor" @confirm="confirmFunc" />
+                   :confirm-label="confirmLabel" :confirm-color="confirmColor" @confirm="confirmFunc"/>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useCssVariables } from '@/css/css'
+import {ref} from 'vue'
+import {useCssVariables} from '@/css/css'
 
 // 引用颜色
-const { positiveColor, negativeColor } = useCssVariables()
+const {positiveColor, negativeColor} = useCssVariables()
 
 const props = defineProps({
   items: {
@@ -119,7 +119,7 @@ const formatTransactionTypeStyle = (type) => {
   } else if (type === 'transfer') {
     color = '#409EFF'
   }
-  return { color }
+  return {color}
 }
 
 // 格式化数据
@@ -137,7 +137,7 @@ const formatCell = (field, value) => {
 // 格式化时间
 const formatTime = (timeStr) => {
   if (!timeStr) return ''
-  const date = new Date(timeStr)
+  const date = new Date(timeStr * 1000)
   return date.toLocaleString()
 }
 

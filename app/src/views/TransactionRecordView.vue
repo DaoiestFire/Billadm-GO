@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue'
+import {onMounted, ref} from 'vue'
 import {useCssVariables} from '@/css/css'
 import iconAdd from '@/assets/icons/add.svg?raw'
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
@@ -40,7 +40,7 @@ import CommonIcon from '@/components/CommonIcon.vue'
 import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import NotificationUtil from "@/backend/notification.js";
-import {buildTransactionRecordDto, createTrForLedger} from "@/backend/tr.js";
+import {buildTransactionRecordDto, createTrForLedger, getAllTrsFromLedgerById} from "@/backend/tr.js";
 
 // store
 const ledgerStore = useLedgerStore()
@@ -99,20 +99,19 @@ const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
 
 // 表格数据
 const tableData = ref([])
-
 // 表格最大行数
 const maxRows = ref(10)
-
-watch(() => maxRows.value,
-    (newValue) => {
-      tableData.value = []
-    },
-    {immediate: false}
-)
-
 // 消费记录创建表单
 const showDialog = ref(false);
 const recordData = ref({});
+
+const refreshTableData = async () => {
+  try {
+    tableData.value = await getAllTrsFromLedgerById(ledgerStore.currentLedgerIdAction)
+  } catch (error) {
+    NotificationUtil.error(`数据显示刷新失败 ${error}`)
+  }
+}
 
 async function handleConfirm(data) {
   const ledgerId = ledgerStore.currentLedgerIdAction
@@ -123,6 +122,10 @@ async function handleConfirm(data) {
     NotificationUtil.error(`创建消费记录失败 ${error}`)
   }
 }
+
+onMounted(() => {
+  refreshTableData()
+})
 </script>
 
 <style scoped>
