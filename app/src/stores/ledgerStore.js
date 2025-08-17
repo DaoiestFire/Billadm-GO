@@ -59,7 +59,7 @@ export const useLedgerStore = defineStore('ledger', () => {
         try {
             await deleteLedgerById(id)
             await updateLedgers()
-            NotificationUtil.success(`账本创建成功`)
+            NotificationUtil.success(`账本删除成功`)
         } catch (error) {
             NotificationUtil.error(`账本删除失败`)
         }
