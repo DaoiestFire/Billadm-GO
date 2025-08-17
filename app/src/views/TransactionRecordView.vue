@@ -101,7 +101,7 @@ const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
 const tableData = ref([])
 // 表格最大行数
 const maxRows = ref(10)
-const currentPage = ref(0)
+const currentPage = ref(1)
 // 消费记录创建表单
 const showDialog = ref(false);
 const recordData = ref({});
