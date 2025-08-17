@@ -109,9 +109,9 @@ const recordData = ref({});
 const refreshTableData = async () => {
   try {
     const limit = maxRows.value
-    const start = (currentPage.value - 1) * limit
+    const offset = (currentPage.value - 1) * limit
 
-    tableData.value = await getTrsByPage(ledgerStore.currentLedgerIdAction, start, limit)
+    tableData.value = await getTrsByPage(ledgerStore.currentLedgerIdAction, offset, limit)
   } catch (error) {
     NotificationUtil.error(`数据显示刷新失败 ${error}`)
   }

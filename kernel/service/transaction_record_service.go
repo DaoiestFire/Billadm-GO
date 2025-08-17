@@ -33,7 +33,8 @@ func GetTrService() TransactionRecordService {
 
 type TransactionRecordService interface {
 	CreateTr(dto *dto.TransactionRecordDto) (string, error)
-	ListAllTrByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error)
+	ListAllTrsByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error)
+	QueryTrsByPage(ledgerId string, start, limit int) ([]*dto.TransactionRecordDto, error)
 	DeleteTrById(string) error
 }
 
@@ -77,7 +78,7 @@ func (t *transactionRecordServiceImpl) CreateTr(trDto *dto.TransactionRecordDto)
 	return transactionID, nil
 }
 
-func (t *transactionRecordServiceImpl) ListAllTrByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error) {
+func (t *transactionRecordServiceImpl) ListAllTrsByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error) {
 	logrus.Infof("start to list all transaction record, ledger id: %s", ledgerId)
 
 	var err error
@@ -103,6 +104,35 @@ func (t *transactionRecordServiceImpl) ListAllTrByLedgerId(ledgerId string) ([]*
 	}
 
 	logrus.Infof("list all transaction record success, ledger id: %s, len: %d", ledgerId, len(trs))
+	return trDtos, err
+}
+
+func (t *transactionRecordServiceImpl) QueryTrsByPage(ledgerId string, offset, limit int) ([]*dto.TransactionRecordDto, error) {
+	logrus.Infof("start to query trs by page, offset: %d, limit: %d", offset, limit)
+
+	var err error
+	// 先查询到所有的tr
+	trs, err := t.trDao.QueryTrsByPage(ledgerId, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	// 再查询tr的tags进行组装
+	trDtos := make([]*dto.TransactionRecordDto, 0, len(trs))
+	for _, tr := range trs {
+		trTags, err := t.trTagDao.QueryTrTagsByTrId(tr.TransactionID)
+		if err != nil {
+			return nil, err
+		}
+		trDto := &dto.TransactionRecordDto{}
+		trDto.FromTransactionRecord(tr)
+		for _, tag := range trTags {
+			trDto.Tags = append(trDto.Tags, tag.Tag)
+		}
+		trDtos = append(trDtos, trDto)
+	}
+
+	logrus.Infof("query trs by page success, len: %d", len(trs))
 	return trDtos, err
 }
 

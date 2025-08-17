@@ -11,7 +11,7 @@ import (
 	"github.com/billadm/service"
 )
 
-func getTransactionRecord(c *gin.Context) {
+func queryAllTrs(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
@@ -27,8 +27,47 @@ func getTransactionRecord(c *gin.Context) {
 		return
 	}
 
-	//TODO 当前仅能查询账本中的所有的账单
-	trs, err := service.GetTrService().ListAllTrByLedgerId(ledgerId)
+	trs, err := service.GetTrService().ListAllTrsByLedgerId(ledgerId)
+	if err != nil {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	}
+
+	ret.Data = trs
+}
+
+func queryTrsByPage(c *gin.Context) {
+	ret := models.NewResult()
+	defer c.JSON(http.StatusOK, ret)
+
+	arg, ok := JsonArg(c, ret)
+	if !ok {
+		return
+	}
+
+	ledgerId, ok := arg["ledger_id"].(string)
+	if !ok {
+		ret.Code = -1
+		ret.Msg = "ledger_id field not exist in request body"
+		return
+	}
+
+	offset, ok := arg["offset"].(float64)
+	if !ok {
+		ret.Code = -1
+		ret.Msg = "offset field not exist in request body"
+		return
+	}
+
+	limit, ok := arg["limit"].(float64)
+	if !ok {
+		ret.Code = -1
+		ret.Msg = "limit field not exist in request body"
+		return
+	}
+
+	trs, err := service.GetTrService().QueryTrsByPage(ledgerId, int(offset), int(limit))
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()

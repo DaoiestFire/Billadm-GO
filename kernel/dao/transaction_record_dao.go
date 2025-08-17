@@ -31,6 +31,7 @@ func GetTrDao() TransactionRecordDao {
 type TransactionRecordDao interface {
 	CreateTr(record *models.TransactionRecord) error
 	ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error)
+	QueryTrsByPage(ledgerId string, offset, limit int) ([]*models.TransactionRecord, error)
 	DeleteTrById(trId string) error
 	CountTrByLedgerId(ledgerId string) (int64, error)
 	DeleteAllTrByLedgerId(ledgerId string) error
@@ -53,6 +54,15 @@ func (t *transactionRecordDaoImpl) CreateTr(record *models.TransactionRecord) er
 func (t *transactionRecordDaoImpl) ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error) {
 	trs := make([]*models.TransactionRecord, 0)
 	if err := t.db.Where("ledger_id = ?", ledgerId).Find(&trs).Error; err != nil {
+		return nil, err
+	}
+
+	return trs, nil
+}
+
+func (t *transactionRecordDaoImpl) QueryTrsByPage(ledgerId string, offset, limit int) ([]*models.TransactionRecord, error) {
+	trs := make([]*models.TransactionRecord, 0)
+	if err := t.db.Where("ledger_id = ?", ledgerId).Offset(offset).Limit(limit).Find(&trs).Error; err != nil {
 		return nil, err
 	}
 

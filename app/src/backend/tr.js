@@ -2,21 +2,21 @@ import api_client from "@/backend/api_client.js";
 import {dateToUnixTimestamp, isResponseSuccess} from "@/backend/functions.js";
 
 export async function getAllTrsFromLedgerById(id) {
-    const resp = await api_client.post('/v1/tr/get', {'ledger_id': id});
+    const resp = await api_client.post('/v1/tr/query_all', {'ledger_id': id});
     if (!isResponseSuccess(resp)) {
         throw "getAllTrsFromLedgerById 响应错误"
     }
     return resp.data
 }
 
-export async function getTrsByPage(id, start, limit) {
-    const resp = await api_client.post('/v1/tr/get', {
+export async function getTrsByPage(id, offset, limit) {
+    const resp = await api_client.post('/v1/tr/query_by_page', {
         'ledger_id': id,
-        'start': start,
+        'offset': offset,
         'limit': limit,
     });
     if (!isResponseSuccess(resp)) {
-        throw "getTrsByPage 响应错误"
+        throw `getTrsByPage 响应错误 ${resp.msg}`
     }
     return resp.data
 }
@@ -24,7 +24,7 @@ export async function getTrsByPage(id, start, limit) {
 export async function createTrForLedger(data) {
     const resp = await api_client.post('/v1/tr/post', data);
     if (!isResponseSuccess(resp)) {
-        throw "createTrForLedger 响应错误"
+        throw `createTrForLedger 响应错误 ${resp.msg}`
     }
 }
 
