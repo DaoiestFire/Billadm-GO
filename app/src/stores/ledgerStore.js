@@ -26,8 +26,12 @@ export const useLedgerStore = defineStore('ledger', () => {
         return currentLedger.value ? currentLedger.value.name : ''
     })
 
+    const init = async () => {
+        await refreshLedgers()
+    }
+
     // 访问后端更新账本
-    const updateLedgers = async () => {
+    const refreshLedgers = async () => {
         try {
             ledgers.value = []
             const ledgersFromServer = await queryAllLedgers()
@@ -52,7 +56,7 @@ export const useLedgerStore = defineStore('ledger', () => {
     const createLedger = async (name) => {
         try {
             await createLedgerByName(name)
-            await updateLedgers()
+            await refreshLedgers()
             NotificationUtil.success(`账本 ${name} 创建成功`)
         } catch (error) {
             NotificationUtil.error(`账本 ${name} 创建失败 ${error}`)
@@ -63,7 +67,7 @@ export const useLedgerStore = defineStore('ledger', () => {
     const deleteLedger = async (id) => {
         try {
             await deleteLedgerById(id)
-            await updateLedgers()
+            await refreshLedgers()
             NotificationUtil.success(`账本删除成功`)
         } catch (error) {
             NotificationUtil.error(`账本删除失败`)
@@ -90,7 +94,8 @@ export const useLedgerStore = defineStore('ledger', () => {
         refreshTrTable,
         currentLedgerId,
         currentLedgerName,
-        updateLedgers,
+        init,
+        refreshLedgers,
         createLedger,
         deleteLedger,
         setCurrentLedger

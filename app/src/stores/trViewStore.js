@@ -14,6 +14,12 @@ export const useTrViewStore = defineStore('trView', () => {
     // ledgerStore
     const ledgerStore = useLedgerStore()
 
+    // 初始化接口
+    const init = async () => {
+        await refreshPages()
+        await refreshTableData()
+    }
+
     // set 函数
     const refreshTableData = async () => {
         try {
@@ -42,6 +48,7 @@ export const useTrViewStore = defineStore('trView', () => {
         pages,
         currentPage,
         pageSize,
+        init,
         refreshTableData,
         refreshPages,
         setCurrentPage,
