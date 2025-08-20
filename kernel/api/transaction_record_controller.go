@@ -37,7 +37,7 @@ func queryAllTrs(c *gin.Context) {
 	ret.Data = trs
 }
 
-func queryTrsByPage(c *gin.Context) {
+func queryTrsOnCondition(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
@@ -67,7 +67,7 @@ func queryTrsByPage(c *gin.Context) {
 		return
 	}
 
-	trs, err := service.GetTrService().QueryTrsByPage(ledgerId, int(offset), int(limit))
+	trs, err := service.GetTrService().QueryTrsOnCondition(ledgerId, int(offset), int(limit))
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()

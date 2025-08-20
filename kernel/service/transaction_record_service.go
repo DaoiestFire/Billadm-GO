@@ -34,7 +34,7 @@ func GetTrService() TransactionRecordService {
 type TransactionRecordService interface {
 	CreateTr(dto *dto.TransactionRecordDto) (string, error)
 	ListAllTrsByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error)
-	QueryTrsByPage(ledgerId string, start, limit int) ([]*dto.TransactionRecordDto, error)
+	QueryTrsOnCondition(ledgerId string, start, limit int) ([]*dto.TransactionRecordDto, error)
 	DeleteTrById(string) error
 }
 
@@ -107,7 +107,7 @@ func (t *transactionRecordServiceImpl) ListAllTrsByLedgerId(ledgerId string) ([]
 	return trDtos, err
 }
 
-func (t *transactionRecordServiceImpl) QueryTrsByPage(ledgerId string, offset, limit int) ([]*dto.TransactionRecordDto, error) {
+func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ledgerId string, offset, limit int) ([]*dto.TransactionRecordDto, error) {
 	logrus.Infof("start to query trs by page, offset: %d, limit: %d", offset, limit)
 
 	var err error

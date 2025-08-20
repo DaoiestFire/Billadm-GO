@@ -9,8 +9,8 @@ export async function getAllTrsFromLedgerById(id) {
     return resp.data
 }
 
-export async function getTrsByPage(id, offset, limit) {
-    const resp = await api_client.post('/v1/tr/query_by_page', {
+export async function queryTrsOnCondition(id, offset, limit) {
+    const resp = await api_client.post('/v1/tr/query_trs_on_condition', {
         'ledger_id': id,
         'offset': offset,
         'limit': limit,
@@ -22,14 +22,14 @@ export async function getTrsByPage(id, offset, limit) {
 }
 
 export async function createTrForLedger(data) {
-    const resp = await api_client.post('/v1/tr/post', data);
+    const resp = await api_client.post('/v1/tr/create_tr', data);
     if (!isResponseSuccess(resp)) {
         throw `createTrForLedger 响应错误 ${resp.msg}`
     }
 }
 
 export async function deleteTrById(id) {
-    const resp = await api_client.post('/v1/tr/delete', {'tr_id': id});
+    const resp = await api_client.post('/v1/tr/delete_tr_by_id', {'tr_id': id});
     if (!isResponseSuccess(resp)) {
         throw "deleteTrById 响应错误"
     }

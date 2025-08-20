@@ -16,13 +16,14 @@
 
     <!-- 中间栏：消费记录表 -->
     <div class="middle-section">
-      <TransactionRecordTable :items="tableData" :columnStyles="columnStyles" :headerHeight="40" :rowHeight="40"/>
+      <TransactionRecordTable :items="trViewStore.tableData" :columnStyles="columnStyles" :headerHeight="40"
+                              :rowHeight="40"/>
     </div>
 
     <!-- 下栏：分页组件 -->
     <div class="bottom-bar">
-      <CustomSelect v-model="maxRows" :options="options" direction="up"/>
-      <Pagination v-model:current-page="currentPage" :pages="15"/>
+      <CustomSelect v-model="trViewStore.pageSize" :options="options" direction="up"/>
+      <Pagination v-model:current-page="trViewStore.currentPage" :pages="trViewStore.pages"/>
     </div>
   </div>
   <TransactionRecordOperation v-model:modelValue="recordData" v-model:visible="showDialog" title="新增消费记录"
@@ -30,7 +31,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref, watch} from 'vue'
+import {ref} from 'vue'
 import {useCssVariables} from '@/css/css'
 import iconAdd from '@/assets/icons/add.svg?raw'
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
@@ -39,11 +40,13 @@ import CustomSelect from '@/components/CustomSelect.vue'
 import CommonIcon from '@/components/CommonIcon.vue'
 import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
 import {useLedgerStore} from "@/stores/ledgerStore.js";
+import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
-import {buildTransactionRecordDto, createTrForLedger, getTrsByPage} from "@/backend/tr.js";
+import {buildTransactionRecordDto, createTrForLedger} from "@/backend/tr.js";
 
 // store
 const ledgerStore = useLedgerStore()
+const trViewStore = useTrViewStore()
 
 // 视图常量
 const options = [
@@ -51,7 +54,6 @@ const options = [
   {label: '每页20行', value: 20},
   {label: '每页50行', value: 50}
 ]
-
 const columnStyles = [
   {
     field: 'index',
@@ -97,47 +99,20 @@ const columnStyles = [
 // css variables
 const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
 
-// 表格数据
-const tableData = ref([])
-// 表格最大行数
-const maxRows = ref(10)
-const currentPage = ref(1)
-// 消费记录创建表单
+// 消费记录表单
 const showDialog = ref(false);
 const recordData = ref({});
 
-const refreshTableData = async () => {
-  try {
-    const limit = maxRows.value
-    const offset = (currentPage.value - 1) * limit
-
-    tableData.value = await getTrsByPage(ledgerStore.currentLedgerIdAction, offset, limit)
-  } catch (error) {
-    NotificationUtil.error(`数据显示刷新失败 ${error}`)
-  }
-}
-
+// 功能函数
 async function handleConfirm(data) {
-  const ledgerId = ledgerStore.currentLedgerIdAction
   try {
-    const transactionRecord = buildTransactionRecordDto(data, ledgerId)
+    const transactionRecord = buildTransactionRecordDto(data, ledgerStore.currentLedgerId)
     await createTrForLedger(transactionRecord)
+    await trViewStore.refreshTableData()
   } catch (error) {
     NotificationUtil.error(`创建消费记录失败 ${error}`)
   }
 }
-
-watch(() => ledgerStore.currentLedger, () => {
-  refreshTableData()
-}, {immediate: false})
-
-watch(() => currentPage.value, (newPage) => {
-  refreshTableData()
-}, {immediate: false})
-
-onMounted(() => {
-  refreshTableData()
-})
 </script>
 
 <style scoped>

@@ -16,10 +16,10 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/ledger/delete", deleteLedger)
 	// transaction record
 	ginServer.POST("/api/v1/tr/query_all", queryAllTrs)
-	ginServer.POST("/api/v1/tr/query_by_page", queryTrsByPage)
-	ginServer.POST("/api/v1/tr/post", createTransactionRecord)
+	ginServer.POST("/api/v1/tr/query_trs_on_condition", queryTrsOnCondition)
+	ginServer.POST("/api/v1/tr/create_tr", createTransactionRecord)
 	ginServer.POST("/api/v1/tr/put", updateTransactionRecord)
-	ginServer.POST("/api/v1/tr/delete", deleteTransactionRecord)
+	ginServer.POST("/api/v1/tr/delete_tr_by_id", deleteTransactionRecord)
 }
 
 func JsonArg(c *gin.Context, result *models.Result) (arg map[string]interface{}, ok bool) {
