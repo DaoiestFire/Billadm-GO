@@ -1,4 +1,4 @@
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {defineStore} from 'pinia';
 import {queryTrsOnCondition} from "@/backend/tr.js";
 import NotificationUtil from "@/backend/notification.js";
@@ -29,6 +29,11 @@ export const useTrViewStore = defineStore('trView', () => {
             NotificationUtil.error(`消费记录数据刷新失败 ${error}`)
         }
     }
+
+    watch(() => [pageSize.value, currentPage.value], async () => {
+        console.log(`每页数量 ${pageSize.value} 当前页数 ${currentPage.value}`)
+        await refreshTableData()
+    })
 
     const refreshPages = () => {
         // 函数体为空
