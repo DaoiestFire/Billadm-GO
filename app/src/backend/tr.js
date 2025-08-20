@@ -2,7 +2,7 @@ import api_client from "@/backend/api_client.js";
 import {dateToUnixTimestamp, isResponseSuccess} from "@/backend/functions.js";
 
 export async function getAllTrsFromLedgerById(id) {
-    const resp = await api_client.post('/v1/tr/query_all', {'ledger_id': id});
+    const resp = await api_client.post('/v1/tr/query_all_trs', {'ledger_id': id});
     if (!isResponseSuccess(resp)) {
         throw "getAllTrsFromLedgerById 响应错误"
     }

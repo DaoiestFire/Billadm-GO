@@ -10,12 +10,12 @@ import (
 
 func ServeAPI(ginServer *gin.Engine) {
 	// ledger
-	ginServer.POST("/api/v1/ledger/get", getLedger)
+	ginServer.POST("/api/v1/ledger/query_all_ledgers", queryAllLedgers)
 	ginServer.POST("/api/v1/ledger/post", createLedger)
 	ginServer.POST("/api/v1/ledger/put", updateLedger)
 	ginServer.POST("/api/v1/ledger/delete", deleteLedger)
 	// transaction record
-	ginServer.POST("/api/v1/tr/query_all", queryAllTrs)
+	ginServer.POST("/api/v1/tr/query_all_trs", queryAllTrs)
 	ginServer.POST("/api/v1/tr/query_trs_on_condition", queryTrsOnCondition)
 	ginServer.POST("/api/v1/tr/create_tr", createTransactionRecord)
 	ginServer.POST("/api/v1/tr/put", updateTransactionRecord)

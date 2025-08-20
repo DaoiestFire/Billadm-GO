@@ -13,7 +13,7 @@ import (
 	"github.com/billadm/service"
 )
 
-func getLedger(c *gin.Context) {
+func queryAllLedgers(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 

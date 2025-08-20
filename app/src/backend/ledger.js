@@ -1,10 +1,10 @@
 import api_client from "@/backend/api_client.js";
 import {isResponseSuccess} from "@/backend/functions.js";
 
-export async function getAllLedgers() {
-    const resp = await api_client.post('/v1/ledger/get', {'ledger_id': 'all'});
+export async function queryAllLedgers() {
+    const resp = await api_client.post('/v1/ledger/query_all_ledgers', {'ledger_id': 'all'});
     if (!isResponseSuccess(resp)) {
-        throw "getAllLedgers 响应错误"
+        throw new Error("queryAllLedgers 响应错误")
     }
     return resp.data
 }

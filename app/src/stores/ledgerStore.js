@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import {createLedgerByName, deleteLedgerById, getAllLedgers} from "@/backend/ledger.js";
+import {createLedgerByName, deleteLedgerById, queryAllLedgers} from "@/backend/ledger.js";
 import NotificationUtil from "@/backend/notification";
 
 // 定义账本对象的类型 (JavaScript 中主要用于文档和类型提示，TypeScript 中更严格)
@@ -30,7 +30,7 @@ export const useLedgerStore = defineStore('ledger', () => {
     const updateLedgers = async () => {
         try {
             ledgers.value = []
-            const ledgersFromServer = await getAllLedgers()
+            const ledgersFromServer = await queryAllLedgers()
             if (ledgersFromServer && Array.isArray(ledgersFromServer)) {
                 ledgersFromServer.forEach(ledger => {
                     ledgers.value.push(ledger)
@@ -44,7 +44,7 @@ export const useLedgerStore = defineStore('ledger', () => {
                 setCurrentLedger(ledgers.value[0].id)
             }
         } catch (error) {
-            NotificationUtil.error(`请求全部账本失败 ${error}`)
+            NotificationUtil.error(`获取全部账本失败 ${error}`)
         }
     }
 
