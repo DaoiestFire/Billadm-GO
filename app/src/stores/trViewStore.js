@@ -7,7 +7,7 @@ import {useLedgerStore} from "@/stores/ledgerStore.js";
 export const useTrViewStore = defineStore('trView', () => {
     // 定义状态
     const tableData = ref([])
-    const pages = ref(0)
+    const pages = ref(1)
     const currentPage = ref(1)
     const pageSize = ref(10)
 
