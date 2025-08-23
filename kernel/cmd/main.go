@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/billadm/constant"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
+	"github.com/billadm/constant"
 	"github.com/billadm/logger"
 	"github.com/billadm/server"
 	"github.com/billadm/util"

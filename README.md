@@ -1,2 +1,2 @@
 # Billadm-GO
-基于vue+gin的记账工具
+一个记账工具
