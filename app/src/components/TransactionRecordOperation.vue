@@ -29,7 +29,7 @@
           <div class="form-item">
             <label>消费类型</label>
             <el-select v-model="formData.category" placeholder="选择消费类型" style="width: 100%">
-              <el-option v-for="category in categoryOptions" :key="category" :value="category"/>
+              <el-option v-for="category in categoryStore.categoryNames" :key="category" :value="category"/>
             </el-select>
           </div>
 
@@ -67,6 +67,10 @@
 <script setup>
 import {ref, watch} from 'vue';
 import {getTodayMiddleData} from "@/backend/util.js";
+import {useCategoryStore} from "@/stores/categoryStore.js";
+
+// store
+const categoryStore = useCategoryStore()
 
 // --- Props ---
 const props = defineProps({
@@ -85,10 +89,6 @@ const props = defineProps({
       {label: '收入', value: 'income'},
       {label: '转账', value: 'transfer'}
     ]
-  },
-  categoryOptions: {
-    type: Array,
-    default: () => ['餐饮', '交通']
   },
   tagOptions: {
     type: Array,

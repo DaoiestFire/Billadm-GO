@@ -34,13 +34,16 @@ import AppTopBar from '@/components/AppTopBar.vue'
 import AppLeftBar from '@/components/AppLeftBar.vue'
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
+import {useCategoryStore} from "@/stores/categoryStore.js";
 
 const ledgerStore = useLedgerStore()
 const trViewStore = useTrViewStore()
+const categoryStore = useCategoryStore()
 
 onMounted(async () => {
   await ledgerStore.init()
   await trViewStore.init()
+  await categoryStore.init()
 })
 </script>
 
