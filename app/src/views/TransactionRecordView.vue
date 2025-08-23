@@ -42,7 +42,7 @@ import TransactionRecordOperation from '@/components/TransactionRecordOperation.
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
-import {createTrForLedger, trDtoToTrForm, trFormToTrDto} from "@/backend/tr.js";
+import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/tr.js";
 
 // store
 const ledgerStore = useLedgerStore()
@@ -122,16 +122,15 @@ const onEditItem = (item) => {
 }
 
 async function handleConfirm(data) {
-  if (opType.value === 'edit') {
-    console.log(data)
-    return
-  }
   try {
     const transactionRecord = trFormToTrDto(data, ledgerStore.currentLedgerId)
     await createTrForLedger(transactionRecord)
+    if (opType.value === 'edit') {
+      await deleteTrById(data.id)
+    }
     await trViewStore.init()
   } catch (error) {
-    NotificationUtil.error(`创建消费记录失败 ${error}`)
+    NotificationUtil.error(`消费记录操作失败 ${error}`)
   }
 }
 </script>
