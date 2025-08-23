@@ -52,6 +52,7 @@ export const useLedgerStore = defineStore('ledger', () => {
 
     // 添加账本
     const createLedger = async (name) => {
+        console.log(1)
         try {
             await createLedgerByName(name)
             await refreshLedgers()

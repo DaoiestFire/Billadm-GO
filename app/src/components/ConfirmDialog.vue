@@ -68,8 +68,9 @@ const props = defineProps({
     type: String,
     default: '请输入...'
   },
-  onConfirm: {
-    type: Function,
+  item: {
+    type: [Object, null],
+    default: null
   }
 });
 
@@ -98,9 +99,11 @@ function closeDialog() {
 }
 
 function handleConfirm() {
-  if (typeof props.onConfirm === 'function') {
-    props.onConfirm(props.showInput ? inputValue.value : undefined);
-  }
+  const data = {
+    input: props.showInput ? inputValue.value : null,
+    item: props.item
+  };
+  emit('confirm', data);
   closeDialog();
 }
 </script>

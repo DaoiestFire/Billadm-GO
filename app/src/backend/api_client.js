@@ -18,6 +18,7 @@ const api = {
      * @returns {Promise} - 返回一个 Promise，resolve 时携带响应数据
      */
     post(url, data = {}) {
+        console.log(3)
         return apiClient.post(url, data)
             .then(response => response.data)
             .catch(error => {

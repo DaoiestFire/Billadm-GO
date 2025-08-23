@@ -7,7 +7,7 @@
   </div>
   <ConfirmDialog v-model:visible="showLedgerConfirmDialog" :showInput="showLedgerInput" :message="message"
                  :cancel-color="cancelColor" :confirm-label="confirmLabel" :confirm-color="confirmColor"
-                 @confirm="confirmFunc"/>
+                 :item="dialogItem" @confirm="onConfirm"/>
 </template>
 
 <script setup>
@@ -35,35 +35,40 @@ const message = ref('')
 const confirmLabel = ref('确认')
 const confirmColor = ref('')
 const cancelColor = ref('')
-const confirmFunc = ref(null)
+const dialogItem = ref(null)
+
+const onConfirm = async (data) => {
+  if (confirmLabel.value === '创建') {
+    await ledgerStore.createLedger(data.input)
+  }
+
+  if (confirmLabel.value === '删除') {
+    await ledgerStore.deleteLedger(data.item)
+  }
+}
 
 const showCreateLedger = () => {
   message.value = '输入账本名称'
   confirmLabel.value = '创建'
   confirmColor.value = positiveColor.value
   cancelColor.value = negativeColor.value
-  confirmFunc.value = ledgerStore.createLedger
   showLedgerInput.value = true
   showLedgerConfirmDialog.value = true
-}
-
-const getShowDeleteLedgerFunc = (id) => {
-  return () => {
-    message.value = '确认删除账本吗？'
-    confirmLabel.value = '删除'
-    confirmColor.value = negativeColor.value
-    cancelColor.value = positiveColor.value
-    confirmFunc.value = () => ledgerStore.deleteLedger(id)
-    showLedgerInput.value = false
-    showLedgerConfirmDialog.value = true
-  }
 }
 
 // 响应式计算删除账本的菜单项
 const deleteLedgers = computed(() => {
   return ledgerStore.ledgers.map(l => ({
     label: l.name,
-    action: getShowDeleteLedgerFunc(l.id)
+    action: () => {
+      dialogItem.value = l.id
+      message.value = '确认删除账本吗？'
+      confirmLabel.value = '删除'
+      confirmColor.value = negativeColor.value
+      cancelColor.value = positiveColor.value
+      showLedgerInput.value = false
+      showLedgerConfirmDialog.value = true
+    }
   }))
 })
 
