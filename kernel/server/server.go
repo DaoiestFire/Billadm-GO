@@ -1,6 +1,8 @@
 package server
 
 import (
+	"net/http"
+	"path/filepath"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -9,6 +11,7 @@ import (
 
 	"github.com/billadm/api"
 	"github.com/billadm/constant"
+	"github.com/billadm/util"
 )
 
 func NewGinServer() *gin.Engine {
@@ -23,6 +26,11 @@ func NewGinServer() *gin.Engine {
 		AllowCredentials: true,                                                         // 是否允许发送Cookie
 		MaxAge:           12 * time.Hour,                                               // 预检请求的有效期
 	}))
+	server.Static("/static", util.GetDistDir())
+	server.LoadHTMLGlob(filepath.Join(util.GetDistDir(), "*.html"))
+	server.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
 	api.ServeAPI(server)
 	return server
 }

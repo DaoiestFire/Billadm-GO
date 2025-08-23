@@ -48,3 +48,10 @@ func GetConfDir() string {
 func GetLogDir() string {
 	return filepath.Join(GetRootDir(), "log")
 }
+
+func GetDistDir() string {
+	if IsDebugMode() {
+		return filepath.Join(filepath.Dir(GetRootDir()), "app", "dist")
+	}
+	return filepath.Join(GetRootDir(), "dist")
+}
