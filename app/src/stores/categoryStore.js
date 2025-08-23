@@ -6,11 +6,9 @@ import NotificationUtil from "@/backend/notification.js";
 export const useCategoryStore = defineStore('category', () => {
     const categories = ref([])
 
-    // 计算属性：获取 category 名称列表，并按字典降序排序
+    // 计算属性：获取 category 名称列表
     const categoryNames = computed(() => {
-        return [...categories.value]
-            .map(category => category.name)
-            .sort((a, b) => b.localeCompare(a))
+        return [...categories.value].map(category => category.name)
     })
 
     const init = async () => {

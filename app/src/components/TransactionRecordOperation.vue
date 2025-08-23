@@ -121,8 +121,8 @@ watch(
           id: '',
           time: getTodayMiddleData(), // 默认当天12点0分0秒
           type: 'expense',
-          category: '',
-          description: '',
+          category: categoryStore.categoryNames.length > 0 ? categoryStore.categoryNames[0] : '',
+          description: '-',
           tags: [],
           price: 0,
           ...props.modelValue
