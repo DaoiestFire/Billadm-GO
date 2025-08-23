@@ -66,6 +66,7 @@
 
 <script setup>
 import {ref, watch} from 'vue';
+import {getTodayMiddleData} from "@/backend/util.js";
 
 // --- Props ---
 const props = defineProps({
@@ -118,7 +119,7 @@ watch(
         // 合并默认值与传入的 modelValue
         formData.value = {
           id: '',
-          time: new Date(), // 默认当前时间
+          time: getTodayMiddleData(), // 默认当天12点0分0秒
           type: 'expense',
           category: '',
           description: '',
