@@ -41,6 +41,12 @@
 <script setup>
 import {ref} from 'vue'
 import {useCssVariables} from '@/css/css'
+import {useTrViewStore} from "@/stores/trViewStore.js";
+import {deleteTrById} from "@/backend/tr.js";
+import NotificationUtil from "@/backend/notification.js";
+
+// store
+const trViewStore = useTrViewStore()
 
 // 引用颜色
 const {positiveColor, negativeColor} = useCssVariables()
@@ -72,19 +78,20 @@ const confirmColor = ref('')
 const cancelColor = ref('')
 const confirmFunc = ref(null)
 
-
-// 消费记录操作函数
-const deleteTrById = (id) => {
-  console.log(id)
-}
-
 const getShowDeleteTrFunc = (id) => {
   return () => {
     message.value = '确认删除消费记录吗？'
     confirmLabel.value = '删除'
     confirmColor.value = negativeColor.value
     cancelColor.value = positiveColor.value
-    confirmFunc.value = () => deleteTrById(id)
+    confirmFunc.value = async () => {
+      try {
+        await deleteTrById(id)
+        await trViewStore.init()
+      } catch (error) {
+        NotificationUtil.error(`删除消费记录失败 ${error}`)
+      }
+    }
     showTrConfirmDialog.value = true
   }
 }

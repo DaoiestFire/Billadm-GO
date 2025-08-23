@@ -52,7 +52,8 @@ export const useTrViewStore = defineStore('trView', () => {
     const refreshPages = async () => {
         try {
             const trCnt = await queryTrCountOnCondition(ledgerStore.currentLedgerId)
-            pages.value = Math.ceil(trCnt / pageSize.value)
+            const pagesVal = Math.ceil(trCnt / pageSize.value)
+            pages.value = pagesVal < 1 ? 1 : pagesVal
         } catch (error) {
             NotificationUtil.error(`查询消费记录数量失败 ${error}`)
         }

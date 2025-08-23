@@ -16,8 +16,6 @@ export const useLedgerStore = defineStore('ledger', () => {
     const ledgers = ref([])
     const currentLedger = ref(null)
 
-    const refreshTrTable = ref(false)
-
     const currentLedgerId = computed(() => {
         return currentLedger.value ? currentLedger.value.id : ''
     })
@@ -91,7 +89,6 @@ export const useLedgerStore = defineStore('ledger', () => {
     return {
         ledgers,
         currentLedger,
-        refreshTrTable,
         currentLedgerId,
         currentLedgerName,
         init,
