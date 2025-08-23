@@ -37,8 +37,7 @@ export const useTrViewStore = defineStore('trView', () => {
     }
 
     watch(() => [pageSize.value, currentPage.value], async () => {
-        console.log(`每页数量 ${pageSize.value} 当前页数 ${currentPage.value}`)
-        await refreshTableData()
+        await init()
     })
 
     watch(() => ledgerStore.currentLedger, async () => {

@@ -76,7 +76,7 @@ export function trFormToTrDto(data = {}, ledgerId = '') {
 }
 
 export function trDtoToTrForm(item) {
-    const data = {
+    return {
         id: item.transaction_id,
         time: new Date(item.transaction_at * 1000),
         type: item.transaction_type,
@@ -85,7 +85,5 @@ export function trDtoToTrForm(item) {
         tags: item.tags,
         price: item.price,
     }
-
-    return data
 }
 

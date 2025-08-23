@@ -10,7 +10,6 @@ export async function queryAllLedgers() {
 }
 
 export async function createLedgerByName(name) {
-    console.log(2)
     const resp = await api_client.post('/v1/ledger/post', {name});
     if (!isResponseSuccess(resp)) {
         throw "createLedgerByName 响应错误"

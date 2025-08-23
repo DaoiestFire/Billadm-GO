@@ -27,7 +27,6 @@ const ledgerStore = useLedgerStore()
 // 引用颜色
 const {positiveColor, negativeColor} = useCssVariables()
 
-
 // 各种框的控制变量
 const showLedgerConfirmDialog = ref(false)
 const showLedgerInput = ref(false)
@@ -45,15 +44,6 @@ const onConfirm = async (data) => {
   if (confirmLabel.value === '删除') {
     await ledgerStore.deleteLedger(data.item)
   }
-}
-
-const showCreateLedger = () => {
-  message.value = '输入账本名称'
-  confirmLabel.value = '创建'
-  confirmColor.value = positiveColor.value
-  cancelColor.value = negativeColor.value
-  showLedgerInput.value = true
-  showLedgerConfirmDialog.value = true
 }
 
 // 响应式计算删除账本的菜单项
@@ -79,7 +69,14 @@ const menuItems = ref([
       {
         label: '新建账本',
         icon: iconAdd,
-        action: showCreateLedger,
+        action: () => {
+          message.value = '输入账本名称'
+          confirmLabel.value = '创建'
+          confirmColor.value = positiveColor.value
+          cancelColor.value = negativeColor.value
+          showLedgerInput.value = true
+          showLedgerConfirmDialog.value = true
+        },
       },
       {
         label: '删除账本',
