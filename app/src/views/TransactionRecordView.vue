@@ -108,7 +108,7 @@ async function handleConfirm(data) {
   try {
     const transactionRecord = buildTransactionRecordDto(data, ledgerStore.currentLedgerId)
     await createTrForLedger(transactionRecord)
-    await trViewStore.refreshTableData()
+    await trViewStore.init()
   } catch (error) {
     NotificationUtil.error(`创建消费记录失败 ${error}`)
   }

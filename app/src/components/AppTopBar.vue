@@ -50,7 +50,7 @@ const billadmMenu = ref(null)
 // 创建可写的 computed 用于 v-model
 const currentLedgerId = computed({
   get() {
-    return ledgerStore.currentLedgerIdAction
+    return ledgerStore.currentLedgerId
   },
   set(value) {
     ledgerStore.setCurrentLedger(value)

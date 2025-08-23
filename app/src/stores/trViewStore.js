@@ -23,15 +23,29 @@ export const useTrViewStore = defineStore('trView', () => {
     // set 函数
     const refreshTableData = async () => {
         try {
-            const offset = (currentPage - 1) * pageSize
-            tableData.value = await queryTrsOnCondition(ledgerStore.currentLedgerId, offset, pageSize)
+            const offset = (currentPage.value - 1) * pageSize.value
+            tableData.value = await queryTrsOnCondition(ledgerStore.currentLedgerId, offset, pageSize.value)
         } catch (error) {
             NotificationUtil.error(`消费记录数据刷新失败 ${error}`)
         }
     }
 
+    const resetView = () => {
+        tableData.value = []
+        currentPage.value = 1
+        pageSize.value = 1
+    }
+
     watch(() => [pageSize.value, currentPage.value], async () => {
         console.log(`每页数量 ${pageSize.value} 当前页数 ${currentPage.value}`)
+        await refreshTableData()
+    })
+
+    watch(() => ledgerStore.currentLedger, async () => {
+        if (ledgerStore.currentLedger === null) {
+            resetView()
+            return
+        }
         await refreshTableData()
     })
 

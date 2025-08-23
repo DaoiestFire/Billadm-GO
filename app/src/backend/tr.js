@@ -16,7 +16,7 @@ export async function queryTrsOnCondition(id, offset, limit) {
         'limit': limit,
     });
     if (!isResponseSuccess(resp)) {
-        throw `getTrsByPage 响应错误 ${resp.msg}`
+        throw `queryTrsOnCondition 响应错误 ${resp.msg}`
     }
     return resp.data
 }
