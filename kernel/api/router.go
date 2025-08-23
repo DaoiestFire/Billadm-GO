@@ -23,6 +23,8 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/tr/delete_tr_by_id", deleteTransactionRecord)
 	// category
 	ginServer.POST("/api/v1/category/query_all_category", queryAllCategory)
+	// tag
+	ginServer.POST("/api/v1/tag/query_all_tag", queryAllTag)
 }
 
 func JsonArg(c *gin.Context, result *models.Result) (arg map[string]interface{}, ok bool) {

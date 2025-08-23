@@ -1,12 +1,12 @@
 package dao
 
 import (
-	"gorm.io/gorm"
 	"sync"
 
-	"github.com/billadm/util/db"
+	"gorm.io/gorm"
 
 	"github.com/billadm/models"
+	"github.com/billadm/util/db"
 )
 
 var (
