@@ -1,6 +1,6 @@
 import {describe, it} from "vitest";
 import {createLedgerByName} from "@/backend/ledger.js";
-import {buildTransactionRecordDto, createTrForLedger, deleteTrById, getAllTrsFromLedgerById} from "@/backend/tr.js";
+import {trFormToTrDto, createTrForLedger, deleteTrById, getAllTrsFromLedgerById} from "@/backend/tr.js";
 import {TransactionType} from "@/backend/constant.js";
 
 describe('Tr Utils', () => {
@@ -11,7 +11,7 @@ describe('Tr Utils', () => {
         console.log("测试账本id：", ledgerId)
 
         // 创建一个消费记录
-        const tr = buildTransactionRecordDto({
+        const tr = trFormToTrDto({
             ledger_id: ledgerId,
             price: 1234.5,
             transaction_type: TransactionType.EXPENSE,

@@ -15,7 +15,7 @@
               :style="formatCellStyle(styleItem.field, item)">
             <template v-if="styleItem.field === 'actions'">
               <div class="action-buttons">
-                <button class="btn-edit">编辑</button>
+                <button class="btn-edit" @click="handleEdit(item)">编辑</button>
                 <button class="btn-delete" @click="getShowDeleteTrFunc(item.transaction_id)()">删除</button>
               </div>
             </template>
@@ -45,6 +45,9 @@ import {useTrViewStore} from "@/stores/trViewStore.js";
 import {deleteTrById} from "@/backend/tr.js";
 import NotificationUtil from "@/backend/notification.js";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
+
+// emit
+const emit = defineEmits(['edit-item'])
 
 // store
 const trViewStore = useTrViewStore()
@@ -78,6 +81,10 @@ const confirmLabel = ref('确认')
 const confirmColor = ref('')
 const cancelColor = ref('')
 const confirmFunc = ref(null)
+
+const handleEdit = (item) => {
+  emit('edit-item', item)
+}
 
 const getShowDeleteTrFunc = (id) => {
   return () => {

@@ -51,7 +51,7 @@ export async function deleteTrById(id) {
  * @param ledgerId
  * @returns {Object} 符合后端结构的对象
  */
-export function buildTransactionRecordDto(data = {}, ledgerId = '') {
+export function trFormToTrDto(data = {}, ledgerId = '') {
 
     const transactionRecord = {
         ledger_id: data.ledger_id || ledgerId,           // string，默认为空字符串
@@ -73,5 +73,19 @@ export function buildTransactionRecordDto(data = {}, ledgerId = '') {
     }
 
     return transactionRecord
+}
+
+export function trDtoToTrForm(item) {
+    const data = {
+        id: item.transaction_id,
+        time: new Date(item.transaction_at * 1000),
+        type: item.transaction_type,
+        category: item.category,
+        description: item.description,
+        tags: item.tags,
+        price: item.price,
+    }
+
+    return data
 }
 

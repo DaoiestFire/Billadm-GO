@@ -10,14 +10,14 @@
         <CommonIcon :icon="iconAdd" label="新增消费记录" width="40" height="40" :color="iconColor"
                     :bgColor="minorBgColor"
                     :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-left"
-                    @click="showDialog = true"/>
+                    @click="onCreate"/>
       </div>
     </div>
 
     <!-- 中间栏：消费记录表 -->
     <div class="middle-section">
       <TransactionRecordTable :items="trViewStore.tableData" :columnStyles="columnStyles" :headerHeight="40"
-                              :rowHeight="40"/>
+                              :rowHeight="40" @edit-item="onEditItem"/>
     </div>
 
     <!-- 下栏：分页组件 -->
@@ -42,7 +42,7 @@ import TransactionRecordOperation from '@/components/TransactionRecordOperation.
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
-import {buildTransactionRecordDto, createTrForLedger} from "@/backend/tr.js";
+import {createTrForLedger, trDtoToTrForm, trFormToTrDto} from "@/backend/tr.js";
 
 // store
 const ledgerStore = useLedgerStore()
@@ -54,6 +54,7 @@ const options = [
   {label: '每页20行', value: 20},
   {label: '每页50行', value: 50}
 ]
+
 const columnStyles = [
   {
     field: 'index',
@@ -102,11 +103,27 @@ const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
 // 消费记录表单
 const showDialog = ref(false);
 const recordData = ref({});
+const opType = ref('create')
 
 // 功能函数
+const onCreate = () => {
+  opType.value = 'create'
+  showDialog.value = true
+}
+
+const onEditItem = (item) => {
+  recordData.value = trDtoToTrForm(item)
+  opType.value = 'edit'
+  showDialog.value = true
+}
+
 async function handleConfirm(data) {
+  if (opType.value === 'edit') {
+    console.log(data)
+    return
+  }
   try {
-    const transactionRecord = buildTransactionRecordDto(data, ledgerStore.currentLedgerId)
+    const transactionRecord = trFormToTrDto(data, ledgerStore.currentLedgerId)
     await createTrForLedger(transactionRecord)
     await trViewStore.init()
   } catch (error) {
