@@ -26,7 +26,7 @@
       <Pagination v-model:current-page="trViewStore.currentPage" :pages="trViewStore.pages"/>
     </div>
   </div>
-  <TransactionRecordOperation v-model:modelValue="recordData" v-model:visible="showDialog" title="新增消费记录"
+  <TransactionRecordOperation v-model:modelValue="recordData" v-model:visible="showDialog" :title="dialogTitle"
                               :onConfirm="handleConfirm"/>
 </template>
 
@@ -104,14 +104,18 @@ const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
 const showDialog = ref(false);
 const recordData = ref({});
 const opType = ref('create')
+const dialogTitle = ref('')
 
 // 功能函数
 const onCreate = () => {
+  dialogTitle.value = '创建消费记录'
+  recordData.value = {}
   opType.value = 'create'
   showDialog.value = true
 }
 
 const onEditItem = (item) => {
+  dialogTitle.value = '编辑消费记录'
   recordData.value = trDtoToTrForm(item)
   opType.value = 'edit'
   showDialog.value = true
