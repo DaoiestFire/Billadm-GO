@@ -42,6 +42,9 @@ type trTagDaoImpl struct {
 }
 
 func (t *trTagDaoImpl) CreateTrTags(tags []*models.TrTag) error {
+	if len(tags) <= 0 {
+		return nil
+	}
 	if err := t.db.Create(tags).Error; err != nil {
 		return err
 	}

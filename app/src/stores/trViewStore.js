@@ -1,6 +1,6 @@
 import {ref, watch} from "vue";
 import {defineStore} from 'pinia';
-import {queryTrsOnCondition} from "@/backend/tr.js";
+import {queryTrCountOnCondition, queryTrsOnCondition} from "@/backend/tr.js";
 import NotificationUtil from "@/backend/notification.js";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 
@@ -49,16 +49,13 @@ export const useTrViewStore = defineStore('trView', () => {
         await refreshTableData()
     })
 
-    const refreshPages = () => {
-        // 函数体为空
-    }
-
-    const setCurrentPage = (page) => {
-        // 函数体为空
-    }
-
-    const setPageSize = (size) => {
-        // 函数体为空
+    const refreshPages = async () => {
+        try {
+            const trCnt = await queryTrCountOnCondition(ledgerStore.currentLedgerId)
+            pages.value = Math.ceil(trCnt / pageSize.value)
+        } catch (error) {
+            NotificationUtil.error(`查询消费记录数量失败 ${error}`)
+        }
     }
 
     // 返回 store 的状态和方法
@@ -70,7 +67,5 @@ export const useTrViewStore = defineStore('trView', () => {
         init,
         refreshTableData,
         refreshPages,
-        setCurrentPage,
-        setPageSize
     }
 })

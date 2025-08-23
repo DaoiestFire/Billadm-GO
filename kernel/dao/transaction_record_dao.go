@@ -72,7 +72,7 @@ func (t *transactionRecordDaoImpl) QueryTrsByPage(ledgerId string, offset, limit
 
 func (t *transactionRecordDaoImpl) QueryCountOnCondition(ledgerId string) (int64, error) {
 	var count int64
-	if err := t.db.Where("ledger_id = ?", ledgerId).Count(&count).Error; err != nil {
+	if err := t.db.Model(&models.TransactionRecord{}).Where("ledger_id = ?", ledgerId).Count(&count).Error; err != nil {
 		return 0, err
 	}
 

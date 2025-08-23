@@ -143,6 +143,8 @@ func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ledgerId string) 
 	if err != nil {
 		return 0, err
 	}
+
+	logrus.Infof("query count of transaction records success, len: %d", cnt)
 	return cnt, nil
 }
 
