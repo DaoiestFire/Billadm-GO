@@ -43,7 +43,7 @@
           <div class="form-item">
             <label>标签</label>
             <el-select v-model="formData.tags" multiple placeholder="添加标签" style="width: 100%">
-              <el-option v-for="tag in tagOptions" :key="tag" :value="tag"/>
+              <el-option v-for="tag in tagStore.tagNames" :key="tag" :value="tag"/>
             </el-select>
           </div>
 
@@ -68,9 +68,11 @@
 import {ref, watch} from 'vue';
 import {getTodayMiddleData} from "@/backend/util.js";
 import {useCategoryStore} from "@/stores/categoryStore.js";
+import {useTagStore} from "@/stores/tagStore.js";
 
 // store
 const categoryStore = useCategoryStore()
+const tagStore = useTagStore()
 
 // --- Props ---
 const props = defineProps({
@@ -89,10 +91,6 @@ const props = defineProps({
       {label: '收入', value: 'income'},
       {label: '转账', value: 'transfer'}
     ]
-  },
-  tagOptions: {
-    type: Array,
-    default: () => ['餐饮', '交通']
   },
   modelValue: {
     type: Object,
