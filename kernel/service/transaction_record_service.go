@@ -35,6 +35,7 @@ type TransactionRecordService interface {
 	CreateTr(dto *dto.TransactionRecordDto) (string, error)
 	ListAllTrsByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error)
 	QueryTrsOnCondition(ledgerId string, start, limit int) ([]*dto.TransactionRecordDto, error)
+	QueryTrCountOnCondition(ledgerId string) (int64, error)
 	DeleteTrById(string) error
 }
 
@@ -134,6 +135,15 @@ func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ledgerId string, offs
 
 	logrus.Infof("query trs by page success, len: %d", len(trs))
 	return trDtos, err
+}
+
+func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ledgerId string) (int64, error) {
+	logrus.Infof("start to query count of transaction records")
+	cnt, err := t.trDao.QueryCountOnCondition(ledgerId)
+	if err != nil {
+		return 0, err
+	}
+	return cnt, nil
 }
 
 func (t *transactionRecordServiceImpl) DeleteTrById(trId string) error {

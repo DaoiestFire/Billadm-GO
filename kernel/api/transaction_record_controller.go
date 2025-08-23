@@ -77,6 +77,32 @@ func queryTrsOnCondition(c *gin.Context) {
 	ret.Data = trs
 }
 
+func queryTrCountOnCondition(c *gin.Context) {
+	ret := models.NewResult()
+	defer c.JSON(http.StatusOK, ret)
+
+	arg, ok := JsonArg(c, ret)
+	if !ok {
+		return
+	}
+
+	ledgerId, ok := arg["ledger_id"].(string)
+	if !ok {
+		ret.Code = -1
+		ret.Msg = "ledger_id field not exist in request body"
+		return
+	}
+
+	cnt, err := service.GetTrService().QueryTrCountOnCondition(ledgerId)
+	if err != nil {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	}
+
+	ret.Data = cnt
+}
+
 func createTransactionRecord(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)

@@ -32,6 +32,7 @@ type TransactionRecordDao interface {
 	CreateTr(record *models.TransactionRecord) error
 	ListAllTrByLedgerId(ledgerId string) ([]*models.TransactionRecord, error)
 	QueryTrsByPage(ledgerId string, offset, limit int) ([]*models.TransactionRecord, error)
+	QueryCountOnCondition(ledgerId string) (int64, error)
 	DeleteTrById(trId string) error
 	CountTrByLedgerId(ledgerId string) (int64, error)
 	DeleteAllTrByLedgerId(ledgerId string) error
@@ -67,6 +68,15 @@ func (t *transactionRecordDaoImpl) QueryTrsByPage(ledgerId string, offset, limit
 	}
 
 	return trs, nil
+}
+
+func (t *transactionRecordDaoImpl) QueryCountOnCondition(ledgerId string) (int64, error) {
+	var count int64
+	if err := t.db.Where("ledger_id = ?", ledgerId).Count(&count).Error; err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }
 
 func (t *transactionRecordDaoImpl) DeleteTrById(trId string) error {
