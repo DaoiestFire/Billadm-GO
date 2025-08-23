@@ -8,6 +8,9 @@ import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 
 export default defineConfig({
     base: '/static',
+    build: {
+        outDir: '../kernel/dist',
+    },
     plugins: [
         vue(),
         vitePluginRaw({
