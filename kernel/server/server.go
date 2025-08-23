@@ -7,17 +7,14 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 
 	"github.com/billadm/api"
-	"github.com/billadm/constant"
 	"github.com/billadm/util"
 )
 
 func NewGinServer() *gin.Engine {
-	logrus.Infof("start server with mode: %s", constant.Mode)
-	gin.SetMode(constant.Mode)
 	server := gin.Default()
+	// cors
 	server.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},                                                // 允许的源
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}, // 允许的HTTP方法

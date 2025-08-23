@@ -1,9 +1,0 @@
-global:
-  port: "31943"
-  db_name: "billadm.db"
-release:
-  log_level: "info"
-  log_file: "billadm.log"
-debug:
-  log_level: "debug"
-  log_file: ""

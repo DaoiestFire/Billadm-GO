@@ -10,7 +10,7 @@ import (
 )
 
 func TestTR_CRUD(t *testing.T) {
-	dbPath := filepath.Join(util.GetTestDir(), util.GetRandomString(8)+".db")
+	dbPath := filepath.Join(util.GetRootDir(), util.GetRandomString(8)+".db")
 	err := db.Init(dbPath)
 	if err != nil {
 		t.Errorf("Error execute script in database, dbPath: %s, err: %v", dbPath, err)

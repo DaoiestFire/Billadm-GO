@@ -1,4 +1,2 @@
-kernel/go.sum
-kernel/test/*
-!kernel/test/.gitkeep
+kernel/*db
 build/target

@@ -26,7 +26,7 @@ func GetInstance() *gorm.DB {
 }
 
 func Init(dbPath string) error {
-	initScriptPath := filepath.Join(util.GetConfDir(), "sql", SqlFileName)
+	initScriptPath := filepath.Join(util.GetConfDir(), SqlFileName)
 	if err := openAndInit(dbPath, initScriptPath); err != nil {
 		return err
 	}
