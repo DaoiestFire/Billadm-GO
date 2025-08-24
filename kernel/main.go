@@ -32,9 +32,8 @@ func main() {
 	logrus.Info("--------- start billadm ---------")
 	ginServer := server.NewGinServer()
 	gin.SetMode(util.Config.Mode)
-	if err := ginServer.Run(":" + util.Config.Port); err != nil {
+	if err := ginServer.Run("127.0.0.1:" + util.Config.Port); err != nil {
 		logrus.Errorf("start billadm err: %v", err)
 		return
 	}
-	logrus.Info("--------- end billadm ---------")
 }
