@@ -68,9 +68,14 @@ const ledgers = computed(() => {
 
 <style scoped>
 .menu-bar {
+  -webkit-app-region: drag;
   display: flex;
   align-items: center;
   position: relative;
+}
+
+.menu-bar > * {
+  -webkit-app-region: no-drag;
 }
 
 /* 左边按钮 将它与后面的元素隔开 */
