@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('node:path');
 
 if (require('electron-squirrel-startup')) {
@@ -26,6 +26,20 @@ const createWindow = () => {
     } else {
         mainWindow.loadURL(getServer() + '/static/index.html');
     }
+
+    ipcMain.on('window-control', (event, command) => {
+        switch (command) {
+            case 'minimize':
+                mainWindow.minimize();
+                break;
+            case 'maximize':
+                mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
+                break;
+            case 'close':
+                mainWindow.close();
+                break;
+        }
+    });
 };
 
 app.whenReady().then(() => {

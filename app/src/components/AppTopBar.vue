@@ -13,11 +13,11 @@
     <div class="right-groups">
       <CommonIcon :icon="iconZoomOut" label="最小化" width="41" height="30" :color="iconColor"
                   :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="rect"
-                  tooltipPlacement="bottom-left"/>
+                  tooltipPlacement="bottom-left" @click="onMinimize"/>
       <CommonIcon :icon="iconZoomIn" label="最大化" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                  :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-left"/>
+                  :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-left" @click="onMaximize"/>
       <CommonIcon :icon="iconClose" label="关闭" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                  :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-left"/>
+                  :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-left" @click="onClose"/>
     </div>
   </div>
 </template>
@@ -63,6 +63,19 @@ const ledgers = computed(() => {
     value: l.id,
   }))
 })
+
+// 窗口控制
+const onMinimize = () => {
+  window.electronAPI.minimizeWindow();
+}
+
+const onMaximize = () => {
+  window.electronAPI.maximizeWindow();
+}
+
+const onClose = () => {
+  window.electronAPI.closeWindow();
+}
 
 </script>
 
