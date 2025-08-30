@@ -116,26 +116,6 @@ catch
     exit 1
 }
 
-# 6. 拷贝 conf 目录
-Write-Host "`n⚙️  正在拷贝配置文件目录..." -ForegroundColor Yellow
-if (Test-Path $kernelConfDir)
-{
-    try
-    {
-        Copy-Item -Path $kernelConfDir -Destination $targetDir -Recurse -Force -ErrorAction Stop
-        Write-Host "✅ 已拷贝 $kernelConfDir → $targetDir\conf" -ForegroundColor Green
-    }
-    catch
-    {
-        Write-Error "❌ 拷贝 conf 目录失败: $( $_.Exception.Message )"
-        exit 1
-    }
-}
-else
-{
-    Write-Warning "⚠️  conf 目录不存在，跳过拷贝: $kernelConfDir"
-}
-
 # 7. 进入 target 目录并启动服务
 Set-Location $targetDir
 Write-Host "`n🎮 正在启动 Billadm-Kernel 服务..." -ForegroundColor Green

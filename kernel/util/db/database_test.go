@@ -15,9 +15,8 @@ func TestDbConnect(t *testing.T) {
 }
 
 func TestOpenAndInit(t *testing.T) {
-	initSqlPath := filepath.Join(util.GetConfDir(), "billadm.sql")
 	dbPath := filepath.Join(util.GetRootDir(), util.GetRandomString(8)+".db")
-	if err := openAndInit(dbPath, initSqlPath); err != nil {
-		t.Errorf("Error execute script in database, dbPath: %s, initSqlPath: %s, err: %v", dbPath, initSqlPath, err)
+	if err := openAndInit(dbPath); err != nil {
+		t.Errorf("Error execute script in database, dbPath: %s, err: %v", dbPath, err)
 	}
 }

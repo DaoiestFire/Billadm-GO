@@ -3,8 +3,6 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -12,7 +10,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"github.com/billadm/util"
+	"github.com/billadm/constant"
 )
 
 const (
@@ -26,8 +24,7 @@ func GetInstance() *gorm.DB {
 }
 
 func Init(dbPath string) error {
-	initScriptPath := filepath.Join(util.GetConfDir(), SqlFileName)
-	if err := openAndInit(dbPath, initScriptPath); err != nil {
+	if err := openAndInit(dbPath); err != nil {
 		return err
 	}
 
@@ -51,7 +48,7 @@ func newDbInstance(dbPath string) (*gorm.DB, error) {
 }
 
 // 打开数据库并执行初始化脚本
-func openAndInit(dbPath, initScriptPath string) error {
+func openAndInit(dbPath string) error {
 	database, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return fmt.Errorf("打开数据库失败: %w", err)
@@ -61,12 +58,7 @@ func openAndInit(dbPath, initScriptPath string) error {
 		return fmt.Errorf("数据库连接验证失败: %w", err)
 	}
 
-	script, err := os.ReadFile(initScriptPath)
-	if err != nil {
-		return fmt.Errorf("读取初始化脚本失败: %w", err)
-	}
-
-	if err = executeInitScript(database, string(script)); err != nil {
+	if err = executeInitScript(database, constant.Sql); err != nil {
 		database.Close()
 		return fmt.Errorf("执行初始化脚本失败: %w", err)
 	}
