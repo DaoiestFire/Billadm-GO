@@ -2,7 +2,6 @@ const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('node:path');
 const {spawn} = require('child_process');
 
-
 const isDev = !app.isPackaged
 const localServer = "http://127.0.0.1";
 const kernelPort = 31943;
@@ -51,7 +50,7 @@ const createWindow = () => {
     });
 
     if (isDev) {
-        mainWindow.loadURL('http://localhost:5173/static/index.html');
+        mainWindow.loadURL(`http://localhost:${kernelPort}/static/index.html`);
         mainWindow.webContents.openDevTools();
     } else {
         mainWindow.loadURL(getServer() + '/static/index.html');

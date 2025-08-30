@@ -3,19 +3,12 @@ const {FuseV1Options, FuseVersion} = require('@electron/fuses');
 
 module.exports = {
     packagerConfig: {
-        asar: false,
+        asar: true,
         extraResource: [
             'dist',
             'Billadm-Kernel.exe'
         ]
     },
-    rebuildConfig: {},
-    makers: [
-        {
-            name: '@electron-forge/maker-squirrel',
-            config: {},
-        }
-    ],
     plugins: [
         new FusesPlugin({
             version: FuseVersion.V1,
