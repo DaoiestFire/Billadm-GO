@@ -1,65 +1,103 @@
-# 设置项目名称和输出目录
-$projectName = "billadm"
-$outputDir = Join-Path $PSScriptRoot "target\bin"
+# 设置输出编码为 UTF-8（防止中文乱码）
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-# 如果 target 目录存在则先删除
-if (Test-Path $outputDir) {
-    Remove-Item -Recurse -Force $outputDir
+# 获取脚本所在目录
+$scriptDir = $PSScriptRoot
+
+# 获取项目根目录（上一级）
+$projectRoot = Split-Path -Parent $scriptDir
+
+# 定义路径
+$kernelDir = Join-Path $projectRoot "kernel"
+$targetDir = Join-Path $kernelDir "target"           # target 放在 Go 项目内部
+$outputExeName = "Billadm-Kernel.exe"
+$outputPath = Join-Path $targetDir $outputExeName
+
+# 输出路径信息
+Write-Host "📌 脚本所在目录: $scriptDir" -ForegroundColor Green
+Write-Host "📁 项目根目录: $projectRoot" -ForegroundColor Green
+Write-Host "🔧 Go 项目目录: $kernelDir" -ForegroundColor Green
+Write-Host "📦 构建输出目录: $targetDir" -ForegroundColor Green
+Write-Host "💾 输出文件: $outputPath" -ForegroundColor Green
+
+# 检查 kernel 目录是否存在
+if (-not (Test-Path $kernelDir))
+{
+    Write-Error "❌ 错误：Go 项目目录不存在: $kernelDir"
+    exit 1
 }
 
-# 创建输出目录
-New-Item -ItemType Directory -Path $outputDir | Out-Null
+# 检查是否包含 go.mod（判断是否为有效 Go 项目）
+$goMod = Join-Path $kernelDir "go.mod"
+if (-not (Test-Path $goMod))
+{
+    Write-Error "❌ 错误：未找到 go.mod，确认 '$kernelDir' 是有效的 Go 项目"
+    exit 1
+}
 
-# 定义目标平台数组：支持 amd64 和 arm64
-$targets = @(
-    @{ GOOS = "windows"; GOARCH = "amd64" },
-    @{ GOOS = "windows"; GOARCH = "arm64" }
-)
-
-# 获取脚本所在目录的上级目录作为项目根目录
-$projectRoot = Split-Path $PSScriptRoot -Parent
-
-# 进入 kernel/cmd 子目录
-$buildDir = Join-Path $projectRoot "kernel\cmd"
-Set-Location $buildDir
-
-Write-Host "当前工作目录: $(Get-Location)"
-
-# 遍历并构建每个平台
-foreach ($target in $targets) {
-    $goos = $target.GOOS
-    $goarch = $target.GOARCH
-
-    # 设置环境变量
-    $env:GOOS = $goos
-    $env:GOARCH = $goarch
-
-    # 构建输出文件名
-    $filename = "$projectName-$goos-$goarch"
-    if ($goos -eq "windows") {
-        $filename += ".exe"
+# 删除 Go 项目下的 target 目录（如果存在）
+if (Test-Path $targetDir)
+{
+    Write-Host "🗑️  正在删除旧的 target 目录..." -ForegroundColor Yellow
+    try
+    {
+        Remove-Item $targetDir -Recurse -Force -ErrorAction Stop
+        Write-Host "✅ 成功删除 $targetDir" -ForegroundColor Green
     }
-
-    $outputFile = Join-Path $outputDir $filename
-
-    Write-Host "Building for $goos/$goarch..."
-
-    # 执行 go build 命令
-    go build -o $outputFile -ldflags "-s -w -X github.com/billadm/constant.Mode=release" .
-
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Build failed for $goos/$goarch."
+    catch
+    {
+        Write-Error "❌ 删除 target 目录失败: $( $_.Exception.Message )"
         exit 1
     }
-
-    Write-Host "Built successfully: $outputFile"
 }
 
-# 返回原始工作目录
-Set-Location $PSScriptRoot
+# 创建新的 target 目录
+try
+{
+    New-Item -ItemType Directory -Path $targetDir -Force -ErrorAction Stop | Out-Null
+    Write-Host "🆕 已创建输出目录: $targetDir" -ForegroundColor Cyan
+}
+catch
+{
+    Write-Error "❌ 创建 target 目录失败: $( $_.Exception.Message )"
+    exit 1
+}
 
-# 清理环境变量
-Remove-Item Env:\GOOS -ErrorAction SilentlyContinue
-Remove-Item Env:\GOARCH -ErrorAction SilentlyContinue
+# 记录当前目录（脚本所在目录），用于最后返回
+$initialLocation = Get-Location
 
-Write-Host "All builds completed successfully!"
+# 进入 Go 项目目录
+Set-Location $kernelDir
+Write-Host "`n🔨 正在编译 Go 项目..." -ForegroundColor Magenta
+
+# 设置编译环境变量（Windows 32位）
+$env:GOOS = "windows"
+$env:GOARCH = "amd64"
+$env:CGO_ENABLED = "0"  # 生成静态、无依赖的二进制
+
+# 执行编译命令
+& go build -ldflags '-s -w -extldflags "-static"' -o $outputPath
+
+# 检查编译是否成功
+if ($LASTEXITCODE -ne 0)
+{
+    Write-Error "❌ Go 编译失败，退出码: $LASTEXITCODE"
+    Set-Location $initialLocation
+    exit $LASTEXITCODE
+}
+
+# 验证输出文件是否生成
+if (Test-Path $outputPath)
+{
+    Write-Host "✅ 编译成功！生成文件: $outputPath" -ForegroundColor Green
+}
+else
+{
+    Write-Error "❌ 编译完成但未生成预期文件: $outputPath"
+    Set-Location $initialLocation
+    exit 1
+}
+
+# 返回脚本所在目录
+Set-Location $initialLocation
+Write-Host "↩️  已返回脚本所在目录: $scriptDir" -ForegroundColor DarkCyan
