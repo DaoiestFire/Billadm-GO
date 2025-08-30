@@ -2,6 +2,7 @@ package util
 
 import (
 	"flag"
+	"github.com/sirupsen/logrus"
 	"strings"
 )
 
@@ -29,6 +30,8 @@ func NewBilladmConfigFromFlags() error {
 		LogFile:  *logFilePtr,
 		Mode:     *modePtr,
 	}
+
+	logrus.Warnf("port: %s, log_level: %s, log_file: %s, mode: %s", Config.Port, Config.LogLevel, Config.LogFile, Config.Mode)
 
 	return nil
 }

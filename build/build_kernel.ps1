@@ -9,15 +9,13 @@ $projectRoot = Split-Path -Parent $scriptDir
 
 # 定义路径
 $kernelDir = Join-Path $projectRoot "kernel"
-$targetDir = Join-Path $kernelDir "target"           # target 放在 Go 项目内部
 $outputExeName = "Billadm-Kernel.exe"
-$outputPath = Join-Path $targetDir $outputExeName
+$outputPath = Join-Path $kernelDir $outputExeName
 
 # 输出路径信息
 Write-Host "📌 脚本所在目录: $scriptDir" -ForegroundColor Green
 Write-Host "📁 项目根目录: $projectRoot" -ForegroundColor Green
 Write-Host "🔧 Go 项目目录: $kernelDir" -ForegroundColor Green
-Write-Host "📦 构建输出目录: $targetDir" -ForegroundColor Green
 Write-Host "💾 输出文件: $outputPath" -ForegroundColor Green
 
 # 检查 kernel 目录是否存在
@@ -35,32 +33,20 @@ if (-not (Test-Path $goMod))
     exit 1
 }
 
-# 删除 Go 项目下的 target 目录（如果存在）
-if (Test-Path $targetDir)
+# 删除 Go 项目下的 可执行文件
+if (Test-Path $outputPath)
 {
-    Write-Host "🗑️  正在删除旧的 target 目录..." -ForegroundColor Yellow
+    Write-Host "🗑️  正在删除旧的 编译文件..." -ForegroundColor Yellow
     try
     {
-        Remove-Item $targetDir -Recurse -Force -ErrorAction Stop
-        Write-Host "✅ 成功删除 $targetDir" -ForegroundColor Green
+        Remove-Item $outputPath -Recurse -Force -ErrorAction Stop
+        Write-Host "✅ 成功删除 $outputPath" -ForegroundColor Green
     }
     catch
     {
-        Write-Error "❌ 删除 target 目录失败: $( $_.Exception.Message )"
+        Write-Error "❌ 删除 $outputPath 失败: $( $_.Exception.Message )"
         exit 1
     }
-}
-
-# 创建新的 target 目录
-try
-{
-    New-Item -ItemType Directory -Path $targetDir -Force -ErrorAction Stop | Out-Null
-    Write-Host "🆕 已创建输出目录: $targetDir" -ForegroundColor Cyan
-}
-catch
-{
-    Write-Error "❌ 创建 target 目录失败: $( $_.Exception.Message )"
-    exit 1
 }
 
 # 记录当前目录（脚本所在目录），用于最后返回
@@ -73,7 +59,7 @@ Write-Host "`n🔨 正在编译 Go 项目..." -ForegroundColor Magenta
 # 设置编译环境变量（Windows 32位）
 $env:GOOS = "windows"
 $env:GOARCH = "amd64"
-$env:CGO_ENABLED = "0"  # 生成静态、无依赖的二进制
+$env:CGO_ENABLED = "1"
 
 # 执行编译命令
 & go build -ldflags '-s -w -extldflags "-static"' -o $outputPath

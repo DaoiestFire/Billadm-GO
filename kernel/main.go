@@ -30,8 +30,8 @@ func main() {
 	}
 	// 启动服务器
 	logrus.Info("--------- start billadm ---------")
-	ginServer := server.NewGinServer()
 	gin.SetMode(util.Config.Mode)
+	ginServer := server.NewGinServer()
 	if err := ginServer.Run("127.0.0.1:" + util.Config.Port); err != nil {
 		logrus.Errorf("start billadm err: %v", err)
 		return

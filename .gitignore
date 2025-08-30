@@ -1,3 +1,4 @@
 kernel/*db
 kernel/dist
-kernel/target
+kernel/*exe
+build/target
