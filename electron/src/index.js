@@ -1,6 +1,8 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
-const path = require('node:path');
+const path = require('path');
 const {spawn} = require('child_process');
+
+process.noAsar = false;
 
 const isDev = !app.isPackaged
 const localServer = "http://127.0.0.1";
@@ -12,33 +14,48 @@ const getServer = (port = kernelPort) => {
 
 let kernelProcess = null;
 
+const logDir = path.join(isDev ? app.getAppPath() : process.resourcesPath, 'logs');
+const logFile = path.join(logDir, 'app.log');
+
+const fs = require('fs')
+if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir, {recursive: true});
+}
+const logStream = fs.createWriteStream(logFile, {flags: 'a'});
+const log = (message) => {
+    const time = new Date().toISOString();
+    const logMessage = `[${time}] ${message}\n`;
+    logStream.write(logMessage);
+};
+
 const startKernel = () => {
-    const kernelExe = path.join(app.getAppPath(), 'Billadm-Kernel.exe');
-    console.log('Starting kernel:', kernelExe);
+    const kernelPath = isDev ? app.getAppPath() : process.resourcesPath;
+    const kernelExe = path.join(kernelPath, 'Billadm-Kernel.exe');
+    log(`Starting kernel: ${kernelExe}`);
 
     kernelProcess = spawn(kernelExe, ['-port', kernelPort, '-log_file', 'billadm.log', '-mode', 'release']);
 
     // 捕获标准输出
     kernelProcess.stdout.on('data', (data) => {
-        console.log(`[Kernel STDOUT]: ${data.toString()}`);
+        log(`[Kernel STDOUT]: ${data.toString()}`);
     });
 
     // 捕获错误输出
     kernelProcess.stderr.on('data', (data) => {
-        console.error(`[Kernel STDERR]: ${data.toString()}`);
+        log(`[Kernel STDERR]: ${data.toString()}`);
     });
 
     // 进程关闭
     kernelProcess.on('close', (code) => {
-        console.log(`[Kernel Process] exited with code ${code}`);
+        log(`[Kernel Process] exited with code ${code}`);
         kernelProcess = null;
         if (code !== 0) {
-            console.warn(`Backend process exited unexpectedly code ${code}. `);
+            log(`Backend process exited unexpectedly code ${code}. `);
         }
     });
 
     kernelProcess.on('error', (err) => {
-        console.error('[Kernel Process] Failed to start:', err);
+        log('[Kernel Process] Failed to start:', err);
     });
 };
 
@@ -49,11 +66,10 @@ const createWindow = () => {
         },
     });
 
+    mainWindow.loadURL(getServer() + '/static/index.html');
+
     if (isDev) {
-        mainWindow.loadURL(`http://localhost:${kernelPort}/static/index.html`);
         mainWindow.webContents.openDevTools();
-    } else {
-        mainWindow.loadURL(getServer() + '/static/index.html');
     }
 
     ipcMain.on('window-control', (event, command) => {

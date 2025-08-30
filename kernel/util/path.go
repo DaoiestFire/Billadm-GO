@@ -6,8 +6,12 @@ import (
 )
 
 func GetRootDir() string {
-	rootPath, _ := os.Getwd()
-	return rootPath
+	exePath, err := os.Executable()
+	if err != nil {
+		return ""
+	}
+
+	return filepath.Dir(exePath)
 }
 
 func GetDistDir() string {
