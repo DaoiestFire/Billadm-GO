@@ -10,7 +10,7 @@ files:
   - dist/**
   - Billadm-Kernel.exe
 win:
-  icon: "assets/icon.ico"
+  icon: "assets/billadm.ico"
   requestedExecutionLevel: "asInvoker"
   target: nsis
 nsis:
