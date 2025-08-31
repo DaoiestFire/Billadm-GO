@@ -34,6 +34,7 @@ import CommonIcon from '@/components/CommonIcon.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
 import MultiLevelMenu from '@/components/MultiLevelMenu.vue'
 import {useLedgerStore} from "@/stores/ledgerStore.js";
+import {exitApp} from "@/backend/app.js";
 
 // store
 const ledgerStore = useLedgerStore()
@@ -73,7 +74,8 @@ const onMaximize = () => {
   window.electronAPI.maximizeWindow();
 }
 
-const onClose = () => {
+const onClose = async () => {
+  await exitApp()
   window.electronAPI.closeWindow();
 }
 
