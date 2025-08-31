@@ -2,9 +2,9 @@
 
 // 默认配置
 const defaultConfig = {
-    duration: 3000,
+    duration: 2500,
     showClose: true,
-    offset: 50,
+    offset: 100,
 }
 
 /**

@@ -61,7 +61,7 @@ const startKernel = () => {
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 1600, height: 800, frame: false, webPreferences: {
+        width: 1600, height: 1000, frame: false, webPreferences: {
             nodeIntegration: false, contextIsolation: true, preload: path.join(__dirname, 'preload.js'),
         },
     });
@@ -100,6 +100,10 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
+        if (kernelProcess.exitCode !== null) {
+            kernelProcess.kill()
+        }
         app.quit();
+
     }
 });
