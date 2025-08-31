@@ -1,8 +1,9 @@
 # Logs
 logs
 *.log
+# build
 *.db
 *.exe
-
+dist
 # Electron-Forge
 out/

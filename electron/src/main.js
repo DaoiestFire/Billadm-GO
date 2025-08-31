@@ -8,6 +8,7 @@ process.noAsar = false;
 const isDev = !app.isPackaged
 const localServer = "http://127.0.0.1";
 const kernelPort = 31943;
+const appPath = isDev ? path.dirname(__dirname) : app.getAppPath();
 
 const getServer = (port = kernelPort) => {
     return localServer + ":" + port;
@@ -15,7 +16,7 @@ const getServer = (port = kernelPort) => {
 
 let kernelProcess = null;
 
-const logDir = path.join(app.getAppPath(), 'logs');
+const logDir = path.join(appPath, 'logs');
 const logFile = path.join(logDir, 'app.log');
 
 
@@ -30,7 +31,7 @@ const log = (message) => {
 };
 
 const startKernel = () => {
-    const kernelExe = path.join(app.getAppPath(), 'Billadm-Kernel.exe');
+    const kernelExe = path.join(appPath, 'Billadm-Kernel.exe');
     log(`Starting kernel: ${kernelExe}`);
 
     kernelProcess = spawn(kernelExe, ['-port', kernelPort, '-log_file', 'billadm.log', '-mode', 'release']);
