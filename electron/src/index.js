@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
+const fs = require('fs');
 const {spawn} = require('child_process');
 
 process.noAsar = false;
@@ -14,10 +15,10 @@ const getServer = (port = kernelPort) => {
 
 let kernelProcess = null;
 
-const logDir = path.join(isDev ? app.getAppPath() : process.resourcesPath, 'logs');
+const logDir = path.join(app.getAppPath(), 'logs');
 const logFile = path.join(logDir, 'app.log');
 
-const fs = require('fs')
+
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir, {recursive: true});
 }
@@ -29,8 +30,7 @@ const log = (message) => {
 };
 
 const startKernel = () => {
-    const kernelPath = isDev ? app.getAppPath() : process.resourcesPath;
-    const kernelExe = path.join(kernelPath, 'Billadm-Kernel.exe');
+    const kernelExe = path.join(app.getAppPath(), 'Billadm-Kernel.exe');
     log(`Starting kernel: ${kernelExe}`);
 
     kernelProcess = spawn(kernelExe, ['-port', kernelPort, '-log_file', 'billadm.log', '-mode', 'release']);
