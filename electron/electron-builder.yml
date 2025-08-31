@@ -1,0 +1,11 @@
+appId: com.github.billadm
+productName: Billadm
+asar: false
+directories:
+  output: out
+files:
+  - src/**
+  - node_modules/**
+  - package.json
+  - dist/**
+  - Billadm-Kernel.exe

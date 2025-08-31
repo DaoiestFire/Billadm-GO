@@ -1,12 +1,19 @@
 {
   "name": "billadm",
+  "description": "Billadm is a bill management tool",
+  "author": {
+    "name": "ljw",
+    "email": "liujingwei1997@outlook.com"
+  },
   "productName": "Billadm",
   "version": "1.0.0",
   "main": "./src/main.js",
   "scripts": {
-    "start": "electron ./src/main.js"
+    "start": "electron ./src/main.js",
+    "package": "electron-builder --config electron-builder.yml --publish=never"
   },
   "devDependencies": {
-    "electron": "37.3.1"
+    "electron": "37.3.1",
+    "electron-builder": "^26.0.12"
   }
 }
