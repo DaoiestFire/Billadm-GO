@@ -11,8 +11,6 @@ $projectRoot = Split-Path -Parent $scriptDir
 $targetDir = Join-Path $scriptDir "target"
 $appDistDir = Join-Path $projectRoot "app\dist"
 $kernelExe = Join-Path $projectRoot "kernel\Billadm-Kernel.exe"
-$kernelConfDir = Join-Path $projectRoot "kernel\conf"
-$targetExe = Join-Path $targetDir "Billadm-Kernel.exe"
 
 # 输出开始信息
 Write-Host "🚀 开始执行一键构建与启动流程" -ForegroundColor Cyan
