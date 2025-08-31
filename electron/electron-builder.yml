@@ -9,3 +9,20 @@ files:
   - package.json
   - dist/**
   - Billadm-Kernel.exe
+win:
+  icon: "assets/icon.ico"
+  requestedExecutionLevel: "asInvoker"
+#nsis:
+#  oneClick: false
+#  perMachine: false
+#  allowToChangeInstallationDirectory: true
+#  allowElevation: true
+#  deleteAppDataOnUninstall: true
+#  createDesktopShortcut: true
+#  createStartMenuShortcut: true
+#  shortcutName: "SiYuan"
+#  license: "../LICENSE"
+#  include: "nsis/installer.nsh"
+#  warningsAsErrors: false
+#  installerSidebar: "nsis/installerSidebar.bmp"
+#  uninstallerSidebar: "nsis/uninstallerSidebar.bmp"
