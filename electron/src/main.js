@@ -101,10 +101,9 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-        if (kernelProcess.exitCode === null) {
+        if (kernelProcess && kernelProcess.exitCode === null) {
             kernelProcess.kill()
         }
         app.quit();
-
     }
 });

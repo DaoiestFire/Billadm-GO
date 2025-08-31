@@ -13,10 +13,6 @@ import (
 	"github.com/billadm/constant"
 )
 
-const (
-	SqlFileName = "billadm.sql"
-)
-
 var db *gorm.DB
 
 func GetInstance() *gorm.DB {
@@ -43,7 +39,7 @@ func newDbInstance(dbPath string) (*gorm.DB, error) {
 		logrus.Errorf("连接数据库失败, db path: %s, err: %v", dbPath, err)
 		return nil, fmt.Errorf("连接数据库失败, db path: %s, err: %v", dbPath, err)
 	}
-	logrus.Infof("连接数据库成功, db path: %s", dbPath)
+	logrus.Warnf("连接数据库成功, db path: %s", dbPath)
 	return db, nil
 }
 

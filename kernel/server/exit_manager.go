@@ -34,10 +34,10 @@ func (em *ExitManager) Start() {
 	logrus.Info("启动程序退出处理协程")
 	go func() {
 		sigCh := make(chan os.Signal, 1)
-		signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+		signal.Notify(sigCh, os.Kill, os.Interrupt, syscall.SIGTERM)
 		select {
-		case <-sigCh:
-			logrus.Warn("billadm exit manager shutdown by signal")
+		case sig := <-sigCh:
+			logrus.Warnf("billadm exit manager shutdown by signal %s", sig.String())
 			em.shutdown()
 			return
 		}

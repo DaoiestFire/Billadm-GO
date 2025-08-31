@@ -75,7 +75,7 @@ const onMaximize = () => {
 }
 
 const onClose = async () => {
-  await exitApp()
+  exitApp()
   window.electronAPI.closeWindow();
 }
 
