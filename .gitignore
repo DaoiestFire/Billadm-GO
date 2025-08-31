@@ -2,7 +2,3 @@ kernel/*db
 kernel/dist
 kernel/*exe
 build/target
-electron/dist
-electron/*exe
-electron/*db
-electron/conf
