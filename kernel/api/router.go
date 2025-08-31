@@ -9,6 +9,8 @@ import (
 )
 
 func ServeAPI(ginServer *gin.Engine) {
+	// app
+	ginServer.POST("/api/v1/app/exit_app", exitApp)
 	// ledger
 	ginServer.POST("/api/v1/ledger/query_all_ledgers", queryAllLedgers)
 	ginServer.POST("/api/v1/ledger/post", createLedger)

@@ -6,7 +6,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"github.com/billadm/api"
 	"github.com/billadm/util"
 )
 
@@ -22,6 +21,5 @@ func NewGinServer() *gin.Engine {
 		MaxAge:           12 * time.Hour,                                               // 预检请求的有效期
 	}))
 	server.Static("/static", util.GetDistDir())
-	api.ServeAPI(server)
 	return server
 }
