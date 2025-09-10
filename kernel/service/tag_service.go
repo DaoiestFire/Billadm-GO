@@ -3,10 +3,9 @@ package service
 import (
 	"sync"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/billadm/dao"
 	"github.com/billadm/models"
+	"github.com/billadm/workspace"
 )
 
 var (
@@ -29,7 +28,7 @@ func GetTagService() TagService {
 }
 
 type TagService interface {
-	QueryAllTag() ([]models.Tag, error)
+	QueryAllTag(ws *workspace.Workspace) ([]models.Tag, error)
 }
 
 var _ TagService = &tagServiceImpl{}
@@ -38,13 +37,13 @@ type tagServiceImpl struct {
 	tagDao dao.TagDao
 }
 
-func (t *tagServiceImpl) QueryAllTag() ([]models.Tag, error) {
-	logrus.Info("start to query all tag")
-	tags, err := t.tagDao.QueryAllTags()
+func (t *tagServiceImpl) QueryAllTag(ws *workspace.Workspace) ([]models.Tag, error) {
+	ws.GetLogger().Info("start to query all tag")
+	tags, err := t.tagDao.QueryAllTags(ws)
 	if err != nil {
 		return nil, err
 	}
 
-	logrus.Info("query all tag success, length: ", len(tags))
+	ws.GetLogger().Info("query all tag success, length: ", len(tags))
 	return tags, nil
 }

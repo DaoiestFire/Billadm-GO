@@ -23,16 +23,16 @@ func GetTagDao() TagDao {
 }
 
 type TagDao interface {
-	QueryAllTags(workspace *workspace.Workspace) ([]models.Tag, error)
+	QueryAllTags(ws *workspace.Workspace) ([]models.Tag, error)
 }
 
 var _ TagDao = &TagDaoImpl{}
 
 type TagDaoImpl struct{}
 
-func (t *TagDaoImpl) QueryAllTags(workspace *workspace.Workspace) ([]models.Tag, error) {
+func (t *TagDaoImpl) QueryAllTags(ws *workspace.Workspace) ([]models.Tag, error) {
 	tags := make([]models.Tag, 0)
-	if err := workspace.GetDb().Find(&tags).Error; err != nil {
+	if err := ws.GetDb().Find(&tags).Error; err != nil {
 		return nil, err
 	}
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/billadm/dao"
 	"github.com/billadm/models"
-	"github.com/sirupsen/logrus"
+	"github.com/billadm/workspace"
 )
 
 var (
@@ -28,7 +28,7 @@ func GetCategoryService() CategoryService {
 }
 
 type CategoryService interface {
-	QueryAllCategory() ([]models.Category, error)
+	QueryAllCategory(ws *workspace.Workspace) ([]models.Category, error)
 }
 
 var _ CategoryService = &categoryServiceImpl{}
@@ -37,13 +37,13 @@ type categoryServiceImpl struct {
 	categoryDao dao.CategoryDao
 }
 
-func (c *categoryServiceImpl) QueryAllCategory() ([]models.Category, error) {
-	logrus.Info("start to query all category")
-	categories, err := c.categoryDao.QueryAllCategory()
+func (c *categoryServiceImpl) QueryAllCategory(ws *workspace.Workspace) ([]models.Category, error) {
+	ws.GetLogger().Info("start to query all category")
+	categories, err := c.categoryDao.QueryAllCategory(ws)
 	if err != nil {
 		return nil, err
 	}
 
-	logrus.Info("query all category success, length: ", len(categories))
+	ws.GetLogger().Info("query all category success, length: ", len(categories))
 	return categories, nil
 }

@@ -23,16 +23,16 @@ func GetCategoryDao() CategoryDao {
 }
 
 type CategoryDao interface {
-	QueryAllCategory(workspace *workspace.Workspace) ([]models.Category, error)
+	QueryAllCategory(ws *workspace.Workspace) ([]models.Category, error)
 }
 
 var _ CategoryDao = &categoryDaoImpl{}
 
 type categoryDaoImpl struct{}
 
-func (c *categoryDaoImpl) QueryAllCategory(workspace *workspace.Workspace) ([]models.Category, error) {
+func (c *categoryDaoImpl) QueryAllCategory(ws *workspace.Workspace) ([]models.Category, error) {
 	categories := make([]models.Category, 0)
-	if err := workspace.GetDb().Find(&categories).Error; err != nil {
+	if err := ws.GetDb().Find(&categories).Error; err != nil {
 		return nil, err
 	}
 	return categories, nil

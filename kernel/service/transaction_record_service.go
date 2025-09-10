@@ -3,12 +3,11 @@ package service
 import (
 	"sync"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/billadm/dao"
 	"github.com/billadm/models"
 	"github.com/billadm/models/dto"
 	"github.com/billadm/util"
+	"github.com/billadm/workspace"
 )
 
 var (
@@ -32,11 +31,11 @@ func GetTrService() TransactionRecordService {
 }
 
 type TransactionRecordService interface {
-	CreateTr(dto *dto.TransactionRecordDto) (string, error)
-	ListAllTrsByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error)
-	QueryTrsOnCondition(ledgerId string, start, limit int) ([]*dto.TransactionRecordDto, error)
-	QueryTrCountOnCondition(ledgerId string) (int64, error)
-	DeleteTrById(string) error
+	CreateTr(ws *workspace.Workspace, dto *dto.TransactionRecordDto) (string, error)
+	ListAllTrsByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*dto.TransactionRecordDto, error)
+	QueryTrsOnCondition(ws *workspace.Workspace, ledgerId string, start, limit int) ([]*dto.TransactionRecordDto, error)
+	QueryTrCountOnCondition(ws *workspace.Workspace, ledgerId string) (int64, error)
+	DeleteTrById(ws *workspace.Workspace, trId string) error
 }
 
 var _ TransactionRecordService = &transactionRecordServiceImpl{}
@@ -47,16 +46,16 @@ type transactionRecordServiceImpl struct {
 }
 
 // CreateTr 创建成功返回交易记录的id
-func (t *transactionRecordServiceImpl) CreateTr(trDto *dto.TransactionRecordDto) (string, error) {
-	logrus.Infof("start to create transaction record, ledger id: %s, description: %s", trDto.LedgerID, trDto.Description)
+func (t *transactionRecordServiceImpl) CreateTr(ws *workspace.Workspace, trDto *dto.TransactionRecordDto) (string, error) {
+	ws.GetLogger().Infof("start to create transaction record, ledger id: %s, description: %s", trDto.LedgerID, trDto.Description)
 
 	transactionID := util.GetUUID()
 
 	// 先创建消费记录
 	record := trDto.ToTransactionRecord()
 	record.TransactionID = transactionID
-	if err := t.trDao.CreateTr(record); err != nil {
-		logrus.Errorf("create transaction record failed, ledger id: %s, description: %s, err: %v", record.LedgerID, record.Description, err)
+	if err := t.trDao.CreateTr(ws, record); err != nil {
+		ws.GetLogger().Errorf("create transaction record failed, ledger id: %s, description: %s, err: %v", record.LedgerID, record.Description, err)
 		return "", err
 	}
 
@@ -70,21 +69,21 @@ func (t *transactionRecordServiceImpl) CreateTr(trDto *dto.TransactionRecordDto)
 		}
 		trTags = append(trTags, trTag)
 	}
-	if err := t.trTagDao.CreateTrTags(trTags); err != nil {
-		logrus.Errorf("create trTags failed, ledger id: %s, description: %s, err: %v", record.LedgerID, record.Description, err)
+	if err := t.trTagDao.CreateTrTags(ws, trTags); err != nil {
+		ws.GetLogger().Errorf("create trTags failed, ledger id: %s, description: %s, err: %v", record.LedgerID, record.Description, err)
 		return "", err
 	}
 
-	logrus.Infof("create transaction record success, ledger id: %s, description: %s", trDto.LedgerID, trDto.Description)
+	ws.GetLogger().Infof("create transaction record success, ledger id: %s, description: %s", trDto.LedgerID, trDto.Description)
 	return transactionID, nil
 }
 
-func (t *transactionRecordServiceImpl) ListAllTrsByLedgerId(ledgerId string) ([]*dto.TransactionRecordDto, error) {
-	logrus.Infof("start to list all transaction record, ledger id: %s", ledgerId)
+func (t *transactionRecordServiceImpl) ListAllTrsByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*dto.TransactionRecordDto, error) {
+	ws.GetLogger().Infof("start to list all transaction record, ledger id: %s", ledgerId)
 
 	var err error
 	// 先查询到所有的tr
-	trs, err := t.trDao.ListAllTrByLedgerId(ledgerId)
+	trs, err := t.trDao.ListAllTrByLedgerId(ws, ledgerId)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +91,7 @@ func (t *transactionRecordServiceImpl) ListAllTrsByLedgerId(ledgerId string) ([]
 	// 再查询tr的tags进行组装
 	trDtos := make([]*dto.TransactionRecordDto, 0, len(trs))
 	for _, tr := range trs {
-		trTags, err := t.trTagDao.QueryTrTagsByTrId(tr.TransactionID)
+		trTags, err := t.trTagDao.QueryTrTagsByTrId(ws, tr.TransactionID)
 		if err != nil {
 			return nil, err
 		}
@@ -104,16 +103,16 @@ func (t *transactionRecordServiceImpl) ListAllTrsByLedgerId(ledgerId string) ([]
 		trDtos = append(trDtos, trDto)
 	}
 
-	logrus.Infof("list all transaction record success, ledger id: %s, len: %d", ledgerId, len(trs))
+	ws.GetLogger().Infof("list all transaction record success, ledger id: %s, len: %d", ledgerId, len(trs))
 	return trDtos, err
 }
 
-func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ledgerId string, offset, limit int) ([]*dto.TransactionRecordDto, error) {
-	logrus.Infof("start to query trs by page, offset: %d, limit: %d", offset, limit)
+func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspace, ledgerId string, offset, limit int) ([]*dto.TransactionRecordDto, error) {
+	ws.GetLogger().Infof("start to query trs by page, offset: %d, limit: %d", offset, limit)
 
 	var err error
 	// 先查询到所有的tr
-	trs, err := t.trDao.QueryTrsByPage(ledgerId, offset, limit)
+	trs, err := t.trDao.QueryTrsByPage(ws, ledgerId, offset, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +120,7 @@ func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ledgerId string, offs
 	// 再查询tr的tags进行组装
 	trDtos := make([]*dto.TransactionRecordDto, 0, len(trs))
 	for _, tr := range trs {
-		trTags, err := t.trTagDao.QueryTrTagsByTrId(tr.TransactionID)
+		trTags, err := t.trTagDao.QueryTrTagsByTrId(ws, tr.TransactionID)
 		if err != nil {
 			return nil, err
 		}
@@ -133,34 +132,34 @@ func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ledgerId string, offs
 		trDtos = append(trDtos, trDto)
 	}
 
-	logrus.Infof("query trs by page success, len: %d", len(trs))
+	ws.GetLogger().Infof("query trs by page success, len: %d", len(trs))
 	return trDtos, err
 }
 
-func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ledgerId string) (int64, error) {
-	logrus.Infof("start to query count of transaction records")
-	cnt, err := t.trDao.QueryCountOnCondition(ledgerId)
+func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ws *workspace.Workspace, ledgerId string) (int64, error) {
+	ws.GetLogger().Infof("start to query count of transaction records")
+	cnt, err := t.trDao.QueryCountOnCondition(ws, ledgerId)
 	if err != nil {
 		return 0, err
 	}
 
-	logrus.Infof("query count of transaction records success, len: %d", cnt)
+	ws.GetLogger().Infof("query count of transaction records success, len: %d", cnt)
 	return cnt, nil
 }
 
-func (t *transactionRecordServiceImpl) DeleteTrById(trId string) error {
-	logrus.Infof("start to delete transaction record, tr id: %s", trId)
+func (t *transactionRecordServiceImpl) DeleteTrById(ws *workspace.Workspace, trId string) error {
+	ws.GetLogger().Infof("start to delete transaction record, tr id: %s", trId)
 
 	// 先删除消费记录的tags
-	if err := t.trTagDao.DeleteTrTagByTrId(trId); err != nil {
+	if err := t.trTagDao.DeleteTrTagByTrId(ws, trId); err != nil {
 		return err
 	}
 
 	// 再删除对应的消费记录
-	if err := t.trDao.DeleteTrById(trId); err != nil {
+	if err := t.trDao.DeleteTrById(ws, trId); err != nil {
 		return err
 	}
 
-	logrus.Infof("delete transaction record success, tr id: %s", trId)
+	ws.GetLogger().Infof("delete transaction record success, tr id: %s", trId)
 	return nil
 }
