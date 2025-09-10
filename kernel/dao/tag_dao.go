@@ -3,10 +3,8 @@ package dao
 import (
 	"sync"
 
-	"gorm.io/gorm"
-
 	"github.com/billadm/models"
-	"github.com/billadm/util/db"
+	"github.com/billadm/workspace"
 )
 
 var (
@@ -19,26 +17,22 @@ func GetTagDao() TagDao {
 		return tagDao
 	}
 	tagDaoOnce.Do(func() {
-		tagDao = &TagDaoImpl{
-			db: db.GetInstance(),
-		}
+		tagDao = &TagDaoImpl{}
 	})
 	return tagDao
 }
 
 type TagDao interface {
-	QueryAllTags() ([]models.Tag, error)
+	QueryAllTags(workspace *workspace.Workspace) ([]models.Tag, error)
 }
 
 var _ TagDao = &TagDaoImpl{}
 
-type TagDaoImpl struct {
-	db *gorm.DB
-}
+type TagDaoImpl struct{}
 
-func (t *TagDaoImpl) QueryAllTags() ([]models.Tag, error) {
+func (t *TagDaoImpl) QueryAllTags(workspace *workspace.Workspace) ([]models.Tag, error) {
 	tags := make([]models.Tag, 0)
-	if err := t.db.Find(&tags).Error; err != nil {
+	if err := workspace.GetDb().Find(&tags).Error; err != nil {
 		return nil, err
 	}
 

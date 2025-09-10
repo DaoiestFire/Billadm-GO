@@ -3,10 +3,8 @@ package dao
 import (
 	"sync"
 
-	"gorm.io/gorm"
-
 	"github.com/billadm/models"
-	"github.com/billadm/util/db"
+	"github.com/billadm/workspace"
 )
 
 var (
@@ -19,28 +17,23 @@ func GetCategoryDao() CategoryDao {
 		return categoryDao
 	}
 	categoryDaoOnce.Do(func() {
-		categoryDao = &categoryDaoImpl{
-			db: db.GetInstance(),
-		}
+		categoryDao = &categoryDaoImpl{}
 	})
 	return categoryDao
 }
 
 type CategoryDao interface {
-	QueryAllCategory() ([]models.Category, error)
+	QueryAllCategory(workspace *workspace.Workspace) ([]models.Category, error)
 }
 
 var _ CategoryDao = &categoryDaoImpl{}
 
-type categoryDaoImpl struct {
-	db *gorm.DB
-}
+type categoryDaoImpl struct{}
 
-func (c *categoryDaoImpl) QueryAllCategory() ([]models.Category, error) {
+func (c *categoryDaoImpl) QueryAllCategory(workspace *workspace.Workspace) ([]models.Category, error) {
 	categories := make([]models.Category, 0)
-	if err := c.db.Find(&categories).Error; err != nil {
+	if err := workspace.GetDb().Find(&categories).Error; err != nil {
 		return nil, err
 	}
-
 	return categories, nil
 }

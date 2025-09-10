@@ -1,8 +1,9 @@
 package constant
 
 const (
-	DbName = "billadm.db"
-	All    = "all"
+	LogName = "billadm.log"
+	DbName  = "billadm.db"
+	All     = "all"
 )
 
 const Sql = `-- 创建账本表

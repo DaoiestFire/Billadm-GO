@@ -1,4 +1,4 @@
-package db
+package util
 
 import (
 	"database/sql"
@@ -13,38 +13,8 @@ import (
 	"github.com/billadm/constant"
 )
 
-var db *gorm.DB
-
-func GetInstance() *gorm.DB {
-	return db
-}
-
-func Init(dbPath string) error {
-	if err := openAndInit(dbPath); err != nil {
-		return err
-	}
-
-	ins, err := newDbInstance(dbPath)
-	if err != nil {
-		return err
-	}
-	db = ins
-	return nil
-}
-
-func newDbInstance(dbPath string) (*gorm.DB, error) {
-	var err error
-	db, err = gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
-	if err != nil {
-		logrus.Errorf("连接数据库失败, db path: %s, err: %v", dbPath, err)
-		return nil, fmt.Errorf("连接数据库失败, db path: %s, err: %v", dbPath, err)
-	}
-	logrus.Warnf("连接数据库成功, db path: %s", dbPath)
-	return db, nil
-}
-
-// 打开数据库并执行初始化脚本
-func openAndInit(dbPath string) error {
+// OpenAndInit 打开数据库并执行初始化脚本
+func OpenAndInit(dbPath string) error {
 	database, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return fmt.Errorf("打开数据库失败: %w", err)
@@ -88,4 +58,14 @@ func executeInitScript(db *sql.DB, script string) error {
 
 	// 提交事务
 	return tx.Commit()
+}
+
+func NewDbInstance(dbPath string) (*gorm.DB, error) {
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
+	if err != nil {
+		logrus.Errorf("连接数据库失败, db path: %s, err: %v", dbPath, err)
+		return nil, fmt.Errorf("连接数据库失败, db path: %s, err: %v", dbPath, err)
+	}
+	logrus.Warnf("连接数据库成功, db path: %s", dbPath)
+	return db, nil
 }

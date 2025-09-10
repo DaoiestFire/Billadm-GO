@@ -3,10 +3,8 @@ package dao
 import (
 	"sync"
 
-	"gorm.io/gorm"
-
 	"github.com/billadm/models"
-	"github.com/billadm/util/db"
+	"github.com/billadm/workspace"
 )
 
 var (
@@ -20,54 +18,50 @@ func GetTrTagDao() TrTagDao {
 	}
 
 	trTagDaoOnce.Do(func() {
-		trTagDao = &trTagDaoImpl{
-			db: db.GetInstance(),
-		}
+		trTagDao = &trTagDaoImpl{}
 	})
 
 	return trTagDao
 }
 
 type TrTagDao interface {
-	CreateTrTags([]*models.TrTag) error
-	DeleteTrTagByLedgerId(ledgerId string) error
-	DeleteTrTagByTrId(trId string) error
-	QueryTrTagsByTrId(trId string) ([]*models.TrTag, error)
+	CreateTrTags(workspace *workspace.Workspace, tags []*models.TrTag) error
+	DeleteTrTagByLedgerId(workspace *workspace.Workspace, ledgerId string) error
+	DeleteTrTagByTrId(workspace *workspace.Workspace, trId string) error
+	QueryTrTagsByTrId(workspace *workspace.Workspace, trId string) ([]*models.TrTag, error)
 }
 
 var _ TrTagDao = &trTagDaoImpl{}
 
-type trTagDaoImpl struct {
-	db *gorm.DB
-}
+type trTagDaoImpl struct{}
 
-func (t *trTagDaoImpl) CreateTrTags(tags []*models.TrTag) error {
+func (t *trTagDaoImpl) CreateTrTags(workspace *workspace.Workspace, tags []*models.TrTag) error {
 	if len(tags) <= 0 {
 		return nil
 	}
-	if err := t.db.Create(tags).Error; err != nil {
+	if err := workspace.GetDb().Create(tags).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *trTagDaoImpl) DeleteTrTagByLedgerId(ledgerId string) error {
-	if err := t.db.Delete(&models.TrTag{}, "ledger_id = ?", ledgerId).Error; err != nil {
+func (t *trTagDaoImpl) DeleteTrTagByLedgerId(workspace *workspace.Workspace, ledgerId string) error {
+	if err := workspace.GetDb().Delete(&models.TrTag{}, "ledger_id = ?", ledgerId).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *trTagDaoImpl) DeleteTrTagByTrId(trId string) error {
-	if err := t.db.Delete(&models.TrTag{}, "transaction_id = ?", trId).Error; err != nil {
+func (t *trTagDaoImpl) DeleteTrTagByTrId(workspace *workspace.Workspace, trId string) error {
+	if err := workspace.GetDb().Delete(&models.TrTag{}, "transaction_id = ?", trId).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *trTagDaoImpl) QueryTrTagsByTrId(trId string) ([]*models.TrTag, error) {
+func (t *trTagDaoImpl) QueryTrTagsByTrId(workspace *workspace.Workspace, trId string) ([]*models.TrTag, error) {
 	trTags := make([]*models.TrTag, 0)
-	if err := t.db.Where("transaction_id = ?", trId).Find(&trTags).Error; err != nil {
+	if err := workspace.GetDb().Where("transaction_id = ?", trId).Find(&trTags).Error; err != nil {
 		return nil, err
 	}
 	return trTags, nil

@@ -3,10 +3,8 @@ package dao
 import (
 	"sync"
 
-	"gorm.io/gorm"
-
 	"github.com/billadm/models"
-	"github.com/billadm/util/db"
+	"github.com/billadm/workspace"
 )
 
 var (
@@ -19,54 +17,50 @@ func GetLedgerDao() LedgerDao {
 		return ledgerDao
 	}
 	ledgerDaoOnce.Do(func() {
-		ledgerDao = &ledgerDaoImpl{
-			db: db.GetInstance(),
-		}
+		ledgerDao = &ledgerDaoImpl{}
 	})
 	return ledgerDao
 }
 
 type LedgerDao interface {
-	CreateLedger(ledger *models.Ledger) error
-	ListAllLedger() ([]models.Ledger, error)
-	QueryLedgerById(ledgerId string) (*models.Ledger, error)
-	DeleteLedgerById(ledgerId string) error
+	CreateLedger(workspace *workspace.Workspace, ledger *models.Ledger) error
+	ListAllLedger(workspace *workspace.Workspace) ([]models.Ledger, error)
+	QueryLedgerById(workspace *workspace.Workspace, ledgerId string) (*models.Ledger, error)
+	DeleteLedgerById(workspace *workspace.Workspace, ledgerId string) error
 }
 
 var _ LedgerDao = &ledgerDaoImpl{}
 
-type ledgerDaoImpl struct {
-	db *gorm.DB
-}
+type ledgerDaoImpl struct{}
 
-func (l *ledgerDaoImpl) CreateLedger(ledger *models.Ledger) error {
-	if err := l.db.Create(ledger).Error; err != nil {
+func (l *ledgerDaoImpl) CreateLedger(workspace *workspace.Workspace, ledger *models.Ledger) error {
+	if err := workspace.GetDb().Create(ledger).Error; err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (l *ledgerDaoImpl) ListAllLedger() ([]models.Ledger, error) {
+func (l *ledgerDaoImpl) ListAllLedger(workspace *workspace.Workspace) ([]models.Ledger, error) {
 	ledgers := make([]models.Ledger, 0)
-	if err := l.db.Find(&ledgers).Error; err != nil {
+	if err := workspace.GetDb().Find(&ledgers).Error; err != nil {
 		return nil, err
 	}
 
 	return ledgers, nil
 }
 
-func (l *ledgerDaoImpl) QueryLedgerById(ledgerId string) (*models.Ledger, error) {
+func (l *ledgerDaoImpl) QueryLedgerById(workspace *workspace.Workspace, ledgerId string) (*models.Ledger, error) {
 	var ledger models.Ledger
-	if err := l.db.Where("id = ?", ledgerId).First(&ledger).Error; err != nil {
+	if err := workspace.GetDb().Where("id = ?", ledgerId).First(&ledger).Error; err != nil {
 		return nil, err
 	}
 
 	return &ledger, nil
 }
 
-func (l *ledgerDaoImpl) DeleteLedgerById(ledgerId string) error {
-	if err := l.db.Where("id = ?", ledgerId).Delete(&models.Ledger{}).Error; err != nil {
+func (l *ledgerDaoImpl) DeleteLedgerById(workspace *workspace.Workspace, ledgerId string) error {
+	if err := workspace.GetDb().Where("id = ?", ledgerId).Delete(&models.Ledger{}).Error; err != nil {
 		return err
 	}
 

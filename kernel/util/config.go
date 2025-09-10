@@ -2,14 +2,14 @@ package util
 
 import (
 	"flag"
-	"github.com/sirupsen/logrus"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 type BilladmConfig struct {
 	Port     string // 服务器监听端口
 	LogLevel string // 日志级别
-	LogFile  string // 日志文件路径
 	Mode     string // 运行模式
 }
 
@@ -19,7 +19,6 @@ var Config BilladmConfig
 func NewBilladmConfigFromFlags() error {
 	portPtr := flag.String("port", "31943", "服务器监听端口 (默认: 31943)")
 	logLevelPtr := flag.String("log_level", "info", "日志级别 (debug, info, warn, warning, error) (默认: info)")
-	logFilePtr := flag.String("log_file", "", "日志文件路径 (默认: 标准输出)")
 	modePtr := flag.String("mode", "debug", "billadm的运行模式 (debug, release) (默认: debug)")
 
 	flag.Parse()
@@ -27,11 +26,10 @@ func NewBilladmConfigFromFlags() error {
 	Config = BilladmConfig{
 		Port:     *portPtr,
 		LogLevel: strings.ToLower(*logLevelPtr),
-		LogFile:  *logFilePtr,
 		Mode:     *modePtr,
 	}
 
-	logrus.Warnf("port: %s, log_level: %s, log_file: %s, mode: %s", Config.Port, Config.LogLevel, Config.LogFile, Config.Mode)
+	logrus.Warnf("port: %s, log_level: %s, mode: %s", Config.Port, Config.LogLevel, Config.Mode)
 
 	return nil
 }

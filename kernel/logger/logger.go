@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"path/filepath"
 	"runtime"
 	"strconv"
 
@@ -21,23 +20,13 @@ func init() {
 }
 
 // Init 初始化日志配置
-func Init(level, path, name string) error {
+func Init(level string) error {
 	// 设置日志级别
 	logLevel, err := logrus.ParseLevel(level)
 	if err != nil {
 		return err
 	}
 	log.SetLevel(logLevel)
-
-	// 设置输出目标
-	if path != "" && name != "" {
-		fullPath := filepath.Join(path, name)
-		file, err := os.OpenFile(fullPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
-		if err != nil {
-			return err
-		}
-		log.SetOutput(file)
-	}
 	return nil
 }
 

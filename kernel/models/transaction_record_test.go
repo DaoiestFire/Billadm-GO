@@ -6,18 +6,17 @@ import (
 	"time"
 
 	"github.com/billadm/util"
-	"github.com/billadm/util/db"
 )
 
 func TestTR_CRUD(t *testing.T) {
 	dbPath := filepath.Join(util.GetRootDir(), util.GetRandomString(8)+".db")
-	err := db.Init(dbPath)
+	err := util.Init(dbPath)
 	if err != nil {
 		t.Errorf("Error execute script in database, dbPath: %s, err: %v", dbPath, err)
 		return
 	}
 
-	DB := db.GetInstance()
+	DB := util.GetInstance()
 
 	// 插入
 	id := util.GetUUID()
