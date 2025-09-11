@@ -11,12 +11,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var log = logrus.StandardLogger()
-
 func init() {
-	log.SetOutput(os.Stdout)
-	log.SetLevel(logrus.DebugLevel)
-	log.SetFormatter(&CustomFormatter{})
+	logrus.StandardLogger().SetOutput(os.Stdout)
+	logrus.StandardLogger().SetLevel(logrus.DebugLevel)
+	logrus.StandardLogger().SetFormatter(&CustomFormatter{})
 }
 
 // Init 初始化日志配置
@@ -26,7 +24,7 @@ func Init(level string) error {
 	if err != nil {
 		return err
 	}
-	log.SetLevel(logLevel)
+	logrus.StandardLogger().SetLevel(logLevel)
 	return nil
 }
 
