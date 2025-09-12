@@ -19,6 +19,12 @@ type Workspace struct {
 }
 
 func NewWorkspace(directory string) (*Workspace, error) {
+	if !util.IsDirectoryExists(directory) {
+		err := os.MkdirAll(directory, 0750)
+		if err != nil {
+			return nil, err
+		}
+	}
 	// 实例化log
 	log := logrus.New()
 	logFile := filepath.Join(directory, constant.LogName)
@@ -36,7 +42,7 @@ func NewWorkspace(directory string) (*Workspace, error) {
 	// 实例化db
 	dbFile := filepath.Join(directory, constant.DbName)
 	if err := util.OpenAndInit(dbFile); err != nil {
-		return err, nil
+		return nil, err
 	}
 	db, err := util.NewDbInstance(dbFile)
 	if err != nil {

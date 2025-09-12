@@ -13,7 +13,11 @@ type BilladmConfig struct {
 	Mode     string // 运行模式
 }
 
-var Config BilladmConfig
+var Config = BilladmConfig{
+	Port:     "31943",
+	LogLevel: "debug",
+	Mode:     "debug",
+}
 
 // NewBilladmConfigFromFlags 解析命令行标志并返回一个配置对象
 func NewBilladmConfigFromFlags() error {

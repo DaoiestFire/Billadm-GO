@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/billadm/workspace"
 	"os"
 	"os/signal"
 	"sync"
@@ -46,13 +47,17 @@ func (em *ExitManager) Start() {
 
 // Exit 显式触发关闭流程
 func (em *ExitManager) Exit() {
-	logrus.Warn("billadm exit manager shutdown by manual")
+	logrus.Warn("主动关闭Billadm")
 	em.shutdown()
 }
 
 // shutdown 执行实际的关闭逻辑（只执行一次）
 func (em *ExitManager) shutdown() {
 	em.once.Do(func() {
+		err := workspace.Manager.Close()
+		if err != nil {
+			logrus.Errorf("Billadm退出异常, 工作空间关闭异常, 错误: %v", err)
+		}
 		os.Exit(0)
 	})
 }
