@@ -9,7 +9,7 @@ import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 export default defineConfig({
     base: '/static',
     server: {
-        port: 31943,
+        port: 31945,
     },
     plugins: [
         vue(),

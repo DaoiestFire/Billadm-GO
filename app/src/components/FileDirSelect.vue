@@ -3,8 +3,7 @@
   <Teleport to="body">
     <div v-if="visible" class="confirm-dialog-overlay" @click="closeDialog">
       <div class="confirm-dialog" @click.stop>
-        <!-- 标题 -->
-        <h3 class="confirm-title">{{ title }}</h3>
+        <p class="confirm-message">{{ title }}</p>
 
         <!-- 路径输入框 + 浏览按钮 -->
         <div class="input-with-button">
@@ -167,10 +166,9 @@ function handleConfirm() {
   max-width: 500px;
 }
 
-.confirm-title {
-  margin: 0 0 16px 0;
-  font-size: 18px;
-  font-weight: 500;
+.confirm-message {
+  margin: 0 0 20px 0;
+  font-size: 16px;
   text-align: left;
 }
 

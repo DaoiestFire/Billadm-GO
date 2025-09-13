@@ -1,6 +1,10 @@
 <template>
   <div class="layout">
-    <FileDirSelect v-model:visible="visible"/>
+    <FileDirSelect v-model:visible="ledgerStore.showWorkspaceSelect"
+                   title="新建工作目录或打开已存在的工作目录"
+                   :cancel-color="negativeColor"
+                   :confirm-color="positiveColor"
+    />
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
       <AppTopBar/>
@@ -38,19 +42,24 @@ import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import {useCategoryStore} from "@/stores/categoryStore.js";
 import {useTagStore} from "@/stores/tagStore.js";
+import {useCssVariables} from "@/css/css.js";
 
-const ledgerStore = useLedgerStore()
-const trViewStore = useTrViewStore()
-const categoryStore = useCategoryStore()
-const tagStore = useTagStore()
+const ledgerStore = useLedgerStore();
+const trViewStore = useTrViewStore();
+const categoryStore = useCategoryStore();
+const tagStore = useTagStore();
 
-const visible = true
+// 引用颜色
+const {positiveColor, negativeColor} = useCssVariables();
 
 onMounted(async () => {
-  await ledgerStore.init()
-  await trViewStore.init()
-  await categoryStore.init()
-  await tagStore.init()
+  await ledgerStore.init();
+  if (!ledgerStore.workspaceOpened) {
+    return;
+  }
+  await trViewStore.init();
+  await categoryStore.init();
+  await tagStore.init();
 })
 </script>
 

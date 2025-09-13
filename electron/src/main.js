@@ -7,12 +7,13 @@ const {spawn} = require('child_process');
 process.noAsar = false;
 
 const isDev = !app.isPackaged
-const localServer = "http://localhost";
-const kernelPort = 31943;
+const localServer = isDev ? 'http://localhost' : 'http://127.0.0.1';
+const kernelPort = isDev ? 31945 : 31943;
+const urlPath = isDev ? '/static' : '/static/index.html';
 const appPath = isDev ? path.dirname(__dirname) : app.getAppPath();
 
 const getServer = (port = kernelPort) => {
-    return localServer + ":" + port;
+    return localServer + ':' + port;
 };
 
 
@@ -120,7 +121,7 @@ const createWindow = () => {
         },
     });
 
-    mainWindow.loadURL(getServer() + '/static/index.html');
+    mainWindow.loadURL(getServer() + urlPath);
 
     if (isDev) {
         mainWindow.webContents.openDevTools();

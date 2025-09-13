@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
 import {createLedgerByName, deleteLedgerById, queryAllLedgers} from "@/backend/ledger.js";
 import NotificationUtil from "@/backend/notification";
+import {hasOpenedWorkspace} from "@/backend/workspace.js";
 
 // 定义账本对象的类型 (JavaScript 中主要用于文档和类型提示，TypeScript 中更严格)
 /**
@@ -13,8 +14,13 @@ import NotificationUtil from "@/backend/notification";
  */
 
 export const useLedgerStore = defineStore('ledger', () => {
+    const workspaceOpened = ref(true)
     const ledgers = ref([])
     const currentLedger = ref(null)
+
+    const showWorkspaceSelect = computed(() => {
+        return !workspaceOpened.value
+    })
 
     const currentLedgerId = computed(() => {
         return currentLedger.value ? currentLedger.value.id : ''
@@ -25,7 +31,16 @@ export const useLedgerStore = defineStore('ledger', () => {
     })
 
     const init = async () => {
-        await refreshLedgers()
+        try {
+            const openedStatus = await hasOpenedWorkspace()
+            if (!openedStatus.opened) {
+                workspaceOpened.value = false;
+                return
+            }
+            await refreshLedgers()
+        } catch (error) {
+            NotificationUtil.error(`获取全部账本失败 ${error}`)
+        }
     }
 
     // 访问后端更新账本
@@ -87,7 +102,9 @@ export const useLedgerStore = defineStore('ledger', () => {
     }
 
     return {
+        workspaceOpened,
         ledgers,
+        showWorkspaceSelect,
         currentLedger,
         currentLedgerId,
         currentLedgerName,

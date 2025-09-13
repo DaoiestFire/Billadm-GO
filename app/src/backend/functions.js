@@ -19,7 +19,7 @@ export function isResponseSuccess(response) {
     }
 
     // 根据code判断响应是否正常
-    return response.code === 0;
+    return true;
 }
 
 export function dateToUnixTimestamp(date) {
