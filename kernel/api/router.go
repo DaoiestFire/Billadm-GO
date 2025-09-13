@@ -27,6 +27,8 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/category/query_all_category", queryAllCategory)
 	// tag
 	ginServer.POST("/api/v1/tag/query_all_tag", queryAllTag)
+	// workspace
+	ginServer.POST("/api/v1/workspace/open_workspace", openWorkspace)
 }
 
 func JsonArg(c *gin.Context, result *models.Result) (arg map[string]interface{}, ok bool) {

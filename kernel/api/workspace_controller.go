@@ -1,0 +1,33 @@
+package api
+
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+
+	"github.com/billadm/models"
+	"github.com/billadm/workspace"
+)
+
+func openWorkspace(c *gin.Context) {
+	ret := models.NewResult()
+	defer c.JSON(http.StatusOK, ret)
+
+	arg, ok := JsonArg(c, ret)
+	if !ok {
+		return
+	}
+
+	workspaceDir, ok := arg["workspaceDir"].(string)
+	if !ok || workspaceDir == "" {
+		ret.Code = -1
+		ret.Msg = "工作目录路径不能为空"
+		return
+	}
+
+	err := workspace.Manager.OpenWorkspace(workspaceDir)
+	if err != nil {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	}
+}
