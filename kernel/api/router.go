@@ -29,7 +29,7 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/tag/query_all_tag", queryAllTag)
 	// workspace
 	ginServer.POST("/api/v1/workspace/open_workspace", openWorkspace)
-	ginServer.GET("/api/v1/workspace/is_opened", hasOpenedWorkspace)
+	ginServer.POST("/api/v1/workspace/is_opened", hasOpenedWorkspace)
 }
 
 func JsonArg(c *gin.Context, result *models.Result) (arg map[string]interface{}, ok bool) {
