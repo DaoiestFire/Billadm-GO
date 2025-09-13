@@ -143,23 +143,6 @@ function handleConfirm() {
   margin-bottom: 20px;
 }
 
-/* 输入框样式 */
-.confirm-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  outline: none;
-  box-sizing: border-box;
-}
-
-/* 浅色 placeholder */
-.confirm-input::placeholder {
-  color: #aaa;
-  font-style: italic;
-}
-
 /* 按钮容器 */
 .button-container {
   display: flex;

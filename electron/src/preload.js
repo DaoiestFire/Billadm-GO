@@ -1,4 +1,4 @@
-const {contextBridge, ipcRenderer} = require('electron')
+const {contextBridge, ipcRenderer, dialog} = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
     minimizeWindow: () => {
@@ -10,4 +10,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     closeWindow: () => {
         ipcRenderer.send('window-control', 'close');
     },
+    openDialog: async (options) => {
+        await dialog.showOpenDialog(options);
+    }
 })
