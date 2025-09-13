@@ -153,7 +153,8 @@ const createWindow = () => {
         }
     });
 
-    ipcMain.handle('workspace:set', (event, workspaceDir) => {
+    ipcMain.on('workspace:set', (event, workspaceDir) => {
+        log(`workspace:set ${workspaceDir}`);
         billadmCfg.workspaceDir = workspaceDir;
     });
 };

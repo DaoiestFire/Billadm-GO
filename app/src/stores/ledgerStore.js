@@ -14,13 +14,9 @@ import {hasOpenedWorkspace} from "@/backend/workspace.js";
  */
 
 export const useLedgerStore = defineStore('ledger', () => {
-    const workspaceOpened = ref(true)
+    const workspaceStatus = ref({})
     const ledgers = ref([])
     const currentLedger = ref(null)
-
-    const showWorkspaceSelect = computed(() => {
-        return !workspaceOpened.value
-    })
 
     const currentLedgerId = computed(() => {
         return currentLedger.value ? currentLedger.value.id : ''
@@ -98,17 +94,15 @@ export const useLedgerStore = defineStore('ledger', () => {
 
     const refreshWorkspaceStatus = async () => {
         try {
-            const openedStatus = await hasOpenedWorkspace();
-            workspaceOpened.value = openedStatus.opened;
+            workspaceStatus.value = await hasOpenedWorkspace();
         } catch (error) {
             NotificationUtil.error(`工作空间状态刷新失败 ${error}`)
         }
     }
 
     return {
-        workspaceOpened,
+        workspaceStatus,
         ledgers,
-        showWorkspaceSelect,
         currentLedger,
         currentLedgerId,
         currentLedgerName,

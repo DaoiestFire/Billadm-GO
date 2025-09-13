@@ -69,11 +69,13 @@ const handleOpenWorkspace = async (workspace) => {
 
 const initWorkspace = async () => {
   await ledgerStore.refreshWorkspaceStatus();
-  if (!ledgerStore.workspaceOpened) {
+  if (!ledgerStore.workspaceStatus?.opened) {
     showWorkspaceSelect.value = true;
     return;
   } else {
-    window.electronAPI.setWorkspace(openedStatus.workspace)
+    showWorkspaceSelect.value = false;
+    console.log(ledgerStore.workspaceStatus)
+    window.electronAPI.setWorkspace(ledgerStore.workspaceStatus?.workspace)
   }
   await ledgerStore.init();
   await trViewStore.init();
