@@ -74,7 +74,6 @@ const initWorkspace = async () => {
     return;
   } else {
     showWorkspaceSelect.value = false;
-    console.log(ledgerStore.workspaceStatus)
     window.electronAPI.setWorkspace(ledgerStore.workspaceStatus?.workspace)
   }
   await ledgerStore.init();

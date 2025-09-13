@@ -1,12 +1,12 @@
 {
   "name": "billadm",
-  "description": "Billadm is a bill management tool",
+  "description": "Billadm is a bill management app",
   "author": {
     "name": "ljw",
     "email": "liujingwei1997@outlook.com"
   },
   "productName": "Billadm",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "./src/main.js",
   "scripts": {
     "start": "electron ./src/main.js",

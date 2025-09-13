@@ -154,7 +154,6 @@ const createWindow = () => {
     });
 
     ipcMain.on('workspace:set', (event, workspaceDir) => {
-        log(`workspace:set ${workspaceDir}`);
         billadmCfg.workspaceDir = workspaceDir;
     });
 };
