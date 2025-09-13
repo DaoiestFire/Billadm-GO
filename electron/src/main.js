@@ -48,11 +48,32 @@ function readBilladmFile() {
             ...tmpObj,
         }
     } catch (err) {
-        console.error('读取 .billadm 文件时发生错误:', err.message);
+        log(`读取 .billadm 文件时发生错误:', ${err.message}`);
     }
 
     log(`窗口宽度 ${billadmCfg.width} 窗口高度 ${billadmCfg.height} 工作空间路径 ${billadmCfg.workspaceDir}`)
 }
+
+function saveBilladmConfig() {
+    const homeDir = os.homedir();
+    const filePath = path.join(homeDir, '.billadm');
+
+    try {
+        if (typeof billadmCfg !== 'object' || billadmCfg === null) {
+            log('billadmCfg 不是一个有效的对象，无法保存');
+            return false;
+        }
+
+        const data = JSON.stringify(billadmCfg, null, 2);
+
+        fs.writeFileSync(filePath, data, 'utf8');
+
+        log(`配置已成功保存至: ${filePath}`);
+    } catch (err) {
+        log(`保存 .billadm 文件时发生错误 ${err.message}`);
+    }
+}
+
 
 // 内核
 let kernelProcess = null;
@@ -137,6 +158,7 @@ app.on('window-all-closed', () => {
         if (kernelProcess && kernelProcess.exitCode === null) {
             kernelProcess.kill()
         }
+        saveBilladmConfig()
         app.quit();
     }
 });
