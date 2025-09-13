@@ -54,10 +54,7 @@ func (em *ExitManager) Exit() {
 // shutdown 执行实际的关闭逻辑（只执行一次）
 func (em *ExitManager) shutdown() {
 	em.once.Do(func() {
-		err := workspace.Manager.Close()
-		if err != nil {
-			logrus.Errorf("Billadm退出异常, 工作空间关闭异常, 错误: %v", err)
-		}
+		workspace.Manager.Close()
 		os.Exit(0)
 	})
 }

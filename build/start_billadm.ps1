@@ -120,7 +120,7 @@ Write-Host "`n🎮 正在启动 Billadm-Kernel 服务..." -ForegroundColor Green
 Write-Host "   执行命令: .\Billadm-Kernel.exe -log_file billadm.log -mode release`n"
 
 # 启动程序（阻塞运行）
-& .\Billadm-Kernel.exe -log_file billadm.log -mode release
+& .\Billadm-Kernel.exe -mode release
 
 # 检查启动是否异常退出
 if ($LASTEXITCODE -ne 0)

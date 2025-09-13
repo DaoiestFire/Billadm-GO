@@ -34,3 +34,12 @@ func (wm *WsManager) OpenedWorkspace() *Workspace {
 
 	return wm.workspace
 }
+
+func (wm *WsManager) Close() {
+	wm.lock.Lock()
+	defer wm.lock.Unlock()
+
+	if wm.workspace != nil {
+		wm.workspace.Close()
+	}
+}

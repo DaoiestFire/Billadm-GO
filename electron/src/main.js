@@ -1,6 +1,7 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const fs = require('fs');
+const os = require('os')
 const {spawn} = require('child_process');
 
 process.noAsar = false;
@@ -14,11 +15,10 @@ const getServer = (port = kernelPort) => {
     return localServer + ":" + port;
 };
 
-let kernelProcess = null;
 
+// 应用日志
 const logDir = path.join(appPath, 'logs');
 const logFile = path.join(logDir, 'app.log');
-
 
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir, {recursive: true});
@@ -30,11 +30,38 @@ const log = (message) => {
     logStream.write(logMessage);
 };
 
+let billadmCfg = {
+    width: 1600,
+    height: 1000,
+    workspaceDir: '',
+}
+
+function readBilladmFile() {
+    const homeDir = os.homedir();
+    const filePath = path.join(homeDir, '.billadm');
+    let tmpObj;
+    try {
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        tmpObj = JSON.parse(fileContent);
+        billadmCfg = {
+            ...billadmCfg,
+            ...tmpObj,
+        }
+    } catch (err) {
+        console.error('读取 .billadm 文件时发生错误:', err.message);
+    }
+
+    log(`窗口宽度 ${billadmCfg.width} 窗口高度 ${billadmCfg.height} 工作空间路径 ${billadmCfg.workspaceDir}`)
+}
+
+// 内核
+let kernelProcess = null;
+
 const startKernel = () => {
     const kernelExe = path.join(appPath, 'Billadm-Kernel.exe');
     log(`Starting kernel: ${kernelExe}`);
 
-    kernelProcess = spawn(kernelExe, ['-port', kernelPort, '-log_file', 'billadm.log', '-mode', 'release']);
+    kernelProcess = spawn(kernelExe, ['-port', kernelPort, '-mode', 'release']);
 
     // 捕获标准输出
     kernelProcess.stdout.on('data', (data) => {
@@ -62,8 +89,13 @@ const startKernel = () => {
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 1600, height: 1000, frame: false, webPreferences: {
-            nodeIntegration: false, contextIsolation: true, preload: path.join(__dirname, 'preload.js'),
+        width: billadmCfg.width,
+        height: billadmCfg.height,
+        frame: false,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js'),
         },
     });
 
@@ -90,6 +122,7 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
     startKernel();
+    readBilladmFile();
     createWindow();
 
     app.on('activate', () => {

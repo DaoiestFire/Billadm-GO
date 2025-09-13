@@ -8,7 +8,6 @@ import (
 	"github.com/billadm/logger"
 	"github.com/billadm/server"
 	"github.com/billadm/util"
-	"github.com/billadm/workspace"
 )
 
 func main() {
@@ -22,11 +21,6 @@ func main() {
 	err = logger.Init(util.Config.LogLevel)
 	if err != nil {
 		logrus.Fatalf("初始化日志模块失败 %v", err)
-	}
-	// 初始化工作空间
-	err = workspace.Manager.InitFromConfig(util.Config.HomeDir)
-	if err != nil {
-		logrus.Fatalf("初始化工作空间失败 %v", err)
 	}
 	// 启动优雅退出
 	server.NewExitManager().Start()
