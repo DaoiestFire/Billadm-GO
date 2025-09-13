@@ -1,5 +1,6 @@
 <template>
   <div class="layout">
+    <FileDirSelect v-model:visible="visible"/>
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
       <AppTopBar/>
@@ -30,8 +31,9 @@
 
 <script setup>
 import {onMounted} from "vue";
-import AppTopBar from '@/components/AppTopBar.vue'
-import AppLeftBar from '@/components/AppLeftBar.vue'
+import AppTopBar from '@/components/AppTopBar.vue';
+import AppLeftBar from '@/components/AppLeftBar.vue';
+import FileDirSelect from "@/components/FileDirSelect.vue";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import {useCategoryStore} from "@/stores/categoryStore.js";
@@ -41,6 +43,8 @@ const ledgerStore = useLedgerStore()
 const trViewStore = useTrViewStore()
 const categoryStore = useCategoryStore()
 const tagStore = useTagStore()
+
+const visible = true
 
 onMounted(async () => {
   await ledgerStore.init()

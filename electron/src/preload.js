@@ -11,6 +11,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
         ipcRenderer.send('window-control', 'close');
     },
     openDialog: async (options) => {
-        await dialog.showOpenDialog(options);
+        return await ipcRenderer.invoke('dialog:open', options);
     }
 })

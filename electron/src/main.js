@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain, dialog} = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os')
@@ -7,7 +7,7 @@ const {spawn} = require('child_process');
 process.noAsar = false;
 
 const isDev = !app.isPackaged
-const localServer = "http://127.0.0.1";
+const localServer = "http://localhost";
 const kernelPort = 31943;
 const appPath = isDev ? path.dirname(__dirname) : app.getAppPath();
 
@@ -137,6 +137,18 @@ const createWindow = () => {
             case 'close':
                 mainWindow.close();
                 break;
+        }
+    });
+
+    ipcMain.handle('dialog:open', async (event, options) => {
+        try {
+            return await dialog.showOpenDialog({
+                properties: ['openFile'],
+                ...options,
+            });
+        } catch (err) {
+            log(`Dialog error: ${err.message}`);
+            return {canceled: true, filePaths: [], error: err.message};
         }
     });
 };
