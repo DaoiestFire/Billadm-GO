@@ -33,9 +33,12 @@ export const useLedgerStore = defineStore('ledger', () => {
     const init = async () => {
         try {
             const openedStatus = await hasOpenedWorkspace()
+            console.log(openedStatus)
             if (!openedStatus.opened) {
                 workspaceOpened.value = false;
                 return
+            } else {
+                workspaceOpened.value = true;
             }
             await refreshLedgers()
         } catch (error) {

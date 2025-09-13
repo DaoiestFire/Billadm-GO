@@ -1,9 +1,10 @@
 <template>
   <div class="layout">
-    <FileDirSelect v-model:visible="ledgerStore.showWorkspaceSelect"
+    <FileDirSelect v-model:visible="showWorkspaceSelect"
                    title="新建工作目录或打开已存在的工作目录"
                    :cancel-color="negativeColor"
                    :confirm-color="positiveColor"
+                   @confirm="handleOpenWorkspace"
     />
     <!-- 上栏：菜单栏 -->
     <div class="top-bar">
@@ -34,7 +35,7 @@
 </template>
 
 <script setup>
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import AppTopBar from '@/components/AppTopBar.vue';
 import AppLeftBar from '@/components/AppLeftBar.vue';
 import FileDirSelect from "@/components/FileDirSelect.vue";
@@ -43,6 +44,8 @@ import {useTrViewStore} from "@/stores/trViewStore.js";
 import {useCategoryStore} from "@/stores/categoryStore.js";
 import {useTagStore} from "@/stores/tagStore.js";
 import {useCssVariables} from "@/css/css.js";
+import {openWorkspace} from "@/backend/workspace.js";
+import NotificationUtil from "@/backend/notification.js";
 
 const ledgerStore = useLedgerStore();
 const trViewStore = useTrViewStore();
@@ -52,15 +55,30 @@ const tagStore = useTagStore();
 // 引用颜色
 const {positiveColor, negativeColor} = useCssVariables();
 
-onMounted(async () => {
+const showWorkspaceSelect = ref(false)
+
+const handleOpenWorkspace = async (workspace) => {
+  try {
+    await openWorkspace(workspace);
+    await initWorkspace();
+  } catch (error) {
+    NotificationUtil.error(`打开工作空间失败 ${error}`);
+    showWorkspaceSelect.value = true;
+  }
+}
+
+const initWorkspace = async () => {
   await ledgerStore.init();
   if (!ledgerStore.workspaceOpened) {
+    showWorkspaceSelect.value = true;
     return;
   }
   await trViewStore.init();
   await categoryStore.init();
   await tagStore.init();
-})
+}
+
+onMounted(initWorkspace)
 </script>
 
 <style scoped>
