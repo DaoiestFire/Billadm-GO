@@ -38,29 +38,26 @@ func (wm *WsManager) InitFromConfig(homeDir string) error {
 	wm.homeDir = homeDir
 
 	configFilePath := path.Join(homeDir, ".billadm")
-	if !util.IsFileExists(configFilePath) {
-		// 配置不存在则认为是首次打开
-		return nil
-	}
-
-	bytes, err := os.ReadFile(configFilePath)
-	if err != nil {
-		return err
-	}
-
-	var config billadmConfig
-	err = json.Unmarshal(bytes, &config)
-	if err != nil {
-		return err
-	}
-
-	for _, dir := range config.WorkspaceDirs {
-		err = wm.OpenWorkspace(dir)
+	if util.IsFileExists(configFilePath) {
+		bytes, err := os.ReadFile(configFilePath)
 		if err != nil {
-			logrus.Errorf("open workspace %s error: %v", dir, err)
+			return err
 		}
+
+		var config billadmConfig
+		err = json.Unmarshal(bytes, &config)
+		if err != nil {
+			return err
+		}
+
+		for _, dir := range config.WorkspaceDirs {
+			err = wm.OpenWorkspace(dir)
+			if err != nil {
+				logrus.Errorf("open workspace %s error: %v", dir, err)
+			}
+		}
+		wm.openedWorkspace = config.OpenedWorkspace
 	}
-	wm.openedWorkspace = config.OpenedWorkspace
 
 	go func() {
 		ticker := time.NewTicker(10 * time.Second)
