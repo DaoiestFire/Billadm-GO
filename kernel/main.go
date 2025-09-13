@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
@@ -8,9 +10,11 @@ import (
 	"github.com/billadm/logger"
 	"github.com/billadm/server"
 	"github.com/billadm/util"
+	"github.com/billadm/workspace"
 )
 
 func main() {
+	logrus.Warnf("Args: %v", os.Args)
 	var err error
 	// 解析命令行选项
 	err = util.NewBilladmConfigFromFlags()
@@ -21,6 +25,13 @@ func main() {
 	err = logger.Init(util.Config.LogLevel)
 	if err != nil {
 		logrus.Fatalf("初始化日志模块失败 %v", err)
+	}
+	// 如果启动时指定了工作空间则打开
+	if util.Config.Workspace != "" {
+		err = workspace.Manager.OpenWorkspace(util.Config.Workspace)
+		if err != nil {
+			logrus.Errorf("启动时打开工作空间失败 %v", err)
+		}
 	}
 	// 启动优雅退出
 	server.NewExitManager().Start()

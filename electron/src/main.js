@@ -82,7 +82,7 @@ const startKernel = () => {
     const kernelExe = path.join(appPath, 'Billadm-Kernel.exe');
     log(`Starting kernel: ${kernelExe}`);
 
-    kernelProcess = spawn(kernelExe, ['-port', kernelPort, '-mode', 'release']);
+    kernelProcess = spawn(kernelExe, ['-port', kernelPort, '-mode', 'release', '-workspace', billadmCfg.workspaceDir]);
 
     // 捕获标准输出
     kernelProcess.stdout.on('data', (data) => {
@@ -142,8 +142,8 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
-    startKernel();
     readBilladmFile();
+    startKernel();
     createWindow();
 
     app.on('activate', () => {
