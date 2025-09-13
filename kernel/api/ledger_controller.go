@@ -11,11 +11,19 @@ import (
 	"github.com/billadm/constant"
 	"github.com/billadm/models"
 	"github.com/billadm/service"
+	"github.com/billadm/workspace"
 )
 
 func queryAllLedgers(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
+
+	ws := workspace.Manager.OpenedWorkspace()
+	if ws == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		return
+	}
 
 	arg, ok := JsonArg(c, ret)
 	if !ok {
@@ -33,7 +41,7 @@ func queryAllLedgers(c *gin.Context) {
 	var err error
 	if ledgerId == constant.All {
 		// 返回全部的账本信息
-		ledgers, err = service.GetLedgerService().ListAllLedger()
+		ledgers, err = service.GetLedgerService().ListAllLedger(ws)
 		if err != nil {
 			ret.Code = -1
 			ret.Msg = err.Error()
@@ -44,7 +52,7 @@ func queryAllLedgers(c *gin.Context) {
 		ledgerIds := strings.Split(ledgerId, ",")
 		for _, id := range ledgerIds {
 			id = strings.TrimSpace(id)
-			ledger, err := service.GetLedgerService().QueryLedgerById(id)
+			ledger, err := service.GetLedgerService().QueryLedgerById(ws, id)
 			if err != nil {
 				logrus.Errorf("query ledger by id: %s err: %v", id, err)
 				ret.Code = -1
@@ -62,6 +70,13 @@ func createLedger(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
+	ws := workspace.Manager.OpenedWorkspace()
+	if ws == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		return
+	}
+
 	arg, ok := JsonArg(c, ret)
 	if !ok {
 		return
@@ -75,7 +90,7 @@ func createLedger(c *gin.Context) {
 	}
 
 	// 在指定用户下创建账本
-	ledgerId, err := service.GetLedgerService().CreateLedger(ledgerName)
+	ledgerId, err := service.GetLedgerService().CreateLedger(ws, ledgerName)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -93,6 +108,13 @@ func deleteLedger(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
+	ws := workspace.Manager.OpenedWorkspace()
+	if ws == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		return
+	}
+
 	arg, ok := JsonArg(c, ret)
 	if !ok {
 		return
@@ -105,7 +127,7 @@ func deleteLedger(c *gin.Context) {
 		return
 	}
 
-	err := service.GetLedgerService().DeleteLedgerById(trId)
+	err := service.GetLedgerService().DeleteLedgerById(ws, trId)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()

@@ -20,6 +20,10 @@ func init() {
 	}
 }
 
+const (
+	ErrOpenedWorkspaceNotFoundMsg = "未打开工作空间"
+)
+
 var Manager *WsManager
 
 type billadmConfig struct {
@@ -148,6 +152,10 @@ func (wm *WsManager) RemoveWorkspaceByPath(directory string) (*Workspace, error)
 func (wm *WsManager) OpenedWorkspace() *Workspace {
 	wm.lock.Lock()
 	defer wm.lock.Unlock()
+
+	if wm.openedWorkspace == "" {
+		return nil
+	}
 
 	ws, ok := wm.workspaces[wm.openedWorkspace]
 	if !ok {

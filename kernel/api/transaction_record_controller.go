@@ -9,11 +9,19 @@ import (
 	"github.com/billadm/models"
 	"github.com/billadm/models/dto"
 	"github.com/billadm/service"
+	"github.com/billadm/workspace"
 )
 
 func queryAllTrs(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
+
+	ws := workspace.Manager.OpenedWorkspace()
+	if ws == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		return
+	}
 
 	arg, ok := JsonArg(c, ret)
 	if !ok {
@@ -27,7 +35,7 @@ func queryAllTrs(c *gin.Context) {
 		return
 	}
 
-	trs, err := service.GetTrService().ListAllTrsByLedgerId(ledgerId)
+	trs, err := service.GetTrService().ListAllTrsByLedgerId(ws, ledgerId)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -40,6 +48,13 @@ func queryAllTrs(c *gin.Context) {
 func queryTrsOnCondition(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
+
+	ws := workspace.Manager.OpenedWorkspace()
+	if ws == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		return
+	}
 
 	arg, ok := JsonArg(c, ret)
 	if !ok {
@@ -67,7 +82,7 @@ func queryTrsOnCondition(c *gin.Context) {
 		return
 	}
 
-	trs, err := service.GetTrService().QueryTrsOnCondition(ledgerId, int(offset), int(limit))
+	trs, err := service.GetTrService().QueryTrsOnCondition(ws, ledgerId, int(offset), int(limit))
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -81,6 +96,13 @@ func queryTrCountOnCondition(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
+	ws := workspace.Manager.OpenedWorkspace()
+	if ws == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		return
+	}
+
 	arg, ok := JsonArg(c, ret)
 	if !ok {
 		return
@@ -93,7 +115,7 @@ func queryTrCountOnCondition(c *gin.Context) {
 		return
 	}
 
-	cnt, err := service.GetTrService().QueryTrCountOnCondition(ledgerId)
+	cnt, err := service.GetTrService().QueryTrCountOnCondition(ws, ledgerId)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -107,6 +129,13 @@ func createTransactionRecord(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
+	ws := workspace.Manager.OpenedWorkspace()
+	if ws == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		return
+	}
+
 	trDto, ok := dto.JsonTransactionRecordDto(c, ret)
 	if !ok {
 		return
@@ -118,7 +147,7 @@ func createTransactionRecord(c *gin.Context) {
 		return
 	}
 
-	trId, err := service.GetTrService().CreateTr(trDto)
+	trId, err := service.GetTrService().CreateTr(ws, trDto)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -136,6 +165,13 @@ func deleteTransactionRecord(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
+	ws := workspace.Manager.OpenedWorkspace()
+	if ws == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		return
+	}
+
 	arg, ok := JsonArg(c, ret)
 	if !ok {
 		return
@@ -148,7 +184,7 @@ func deleteTransactionRecord(c *gin.Context) {
 		return
 	}
 
-	err := service.GetTrService().DeleteTrById(trId)
+	err := service.GetTrService().DeleteTrById(ws, trId)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()
