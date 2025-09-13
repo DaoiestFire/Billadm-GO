@@ -31,3 +31,16 @@ func openWorkspace(c *gin.Context) {
 		return
 	}
 }
+
+func hasOpenedWorkspace(c *gin.Context) {
+	ret := models.NewResult()
+	defer c.JSON(http.StatusOK, ret)
+
+	if workspace.Manager.OpenedWorkspace() == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		return
+	}
+
+	ret.Data = workspace.Manager.OpenedWorkspace().GetDirectory()
+}
