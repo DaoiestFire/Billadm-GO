@@ -152,6 +152,10 @@ const createWindow = () => {
             return {canceled: true, filePaths: [], error: err.message};
         }
     });
+
+    ipcMain.handle('workspace:set', (event, workspaceDir) => {
+        billadmCfg.workspaceDir = workspaceDir;
+    });
 };
 
 app.whenReady().then(() => {

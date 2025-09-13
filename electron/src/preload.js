@@ -1,4 +1,4 @@
-const {contextBridge, ipcRenderer, dialog} = require('electron')
+const {contextBridge, ipcRenderer} = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
     minimizeWindow: () => {
@@ -12,5 +12,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     },
     openDialog: async (options) => {
         return await ipcRenderer.invoke('dialog:open', options);
+    },
+    setWorkspace: (workspaceDir) => {
+        ipcRenderer.send('workspace:set', workspaceDir);
     }
 })

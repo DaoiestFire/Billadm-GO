@@ -32,14 +32,6 @@ export const useLedgerStore = defineStore('ledger', () => {
 
     const init = async () => {
         try {
-            const openedStatus = await hasOpenedWorkspace()
-            console.log(openedStatus)
-            if (!openedStatus.opened) {
-                workspaceOpened.value = false;
-                return
-            } else {
-                workspaceOpened.value = true;
-            }
             await refreshLedgers()
         } catch (error) {
             NotificationUtil.error(`获取全部账本失败 ${error}`)
@@ -104,6 +96,15 @@ export const useLedgerStore = defineStore('ledger', () => {
         }
     }
 
+    const refreshWorkspaceStatus = async () => {
+        try {
+            const openedStatus = await hasOpenedWorkspace();
+            workspaceOpened.value = openedStatus.opened;
+        } catch (error) {
+            NotificationUtil.error(`工作空间状态刷新失败 ${error}`)
+        }
+    }
+
     return {
         workspaceOpened,
         ledgers,
@@ -115,6 +116,7 @@ export const useLedgerStore = defineStore('ledger', () => {
         refreshLedgers,
         createLedger,
         deleteLedger,
-        setCurrentLedger
+        setCurrentLedger,
+        refreshWorkspaceStatus,
     }
 })
