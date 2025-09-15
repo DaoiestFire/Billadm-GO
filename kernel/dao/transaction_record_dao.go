@@ -48,7 +48,10 @@ func (t *transactionRecordDaoImpl) CreateTr(ws *workspace.Workspace, record *mod
 
 func (t *transactionRecordDaoImpl) ListAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*models.TransactionRecord, error) {
 	trs := make([]*models.TransactionRecord, 0)
-	if err := ws.GetDb().Where("ledger_id = ?", ledgerId).Find(&trs).Error; err != nil {
+	if err := ws.GetDb().
+		Where("ledger_id = ?", ledgerId).
+		Order("transaction_at desc, category desc").
+		Find(&trs).Error; err != nil {
 		return nil, err
 	}
 
@@ -57,7 +60,12 @@ func (t *transactionRecordDaoImpl) ListAllTrByLedgerId(ws *workspace.Workspace, 
 
 func (t *transactionRecordDaoImpl) QueryTrsByPage(ws *workspace.Workspace, ledgerId string, offset, limit int) ([]*models.TransactionRecord, error) {
 	trs := make([]*models.TransactionRecord, 0)
-	if err := ws.GetDb().Where("ledger_id = ?", ledgerId).Offset(offset).Limit(limit).Find(&trs).Error; err != nil {
+	if err := ws.GetDb().
+		Where("ledger_id = ?", ledgerId).
+		Order("transaction_at desc, category desc").
+		Offset(offset).
+		Limit(limit).
+		Find(&trs).Error; err != nil {
 		return nil, err
 	}
 
@@ -66,7 +74,9 @@ func (t *transactionRecordDaoImpl) QueryTrsByPage(ws *workspace.Workspace, ledge
 
 func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace, ledgerId string) (int64, error) {
 	var count int64
-	if err := ws.GetDb().Model(&models.TransactionRecord{}).Where("ledger_id = ?", ledgerId).Count(&count).Error; err != nil {
+	if err := ws.GetDb().Model(&models.TransactionRecord{}).
+		Where("ledger_id = ?", ledgerId).
+		Count(&count).Error; err != nil {
 		return 0, err
 	}
 
@@ -74,7 +84,9 @@ func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace
 }
 
 func (t *transactionRecordDaoImpl) DeleteTrById(ws *workspace.Workspace, trId string) error {
-	if err := ws.GetDb().Where("transaction_id = ?", trId).Delete(&models.TransactionRecord{}).Error; err != nil {
+	if err := ws.GetDb().
+		Where("transaction_id = ?", trId).
+		Delete(&models.TransactionRecord{}).Error; err != nil {
 		return err
 	}
 	return nil
