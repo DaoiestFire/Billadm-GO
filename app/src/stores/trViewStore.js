@@ -1,8 +1,9 @@
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import {defineStore} from 'pinia';
 import {queryTrCountOnCondition, queryTrsOnCondition} from "@/backend/tr.js";
 import NotificationUtil from "@/backend/notification.js";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
+import {dateToUnixTimestamp} from "@/backend/functions.js";
 
 export const useTrViewStore = defineStore('trView', () => {
     // 定义状态
@@ -10,6 +11,20 @@ export const useTrViewStore = defineStore('trView', () => {
     const pages = ref(1)
     const currentPage = ref(1)
     const pageSize = ref(20)
+    const timeRange = ref([])
+
+    // computed
+    const tsRange = computed(() => {
+        if (!Array.isArray(timeRange.value) || timeRange.value.length < 2) {
+            return null
+        }
+        /** @type {Date} */
+        const startTs = timeRange.value[0];
+        /** @type {Date} */
+        const endTs = timeRange.value[1];
+        endTs.setHours(23, 59, 59, 0)
+        return [dateToUnixTimestamp(startTs), dateToUnixTimestamp(endTs)]
+    })
 
     // ledgerStore
     const ledgerStore = useLedgerStore()
@@ -24,7 +39,15 @@ export const useTrViewStore = defineStore('trView', () => {
     const refreshTableData = async () => {
         try {
             const offset = (currentPage.value - 1) * pageSize.value
-            tableData.value = await queryTrsOnCondition(ledgerStore.currentLedgerId, offset, pageSize.value)
+            let condition = {};
+            condition['ledger_id'] = ledgerStore.currentLedgerId;
+            condition['offset'] = offset;
+            condition['limit'] = pageSize.value;
+            if (tsRange.value !== null) {
+                condition['ts_range'] = tsRange.value;
+            }
+            console.log(condition)
+            tableData.value = await queryTrsOnCondition(condition)
         } catch (error) {
             NotificationUtil.error(`消费记录数据刷新失败 ${error}`)
         }
@@ -36,7 +59,7 @@ export const useTrViewStore = defineStore('trView', () => {
         pageSize.value = 1
     }
 
-    watch(() => [pageSize.value, currentPage.value], async () => {
+    watch(() => [pageSize.value, currentPage.value, tsRange.value], async () => {
         await init()
     })
 
@@ -50,11 +73,17 @@ export const useTrViewStore = defineStore('trView', () => {
 
     const refreshPages = async () => {
         try {
-            const trCnt = await queryTrCountOnCondition(ledgerStore.currentLedgerId)
-            const pagesVal = Math.ceil(trCnt / pageSize.value)
-            pages.value = pagesVal < 1 ? 1 : pagesVal
+            let condition = {};
+            condition['ledger_id'] = ledgerStore.currentLedgerId;
+            if (tsRange.value !== null) {
+                condition['ts_range'] = tsRange.value;
+            }
+            console.log(condition)
+            const trCnt = await queryTrCountOnCondition(condition);
+            const pagesVal = Math.ceil(trCnt / pageSize.value);
+            pages.value = pagesVal < 1 ? 1 : pagesVal;
         } catch (error) {
-            NotificationUtil.error(`查询消费记录数量失败 ${error}`)
+            NotificationUtil.error(`查询消费记录数量失败 ${error}`);
         }
     }
 
@@ -64,6 +93,7 @@ export const useTrViewStore = defineStore('trView', () => {
         pages,
         currentPage,
         pageSize,
+        timeRange,
         init,
         refreshTableData,
         refreshPages,

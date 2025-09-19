@@ -56,33 +56,13 @@ func queryTrsOnCondition(c *gin.Context) {
 		return
 	}
 
-	arg, ok := JsonArg(c, ret)
+	queryCondition, ok := dto.JsonQueryCondition(c, ret)
 	if !ok {
 		return
 	}
+	logrus.Debugf("query condition: %v", queryCondition)
 
-	ledgerId, ok := arg["ledger_id"].(string)
-	if !ok {
-		ret.Code = -1
-		ret.Msg = "ledger_id field not exist in request body"
-		return
-	}
-
-	offset, ok := arg["offset"].(float64)
-	if !ok {
-		ret.Code = -1
-		ret.Msg = "offset field not exist in request body"
-		return
-	}
-
-	limit, ok := arg["limit"].(float64)
-	if !ok {
-		ret.Code = -1
-		ret.Msg = "limit field not exist in request body"
-		return
-	}
-
-	trs, err := service.GetTrService().QueryTrsOnCondition(ws, ledgerId, int(offset), int(limit))
+	trs, err := service.GetTrService().QueryTrsOnCondition(ws, queryCondition)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -103,19 +83,13 @@ func queryTrCountOnCondition(c *gin.Context) {
 		return
 	}
 
-	arg, ok := JsonArg(c, ret)
+	queryCondition, ok := dto.JsonQueryCondition(c, ret)
 	if !ok {
 		return
 	}
+	logrus.Debugf("query condition: %v", queryCondition)
 
-	ledgerId, ok := arg["ledger_id"].(string)
-	if !ok {
-		ret.Code = -1
-		ret.Msg = "ledger_id field not exist in request body"
-		return
-	}
-
-	cnt, err := service.GetTrService().QueryTrCountOnCondition(ws, ledgerId)
+	cnt, err := service.GetTrService().QueryTrCountOnCondition(ws, queryCondition)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()

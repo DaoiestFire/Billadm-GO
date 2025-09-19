@@ -33,8 +33,8 @@ func GetTrService() TransactionRecordService {
 type TransactionRecordService interface {
 	CreateTr(ws *workspace.Workspace, dto *dto.TransactionRecordDto) (string, error)
 	ListAllTrsByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*dto.TransactionRecordDto, error)
-	QueryTrsOnCondition(ws *workspace.Workspace, ledgerId string, start, limit int) ([]*dto.TransactionRecordDto, error)
-	QueryTrCountOnCondition(ws *workspace.Workspace, ledgerId string) (int64, error)
+	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*dto.TransactionRecordDto, error)
+	QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 }
 
@@ -107,12 +107,12 @@ func (t *transactionRecordServiceImpl) ListAllTrsByLedgerId(ws *workspace.Worksp
 	return trDtos, err
 }
 
-func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspace, ledgerId string, offset, limit int) ([]*dto.TransactionRecordDto, error) {
-	ws.GetLogger().Infof("start to query trs by page, offset: %d, limit: %d", offset, limit)
+func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*dto.TransactionRecordDto, error) {
+	ws.GetLogger().Infof("start to query trs, condition: %#v", condition)
 
 	var err error
 	// 先查询到所有的tr
-	trs, err := t.trDao.QueryTrsByPage(ws, ledgerId, offset, limit)
+	trs, err := t.trDao.QueryTrsByPage(ws, condition)
 	if err != nil {
 		return nil, err
 	}
@@ -136,9 +136,9 @@ func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspa
 	return trDtos, err
 }
 
-func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ws *workspace.Workspace, ledgerId string) (int64, error) {
+func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error) {
 	ws.GetLogger().Infof("start to query count of transaction records")
-	cnt, err := t.trDao.QueryCountOnCondition(ws, ledgerId)
+	cnt, err := t.trDao.QueryCountOnCondition(ws, condition)
 	if err != nil {
 		return 0, err
 	}

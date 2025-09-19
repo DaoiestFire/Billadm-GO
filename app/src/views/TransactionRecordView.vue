@@ -3,6 +3,15 @@
     <!-- 上栏：工具栏 -->
     <div class="top-bar">
       <div class="left-groups">
+        <el-date-picker
+            v-model="trViewStore.timeRange"
+            type="daterange"
+            range-separator="~"
+            start-placeholder="起始时间"
+            end-placeholder="结束时间"
+            size="small"
+            style="width: 200px;"
+        />
       </div>
       <div class="center-groups">
       </div>
@@ -99,6 +108,7 @@ const columnStyles = [
 
 // css variables
 const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
+
 
 // 消费记录表单
 const showDialog = ref(false);

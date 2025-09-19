@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"github.com/billadm/models/dto"
 	"sync"
 
 	"github.com/billadm/models"
@@ -27,8 +28,8 @@ func GetTrDao() TransactionRecordDao {
 type TransactionRecordDao interface {
 	CreateTr(ws *workspace.Workspace, record *models.TransactionRecord) error
 	ListAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*models.TransactionRecord, error)
-	QueryTrsByPage(ws *workspace.Workspace, ledgerId string, offset, limit int) ([]*models.TransactionRecord, error)
-	QueryCountOnCondition(ws *workspace.Workspace, ledgerId string) (int64, error)
+	QueryTrsByPage(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error)
+	QueryCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 	CountTrByLedgerId(ws *workspace.Workspace, ledgerId string) (int64, error)
 	DeleteAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) error
@@ -58,28 +59,34 @@ func (t *transactionRecordDaoImpl) ListAllTrByLedgerId(ws *workspace.Workspace, 
 	return trs, nil
 }
 
-func (t *transactionRecordDaoImpl) QueryTrsByPage(ws *workspace.Workspace, ledgerId string, offset, limit int) ([]*models.TransactionRecord, error) {
+func (t *transactionRecordDaoImpl) QueryTrsByPage(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error) {
 	trs := make([]*models.TransactionRecord, 0)
-	if err := ws.GetDb().
-		Where("ledger_id = ?", ledgerId).
-		Order("transaction_at desc, category desc").
-		Offset(offset).
-		Limit(limit).
-		Find(&trs).Error; err != nil {
+	db := ws.GetDb().Where("ledger_id = ?", condition.LedgerID)
+	db = db.Order("transaction_at desc, category desc")
+	if condition.Offset != -1 && condition.Limit != -1 {
+		db = db.Offset(condition.Offset).Limit(condition.Limit)
+	}
+	if len(condition.TsRange) == 2 {
+		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
+	}
+	db = db.Find(&trs)
+	if err := db.Error; err != nil {
 		return nil, err
 	}
-
 	return trs, nil
 }
 
-func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace, ledgerId string) (int64, error) {
+func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error) {
 	var count int64
-	if err := ws.GetDb().Model(&models.TransactionRecord{}).
-		Where("ledger_id = ?", ledgerId).
-		Count(&count).Error; err != nil {
+	db := ws.GetDb().Model(&models.TransactionRecord{})
+	db = db.Where("ledger_id = ?", condition.LedgerID)
+	if len(condition.TsRange) == 2 {
+		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
+	}
+	db = db.Count(&count)
+	if err := db.Error; err != nil {
 		return 0, err
 	}
-
 	return count, nil
 }
 

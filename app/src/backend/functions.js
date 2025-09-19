@@ -25,7 +25,7 @@ export function isResponseSuccess(response) {
 export function dateToUnixTimestamp(date) {
     // 检查输入是否为有效的 Date 对象
     if (!(date instanceof Date) || isNaN(date.getTime())) {
-        return getUnixTimestampInSeconds
+        return getUnixTimestampInSeconds()
     }
     // getTime() 返回毫秒，除以 1000 并取整得到秒
     return Math.floor(date.getTime() / 1000);

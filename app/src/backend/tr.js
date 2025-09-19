@@ -9,22 +9,16 @@ export async function getAllTrsFromLedgerById(id) {
     return resp.data
 }
 
-export async function queryTrsOnCondition(id, offset, limit) {
-    const resp = await api_client.post('/v1/tr/query_trs_on_condition', {
-        'ledger_id': id,
-        'offset': offset,
-        'limit': limit,
-    });
+export async function queryTrsOnCondition(condition) {
+    const resp = await api_client.post('/v1/tr/query_trs_on_condition', condition);
     if (!isResponseSuccess(resp)) {
         throw `queryTrsOnCondition 响应错误 ${resp.msg}`
     }
     return resp.data
 }
 
-export async function queryTrCountOnCondition(id) {
-    const resp = await api_client.post('/v1/tr/query_tr_count_on_condition', {
-        'ledger_id': id,
-    });
+export async function queryTrCountOnCondition(condition) {
+    const resp = await api_client.post('/v1/tr/query_tr_count_on_condition', condition);
     if (!isResponseSuccess(resp)) {
         throw `queryTrCountOnCondition 响应错误 ${resp.msg}`
     }
