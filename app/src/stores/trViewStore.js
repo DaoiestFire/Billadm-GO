@@ -9,7 +9,7 @@ export const useTrViewStore = defineStore('trView', () => {
     const tableData = ref([])
     const pages = ref(1)
     const currentPage = ref(1)
-    const pageSize = ref(10)
+    const pageSize = ref(20)
 
     // ledgerStore
     const ledgerStore = useLedgerStore()
