@@ -123,9 +123,11 @@ const createWindow = () => {
 
     mainWindow.loadURL(getServer() + urlPath);
 
-    if (isDev) {
-        mainWindow.webContents.openDevTools();
-    }
+    // if (isDev) {
+    //     mainWindow.webContents.openDevTools();
+    // }
+
+    mainWindow.webContents.openDevTools();
 
     ipcMain.on('window-control', (event, command) => {
         switch (command) {

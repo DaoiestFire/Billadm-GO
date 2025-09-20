@@ -10,6 +10,7 @@
             start-placeholder="起始时间"
             end-placeholder="结束时间"
             size="small"
+            :editable="false"
             style="width: 200px;"
         />
       </div>
@@ -164,6 +165,7 @@ async function handleConfirm(data) {
 
 /* 左边按钮 将它与后面的元素隔开 */
 .left-groups {
+  margin-left: 20px;
   margin-right: auto;
   display: flex;
   gap: 4px;
