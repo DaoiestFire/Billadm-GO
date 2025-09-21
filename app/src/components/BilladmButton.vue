@@ -1,13 +1,17 @@
 <template>
   <button class="common-icon" :style="[
-        buttonStyle,
-        { '--hover-bg-color': hoverBgColor }
-    ]" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" :class="[
-        { 'common-icon--rect': hoverStyle === 'rect' },
-        { 'common-icon--circle': hoverStyle === 'circle' },
-        { 'is-hovered': isHovered || isActive },
-        { 'is-active': isActive }
-    ]">
+              buttonStyle,
+              { '--hover-bg-color': hoverBgColor ,
+              '--circle-width': `${props.circleSize}px`,
+              '--circle-height': `${props.circleSize}px` }
+          ]"
+          :class="[
+              { 'common-icon--rect': hoverStyle === 'rect' },
+              { 'common-icon--circle': hoverStyle === 'circle' },
+              { 'is-hovered': isHovered || isActive },
+              { 'is-active': isActive }
+          ]"
+          @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <el-tooltip :content="label" :placement="tooltipPlacement">
       <span class="icon" :style="iconStyle" v-html="icon"></span>
     </el-tooltip>
@@ -74,12 +78,16 @@ const props = defineProps({
   tooltipPlacement: {
     type: String,
     default: 'right',
+  },
+  circleSize: {
+    type: [String, Number],
+    default: 24
   }
 })
 
 const isHovered = ref(false)
 
-const handleMouseEnter = (event) => {
+const handleMouseEnter = () => {
   isHovered.value = true
 }
 
@@ -116,8 +124,14 @@ const iconStyle = computed(() => {
   justify-content: center;
   transition: background-color 0.3s ease;
   overflow: hidden;
+}
 
-  --hover-bg-color: rgba(0, 0, 0, 0.2);
+.common-icon--rect.is-hovered::after {
+  background-color: var(--hover-bg-color);
+}
+
+.common-icon--rect.is-active::after {
+  background-color: var(--billadm-color-icon-active-color);
 }
 
 /* rect 模式：悬停或 active 时全屏暗色背景 */
@@ -132,11 +146,11 @@ const iconStyle = computed(() => {
   z-index: 1;
 }
 
-.common-icon--rect.is-hovered::after {
+.common-icon--circle.is-hovered::after {
   background-color: var(--hover-bg-color);
 }
 
-.common-icon--rect.is-active::after {
+.common-icon--circle.is-active::after {
   background-color: var(--billadm-color-icon-active-color);
 }
 
@@ -148,19 +162,11 @@ const iconStyle = computed(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 70%;
-  height: 70%;
+  width: var(--circle-width);
+  height: var(--circle-height);
   border-radius: 4px;
   z-index: 1;
   transition: background-color 0.3s ease;
-}
-
-.common-icon--circle.is-hovered::after {
-  background-color: var(--hover-bg-color);
-}
-
-.common-icon--circle.is-active::after {
-  background-color: var(--billadm-color-icon-active-color);
 }
 
 .icon {

@@ -1,8 +1,8 @@
 <template>
   <div class="menu-bar">
     <div class="left-groups">
-      <CommonIcon :icon="iconMenu" label="菜单" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                  :hoverBgColor="hoverBgColor" hoverStyle="rect" @click="billadmMenu.toggleMenu()"/>
+      <BilladmButton :icon="iconMenu" label="菜单" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+                     :hoverBgColor="hoverBgColor" hoverStyle="rect" @click="billadmMenu.toggleMenu()"/>
       <MultiLevelMenu ref="billadmMenu"/>
       <CustomSelect v-model="currentLedgerId" :options="ledgers" height="24px" width="100px"
                     placeholder="选择账本"/>
@@ -11,13 +11,14 @@
       Billadm-{{ route.name }}
     </div>
     <div class="right-groups">
-      <CommonIcon :icon="iconZoomOut" label="最小化" width="41" height="30" :color="iconColor"
-                  :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="rect"
-                  tooltipPlacement="bottom-start" @click="onMinimize"/>
-      <CommonIcon :icon="iconZoomIn" label="最大化" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                  :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-start" @click="onMaximize"/>
-      <CommonIcon :icon="iconClose" label="关闭" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                  :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-start" @click="onClose"/>
+      <BilladmButton :icon="iconZoomOut" label="最小化" width="41" height="30" :color="iconColor"
+                     :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="rect"
+                     tooltipPlacement="bottom-start" @click="onMinimize"/>
+      <BilladmButton :icon="iconZoomIn" label="最大化" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+                     :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-start"
+                     @click="onMaximize"/>
+      <BilladmButton :icon="iconClose" label="关闭" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
+                     :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-start" @click="onClose"/>
     </div>
   </div>
 </template>
@@ -30,7 +31,7 @@ import iconMenu from '@/assets/icons/menu.svg?raw'
 import iconZoomOut from '@/assets/icons/zoom-out.svg?raw'
 import iconZoomIn from '@/assets/icons/zoom-in.svg?raw'
 import iconClose from '@/assets/icons/close.svg?raw'
-import CommonIcon from '@/components/CommonIcon.vue'
+import BilladmButton from '@/components/BilladmButton.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
 import MultiLevelMenu from '@/components/MultiLevelMenu.vue'
 import {useLedgerStore} from "@/stores/ledgerStore.js";

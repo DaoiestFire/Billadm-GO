@@ -5,8 +5,8 @@
     <div class="center-groups">
     </div>
     <div class="right-groups">
-      <CommonIcon :icon="iconInfo" label="关于软件" width="40" height="30" :color="iconColor" :bgColor="minorBgColor"
-                  :hoverBgColor="hoverBgColor" hoverStyle="circle"/>
+      <BilladmButton :icon="iconInfo" label="关于软件" width="40" height="30" :color="iconColor" :bgColor="minorBgColor"
+                     :hoverBgColor="hoverBgColor" hoverStyle="circle"/>
     </div>
   </div>
 </template>
@@ -14,7 +14,7 @@
 <script setup>
 import {useCssVariables} from '@/css/css';
 import iconInfo from '@/assets/icons/info.svg?raw'
-import CommonIcon from "@/components/CommonIcon.vue";
+import BilladmButton from "@/components/BilladmButton.vue";
 
 // css variables
 const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
