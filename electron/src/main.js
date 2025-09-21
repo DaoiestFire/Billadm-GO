@@ -1,12 +1,12 @@
 const {app, BrowserWindow, ipcMain, dialog} = require('electron');
 const path = require('path');
 const fs = require('fs');
-const os = require('os')
+const os = require('os');
 const {spawn} = require('child_process');
 
 process.noAsar = false;
 
-const isDev = !app.isPackaged
+const isDev = !app.isPackaged;
 const localServer = isDev ? 'http://localhost' : 'http://127.0.0.1';
 const kernelPort = isDev ? 31945 : 31943;
 const urlPath = isDev ? '/static' : '/static/index.html';
@@ -123,11 +123,9 @@ const createWindow = () => {
 
     mainWindow.loadURL(getServer() + urlPath);
 
-    // if (isDev) {
-    //     mainWindow.webContents.openDevTools();
-    // }
-
-    mainWindow.webContents.openDevTools();
+    if (isDev) {
+        mainWindow.webContents.openDevTools();
+    }
 
     ipcMain.on('window-control', (event, command) => {
         switch (command) {

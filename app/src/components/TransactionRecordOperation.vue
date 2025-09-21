@@ -66,13 +66,15 @@
 
 <script setup>
 import {ref, watch} from 'vue';
-import {getTodayMiddleData} from "@/backend/util.js";
+import {getTodayMiddleDate} from "@/backend/util.js";
 import {useCategoryStore} from "@/stores/categoryStore.js";
 import {useTagStore} from "@/stores/tagStore.js";
+import {useTrViewStore} from "@/stores/trViewStore.js";
 
 // store
-const categoryStore = useCategoryStore()
-const tagStore = useTagStore()
+const categoryStore = useCategoryStore();
+const tagStore = useTagStore();
+const trViewStore = useTrViewStore();
 
 // --- Props ---
 const props = defineProps({
@@ -117,7 +119,7 @@ watch(
         // 合并默认值与传入的 modelValue
         formData.value = {
           id: '',
-          time: getTodayMiddleData(), // 默认当天12点0分0秒
+          time: getFormDate(), // 默认当天12点0分0秒
           type: 'expense',
           category: categoryStore.categoryNames.length > 0 ? categoryStore.categoryNames[0] : '',
           description: '-',
@@ -128,6 +130,16 @@ watch(
       }
     }
 );
+
+// 如果选了时间范围以结束时间的12点作为消费时间，否则以当天12点作为消费时间
+const getFormDate = () => {
+  if (Array.isArray(trViewStore.timeRange) && trViewStore.timeRange.length === 2) {
+    let ts = trViewStore.timeRange[1]
+    ts.setHours(12, 0, 0, 0);
+    return ts;
+  }
+  return getTodayMiddleDate()
+}
 
 // --- 方法 ---
 function close() {
