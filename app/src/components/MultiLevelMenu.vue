@@ -155,6 +155,4 @@ defineExpose({
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   min-width: 160px;
 }
-
-/* 确保菜单在小屏幕下不被截断，可以添加滚动或调整位置逻辑，这里简化处理 */
 </style>

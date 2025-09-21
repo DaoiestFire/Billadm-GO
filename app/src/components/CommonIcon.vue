@@ -1,6 +1,5 @@
 <template>
-  <el-tooltip :content="label" :placement="tooltipPlacement">
-    <button class="common-icon" :style="[
+  <button class="common-icon" :style="[
         buttonStyle,
         { '--hover-bg-color': hoverBgColor }
     ]" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" :class="[
@@ -9,9 +8,10 @@
         { 'is-hovered': isHovered || isActive },
         { 'is-active': isActive }
     ]">
+    <el-tooltip :content="label" :placement="tooltipPlacement">
       <span class="icon" :style="iconStyle" v-html="icon"></span>
-    </button>
-  </el-tooltip>
+    </el-tooltip>
+  </button>
 </template>
 
 <script setup>
