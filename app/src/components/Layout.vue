@@ -30,6 +30,7 @@
 
     <!-- 下栏：详情栏 -->
     <div class="bottom-bar">
+      <AppBottomBar/>
     </div>
   </div>
 </template>
@@ -38,6 +39,7 @@
 import {onMounted, ref} from "vue";
 import AppTopBar from '@/components/AppTopBar.vue';
 import AppLeftBar from '@/components/AppLeftBar.vue';
+import AppBottomBar from "@/components/AppBottomBar.vue";
 import FileDirSelect from "@/components/FileDirSelect.vue";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
@@ -46,6 +48,7 @@ import {useTagStore} from "@/stores/tagStore.js";
 import {useCssVariables} from "@/css/css.js";
 import {openWorkspace} from "@/backend/workspace.js";
 import NotificationUtil from "@/backend/notification.js";
+
 
 const ledgerStore = useLedgerStore();
 const trViewStore = useTrViewStore();

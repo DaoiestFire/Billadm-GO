@@ -11,14 +11,13 @@
 </template>
 
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from 'vue'
-import {useCssVariables} from '@/css/css'
-import MenuItem from '@/components/MenuItem.vue'
-import ConfirmDialog from '@/components/ConfirmDialog.vue'
-import iconBook from '@/assets/icons/book.svg?raw'
-import iconInfo from '@/assets/icons/info.svg?raw'
-import iconAdd from '@/assets/icons/add.svg?raw'
-import iconTrash from '@/assets/icons/trash.svg?raw'
+import {computed, onMounted, onUnmounted, ref} from 'vue';
+import {useCssVariables} from '@/css/css';
+import MenuItem from '@/components/MenuItem.vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
+import iconBook from '@/assets/icons/book.svg?raw';
+import iconAdd from '@/assets/icons/add.svg?raw';
+import iconTrash from '@/assets/icons/trash.svg?raw';
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 
 // store
@@ -84,11 +83,6 @@ const menuItems = ref([
         children: deleteLedgers,
       },
     ]
-  },
-  {
-    label: '关于',
-    icon: iconInfo,
-    action: () => console.log('关于'),
   },
 ]);
 
