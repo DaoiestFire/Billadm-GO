@@ -18,7 +18,9 @@
     /* 常用颜色 */
     --billadm-color-positive-color: #409eff;
     --billadm-color-negative-color: #f56c6c;
-    --billadm-color-gray-color: #f5f5f5;
+
+    /* 文本按钮的颜色 */
+    --billadm-color-hover-fg-color: #ffffff;
 }
 
 /* 中文字体 */

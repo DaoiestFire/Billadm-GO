@@ -199,7 +199,8 @@ const rowStyle = {
 }
 
 .btn-edit:hover {
-  background-color: var(--billadm-color-gray-color);
+  background-color: var(--billadm-color-positive-color);
+  color: var(--billadm-color-hover-fg-color);
 }
 
 .btn-delete {
@@ -208,7 +209,8 @@ const rowStyle = {
 }
 
 .btn-delete:hover {
-  background-color: var(--billadm-color-gray-color);
+  background-color: var(--billadm-color-negative-color);
+  color: var(--billadm-color-hover-fg-color);
 }
 
 .tr-table-container {

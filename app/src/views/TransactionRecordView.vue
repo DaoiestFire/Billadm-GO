@@ -18,10 +18,7 @@
       <div class="center-groups">
       </div>
       <div class="right-groups">
-        <CommonIcon :icon="iconAdd" label="新增消费记录" width="40" height="40" :color="iconColor"
-                    :bgColor="minorBgColor"
-                    :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-left"
-                    @click="onCreate"/>
+        <button class="btn-add" @click="onCreate">新增记录</button>
       </div>
     </div>
 
@@ -44,11 +41,9 @@
 <script setup>
 import {ref} from 'vue'
 import {useCssVariables} from '@/css/css'
-import iconAdd from '@/assets/icons/add.svg?raw'
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
 import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
-import CommonIcon from '@/components/CommonIcon.vue'
 import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
@@ -207,11 +202,28 @@ async function handleConfirm(data) {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  gap: 4px;
 }
 
 /* 右边按钮组 */
 .right-groups {
+  margin-right: 20px;
   display: flex;
+  gap: 4px;
+}
+
+.btn-add {
+  background-color: transparent;
+  color: var(--billadm-color-positive-color);
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background-color: var(--billadm-color-positive-color);
+  color: var(--billadm-color-hover-fg-color);
 }
 
 .middle-section {
