@@ -4,6 +4,7 @@ import {queryTrCountOnCondition, queryTrsOnCondition} from "@/backend/tr.js";
 import NotificationUtil from "@/backend/notification.js";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {dateToUnixTimestamp} from "@/backend/functions.js";
+import {setToEndOfDay, setToStartOfDay} from "@/backend/timerange.js";
 
 export const useTrViewStore = defineStore('trView', () => {
     // 定义状态
@@ -20,11 +21,9 @@ export const useTrViewStore = defineStore('trView', () => {
         }
         /** @type {Date} */
         const startTs = timeRange.value[0];
-        startTs.setHours(0, 0, 0, 0)
         /** @type {Date} */
         const endTs = timeRange.value[1];
-        endTs.setHours(23, 59, 59, 0)
-        return [dateToUnixTimestamp(startTs), dateToUnixTimestamp(endTs)]
+        return [dateToUnixTimestamp(setToStartOfDay(startTs)), dateToUnixTimestamp(setToEndOfDay(endTs))]
     })
 
     // ledgerStore

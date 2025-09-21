@@ -12,6 +12,7 @@
             size="small"
             :editable="false"
             style="width: 200px;"
+            :shortcuts="shortcuts"
         />
       </div>
       <div class="center-groups">
@@ -53,6 +54,13 @@ import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
 import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/tr.js";
+import {
+  getLastMonthRange,
+  getLastWeekRange,
+  getThisMonthRange,
+  getThisWeekRange,
+  getTodayRange
+} from "@/backend/timerange.js";
 
 // store
 const ledgerStore = useLedgerStore()
@@ -63,6 +71,29 @@ const options = [
   {label: '每页10行', value: 10},
   {label: '每页20行', value: 20},
   {label: '每页50行', value: 50}
+]
+
+const shortcuts = [
+  {
+    text: '今天',
+    value: getTodayRange,
+  },
+  {
+    text: '本周',
+    value: getThisWeekRange,
+  },
+  {
+    text: '本月',
+    value: getThisMonthRange,
+  },
+  {
+    text: '上周',
+    value: getLastWeekRange,
+  },
+  {
+    text: '上月',
+    value: getLastMonthRange,
+  }
 ]
 
 const columnStyles = [
