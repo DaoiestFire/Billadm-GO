@@ -194,27 +194,21 @@ const rowStyle = {
 }
 
 .btn-edit {
-  background-color: var(--billadm-color-icon-edit-bg-color);
-  color: var(--billadm-color-icon-active-fg-color);
+  background-color: transparent;
+  color: var(--billadm-color-positive-color);
 }
 
 .btn-edit:hover {
-  /* 假设 edit-bg-color 是浅色，hover 时加深 */
-  background-color: color-mix(in srgb, var(--billadm-color-icon-edit-bg-color) 80%, #000);
-  /* 或者你可以定义一个专门的 hover 变量，更可控 */
-  transform: scale(1.05);
-  /* 轻微放大，可选 */
+  background-color: var(--billadm-color-gray-color);
 }
 
 .btn-delete {
-  background-color: var(--billadm-color-icon-delete-bg-color);
-  color: var(--billadm-color-icon-active-fg-color);
+  background-color: transparent;
+  color: var(--billadm-color-negative-color);
 }
 
 .btn-delete:hover {
-  /* 删除按钮 hover 时加深红色 */
-  background-color: color-mix(in srgb, var(--billadm-color-icon-delete-bg-color) 80%, #900);
-  transform: scale(1.05);
+  background-color: var(--billadm-color-gray-color);
 }
 
 .tr-table-container {
