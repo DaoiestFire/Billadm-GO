@@ -20,6 +20,7 @@ export const useTrViewStore = defineStore('trView', () => {
         }
         /** @type {Date} */
         const startTs = timeRange.value[0];
+        startTs.setHours(0, 0, 0, 0)
         /** @type {Date} */
         const endTs = timeRange.value[1];
         endTs.setHours(23, 59, 59, 0)
