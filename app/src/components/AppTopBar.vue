@@ -1,8 +1,8 @@
 <template>
   <div class="menu-bar">
     <div class="left-groups">
-      <BilladmButton :icon="iconMenu" label="菜单" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                     :hoverBgColor="hoverBgColor" hoverStyle="rect" @click="billadmMenu.toggleMenu()"/>
+      <BilladmButton :icon="iconMenu" label="菜单" width="40" height="30" :color="iconColor" :bgColor="minorBgColor"
+                     :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="billadmMenu.toggleMenu()"/>
       <MultiLevelMenu ref="billadmMenu"/>
       <CustomSelect v-model="currentLedgerId" :options="ledgers" height="24px" width="100px"
                     placeholder="选择账本"/>
@@ -11,14 +11,14 @@
       Billadm-{{ route.name }}
     </div>
     <div class="right-groups">
-      <BilladmButton :icon="iconZoomOut" label="最小化" width="41" height="30" :color="iconColor"
-                     :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="rect"
+      <BilladmButton :icon="iconZoomOut" label="最小化" width="40" height="30" :color="iconColor"
+                     :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
                      tooltipPlacement="bottom-start" @click="onMinimize"/>
-      <BilladmButton :icon="iconZoomIn" label="最大化" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                     :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-start"
+      <BilladmButton :icon="iconZoomIn" label="最大化" width="40" height="30" :color="iconColor" :bgColor="minorBgColor"
+                     :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-start"
                      @click="onMaximize"/>
-      <BilladmButton :icon="iconClose" label="关闭" width="41" height="30" :color="iconColor" :bgColor="minorBgColor"
-                     :hoverBgColor="hoverBgColor" hoverStyle="rect" tooltipPlacement="bottom-start" @click="onClose"/>
+      <BilladmButton :icon="iconClose" label="关闭" width="40" height="30" :color="iconColor" :bgColor="minorBgColor"
+                     :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-start" @click="onClose"/>
     </div>
   </div>
 </template>
@@ -98,7 +98,6 @@ const onClose = async () => {
 .left-groups {
   margin-right: auto;
   display: flex;
-  gap: 4px;
 }
 
 /* 中间按钮 */

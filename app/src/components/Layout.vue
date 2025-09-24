@@ -93,12 +93,12 @@ onMounted(initWorkspace)
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background-color: var(--billadm-color-minor-backgroud-color);
 }
 
 .top-bar {
   background: var(--billadm-color-minor-backgroud-color);
   height: 30px;
-  border-bottom: 1px solid var(--billadm-color-window-border-color);
 }
 
 .middle-section {
@@ -113,21 +113,16 @@ onMounted(initWorkspace)
   background: var(--billadm-color-minor-backgroud-color);
 }
 
-.left-panel {
-  border-right: 1px solid var(--billadm-color-window-border-color);
-}
-
-.right-panel {
-  border-left: 1px solid var(--billadm-color-window-border-color);
-}
-
 .center-panel {
+  border-radius: 8px;
+  border: 1px solid var(--billadm-color-window-border-color);
+  padding: 10px;
+  background-color: var(--billadm-color-major-backgroud-color);
   flex: 1;
 }
 
 .bottom-bar {
   background: var(--billadm-color-minor-backgroud-color);
   height: 30px;
-  border-top: 1px solid var(--billadm-color-window-border-color);
 }
 </style>

@@ -180,9 +180,8 @@ async function handleConfirm(data) {
 }
 
 .top-bar {
-  background: var(--billadm-color-minor-backgroud-color);
+  background: var(--billadm-color-major-backgroud-color);
   height: 40px;
-  border-bottom: 1px solid var(--billadm-color-window-border-color);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -191,7 +190,6 @@ async function handleConfirm(data) {
 
 /* 左边按钮 将它与后面的元素隔开 */
 .left-groups {
-  margin-left: 20px;
   margin-right: auto;
   display: flex;
   gap: 4px;
@@ -207,7 +205,6 @@ async function handleConfirm(data) {
 
 /* 右边按钮组 */
 .right-groups {
-  margin-right: 20px;
   display: flex;
   gap: 4px;
 }
@@ -232,9 +229,8 @@ async function handleConfirm(data) {
 }
 
 .bottom-bar {
-  background: var(--billadm-color-minor-backgroud-color);
+  background: var(--billadm-color-major-backgroud-color);
   height: 40px;
-  border-top: 1px solid var(--billadm-color-window-border-color);
   flex-shrink: 0;
   display: flex;
   flex-direction: row;

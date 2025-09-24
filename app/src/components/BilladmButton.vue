@@ -81,7 +81,7 @@ const props = defineProps({
   },
   circleSize: {
     type: [String, Number],
-    default: 24
+    default: 26
   }
 })
 

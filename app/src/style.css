@@ -1,12 +1,12 @@
 :root {
     /* 窗口的颜色 */
     --billadm-color-major-backgroud-color: #ffffff;
-    --billadm-color-minor-backgroud-color: #f5f5f5;
-    --billadm-color-window-border-color: #cccccc;
+    --billadm-color-minor-backgroud-color: #f6f6f6;
+    --billadm-color-window-border-color: #e0e0e0;
 
     /* 按钮的颜色 */
     --billadm-color-icon-color: #7b7b7b;
-    --billadm-color-icon-hover-bg-color: #dddddd;
+    --billadm-color-icon-hover-bg-color: #e4e4e4;
     --billadm-color-icon-active-color: #409eff;
     --billadm-color-icon-active-fg-color: #ffffff;
 
