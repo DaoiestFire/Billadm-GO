@@ -237,5 +237,6 @@ async function handleConfirm(data) {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
 }
 </style>
