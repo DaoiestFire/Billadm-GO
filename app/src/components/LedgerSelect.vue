@@ -8,9 +8,11 @@
       </div>
       <!-- 右侧按钮 -->
       <div class="select-right">
-        <button class="icon-button">
-          <span v-html="iconAdd" class="icon" @click="createLedgerFunc"></span>
-        </button>
+        <el-tooltip content="新建账本" placement="bottom-end">
+          <button class="icon-button">
+            <span v-html="iconAdd" class="icon" @click="createLedgerFunc"></span>
+          </button>
+        </el-tooltip>
       </div>
     </div>
 
@@ -150,7 +152,6 @@ const onConfirm = async (data) => {
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 8px;
   cursor: pointer;
-  overflow: hidden;
   background-color: var(--billadm-color-major-backgroud-color);
 }
 
@@ -165,22 +166,22 @@ const onConfirm = async (data) => {
 .select-right {
   display: flex;
   align-items: center;
+  z-index: 1;
 }
 
 .dropdown {
   position: absolute;
   top: 110%;
   left: 0;
-  z-index: 1000;
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 4px;
   background-color: var(--billadm-color-major-backgroud-color);
   overflow-y: auto;
+  z-index: 1;
 }
 
 .dropdown-item {
   position: relative;
-  overflow: hidden;
   display: flex;
   height: 30px;
   cursor: pointer;
@@ -204,9 +205,9 @@ const onConfirm = async (data) => {
   width: 126px;
   height: 26px;
   border-radius: 4px;
-  z-index: -1;
   transition: background-color 0.3s ease;
   background-color: var(--billadm-color-icon-hover-bg-color);
+  z-index: -1;
 }
 
 .item-right {

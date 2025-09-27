@@ -22,7 +22,6 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue';
 import {useRoute} from 'vue-router';
 import BilladmButton from '@/components/BilladmButton.vue';
 import LedgerSelect from "@/components/LedgerSelect.vue";
@@ -31,37 +30,13 @@ import {useCssVariables} from '@/css/css';
 import iconZoomOut from '@/assets/icons/zoom-out.svg?raw';
 import iconZoomIn from '@/assets/icons/zoom-in.svg?raw';
 import iconClose from '@/assets/icons/close.svg?raw';
-import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {exitApp} from "@/backend/app.js";
-
-// store
-const ledgerStore = useLedgerStore()
 
 // 当前视图
 const route = useRoute()
 
 // css variables
 const {minorBgColor, hoverBgColor, iconColor, uiSizeMenuWidth} = useCssVariables()
-
-// 菜单
-const billadmMenu = ref(null)
-
-// 创建可写的 computed 用于 v-model
-const currentLedgerId = computed({
-  get() {
-    return ledgerStore.currentLedgerId
-  },
-  set(value) {
-    ledgerStore.setCurrentLedger(value)
-  }
-})
-
-const ledgers = computed(() => {
-  return ledgerStore.ledgers.map(l => ({
-    label: l.name,
-    value: l.id,
-  }))
-})
 
 // 窗口控制
 const onMinimize = () => {
