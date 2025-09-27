@@ -238,7 +238,6 @@ const rowStyle = {
   background-color: var(--billadm-color-table-header-bg-color);
   position: sticky;
   top: 0;
-  z-index: 1;
 }
 
 /* 斑马纹样式 */

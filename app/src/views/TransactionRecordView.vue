@@ -40,7 +40,6 @@
 
 <script setup>
 import {ref} from 'vue'
-import {useCssVariables} from '@/css/css'
 import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
 import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
@@ -132,9 +131,6 @@ const columnStyles = [
     width: '120px',
   }
 ]
-
-// css variables
-const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
 
 
 // 消费记录表单
