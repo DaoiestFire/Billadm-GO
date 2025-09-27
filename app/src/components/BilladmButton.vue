@@ -35,11 +35,11 @@ const props = defineProps({
     default: ''
   },
   width: {
-    type: [String, Number],
+    type: String,
     default: 30
   },
   height: {
-    type: [String, Number],
+    type: String,
     default: 30
   },
   iconWidth: {
@@ -47,11 +47,11 @@ const props = defineProps({
     default: 20
   },
   iconHeight: {
-    type: [String, Number],
+    type: String,
     default: 20
   },
   strokeWidth: {
-    type: [String, Number],
+    type: String,
     default: 0.1
   },
   color: {
@@ -64,7 +64,7 @@ const props = defineProps({
   },
   hoverBgColor: {
     type: String,
-    default: '#e0e0e0'
+    default: 'white'
   },
   hoverStyle: {
     type: String,

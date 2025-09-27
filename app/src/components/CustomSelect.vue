@@ -131,11 +131,11 @@ onUnmounted(() => {
 }
 
 .dropdown-down {
-  top: 100%;
+  top: 110%;
 }
 
 .dropdown-up {
-  bottom: 100%;
+  bottom: 110%;
 }
 
 .option {

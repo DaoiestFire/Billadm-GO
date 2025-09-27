@@ -1,97 +1,91 @@
 <template>
   <div class="ledger-select-container">
     <!-- 主选择框 -->
-    <div
-        class="ledger-select"
-        :style="{ height: height }"
-        @click="toggleDropdown"
-    >
+    <div class="ledger-select" :style="{ height: height }">
       <!-- 左侧显示选中项 -->
-      <div class="select-left">
-        {{ selectedOption ? selectedOption.label : placeholder }}
+      <div class="select-left" @click="toggleDropdown">
+        {{ ledgerStore.currentLedgerName ? ledgerStore.currentLedgerName : placeholder }}
       </div>
       <!-- 右侧按钮 -->
       <div class="select-right">
-        <BilladmButton :icon="iconAdd" label="新建账本" :width="height" :height="height" :color="iconColor"
-                       :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
-                       tooltipPlacement="bottom-end"/>
+        <button class="icon-button">
+          <span v-html="iconAdd" class="icon" @click="createLedgerFunc"></span>
+        </button>
       </div>
     </div>
 
     <!-- 下拉框 -->
     <div v-if="showDropdown" class="dropdown">
-      <div
-          v-for="option in options"
-          :key="option.value"
-          class="dropdown-item"
-          @click="selectOption(option)"
-      >
+      <div v-for="option in options" :key="option.value" class="dropdown-item" @click="selectOption(option)">
         <!-- 下拉项左侧文本 -->
-        <div class="item-left">
-          {{ option.label }}
-        </div>
+        <div class="item-left">{{ option.label }}</div>
         <!-- 下拉项右侧按钮 -->
         <div class="item-right">
-          <BilladmButton :icon="iconAdd"/>
+          <button class="icon-button">
+            <span v-html="iconTrash" class="icon" @click="deleteLedgerFunc(option.value,option.label)"></span>
+          </button>
         </div>
       </div>
     </div>
+    <ConfirmDialog v-model:visible="showLedgerConfirmDialog"
+                   :showInput="showLedgerInput"
+                   :message="message"
+                   :cancel-color="cancelColor"
+                   :confirm-label="confirmLabel"
+                   :confirm-color="confirmColor"
+                   :item="dialogItem"
+                   @confirm="onConfirm"/>
   </div>
 </template>
 
 <script setup>
-import {defineProps, ref} from 'vue'
-import BilladmButton from "@/components/BilladmButton.vue";
+import {computed, defineProps, ref} from 'vue'
 import iconAdd from "@/assets/icons/add.svg?raw";
+import iconTrash from "@/assets/icons/trash.svg?raw";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
+import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useCssVariables} from "@/css/css.js";
 
-// css variables
-const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
+// store
+const ledgerStore = useLedgerStore()
 
 // 定义组件属性
 const props = defineProps({
-  // 选择框宽度
-  width: {
-    type: String,
-    default: '150px'
-  },
   // 选择框高度
   height: {
     type: String,
     default: '30px'
   },
-  // 可选项数组
-  options: {
-    type: Array,
-    default: () => [{value: '1', label: '现金账'},
-      {value: '2', label: '银行账'},
-      {value: '3', label: '应收账款'}]
-  },
   // 占位符文本
   placeholder: {
     type: String,
-    default: '请选择...'
+    default: '选择账本'
   }
+})
+
+const options = computed(() => {
+  if (!Array.isArray(ledgerStore.ledgers)) {
+    return []
+  }
+
+  return ledgerStore.ledgers.map(ledger => ({
+    label: ledger.name,
+    value: ledger.id,
+  }))
 })
 
 // 是否显示下拉框
 const showDropdown = ref(false)
 
-// 当前选中的选项
-const selectedOption = ref(null)
-
 // 切换下拉框显示状态
-const toggleDropdown = (event) => {
-  // 如果点击的是主选择框，则切换下拉框
-  if (event.target.closest('.select-left')) {
-    showDropdown.value = !showDropdown.value
-  }
+const toggleDropdown = () => {
+  showDropdown.value = !showDropdown.value
 }
 
 // 选择一个选项
 const selectOption = (option) => {
-  selectedOption.value = option
-  showDropdown.value = false
+  ledgerStore.setCurrentLedger(option.value);
+  showDropdown.value = false;
 }
 
 // 点击外部区域关闭下拉框
@@ -102,6 +96,47 @@ document.addEventListener('click', (event) => {
     showDropdown.value = false
   }
 })
+
+// 引用颜色
+const {positiveColor, negativeColor} = useCssVariables()
+
+// 各种框的控制变量
+const showLedgerConfirmDialog = ref(false)
+const showLedgerInput = ref(false)
+const message = ref('')
+const confirmLabel = ref('确认')
+const confirmColor = ref('')
+const cancelColor = ref('')
+const dialogItem = ref(null)
+
+const createLedgerFunc = () => {
+  message.value = '输入账本名称';
+  confirmLabel.value = '创建';
+  confirmColor.value = positiveColor.value;
+  cancelColor.value = negativeColor.value;
+  showLedgerInput.value = true;
+  showLedgerConfirmDialog.value = true;
+}
+
+const deleteLedgerFunc = (id, name) => {
+  dialogItem.value = id;
+  message.value = `确认删除账本<${name}>吗？`;
+  confirmLabel.value = '删除';
+  confirmColor.value = negativeColor.value;
+  cancelColor.value = positiveColor.value;
+  showLedgerInput.value = false;
+  showLedgerConfirmDialog.value = true;
+}
+
+const onConfirm = async (data) => {
+  if (confirmLabel.value === '创建') {
+    await ledgerStore.createLedger(data.input);
+  }
+
+  if (confirmLabel.value === '删除') {
+    await ledgerStore.deleteLedger(data.item);
+  }
+}
 </script>
 
 <style scoped>
@@ -116,6 +151,7 @@ document.addEventListener('click', (event) => {
   border-radius: 8px;
   cursor: pointer;
   overflow: hidden;
+  background-color: var(--billadm-color-major-backgroud-color);
 }
 
 .select-left {
@@ -123,14 +159,12 @@ document.addEventListener('click', (event) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--billadm-color-major-backgroud-color);
   width: 130px;
 }
 
 .select-right {
   display: flex;
   align-items: center;
-  background-color: #e9e9e9;
 }
 
 .dropdown {
@@ -149,12 +183,7 @@ document.addEventListener('click', (event) => {
   overflow: hidden;
   display: flex;
   height: 30px;
-  border-bottom: 1px solid var(--billadm-color-window-border-color);
   cursor: pointer;
-}
-
-.dropdown-item:last-child {
-  border-bottom: none;
 }
 
 .item-left {
@@ -185,5 +214,38 @@ document.addEventListener('click', (event) => {
   align-items: center;
 }
 
-/* 点击外部关闭下拉框的样式 */
+.icon-button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: transparent;
+  position: relative;
+}
+
+.icon-button:hover::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  z-index: -1;
+  transition: background-color 0.3s ease;
+  background-color: var(--billadm-color-icon-hover-bg-color);
+}
+
+.icon {
+  /* 图标内容容器 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--billadm-color-icon-color);
+  fill: currentColor;
+  stroke: currentColor;
+  width: 20px;
+  height: 20px;
+  stroke-width: 0.1px;
+}
 </style>
