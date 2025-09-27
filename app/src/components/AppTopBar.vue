@@ -1,24 +1,21 @@
 <template>
   <div class="menu-bar">
     <div class="left-groups">
-      <BilladmButton :icon="iconMenu" label="菜单" width="40" height="30" :color="iconColor" :bgColor="minorBgColor"
-                     :hoverBgColor="hoverBgColor" hoverStyle="circle" @click="billadmMenu.toggleMenu()"/>
-      <MultiLevelMenu ref="billadmMenu"/>
-      <CustomSelect v-model="currentLedgerId" :options="ledgers" height="24px" width="100px"
-                    placeholder="选择账本"/>
+      <LedgerSelect/>
     </div>
     <div class="center-groups">
       Billadm-{{ route.name }}
     </div>
     <div class="right-groups">
-      <BilladmButton :icon="iconZoomOut" label="最小化" width="40" height="30" :color="iconColor"
-                     :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
+      <BilladmButton :icon="iconZoomOut" label="最小化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+                     :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
                      tooltipPlacement="bottom-start" @click="onMinimize"/>
-      <BilladmButton :icon="iconZoomIn" label="最大化" width="40" height="30" :color="iconColor" :bgColor="minorBgColor"
-                     :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-start"
-                     @click="onMaximize"/>
-      <BilladmButton :icon="iconClose" label="关闭" width="40" height="30" :color="iconColor" :bgColor="minorBgColor"
-                     :hoverBgColor="hoverBgColor" hoverStyle="circle" tooltipPlacement="bottom-start" @click="onClose"/>
+      <BilladmButton :icon="iconZoomIn" label="最大化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+                     :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
+                     tooltipPlacement="bottom-start" @click="onMaximize"/>
+      <BilladmButton :icon="iconClose" label="关闭" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+                     :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
+                     tooltipPlacement="bottom-start" @click="onClose"/>
     </div>
   </div>
 </template>
@@ -27,15 +24,13 @@
 import {computed, ref} from 'vue'
 import {useRoute} from 'vue-router'
 import {useCssVariables} from '@/css/css'
-import iconMenu from '@/assets/icons/menu.svg?raw'
 import iconZoomOut from '@/assets/icons/zoom-out.svg?raw'
 import iconZoomIn from '@/assets/icons/zoom-in.svg?raw'
 import iconClose from '@/assets/icons/close.svg?raw'
 import BilladmButton from '@/components/BilladmButton.vue'
-import CustomSelect from '@/components/CustomSelect.vue'
-import MultiLevelMenu from '@/components/MultiLevelMenu.vue'
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {exitApp} from "@/backend/app.js";
+import LedgerSelect from "@/components/LedgerSelect.vue";
 
 // store
 const ledgerStore = useLedgerStore()
@@ -44,7 +39,7 @@ const ledgerStore = useLedgerStore()
 const route = useRoute()
 
 // css variables
-const {minorBgColor, hoverBgColor, iconColor} = useCssVariables()
+const {minorBgColor, hoverBgColor, iconColor, uiSizeMenuWidth} = useCssVariables()
 
 // 菜单
 const billadmMenu = ref(null)
@@ -96,8 +91,10 @@ const onClose = async () => {
 
 /* 左边按钮 将它与后面的元素隔开 */
 .left-groups {
+  margin-left: 40px;
   margin-right: auto;
   display: flex;
+  align-items: center;
 }
 
 /* 中间按钮 */

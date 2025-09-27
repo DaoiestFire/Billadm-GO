@@ -98,7 +98,7 @@ onMounted(initWorkspace)
 
 .top-bar {
   background: var(--billadm-color-minor-backgroud-color);
-  height: 30px;
+  height: var(--billadm-ui-size-menu-width);
 }
 
 .middle-section {
@@ -109,7 +109,7 @@ onMounted(initWorkspace)
 
 .left-panel,
 .right-panel {
-  width: 40px;
+  width: var(--billadm-ui-size-menu-width);
   background: var(--billadm-color-minor-backgroud-color);
 }
 
@@ -123,6 +123,6 @@ onMounted(initWorkspace)
 
 .bottom-bar {
   background: var(--billadm-color-minor-backgroud-color);
-  height: 30px;
+  height: var(--billadm-ui-size-menu-width);
 }
 </style>

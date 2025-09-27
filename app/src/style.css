@@ -21,6 +21,9 @@
 
     /* 文本按钮的颜色 */
     --billadm-color-hover-fg-color: #ffffff;
+
+    /* 界面尺寸 */
+    --billadm-ui-size-menu-width: 40px;
 }
 
 /* 中文字体 */

@@ -36,19 +36,19 @@ const props = defineProps({
   },
   width: {
     type: [String, Number],
-    default: 24
+    default: 30
   },
   height: {
     type: [String, Number],
-    default: 24
+    default: 30
   },
   iconWidth: {
     type: [String, Number],
-    default: 18
+    default: 20
   },
   iconHeight: {
     type: [String, Number],
-    default: 18
+    default: 20
   },
   strokeWidth: {
     type: [String, Number],
@@ -81,7 +81,7 @@ const props = defineProps({
   },
   circleSize: {
     type: [String, Number],
-    default: 26
+    default: 30
   }
 })
 
@@ -97,8 +97,8 @@ const handleMouseLeave = () => {
 
 const buttonStyle = computed(() => {
   return {
-    width: `${props.width}px`,
-    height: `${props.height}px`,
+    width: props.width.endsWith('px') ? props.width : `${props.width}px`,
+    height: props.height.endsWith('px') ? props.height : `${props.height}px`,
     backgroundColor: props.bgColor
   }
 })

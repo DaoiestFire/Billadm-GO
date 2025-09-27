@@ -89,7 +89,7 @@ function handlePageChange(page) {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 8px;
+  padding: 0 10px;
   user-select: none;
   font-size: 14px;
 }

@@ -181,11 +181,12 @@ async function handleConfirm(data) {
 
 .top-bar {
   background: var(--billadm-color-major-backgroud-color);
-  height: 40px;
+  height: 30px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   position: relative;
+  margin-bottom: 10px;
 }
 
 /* 左边按钮 将它与后面的元素隔开 */
@@ -230,10 +231,11 @@ async function handleConfirm(data) {
 
 .bottom-bar {
   background: var(--billadm-color-major-backgroud-color);
-  height: 40px;
+  height: 30px;
   flex-shrink: 0;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 }
 </style>
