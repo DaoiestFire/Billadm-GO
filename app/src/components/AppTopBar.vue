@@ -1,6 +1,7 @@
 <template>
   <div class="menu-bar">
     <div class="left-groups">
+      <AppDisplay size="30px"/>
       <LedgerSelect/>
     </div>
     <div class="center-groups">
@@ -21,16 +22,17 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
-import {useRoute} from 'vue-router'
-import {useCssVariables} from '@/css/css'
-import iconZoomOut from '@/assets/icons/zoom-out.svg?raw'
-import iconZoomIn from '@/assets/icons/zoom-in.svg?raw'
-import iconClose from '@/assets/icons/close.svg?raw'
-import BilladmButton from '@/components/BilladmButton.vue'
+import {computed, ref} from 'vue';
+import {useRoute} from 'vue-router';
+import BilladmButton from '@/components/BilladmButton.vue';
+import LedgerSelect from "@/components/LedgerSelect.vue";
+import AppDisplay from "@/components/AppDisplay.vue";
+import {useCssVariables} from '@/css/css';
+import iconZoomOut from '@/assets/icons/zoom-out.svg?raw';
+import iconZoomIn from '@/assets/icons/zoom-in.svg?raw';
+import iconClose from '@/assets/icons/close.svg?raw';
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {exitApp} from "@/backend/app.js";
-import LedgerSelect from "@/components/LedgerSelect.vue";
 
 // store
 const ledgerStore = useLedgerStore()
@@ -91,7 +93,6 @@ const onClose = async () => {
 
 /* 左边按钮 将它与后面的元素隔开 */
 .left-groups {
-  margin-left: 40px;
   margin-right: auto;
   display: flex;
   align-items: center;
