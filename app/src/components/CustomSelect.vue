@@ -1,14 +1,15 @@
 <template>
-  <div class="custom-select" :style="{ width: width }" ref="selectWrapper">
-    <button @click="toggleDropdown" class="select-button" :style="{ height: height }">
+  <div class="custom-select" :style="{ width: width+'px' }" ref="selectWrapper">
+    <button @click="toggleDropdown" class="select-button" :style="{ height: height+'px' }">
       {{ selectedLabel || placeholder }}
     </button>
     <div v-show="isOpen" :class="['dropdown', direction === 'up' ? 'dropdown-up' : 'dropdown-down']">
-      <div v-for="option in options" :key="option.value" class="option" @click="selectOption(option)">
+      <div v-for="option in options" :key="option.value" class="option" @click="selectOption(option)"
+           :style="[{
+             '--bg-width': (props.width - 4) + 'px',
+             '--bg-height': (props.height - 4) + 'px'
+              }]">
         {{ option.label }}
-      </div>
-      <div v-if="options.length===0" class="option">
-        无账本
       </div>
     </div>
   </div>
@@ -35,12 +36,12 @@ const props = defineProps({
     validator: value => ['down', 'up'].includes(value)
   },
   width: {
-    type: [String, Number],
-    default: '100px'
+    type: Number,
+    default: 100
   },
   height: {
-    type: [String, Number],
-    default: '28px'
+    type: Number,
+    default: 28
   }
 });
 
@@ -139,13 +140,26 @@ onUnmounted(() => {
 }
 
 .option {
-  padding: 5px;
   cursor: pointer;
-  text-align: center;
   white-space: nowrap;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
 }
 
-.option:hover {
+.option:hover::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--bg-width);
+  height: var(--bg-height);
+  border-radius: 4px;
+  z-index: -1;
+  transition: background-color 0.3s ease;
   background-color: var(--billadm-color-icon-hover-bg-color);
 }
 </style>
