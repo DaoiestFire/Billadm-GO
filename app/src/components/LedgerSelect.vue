@@ -177,7 +177,7 @@ const onConfirm = async (data) => {
   border-radius: 4px;
   background-color: var(--billadm-color-major-backgroud-color);
   overflow-y: auto;
-  z-index: 1;
+  z-index: 3;
 }
 
 .dropdown-item {
