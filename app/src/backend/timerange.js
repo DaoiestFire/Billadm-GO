@@ -116,3 +116,15 @@ export function getLastMonthRange() {
 
     return [setToStartOfDay(start), setToEndOfDay(end)];
 }
+
+export function getPreviousDay(date) {
+    const result = new Date(date);
+    result.setDate(result.getDate() - 1);
+    return result;
+}
+
+export function getNextDay(date) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + 1);
+    return result;
+}

@@ -3,6 +3,9 @@
     <!-- 上栏：工具栏 -->
     <div class="top-bar">
       <div class="left-groups">
+        <BilladmButton :icon="iconLeft" label="向前一天" width="30px" height="30px" :circleSize="26"
+                       :color="iconColor" bgColor="transparent" :hoverBgColor="hoverBgColor" hoverStyle="circle"
+                       tooltipPlacement="bottom" @click="goToPreviousDay"/>
         <el-date-picker
             v-model="trViewStore.timeRange"
             type="daterange"
@@ -14,6 +17,9 @@
             style="width: 200px;"
             :shortcuts="shortcuts"
         />
+        <BilladmButton :icon="iconRight" label="向后一天" width="30px" height="30px" :circleSize="26"
+                       :color="iconColor" bgColor="transparent" :hoverBgColor="hoverBgColor" hoverStyle="circle"
+                       tooltipPlacement="bottom" @click="goToNextDay"/>
       </div>
       <div class="center-groups">
       </div>
@@ -44,6 +50,9 @@ import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
 import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
 import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
+import BilladmButton from "@/components/BilladmButton.vue";
+import iconLeft from '@/assets/icons/left.svg?raw';
+import iconRight from '@/assets/icons/right.svg?raw';
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
@@ -51,10 +60,16 @@ import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/b
 import {
   getLastMonthRange,
   getLastWeekRange,
+  getNextDay,
+  getPreviousDay,
   getThisMonthRange,
   getThisWeekRange,
   getTodayRange
 } from "@/backend/timerange.js";
+import {useCssVariables} from "@/css/css.js";
+
+// css variables
+const {hoverBgColor, iconColor} = useCssVariables()
 
 // store
 const ledgerStore = useLedgerStore()
@@ -166,6 +181,26 @@ async function handleConfirm(data) {
     NotificationUtil.error(`消费记录操作失败 ${error}`)
   }
 }
+
+const goToPreviousDay = () => {
+  let range = trViewStore.timeRange
+  if (!Array.isArray(range)) {
+    return
+  }
+  range[0] = getPreviousDay(range[0]);
+  range[1] = getPreviousDay(range[1]);
+  trViewStore.timeRange = range;
+}
+
+const goToNextDay = () => {
+  let range = trViewStore.timeRange
+  if (!Array.isArray(range)) {
+    return
+  }
+  range[0] = getNextDay(range[0]);
+  range[1] = getNextDay(range[1]);
+  trViewStore.timeRange = range;
+}
 </script>
 
 <style scoped>
@@ -190,6 +225,7 @@ async function handleConfirm(data) {
   margin-right: auto;
   display: flex;
   gap: 4px;
+  align-items: center;
 }
 
 /* 中间按钮 */
