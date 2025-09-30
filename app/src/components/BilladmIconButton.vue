@@ -14,7 +14,7 @@
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave">
     <el-tooltip :content="label" :placement="tooltipPlacement">
-      <billadm-icon :svg="svg" :color="color" :size="iconSize"/>
+      <billadm-icon class="icon" :svg="svg" :color="isActive ? activeFgColor : color" :size="iconSize"/>
     </el-tooltip>
   </button>
 </template>
@@ -47,11 +47,11 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: '#7a7a7a'
+    default: '#7b7b7b'
   },
   bgColor: {
     type: String,
-    default: '#f5f5f5'
+    default: 'transparent'
   },
   bgSize: {
     type: [String, Number],
@@ -64,6 +64,10 @@ const props = defineProps({
   isActive: {
     type: Boolean,
     default: false
+  },
+  activeFgColor: {
+    type: String,
+    default: 'white'
   },
   tooltipPlacement: {
     type: String,
@@ -101,6 +105,7 @@ const buttonStyle = computed(() => {
   justify-content: center;
   transition: background-color 0.3s ease;
   overflow: hidden;
+  z-index: 1;
 }
 
 .common-icon.is-hovered::after,
@@ -118,10 +123,14 @@ const buttonStyle = computed(() => {
 }
 
 .common-icon.is-hovered::after {
-  background-color: var(--hover-bg-color);
+  background-color: var(--billadm-color-icon-hover-bg-color);
 }
 
 .common-icon.is-active::after {
   background-color: var(--billadm-color-icon-active-color);
+}
+
+.icon {
+  z-index: 2;
 }
 </style>

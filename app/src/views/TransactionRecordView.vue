@@ -4,8 +4,8 @@
     <div class="top-bar">
       <div class="left-groups">
         <BilladmIconButton :svg="iconLeft" label="向前一天" width="30px" height="30px" :circleSize="26"
-                       :color="iconColor" bgColor="transparent" :hoverBgColor="hoverBgColor" hoverStyle="circle"
-                       tooltipPlacement="bottom" @click="goToPreviousDay"/>
+                           :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
+                           tooltipPlacement="bottom" @click="goToPreviousDay"/>
         <el-date-picker
             v-model="trViewStore.timeRange"
             type="daterange"
@@ -18,8 +18,8 @@
             :shortcuts="shortcuts"
         />
         <BilladmIconButton :svg="iconRight" label="向后一天" width="30px" height="30px" :circleSize="26"
-                       :color="iconColor" bgColor="transparent" :hoverBgColor="hoverBgColor" hoverStyle="circle"
-                       tooltipPlacement="bottom" @click="goToNextDay"/>
+                           :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
+                           tooltipPlacement="bottom" @click="goToNextDay"/>
       </div>
       <div class="center-groups">
       </div>

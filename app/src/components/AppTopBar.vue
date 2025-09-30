@@ -9,14 +9,14 @@
     </div>
     <div class="right-groups">
       <BilladmIconButton :svg="iconZoomOut" label="最小化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                     :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
-                     tooltipPlacement="bottom-start" @click="onMinimize"/>
+                         :color="iconColor" :hover-bg-color="hoverBgColor"
+                         tooltip-placement="bottom-start" @click="onMinimize"/>
       <BilladmIconButton :svg="iconZoomIn" label="最大化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                     :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
-                     tooltipPlacement="bottom-start" @click="onMaximize"/>
+                         :color="iconColor" :hover-bg-color="hoverBgColor"
+                         tooltip-placement="bottom-start" @click="onMaximize"/>
       <BilladmIconButton :svg="iconClose" label="关闭" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                     :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
-                     tooltipPlacement="bottom-start" @click="onClose"/>
+                         :color="iconColor" :hover-bg-color="hoverBgColor"
+                         tooltip-placement="bottom-start" @click="onClose"/>
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ import {exitApp} from "@/backend/app.js";
 const route = useRoute()
 
 // css variables
-const {minorBgColor, hoverBgColor, iconColor, uiSizeMenuWidth} = useCssVariables()
+const {hoverBgColor, iconColor, uiSizeMenuWidth} = useCssVariables()
 
 // 窗口控制
 const onMinimize = () => {

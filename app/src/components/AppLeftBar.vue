@@ -1,11 +1,11 @@
 <template>
   <div class="menu-bar">
     <BilladmIconButton :svg="iconBills" label="消费记录" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                   :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
-                   @click="navigate('tr_view')" :isActive="route.path === '/tr_view'"/>
+                       :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
+                       @click="navigate('tr_view')" :isActive="route.path === '/tr_view'"/>
     <BilladmIconButton :svg="iconStatistic" label="数据分析" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                   :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
-                   @click="navigate('da_view')" :isActive="route.path === '/da_view'"/>
+                       :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
+                       @click="navigate('da_view')" :isActive="route.path === '/da_view'"/>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ import iconStatistic from '@/assets/icons/statistic.svg?raw'
 import BilladmIconButton from '@/components/BilladmIconButton.vue'
 
 // css variables
-const {minorBgColor, hoverBgColor, iconColor, uiSizeMenuWidth} = useCssVariables()
+const {iconColor, hoverBgColor, iconActiveFgColor, uiSizeMenuWidth} = useCssVariables()
 
 const router = useRouter()
 const route = useRoute()

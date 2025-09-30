@@ -6,7 +6,7 @@
     </div>
     <div class="right-groups">
       <BilladmIconButton :svg="iconInfo" label="关于软件" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                     :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"/>
+                         :color="iconColor" :hover-bg-color="hoverBgColor"/>
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@ import iconInfo from '@/assets/icons/info.svg?raw'
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
 
 // css variables
-const {minorBgColor, hoverBgColor, iconColor, uiSizeMenuWidth} = useCssVariables()
+const {iconColor, hoverBgColor, uiSizeMenuWidth} = useCssVariables()
 
 </script>
 
