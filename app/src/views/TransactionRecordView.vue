@@ -3,7 +3,7 @@
     <!-- 上栏：工具栏 -->
     <div class="top-bar">
       <div class="left-groups">
-        <BilladmIconButton :svg="iconLeft" label="向前一天" width="30px" height="30px" :circleSize="26"
+        <BilladmIconButton :svg="iconLeft" label="向前一天" width="30px" height="30px" bg-size="26px"
                            :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
                            tooltipPlacement="bottom" @click="goToPreviousDay"/>
         <el-date-picker
@@ -17,7 +17,7 @@
             style="width: 200px;"
             :shortcuts="shortcuts"
         />
-        <BilladmIconButton :svg="iconRight" label="向后一天" width="30px" height="30px" :circleSize="26"
+        <BilladmIconButton :svg="iconRight" label="向后一天" width="30px" height="30px" bg-size="26px"
                            :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
                            tooltipPlacement="bottom" @click="goToNextDay"/>
       </div>

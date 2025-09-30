@@ -116,7 +116,7 @@ onMounted(initWorkspace)
 .center-panel {
   border-radius: 8px;
   border: 1px solid var(--billadm-color-window-border-color);
-  padding: 10px;
+  padding: 8px;
   background-color: var(--billadm-color-major-backgroud-color);
   flex: 1;
 }

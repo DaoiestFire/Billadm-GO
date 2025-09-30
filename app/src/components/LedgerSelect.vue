@@ -218,39 +218,4 @@ const onConfirm = async (data) => {
   display: flex;
   align-items: center;
 }
-
-.icon-button {
-  width: 30px;
-  height: 30px;
-  border: none;
-  background-color: transparent;
-  position: relative;
-}
-
-.icon-button:hover::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 26px;
-  height: 26px;
-  border-radius: 4px;
-  z-index: -1;
-  transition: background-color 0.3s ease;
-  background-color: var(--billadm-color-icon-hover-bg-color);
-}
-
-.icon {
-  /* 图标内容容器 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--billadm-color-icon-color);
-  fill: currentColor;
-  stroke: currentColor;
-  width: 20px;
-  height: 20px;
-  stroke-width: 0.1px;
-}
 </style>
