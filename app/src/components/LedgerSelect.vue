@@ -8,11 +8,11 @@
       </div>
       <!-- 右侧按钮 -->
       <div class="select-right">
-        <el-tooltip content="新建账本" placement="bottom-end">
-          <button class="icon-button">
-            <span v-html="iconAdd" class="icon" @click="createLedgerFunc"></span>
-          </button>
-        </el-tooltip>
+        <BilladmIconButton
+            :svg="iconAdd" label="" width="30px" height="30px" :color="iconColor"
+            :hover-bg-color="hoverBgColor" bg-size="26px" tooltip-placement="bottom-end"
+            @click="createLedgerFunc"
+        />
       </div>
     </div>
 
@@ -23,9 +23,11 @@
         <div class="item-left">{{ option.label }}</div>
         <!-- 下拉项右侧按钮 -->
         <div class="item-right">
-          <button class="icon-button">
-            <span v-html="iconTrash" class="icon" @click="deleteLedgerFunc(option.value,option.label)"></span>
-          </button>
+          <BilladmIconButton
+              :svg="iconTrash" label="" width="30px" height="30px" :color="iconColor"
+              :hover-bg-color="hoverBgColor" bg-size="26px" tooltip-placement="bottom-end"
+              @click="deleteLedgerFunc(option.value,option.label)"
+          />
         </div>
       </div>
     </div>
@@ -45,20 +47,22 @@ import {computed, defineProps, ref} from 'vue'
 import iconAdd from "@/assets/icons/add.svg?raw";
 import iconTrash from "@/assets/icons/trash.svg?raw";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
+import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useCssVariables} from "@/css/css.js";
+
+// css variables
+const {iconColor, hoverBgColor} = useCssVariables()
 
 // store
 const ledgerStore = useLedgerStore()
 
 // 定义组件属性
 const props = defineProps({
-  // 选择框高度
   height: {
     type: String,
     default: '30px'
   },
-  // 占位符文本
   placeholder: {
     type: String,
     default: '选择账本'

@@ -4,7 +4,7 @@
               buttonStyle,
               {
                 '--hover-bg-color': hoverBgColor ,
-                '--bg-size': `${props.bgSize}px`,
+                '--bg-size': props.bgSize,
               }
           ]"
           :class="[
@@ -13,9 +13,10 @@
           ]"
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave">
-    <el-tooltip :content="label" :placement="tooltipPlacement">
+    <el-tooltip v-if="label" :content="label" :placement="tooltipPlacement">
       <billadm-icon class="icon" :svg="svg" :color="isActive ? activeFgColor : color" :size="iconSize"/>
     </el-tooltip>
+    <billadm-icon v-else class="icon" :svg="svg" :color="isActive ? activeFgColor : color" :size="iconSize"/>
   </button>
 </template>
 
@@ -55,7 +56,7 @@ const props = defineProps({
   },
   bgSize: {
     type: [String, Number],
-    default: 30
+    default: '30px'
   },
   hoverBgColor: {
     type: String,
@@ -71,7 +72,7 @@ const props = defineProps({
   },
   tooltipPlacement: {
     type: String,
-    default: 'right',
+    default: 'bottom',
   },
 })
 
