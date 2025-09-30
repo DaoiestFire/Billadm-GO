@@ -8,13 +8,13 @@
       Billadm-{{ route.name }}
     </div>
     <div class="right-groups">
-      <BilladmButton :icon="iconZoomOut" label="最小化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+      <BilladmIconButton :svg="iconZoomOut" label="最小化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
                      :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
                      tooltipPlacement="bottom-start" @click="onMinimize"/>
-      <BilladmButton :icon="iconZoomIn" label="最大化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+      <BilladmIconButton :svg="iconZoomIn" label="最大化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
                      :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
                      tooltipPlacement="bottom-start" @click="onMaximize"/>
-      <BilladmButton :icon="iconClose" label="关闭" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+      <BilladmIconButton :svg="iconClose" label="关闭" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
                      :color="iconColor" :bgColor="minorBgColor" :hoverBgColor="hoverBgColor" hoverStyle="circle"
                      tooltipPlacement="bottom-start" @click="onClose"/>
     </div>
@@ -23,7 +23,7 @@
 
 <script setup>
 import {useRoute} from 'vue-router';
-import BilladmButton from '@/components/BilladmButton.vue';
+import BilladmIconButton from '@/components/BilladmIconButton.vue';
 import LedgerSelect from "@/components/LedgerSelect.vue";
 import AppDisplay from "@/components/AppDisplay.vue";
 import {useCssVariables} from '@/css/css';

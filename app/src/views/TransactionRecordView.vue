@@ -3,7 +3,7 @@
     <!-- 上栏：工具栏 -->
     <div class="top-bar">
       <div class="left-groups">
-        <BilladmButton :icon="iconLeft" label="向前一天" width="30px" height="30px" :circleSize="26"
+        <BilladmIconButton :svg="iconLeft" label="向前一天" width="30px" height="30px" :circleSize="26"
                        :color="iconColor" bgColor="transparent" :hoverBgColor="hoverBgColor" hoverStyle="circle"
                        tooltipPlacement="bottom" @click="goToPreviousDay"/>
         <el-date-picker
@@ -17,7 +17,7 @@
             style="width: 200px;"
             :shortcuts="shortcuts"
         />
-        <BilladmButton :icon="iconRight" label="向后一天" width="30px" height="30px" :circleSize="26"
+        <BilladmIconButton :svg="iconRight" label="向后一天" width="30px" height="30px" :circleSize="26"
                        :color="iconColor" bgColor="transparent" :hoverBgColor="hoverBgColor" hoverStyle="circle"
                        tooltipPlacement="bottom" @click="goToNextDay"/>
       </div>
@@ -50,7 +50,7 @@ import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
 import Pagination from '@/components/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
 import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
-import BilladmButton from "@/components/BilladmButton.vue";
+import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import iconLeft from '@/assets/icons/left.svg?raw';
 import iconRight from '@/assets/icons/right.svg?raw';
 import {useLedgerStore} from "@/stores/ledgerStore.js";
