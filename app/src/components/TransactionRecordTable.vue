@@ -26,7 +26,9 @@
               </el-space>
             </template>
             <template v-else>
-              {{ styleItem.field === 'index' ? index + 1 : formatCell(styleItem.field, item[styleItem.field]) }}
+              {{
+                styleItem.field === 'index' ? (trViewStore.pageSize * (trViewStore.currentPage - 1)) + index + 1 : formatCell(styleItem.field, item[styleItem.field])
+              }}
             </template>
           </td>
         </tr>
