@@ -9,10 +9,11 @@ import {setToEndOfDay, setToStartOfDay} from "@/backend/timerange.js";
 export const useTrViewStore = defineStore('trView', () => {
     // 定义状态
     const tableData = ref([])
-    const pages = ref(1)
-    const currentPage = ref(1)
-    const pageSize = ref(20)
-    const timeRange = ref([])
+    const pages = ref(1) // 总页数
+    const currentPage = ref(1) // 当前页数
+    const pageSize = ref(20) // 每页记录数
+    const trCount = ref(0) // 总记录数
+    const timeRange = ref([]) // 时间选择器
 
     // computed
     const tsRange = computed(() => {
@@ -46,7 +47,6 @@ export const useTrViewStore = defineStore('trView', () => {
             if (tsRange.value !== null) {
                 condition['ts_range'] = tsRange.value;
             }
-            console.log(condition)
             tableData.value = await queryTrsOnCondition(condition)
         } catch (error) {
             NotificationUtil.error(`消费记录数据刷新失败 ${error}`)
@@ -54,22 +54,10 @@ export const useTrViewStore = defineStore('trView', () => {
     }
 
     const resetView = () => {
-        tableData.value = []
-        currentPage.value = 1
-        pageSize.value = 1
+        tableData.value = [];
+        currentPage.value = 1;
+        pageSize.value = 20;
     }
-
-    watch(() => [pageSize.value, currentPage.value, tsRange.value], async () => {
-        await init()
-    })
-
-    watch(() => ledgerStore.currentLedger, async () => {
-        if (ledgerStore.currentLedger === null) {
-            resetView()
-            return
-        }
-        await refreshTableData()
-    })
 
     const refreshPages = async () => {
         try {
@@ -78,14 +66,23 @@ export const useTrViewStore = defineStore('trView', () => {
             if (tsRange.value !== null) {
                 condition['ts_range'] = tsRange.value;
             }
-            console.log(condition)
             const trCnt = await queryTrCountOnCondition(condition);
             const pagesVal = Math.ceil(trCnt / pageSize.value);
             pages.value = pagesVal < 1 ? 1 : pagesVal;
+            trCount.value = trCnt;
         } catch (error) {
             NotificationUtil.error(`查询消费记录数量失败 ${error}`);
         }
     }
+
+    watch(() => [pageSize.value, currentPage.value, tsRange.value], async () => {
+        await init();
+    })
+
+    watch(() => ledgerStore.currentLedger, async () => {
+        resetView();
+        await init();
+    })
 
     // 返回 store 的状态和方法
     return {
@@ -93,6 +90,7 @@ export const useTrViewStore = defineStore('trView', () => {
         pages,
         currentPage,
         pageSize,
+        trCount,
         timeRange,
         init,
         refreshTableData,

@@ -5,6 +5,7 @@
     <div class="center-groups">
     </div>
     <div class="right-groups">
+      <tr-view-bottom-statistics v-if="route.path==='/tr_view'"/>
       <BilladmIconButton :svg="iconInfo" label="关于软件" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
                          :color="iconColor" :hover-bg-color="hoverBgColor"/>
     </div>
@@ -12,13 +13,17 @@
 </template>
 
 <script setup>
-import {useCssVariables} from '@/css/css';
-import iconInfo from '@/assets/icons/info.svg?raw'
+import {useRoute} from "vue-router";
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
+import TrViewBottomStatistics from "@/components/TrViewBottomStatistics.vue";
+import iconInfo from '@/assets/icons/info.svg?raw';
+import {useCssVariables} from '@/css/css';
+
 
 // css variables
 const {iconColor, hoverBgColor, uiSizeMenuWidth} = useCssVariables()
 
+const route = useRoute()
 </script>
 
 <style scoped>

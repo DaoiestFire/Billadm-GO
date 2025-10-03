@@ -24,6 +24,10 @@
 
     /* 界面尺寸 */
     --billadm-ui-size-menu-width: 40px;
+
+    /* 文本 */
+    --billadm-color-text-major-color: #000000;
+    --billadm-color-text-minor-color: #7b7b7b;
 }
 
 /* 中文字体 */
