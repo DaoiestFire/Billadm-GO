@@ -12,35 +12,12 @@
 </template>
 
 <script setup>
-import {ref, watch} from "vue";
+import {ref, watch,onMounted} from "vue";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 
 const statistics = ref([]);
 
 const trViewStore = useTrViewStore()
-
-watch(() => [trViewStore.tableData, trViewStore.trCount], () => {
-  statistics.value = [];
-  const {expense, income, transfer} = aggregateByTransactionType(trViewStore.tableData);
-  statistics.value.push({
-    label: '记录数',
-    value: trViewStore.trCount,
-  });
-  statistics.value.push({
-    label: '收入',
-    value: income,
-  })
-  ;
-  statistics.value.push({
-    label: '支出',
-    value: expense,
-  });
-  statistics.value.push({
-    label: '转账',
-    value: transfer,
-  })
-  ;
-})
 
 function aggregateByTransactionType(records) {
   // 初始化聚合结果对象
@@ -70,6 +47,36 @@ function aggregateByTransactionType(records) {
 
   return result
 }
+
+const refreshStatistics = () => {
+  statistics.value = [];
+  const {expense, income, transfer} = aggregateByTransactionType(trViewStore.tableData);
+  statistics.value.push({
+    label: '记录数',
+    value: trViewStore.trCount,
+  });
+  statistics.value.push({
+    label: '收入',
+    value: income,
+  })
+  ;
+  statistics.value.push({
+    label: '支出',
+    value: expense,
+  });
+  statistics.value.push({
+    label: '转账',
+    value: transfer,
+  });
+}
+
+watch(() => [trViewStore.tableData, trViewStore.trCount], () => {
+  refreshStatistics();
+})
+
+onMounted(() => {
+  refreshStatistics();
+})
 </script>
 
 <style scoped>
