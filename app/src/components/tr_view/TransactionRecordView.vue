@@ -45,11 +45,11 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue'
-import Pagination from '@/components/tr_view/Pagination.vue'
-import CustomSelect from '@/components/CustomSelect.vue'
-import TransactionRecordOperation from '@/components/tr_view/TransactionRecordOperation.vue'
+import {ref} from 'vue';
+import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
+import Pagination from '@/components/tr_view/Pagination.vue';
+import CustomSelect from '@/components/CustomSelect.vue';
+import TransactionRecordOperation from '@/components/tr_view/TransactionRecordOperation.vue';
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import iconLeft from '@/assets/icons/left.svg?raw';
 import iconRight from '@/assets/icons/right.svg?raw';
@@ -69,11 +69,11 @@ import {
 import {useCssVariables} from "@/css/css.js";
 
 // css variables
-const {hoverBgColor, iconColor} = useCssVariables()
+const {hoverBgColor, iconColor} = useCssVariables();
 
 // store
-const ledgerStore = useLedgerStore()
-const trViewStore = useTrViewStore()
+const ledgerStore = useLedgerStore();
+const trViewStore = useTrViewStore();
 
 // 视图常量
 const options = [
@@ -151,22 +151,22 @@ const columnStyles = [
 // 消费记录表单
 const showDialog = ref(false);
 const recordData = ref({});
-const opType = ref('create')
-const dialogTitle = ref('')
+const opType = ref('create');
+const dialogTitle = ref('');
 
 // 功能函数
 const onCreate = () => {
-  dialogTitle.value = '新建消费记录'
-  recordData.value = {}
-  opType.value = 'create'
-  showDialog.value = true
+  dialogTitle.value = '新建消费记录';
+  recordData.value = {};
+  opType.value = 'create';
+  showDialog.value = true;
 }
 
 const onEditItem = (item) => {
-  dialogTitle.value = '编辑消费记录'
-  recordData.value = trDtoToTrForm(item)
-  opType.value = 'edit'
-  showDialog.value = true
+  dialogTitle.value = '编辑消费记录';
+  recordData.value = trDtoToTrForm(item);
+  opType.value = 'edit';
+  showDialog.value = true;
 }
 
 async function handleConfirm(data) {
@@ -184,9 +184,9 @@ async function handleConfirm(data) {
 }
 
 const goToPreviousDay = () => {
-  let range = trViewStore.timeRange
+  let range = trViewStore.timeRange;
   if (!Array.isArray(range)) {
-    return
+    return;
   }
   range[0] = getPreviousDay(range[0]);
   range[1] = getPreviousDay(range[1]);
@@ -194,9 +194,9 @@ const goToPreviousDay = () => {
 }
 
 const goToNextDay = () => {
-  let range = trViewStore.timeRange
+  let range = trViewStore.timeRange;
   if (!Array.isArray(range)) {
-    return
+    return;
   }
   range[0] = getNextDay(range[0]);
   range[1] = getNextDay(range[1]);
