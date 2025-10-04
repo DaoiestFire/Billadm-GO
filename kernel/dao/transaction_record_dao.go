@@ -2,7 +2,6 @@ package dao
 
 import (
 	"database/sql"
-	"fmt"
 	"sync"
 
 	"github.com/billadm/models"
@@ -114,10 +113,7 @@ func (t *transactionRecordDaoImpl) QueryPriceOnCondition(ws *workspace.Workspace
 	if err := db.Error; err != nil {
 		return 0, err
 	}
-	if price.Valid {
-		return price.Float64, nil
-	}
-	return 0, fmt.Errorf("invalid price, might be null")
+	return price.Float64, nil
 }
 
 func (t *transactionRecordDaoImpl) DeleteTrById(ws *workspace.Workspace, trId string) error {
