@@ -30,3 +30,13 @@ export function dateToUnixTimestamp(date) {
     // getTime() 返回毫秒，除以 1000 并取整得到秒
     return Math.floor(date.getTime() / 1000);
 }
+
+export function formatFloat(num) {
+    // 检查输入是否为有效数字
+    if (typeof num !== 'number' || isNaN(num)) {
+        throw new Error('输入必须是一个有效的数字');
+    }
+
+    // toFixed 返回字符串，所以需要转换为数字
+    return parseFloat(num.toFixed(2));
+}
