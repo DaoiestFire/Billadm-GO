@@ -6,19 +6,13 @@
       <!-- 模态框主体 -->
       <div class="billadm-modal" @click.stop>
         <!-- 头部标题（可选） -->
-        <div v-if="$slots.header || title" class="modal-header">
-          <slot name="header">
-            <h3 class="modal-title">{{ title }}</h3>
-          </slot>
+        <div v-if="title" class="modal-header">
+          <h3 class="modal-title">{{ title }}</h3>
         </div>
 
         <!-- 主体内容 -->
         <div class="modal-body">
-          <!-- 默认插槽或 message -->
-          <slot>
-            <p class="modal-message">{{ message }}</p>
-          </slot>
-
+          <p class="modal-message">{{ message }}</p>
           <!-- 可选输入框 -->
           <div v-if="showInput" class="input-container">
             <el-input
@@ -135,7 +129,6 @@ function handleConfirm() {
     item: props.item
   };
   emit('confirm', data);
-  // 不在此处关闭，由 confirm 回调决定是否关闭（也可保持自动关闭）
   closeDialog();
 }
 </script>
@@ -155,13 +148,12 @@ function handleConfirm() {
 }
 
 .billadm-modal {
-  background-color: white;
+  background-color: var(--billadm-color-major-backgroud-color);
   border-radius: 8px;
-  padding: 20px;
+  padding: 16px;
   margin-top: calc(100vh / 4);
   min-width: 300px;
   max-width: 90vw;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 头部样式 */
@@ -173,7 +165,7 @@ function handleConfirm() {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: var(--billadm-color-text-major-color);
 }
 
 .modal-body {
@@ -181,25 +173,23 @@ function handleConfirm() {
 }
 
 .modal-message {
-  margin: 0 0 20px 0;
+  margin: 0 0 16px 0;
   font-size: 16px;
-  color: #555;
+  color: var(--billadm-color-text-minor-color);
 }
 
 .input-container {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .modal-footer {
   margin-top: 20px;
-  border-top: 1px solid #eee;
-  padding-top: 16px;
 }
 
 .button-container {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .dialog-button {
