@@ -28,3 +28,14 @@ type TransactionRecord struct {
 func (tr *TransactionRecord) TableName() string {
 	return "tbl_billadm_transaction_record"
 }
+
+func GetTotalPrice(trs []*TransactionRecord) float64 {
+	if len(trs) == 0 {
+		return 0
+	}
+	var price float64
+	for _, tr := range trs {
+		price += tr.Price
+	}
+	return price
+}

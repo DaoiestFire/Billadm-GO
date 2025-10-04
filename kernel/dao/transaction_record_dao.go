@@ -28,7 +28,7 @@ func GetTrDao() TransactionRecordDao {
 type TransactionRecordDao interface {
 	CreateTr(ws *workspace.Workspace, record *models.TransactionRecord) error
 	ListAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*models.TransactionRecord, error)
-	QueryTrsByPage(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error)
+	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error)
 	QueryCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 	CountTrByLedgerId(ws *workspace.Workspace, ledgerId string) (int64, error)
@@ -59,7 +59,7 @@ func (t *transactionRecordDaoImpl) ListAllTrByLedgerId(ws *workspace.Workspace, 
 	return trs, nil
 }
 
-func (t *transactionRecordDaoImpl) QueryTrsByPage(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error) {
+func (t *transactionRecordDaoImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error) {
 	trs := make([]*models.TransactionRecord, 0)
 	db := ws.GetDb().Where("ledger_id = ?", condition.LedgerID)
 	db = db.Order("transaction_at desc, category desc, price desc")
@@ -68,6 +68,9 @@ func (t *transactionRecordDaoImpl) QueryTrsByPage(ws *workspace.Workspace, condi
 	}
 	if len(condition.TsRange) == 2 {
 		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
+	}
+	if len(condition.TransactionType) > 0 {
+		db = db.Where("transaction_type IN (?)", condition.TransactionType)
 	}
 	db = db.Find(&trs)
 	if err := db.Error; err != nil {

@@ -30,6 +30,8 @@ func ServeAPI(ginServer *gin.Engine) {
 	// workspace
 	ginServer.POST("/api/v1/workspace/open_workspace", openWorkspace)
 	ginServer.POST("/api/v1/workspace/is_opened", hasOpenedWorkspace)
+	// statistics
+	ginServer.POST("/api/v1/statistics/tr", getTrStatistics)
 }
 
 func JsonArg(c *gin.Context, result *models.Result) (arg map[string]interface{}, ok bool) {

@@ -35,6 +35,7 @@ type TransactionRecordService interface {
 	ListAllTrsByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*dto.TransactionRecordDto, error)
 	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*dto.TransactionRecordDto, error)
 	QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error)
+	QueryTrStatisticsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (*dto.TrStatistics, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 }
 
@@ -112,7 +113,7 @@ func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspa
 
 	var err error
 	// 先查询到所有的tr
-	trs, err := t.trDao.QueryTrsByPage(ws, condition)
+	trs, err := t.trDao.QueryTrsOnCondition(ws, condition)
 	if err != nil {
 		return nil, err
 	}
@@ -145,6 +146,38 @@ func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ws *workspace.Wor
 
 	ws.GetLogger().Infof("query count of transaction records success, len: %d", cnt)
 	return cnt, nil
+}
+
+func (t *transactionRecordServiceImpl) QueryTrStatisticsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (*dto.TrStatistics, error) {
+	ws.GetLogger().Infof("start to query tr statistics")
+
+	ret := &dto.TrStatistics{}
+	// 收入
+	condition.TransactionType = []string{models.Income}
+	trs, err := t.trDao.QueryTrsOnCondition(ws, condition)
+	if err != nil {
+		return ret, err
+	}
+	ret.Income = models.GetTotalPrice(trs)
+
+	// 支出
+	condition.TransactionType = []string{models.Expense}
+	trs, err = t.trDao.QueryTrsOnCondition(ws, condition)
+	if err != nil {
+		return ret, err
+	}
+	ret.Expense = models.GetTotalPrice(trs)
+
+	// 转账
+	condition.TransactionType = []string{models.Transfer}
+	trs, err = t.trDao.QueryTrsOnCondition(ws, condition)
+	if err != nil {
+		return ret, err
+	}
+	ret.Transfer = models.GetTotalPrice(trs)
+
+	ws.GetLogger().Infof("query tr statistics, statistics: %v %v %v", ret.Income, ret.Expense, ret.Transfer)
+	return ret, nil
 }
 
 func (t *transactionRecordServiceImpl) DeleteTrById(ws *workspace.Workspace, trId string) error {
