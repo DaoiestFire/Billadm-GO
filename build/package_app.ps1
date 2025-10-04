@@ -12,6 +12,7 @@ $buildDir = Join-Path $projectRoot "build"
 $electronDir = Join-Path $projectRoot "electron"
 $appDistDir = Join-Path $projectRoot "app\dist"
 $kernelExe = Join-Path $projectRoot "kernel\Billadm-Kernel.exe"
+$sqlPath = Join-Path $projectRoot "kernel\billadm.sql"
 
 # 输出开始信息
 Write-Host "📦 开始执行 Electron 应用打包流程" -ForegroundColor Cyan
@@ -56,6 +57,7 @@ Write-Host "✅ 后端构建成功" -ForegroundColor Green
 Write-Host "`n🧹 正在清理 electron 目录旧文件..." -ForegroundColor Yellow
 $targetDistDir = Join-Path $electronDir "dist"
 $targetKernelExe = Join-Path $electronDir "Billadm-Kernel.exe"
+$targetSqlPath = Join-Path $electronDir "billadm.sql"
 
 # 删除 dist 目录（如果存在）
 if (Test-Path $targetDistDir)
@@ -83,6 +85,21 @@ if (Test-Path $targetKernelExe)
     catch
     {
         Write-Error "❌ 删除 Billadm-Kernel.exe 失败: $( $_.Exception.Message )"
+        exit 1
+    }
+}
+
+# 删除旧的 billadm.sql（如果存在）
+if (Test-Path $targetSqlPath)
+{
+    try
+    {
+        Remove-Item $targetSqlPath -Force -ErrorAction Stop
+        Write-Host "🗑️  已删除旧的 billadm.sql" -ForegroundColor DarkGray
+    }
+    catch
+    {
+        Write-Error "❌ 删除 billadm.sql 失败: $( $_.Exception.Message )"
         exit 1
     }
 }
@@ -124,6 +141,25 @@ try
 catch
 {
     Write-Error "❌ 拷贝可执行文件失败: $( $_.Exception.Message )"
+    exit 1
+}
+
+# 拷贝sql文件到 electron
+Write-Host "`n📄 正在拷贝billadm.sql到 electron..." -ForegroundColor Yellow
+if (-not (Test-Path $sqlPath))
+{
+    Write-Error "❌ 找不到sql文件: $sqlPath"
+    exit 1
+}
+
+try
+{
+    Copy-Item -Path $sqlPath -Destination $electronDir -Force -ErrorAction Stop
+    Write-Host "✅ 已拷贝 billadm.sql 到 $electronDir" -ForegroundColor Green
+}
+catch
+{
+    Write-Error "❌ 拷贝sql文件失败: $( $_.Exception.Message )"
     exit 1
 }
 

@@ -3,14 +3,14 @@ package util
 import (
 	"database/sql"
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-
-	"github.com/billadm/constant"
 )
 
 // OpenAndInit 打开数据库并执行初始化脚本
@@ -24,7 +24,13 @@ func OpenAndInit(dbPath string) error {
 		return fmt.Errorf("数据库连接验证失败: %w", err)
 	}
 
-	if err = executeInitScript(database, constant.Sql); err != nil {
+	sqlPath := filepath.Join(GetRootDir(), "billadm.sql")
+	sqlContent, err := os.ReadFile(sqlPath)
+	if err != nil {
+		return err
+	}
+
+	if err = executeInitScript(database, string(sqlContent)); err != nil {
 		database.Close()
 		return fmt.Errorf("执行初始化脚本失败: %w", err)
 	}
