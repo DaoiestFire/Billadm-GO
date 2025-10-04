@@ -156,7 +156,7 @@ const dialogTitle = ref('')
 
 // 功能函数
 const onCreate = () => {
-  dialogTitle.value = '创建消费记录'
+  dialogTitle.value = '新建消费记录'
   recordData.value = {}
   opType.value = 'create'
   showDialog.value = true

@@ -31,14 +31,17 @@
         </div>
       </div>
     </div>
-    <ConfirmDialog v-model:visible="showLedgerConfirmDialog"
-                   :showInput="showLedgerInput"
-                   :message="message"
-                   :cancel-color="cancelColor"
-                   :confirm-label="confirmLabel"
-                   :confirm-color="confirmColor"
-                   :item="dialogItem"
-                   @confirm="onConfirm"/>
+    <billadm-modal
+        v-model:visible="showLedgerConfirmDialog"
+        :showInput="showLedgerInput"
+        :title="title"
+        :message="message"
+        :cancel-color="cancelColor"
+        :confirm-label="confirmLabel"
+        :confirm-color="confirmColor"
+        :item="dialogItem"
+        @confirm="onConfirm"
+    />
   </div>
 </template>
 
@@ -46,7 +49,7 @@
 import {computed, defineProps, ref} from 'vue'
 import iconAdd from "@/assets/icons/add.svg?raw";
 import iconTrash from "@/assets/icons/trash.svg?raw";
-import ConfirmDialog from "@/components/ConfirmDialog.vue";
+import BilladmModal from "@/components/BilladmModal.vue";
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useCssVariables} from "@/css/css.js";
@@ -107,15 +110,17 @@ document.addEventListener('click', (event) => {
 const {positiveColor, negativeColor} = useCssVariables()
 
 // 各种框的控制变量
-const showLedgerConfirmDialog = ref(false)
-const showLedgerInput = ref(false)
-const message = ref('')
-const confirmLabel = ref('确认')
-const confirmColor = ref('')
-const cancelColor = ref('')
-const dialogItem = ref(null)
+const showLedgerConfirmDialog = ref(false);
+const showLedgerInput = ref(false);
+const title = ref('');
+const message = ref('');
+const confirmLabel = ref('确认');
+const confirmColor = ref('');
+const cancelColor = ref('');
+const dialogItem = ref(null);
 
 const createLedgerFunc = () => {
+  title.value = '新建账本';
   message.value = '输入账本名称';
   confirmLabel.value = '创建';
   confirmColor.value = positiveColor.value;
@@ -126,6 +131,7 @@ const createLedgerFunc = () => {
 
 const deleteLedgerFunc = (id, name) => {
   dialogItem.value = id;
+  title.value = '删除账本';
   message.value = `确认删除账本<${name}>吗？`;
   confirmLabel.value = '删除';
   confirmColor.value = negativeColor.value;

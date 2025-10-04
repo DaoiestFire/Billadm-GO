@@ -77,7 +77,6 @@ export const useTrViewStore = defineStore('trView', () => {
                 condition['ts_range'] = tsRange.value;
             }
             trStatistics.value = await queryTrStatisticsOnCondition(condition)
-            console.log(trStatistics.value)
         } catch (error) {
             NotificationUtil.error(`消费记录统计数据刷新失败 ${error}`)
         }

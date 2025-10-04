@@ -35,8 +35,15 @@
         </tbody>
       </table>
     </el-scrollbar>
-    <ConfirmDialog v-model:visible="showTrConfirmDialog" :message="message" :cancel-color="cancelColor"
-                   :confirm-label="confirmLabel" :confirm-color="confirmColor" @confirm="confirmFunc"/>
+    <billadm-modal
+        v-model:visible="showTrConfirmDialog"
+        title="删除消费记录"
+        :message="message"
+        :cancel-color="cancelColor"
+        :confirm-label="confirmLabel"
+        :confirm-color="confirmColor"
+        @confirm="confirmFunc"
+    />
   </div>
 </template>
 
@@ -46,7 +53,7 @@ import {useCssVariables} from '@/css/css.js'
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import {deleteTrById} from "@/backend/tr.js";
 import NotificationUtil from "@/backend/notification.js";
-import ConfirmDialog from "@/components/ConfirmDialog.vue";
+import BilladmModal from "@/components/BilladmModal.vue";
 
 // emit
 const emit = defineEmits(['edit-item'])
