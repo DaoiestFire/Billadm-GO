@@ -176,6 +176,7 @@ function handleConfirm() {
   margin: 0 0 16px 0;
   font-size: 16px;
   color: var(--billadm-color-text-minor-color);
+  white-space: pre-line;
 }
 
 .input-container {

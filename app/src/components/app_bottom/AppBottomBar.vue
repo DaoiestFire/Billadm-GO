@@ -7,9 +7,9 @@
     <div class="right-groups">
       <tr-view-bottom-statistics v-if="shouldShowStatistics"/>
       <billadm-modal
-          :visible="showAboutApp"
+          v-model:visible="showAboutApp"
           title="关于"
-          message="应用名称 billadm\n应用版本 0.1.0"
+          :message="'应用名称 billadm\n应用版本 0.1.0'"
       />
       <billadm-icon-button
           :svg="iconInfo"
