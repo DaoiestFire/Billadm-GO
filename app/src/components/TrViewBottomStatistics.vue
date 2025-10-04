@@ -24,14 +24,14 @@ const statistics = computed(() => {
       value: trViewStore.trCount,
     }, {
       label: '收入',
-      value: trViewStore.trStatistics.income ?? 0,
+      value: trViewStore.trStatistics?.income ?? 0,
     }, {
       label: '支出',
-      value: trViewStore.trStatistics.expense ?? 0,
+      value: trViewStore.trStatistics?.expense ?? 0,
     },
     {
       label: '转账',
-      value: trViewStore.trStatistics.transfer ?? 0,
+      value: trViewStore.trStatistics?.transfer ?? 0,
     }
   ];
 })

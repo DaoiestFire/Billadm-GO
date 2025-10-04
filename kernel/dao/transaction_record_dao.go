@@ -96,7 +96,8 @@ func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace
 
 func (t *transactionRecordDaoImpl) QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (float64, error) {
 	var price float64
-	db := ws.GetDb().Where("ledger_id = ?", condition.LedgerID)
+	db := ws.GetDb().Model(&models.TransactionRecord{})
+	db = db.Where("ledger_id = ?", condition.LedgerID)
 	db = db.Order("transaction_at desc, category desc, price desc")
 	if condition.Offset != -1 && condition.Limit != -1 {
 		db = db.Offset(condition.Offset).Limit(condition.Limit)
