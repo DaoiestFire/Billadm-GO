@@ -39,6 +39,14 @@ export async function deleteTrById(id) {
     }
 }
 
+export async function queryTrStatisticsOnCondition(condition) {
+    const resp = await api_client.post('/v1/statistics/tr', condition);
+    if (!isResponseSuccess(resp)) {
+        throw "queryTrStatisticsOnCondition 响应错误"
+    }
+    return resp.data
+}
+
 /**
  * 构造符合后端 TransactionRecordDto 的请求对象 表单数据转化为dto
  * @param {Object} data - 输入数据，字段可选

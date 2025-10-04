@@ -171,14 +171,15 @@ const onEditItem = (item) => {
 
 async function handleConfirm(data) {
   try {
-    const transactionRecord = trFormToTrDto(data, ledgerStore.currentLedgerId)
-    await createTrForLedger(transactionRecord)
+    const transactionRecord = trFormToTrDto(data, ledgerStore.currentLedgerId);
+    await createTrForLedger(transactionRecord);
     if (opType.value === 'edit') {
-      await deleteTrById(data.id)
+      await deleteTrById(data.id);
     }
-    await trViewStore.init()
+    await trViewStore.init();
+    await trViewStore.refreshStatistics();
   } catch (error) {
-    NotificationUtil.error(`消费记录操作失败 ${error}`)
+    NotificationUtil.error(`消费记录操作失败 ${error}`);
   }
 }
 

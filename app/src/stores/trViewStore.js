@@ -1,6 +1,6 @@
 import {computed, ref, watch} from "vue";
 import {defineStore} from 'pinia';
-import {queryTrCountOnCondition, queryTrsOnCondition} from "@/backend/tr.js";
+import {queryTrCountOnCondition, queryTrsOnCondition, queryTrStatisticsOnCondition} from "@/backend/tr.js";
 import NotificationUtil from "@/backend/notification.js";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {dateToUnixTimestamp} from "@/backend/functions.js";
@@ -14,6 +14,7 @@ export const useTrViewStore = defineStore('trView', () => {
     const pageSize = ref(20) // 每页记录数
     const trCount = ref(0) // 总记录数
     const timeRange = ref([]) // 时间选择器
+    const trStatistics = ref({}) // 时间范围内消费记录的统计数据
 
     // computed
     const tsRange = computed(() => {
@@ -36,29 +37,6 @@ export const useTrViewStore = defineStore('trView', () => {
         await refreshTableData()
     }
 
-    // set 函数
-    const refreshTableData = async () => {
-        try {
-            const offset = (currentPage.value - 1) * pageSize.value
-            let condition = {};
-            condition['ledger_id'] = ledgerStore.currentLedgerId;
-            condition['offset'] = offset;
-            condition['limit'] = pageSize.value;
-            if (tsRange.value !== null) {
-                condition['ts_range'] = tsRange.value;
-            }
-            tableData.value = await queryTrsOnCondition(condition)
-        } catch (error) {
-            NotificationUtil.error(`消费记录数据刷新失败 ${error}`)
-        }
-    }
-
-    const resetView = () => {
-        tableData.value = [];
-        currentPage.value = 1;
-        pageSize.value = 20;
-    }
-
     const refreshPages = async () => {
         try {
             let condition = {};
@@ -75,13 +53,54 @@ export const useTrViewStore = defineStore('trView', () => {
         }
     }
 
+    const refreshTableData = async () => {
+        try {
+            const offset = (currentPage.value - 1) * pageSize.value
+            let condition = {};
+            condition['ledger_id'] = ledgerStore.currentLedgerId;
+            condition['offset'] = offset;
+            condition['limit'] = pageSize.value;
+            if (tsRange.value !== null) {
+                condition['ts_range'] = tsRange.value;
+            }
+            tableData.value = await queryTrsOnCondition(condition)
+        } catch (error) {
+            NotificationUtil.error(`消费记录数据刷新失败 ${error}`)
+        }
+    }
+
+    const refreshStatistics = async () => {
+        try {
+            let condition = {};
+            condition['ledger_id'] = ledgerStore.currentLedgerId;
+            if (tsRange.value !== null) {
+                condition['ts_range'] = tsRange.value;
+            }
+            trStatistics.value = await queryTrStatisticsOnCondition(condition)
+            console.log(trStatistics.value)
+        } catch (error) {
+            NotificationUtil.error(`消费记录统计数据刷新失败 ${error}`)
+        }
+    }
+
+    const resetView = () => {
+        tableData.value = [];
+        currentPage.value = 1;
+        pageSize.value = 20;
+    }
+
     watch(() => [pageSize.value, currentPage.value, tsRange.value], async () => {
         await init();
+    })
+
+    watch(() => trCount.value, async () => {
+        await refreshStatistics();
     })
 
     watch(() => ledgerStore.currentLedger, async () => {
         resetView();
         await init();
+        await refreshStatistics();
     })
 
     // 返回 store 的状态和方法
@@ -92,8 +111,10 @@ export const useTrViewStore = defineStore('trView', () => {
         pageSize,
         trCount,
         timeRange,
+        trStatistics,
         init,
         refreshTableData,
         refreshPages,
+        refreshStatistics,
     }
 })
