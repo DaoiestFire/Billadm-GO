@@ -37,9 +37,9 @@
 
 <script setup>
 import {onMounted, ref} from "vue";
-import AppTopBar from '@/components/AppTopBar.vue';
+import AppTopBar from '@/components/app_top/AppTopBar.vue';
 import AppLeftBar from '@/components/AppLeftBar.vue';
-import AppBottomBar from "@/components/AppBottomBar.vue";
+import AppBottomBar from "@/components/app_bottom/AppBottomBar.vue";
 import FileDirSelect from "@/components/FileDirSelect.vue";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";

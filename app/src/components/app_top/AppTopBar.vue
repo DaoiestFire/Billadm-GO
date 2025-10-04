@@ -24,9 +24,9 @@
 <script setup>
 import {useRoute} from 'vue-router';
 import BilladmIconButton from '@/components/BilladmIconButton.vue';
-import LedgerSelect from "@/components/LedgerSelect.vue";
+import LedgerSelect from "@/components/app_top/LedgerSelect.vue";
 import AppDisplay from "@/components/AppDisplay.vue";
-import {useCssVariables} from '@/css/css';
+import {useCssVariables} from '@/css/css.js';
 import iconZoomOut from '@/assets/icons/zoom-out.svg?raw';
 import iconZoomIn from '@/assets/icons/zoom-in.svg?raw';
 import iconClose from '@/assets/icons/close.svg?raw';

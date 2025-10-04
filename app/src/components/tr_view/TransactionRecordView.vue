@@ -46,10 +46,10 @@
 
 <script setup>
 import {ref} from 'vue'
-import TransactionRecordTable from '@/components/TransactionRecordTable.vue'
-import Pagination from '@/components/Pagination.vue'
+import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue'
+import Pagination from '@/components/tr_view/Pagination.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
-import TransactionRecordOperation from '@/components/TransactionRecordOperation.vue'
+import TransactionRecordOperation from '@/components/tr_view/TransactionRecordOperation.vue'
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import iconLeft from '@/assets/icons/left.svg?raw';
 import iconRight from '@/assets/icons/right.svg?raw';

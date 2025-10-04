@@ -14,7 +14,7 @@
 <script setup>
 import {computed} from "vue";
 import {useTrViewStore} from "@/stores/trViewStore.js";
-import {formatFloat} from "../backend/functions.js";
+import {formatFloat} from "../../backend/functions.js";
 
 const trViewStore = useTrViewStore()
 

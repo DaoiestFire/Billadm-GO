@@ -42,7 +42,7 @@
 
 <script setup>
 import {ref} from 'vue'
-import {useCssVariables} from '@/css/css'
+import {useCssVariables} from '@/css/css.js'
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import {deleteTrById} from "@/backend/tr.js";
 import NotificationUtil from "@/backend/notification.js";

@@ -16,9 +16,9 @@
 import {computed} from "vue";
 import {useRoute} from "vue-router";
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
-import TrViewBottomStatistics from "@/components/TrViewBottomStatistics.vue";
+import TrViewBottomStatistics from "@/components/app_bottom/TrViewBottomStatistics.vue";
 import iconInfo from '@/assets/icons/info.svg?raw';
-import {useCssVariables} from '@/css/css';
+import {useCssVariables} from '@/css/css.js';
 
 
 // css variables

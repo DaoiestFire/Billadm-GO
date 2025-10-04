@@ -1,7 +1,7 @@
 import { createRouter, createMemoryHistory } from 'vue-router';
 import Layout from '@/components/Layout.vue';
-import TransactionRecordView from '@/views/TransactionRecordView.vue';
-import DataAnalysisView from '@/views/DataAnalysisView.vue';
+import TransactionRecordView from '@/components/tr_view/TransactionRecordView.vue';
+import DataAnalysisView from '@/components/da_view/DataAnalysisView.vue';
 
 const routes = [
   {
