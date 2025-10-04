@@ -1,10 +1,10 @@
 package dao
 
 import (
-	"github.com/billadm/models/dto"
 	"sync"
 
 	"github.com/billadm/models"
+	"github.com/billadm/models/dto"
 	"github.com/billadm/workspace"
 )
 
@@ -30,6 +30,7 @@ type TransactionRecordDao interface {
 	ListAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*models.TransactionRecord, error)
 	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error)
 	QueryCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error)
+	QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (float64, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 	CountTrByLedgerId(ws *workspace.Workspace, ledgerId string) (int64, error)
 	DeleteAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) error
@@ -91,6 +92,26 @@ func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace
 		return 0, err
 	}
 	return count, nil
+}
+
+func (t *transactionRecordDaoImpl) QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (float64, error) {
+	var price float64
+	db := ws.GetDb().Where("ledger_id = ?", condition.LedgerID)
+	db = db.Order("transaction_at desc, category desc, price desc")
+	if condition.Offset != -1 && condition.Limit != -1 {
+		db = db.Offset(condition.Offset).Limit(condition.Limit)
+	}
+	if len(condition.TsRange) == 2 {
+		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
+	}
+	if len(condition.TransactionType) > 0 {
+		db = db.Where("transaction_type IN (?)", condition.TransactionType)
+	}
+	db = db.Select("SUM(price)").Scan(&price)
+	if err := db.Error; err != nil {
+		return price, err
+	}
+	return price, nil
 }
 
 func (t *transactionRecordDaoImpl) DeleteTrById(ws *workspace.Workspace, trId string) error {
