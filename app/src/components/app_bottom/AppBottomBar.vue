@@ -9,7 +9,7 @@
       <billadm-modal
           v-model:visible="showAboutApp"
           title="关于"
-          :message="'应用名称 billadm\n应用版本 0.1.0'"
+          :message="`应用名称 ${appName}\n应用版本 ${appVersion}`"
       />
       <billadm-icon-button
           :svg="iconInfo"
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import TrViewBottomStatistics from "@/components/app_bottom/TrViewBottomStatistics.vue";
@@ -44,6 +44,13 @@ const shouldShowStatistics = computed(() => {
 })
 
 const showAboutApp = ref(false);
+let appName = '';
+let appVersion = '';
+
+onMounted(async () => {
+  appName = await window.electronAPI.getAppInfo('name');
+  appVersion = await window.electronAPI.getAppInfo('version');
+})
 </script>
 
 <style scoped>

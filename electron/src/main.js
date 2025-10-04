@@ -156,6 +156,17 @@ const createWindow = () => {
     ipcMain.on('workspace:set', (event, workspaceDir) => {
         billadmCfg.workspaceDir = workspaceDir;
     });
+
+    ipcMain.handle('app', async (event, field) => {
+        switch (field) {
+            case 'name':
+                return app.getName();
+            case 'version':
+                return app.getVersion();
+            default:
+                return '';
+        }
+    });
 };
 
 app.whenReady().then(() => {

@@ -15,5 +15,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     },
     setWorkspace: (workspaceDir) => {
         ipcRenderer.send('workspace:set', workspaceDir);
-    }
+    },
+    getAppInfo: async (field) => {
+        return await ipcRenderer.invoke('app', field);
+    },
 })

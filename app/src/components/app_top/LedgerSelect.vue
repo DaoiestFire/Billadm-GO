@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import {computed, defineProps, ref} from 'vue'
+import {computed, ref} from 'vue'
 import iconAdd from "@/assets/icons/add.svg?raw";
 import iconTrash from "@/assets/icons/trash.svg?raw";
 import BilladmModal from "@/components/BilladmModal.vue";
