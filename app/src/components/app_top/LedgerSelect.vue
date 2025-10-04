@@ -34,6 +34,7 @@
     <billadm-modal
         v-model:visible="showLedgerConfirmDialog"
         :showInput="showLedgerInput"
+        :show-buttons="true"
         :title="title"
         :message="message"
         :cancel-color="cancelColor"

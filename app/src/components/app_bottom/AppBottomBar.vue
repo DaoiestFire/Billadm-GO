@@ -6,19 +6,32 @@
     </div>
     <div class="right-groups">
       <tr-view-bottom-statistics v-if="shouldShowStatistics"/>
-      <BilladmIconButton :svg="iconInfo" label="关于软件" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                         :color="iconColor" :hover-bg-color="hoverBgColor"/>
+      <billadm-modal
+          :visible="showAboutApp"
+          title="关于"
+          message="应用名称 billadm\n应用版本 0.1.0"
+      />
+      <billadm-icon-button
+          :svg="iconInfo"
+          label="关于软件"
+          :width="uiSizeMenuWidth"
+          :height="uiSizeMenuWidth"
+          :color="iconColor"
+          :hover-bg-color="hoverBgColor"
+          @click="showAboutApp=!showAboutApp"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import {computed} from "vue";
+import {computed, ref} from "vue";
 import {useRoute} from "vue-router";
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import TrViewBottomStatistics from "@/components/app_bottom/TrViewBottomStatistics.vue";
 import iconInfo from '@/assets/icons/info.svg?raw';
 import {useCssVariables} from '@/css/css.js';
+import BilladmModal from "@/components/BilladmModal.vue";
 
 
 // css variables
@@ -29,6 +42,8 @@ const route = useRoute()
 const shouldShowStatistics = computed(() => {
   return route.path === '/tr_view'
 })
+
+const showAboutApp = ref(false);
 </script>
 
 <style scoped>

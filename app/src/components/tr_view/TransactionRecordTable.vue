@@ -37,6 +37,7 @@
     </el-scrollbar>
     <billadm-modal
         v-model:visible="showTrConfirmDialog"
+        :show-buttons="true"
         title="删除消费记录"
         :message="message"
         :cancel-color="cancelColor"

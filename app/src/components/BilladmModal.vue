@@ -58,7 +58,7 @@ import {nextTick, ref, watch} from 'vue';
 const props = defineProps({
   visible: {
     type: Boolean,
-    required: true
+    required: false
   },
   title: {
     type: String,
@@ -94,7 +94,7 @@ const props = defineProps({
   },
   showButtons: {
     type: Boolean,
-    default: true // 控制按钮是否显示
+    default: false
   },
   item: {
     type: [Object, null],
