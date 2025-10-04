@@ -1,6 +1,8 @@
 package dao
 
 import (
+	"database/sql"
+	"fmt"
 	"sync"
 
 	"github.com/billadm/models"
@@ -95,7 +97,7 @@ func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace
 }
 
 func (t *transactionRecordDaoImpl) QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (float64, error) {
-	var price float64
+	var price sql.NullFloat64
 	db := ws.GetDb().Model(&models.TransactionRecord{})
 	db = db.Where("ledger_id = ?", condition.LedgerID)
 	db = db.Order("transaction_at desc, category desc, price desc")
@@ -110,9 +112,12 @@ func (t *transactionRecordDaoImpl) QueryPriceOnCondition(ws *workspace.Workspace
 	}
 	db = db.Select("SUM(price)").Scan(&price)
 	if err := db.Error; err != nil {
-		return price, err
+		return 0, err
 	}
-	return price, nil
+	if price.Valid {
+		return price.Float64, nil
+	}
+	return 0, fmt.Errorf("invalid price, might be null")
 }
 
 func (t *transactionRecordDaoImpl) DeleteTrById(ws *workspace.Workspace, trId string) error {
