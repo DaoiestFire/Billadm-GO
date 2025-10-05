@@ -1,18 +1,14 @@
 <template>
-  <button class="common-icon"
-          :style="[
+  <button
+      class="common-icon"
+      :style="[
               buttonStyle,
               {
-                '--hover-bg-color': hoverBgColor ,
+                '--hover-bg-color': hoverBgColor,
                 '--bg-size': props.bgSize,
               }
           ]"
-          :class="[
-              { 'is-hovered': isHovered || isActive },
-              { 'is-active': isActive }
-          ]"
-          @mouseenter="handleMouseEnter"
-          @mouseleave="handleMouseLeave">
+      :class="{ 'is-active': isActive }">
     <el-tooltip v-if="label" :content="label" :placement="tooltipPlacement">
       <billadm-icon class="icon" :svg="svg" :color="isActive ? activeFgColor : color" :size="iconSize"/>
     </el-tooltip>
@@ -21,7 +17,7 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+import {computed} from 'vue';
 import BilladmIcon from "@/components/BilladmIcon.vue";
 
 const props = defineProps({
@@ -35,13 +31,12 @@ const props = defineProps({
   },
   width: {
     type: String,
-    default: 30
+    default: '30px'
   },
   height: {
     type: String,
-    default: 30
+    default: '30px'
   },
-  // icon
   iconSize: {
     type: [String, Number],
     default: '20px'
@@ -76,16 +71,6 @@ const props = defineProps({
   },
 })
 
-const isHovered = ref(false)
-
-const handleMouseEnter = () => {
-  isHovered.value = true
-}
-
-const handleMouseLeave = () => {
-  isHovered.value = false
-}
-
 const buttonStyle = computed(() => {
   return {
     width: typeof props.width === 'number' ? `${props.width}px` : props.width,
@@ -109,7 +94,7 @@ const buttonStyle = computed(() => {
   z-index: 1;
 }
 
-.common-icon.is-hovered::after,
+.common-icon:hover::after,
 .common-icon.is-active::after {
   content: '';
   position: absolute;
@@ -123,8 +108,8 @@ const buttonStyle = computed(() => {
   transition: background-color 0.3s ease;
 }
 
-.common-icon.is-hovered::after {
-  background-color: var(--billadm-color-icon-hover-bg-color);
+.common-icon:hover::after {
+  background-color: var(--hover-bg-color);
 }
 
 .common-icon.is-active::after {

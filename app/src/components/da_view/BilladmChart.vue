@@ -92,6 +92,7 @@ const toggleFullscreen = () => {
   justify-content: space-between;
   align-items: center;
   padding: 0 8px;
+  border-bottom: 1px solid var(--billadm-color-window-border-color);
 }
 
 .chart-title {
