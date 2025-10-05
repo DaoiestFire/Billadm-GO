@@ -5,6 +5,8 @@ import App from '@/App.vue';
 import VueECharts from 'vue-echarts';
 import * as echarts from 'echarts/core';
 import {CanvasRenderer} from 'echarts/renderers';
+import {GridComponent, TooltipComponent} from "echarts/components";
+import {LineChart} from "echarts/charts";
 import 'normalize.css';
 import '@/style.css';
 
@@ -13,6 +15,6 @@ const app = createApp(App);
 
 app.use(pinia);
 app.use(router);
-echarts.use([CanvasRenderer]);
+echarts.use([CanvasRenderer, TooltipComponent, GridComponent, LineChart]);
 app.component('v-chart', VueECharts);
 app.mount('#app');
