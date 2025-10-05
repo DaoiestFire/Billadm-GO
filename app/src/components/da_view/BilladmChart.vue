@@ -96,6 +96,7 @@ const toggleFullscreen = () => {
   width: 80% !important;
   height: 80%;
   border-radius: 16px;
+  z-index: 4;
 }
 
 .chart-header {

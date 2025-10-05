@@ -28,19 +28,15 @@
     </div>
 
     <div class="middle-section">
-      <billadm-chart
-          :title="chart.title"
-          :option="chart.option"
-          :height="chart.height||'300px'"
-          :fullscreen="chart.isFullscreen"
-      />
+      <billadm-chart-display :charts="chartData"/>
     </div>
   </div>
 </template>
 
 <script setup>
+import {ref} from 'vue';
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
-import BilladmChart from "@/components/da_view/BilladmChart.vue";
+import BilladmChartDisplay from "@/components/da_view/BilladmChartDisplay.vue";
 import iconLeft from '@/assets/icons/left.svg?raw';
 import iconRight from '@/assets/icons/right.svg?raw';
 import {useTrViewStore} from "@/stores/trViewStore.js";
@@ -70,17 +66,44 @@ const goToNextDay = () => {
 }
 
 // 图表
-const chart = {
-  title: '销售额趋势',
-  option: {
-    tooltip: {trigger: 'axis'},
-    xAxis: {type: 'category', data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']},
-    yAxis: {type: 'value'},
-    series: [{data: [120, 132, 101, 134, 90, 230, 210], type: 'line'}]
+const chartData = ref([
+  {
+    title: '销售额趋势',
+    option: {
+      tooltip: {trigger: 'axis'},
+      xAxis: {type: 'category', data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']},
+      yAxis: {type: 'value'},
+      series: [{data: [120, 132, 101, 134, 90, 230, 210], type: 'line'}]
+    },
+    height: '300px',
+    isFullscreen: false
   },
-  height: '300px',
-  isFullscreen: false
-};
+  {
+    title: '产品分布',
+    option: {
+      tooltip: {trigger: 'item'},
+      series: [{
+        type: 'pie',
+        data: [
+          {value: 335, name: '商品A'},
+          {value: 310, name: '商品B'},
+          {value: 234, name: '商品C'},
+          {value: 135, name: '商品D'}
+        ]
+      }]
+    },
+    isFullscreen: false
+  },
+  {
+    title: '用户活跃度',
+    option: {
+      xAxis: {type: 'value'},
+      yAxis: {type: 'category', data: ['北京', '上海', '广州', '深圳']},
+      series: [{data: [200, 180, 160, 140], type: 'bar'}]
+    },
+    isFullscreen: false
+  }
+])
 </script>
 
 <style scoped>
