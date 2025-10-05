@@ -73,7 +73,6 @@ const toggleFullscreen = () => {
   background: var(--billadm-color-major-backgroud-color);
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 8px;
-  overflow: hidden;
   transition: all 0.3s ease;
 }
 
@@ -93,7 +92,6 @@ const toggleFullscreen = () => {
   justify-content: space-between;
   align-items: center;
   padding: 0 8px;
-  background-color: var(--billadm-color-minor-backgroud-color);
 }
 
 .chart-title {
