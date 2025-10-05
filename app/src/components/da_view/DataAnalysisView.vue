@@ -28,12 +28,19 @@
     </div>
 
     <div class="middle-section">
+      <billadm-chart
+          :title="chart.title"
+          :option="chart.option"
+          :height="chart.height||'300px'"
+          :fullscreen="chart.isFullscreen"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
+import BilladmChart from "@/components/da_view/BilladmChart.vue";
 import iconLeft from '@/assets/icons/left.svg?raw';
 import iconRight from '@/assets/icons/right.svg?raw';
 import {useTrViewStore} from "@/stores/trViewStore.js";
@@ -61,6 +68,19 @@ const goToNextDay = () => {
   }
   trViewStore.timeRange = getNextPeriod(range[0], range[1]);
 }
+
+// 图表
+const chart = {
+  title: '销售额趋势',
+  option: {
+    tooltip: {trigger: 'axis'},
+    xAxis: {type: 'category', data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']},
+    yAxis: {type: 'value'},
+    series: [{data: [120, 132, 101, 134, 90, 230, 210], type: 'line'}]
+  },
+  height: '300px',
+  isFullscreen: false // 初始非全屏
+};
 </script>
 
 <style scoped>
