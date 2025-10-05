@@ -79,7 +79,7 @@ const chart = {
     series: [{data: [120, 132, 101, 134, 90, 230, 210], type: 'line'}]
   },
   height: '300px',
-  isFullscreen: false // 初始非全屏
+  isFullscreen: false
 };
 </script>
 
@@ -88,6 +88,7 @@ const chart = {
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: var(--billadm-color-major-backgroud-color);
 }
 
 .top-bar {

@@ -82,10 +82,9 @@ const toggleFullscreen = () => {
 
 <style scoped>
 .billadm-chart {
-  background: #fff;
-  border: 1px solid #e0e0e0;
+  background: var(--billadm-color-major-backgroud-color);
+  border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: all 0.3s ease;
 }
@@ -95,38 +94,22 @@ const toggleFullscreen = () => {
   top: 10%;
   left: 10%;
   width: 80% !important;
-  height: 70%;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  height: 80%;
+  border-radius: 16px;
 }
 
 .chart-header {
+  height: var(--billadm-ui-size-menu-width);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
+  padding: 0 8px;
   background-color: var(--billadm-color-minor-backgroud-color);
 }
 
 .chart-title {
   font-size: var(--billadm-size-text-title-size);
   color: var(--billadm-color-text-major-color);
-}
-
-.fullscreen-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  color: #666;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.fullscreen-btn:hover {
-  background-color: #e0e0e0;
-  color: #333;
 }
 
 .chart-container {
