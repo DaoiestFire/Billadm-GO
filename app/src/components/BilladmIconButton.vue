@@ -1,13 +1,7 @@
 <template>
   <button
       class="common-icon"
-      :style="[
-              buttonStyle,
-              {
-                '--hover-bg-color': hoverBgColor,
-                '--bg-size': props.bgSize,
-              }
-          ]"
+      :style="buttonStyle"
       :class="{ 'is-active': isActive }">
     <el-tooltip v-if="label" :content="label" :placement="tooltipPlacement">
       <billadm-icon class="icon" :svg="svg" :color="isActive ? activeFgColor : color" :size="iconSize"/>
@@ -101,15 +95,15 @@ const buttonStyle = computed(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: var(--bg-size);
-  height: var(--bg-size);
+  width: v-bind(bgSize);
+  height: v-bind(bgSize);
   border-radius: 4px;
   z-index: 1;
   transition: background-color 0.3s ease;
 }
 
 .common-icon:hover::after {
-  background-color: var(--hover-bg-color);
+  background-color: v-bind(hoverBgColor);
 }
 
 .common-icon.is-active::after {
