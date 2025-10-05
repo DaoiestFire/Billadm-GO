@@ -18,9 +18,8 @@
 
 <script setup>
 import {computed} from 'vue';
-import BilladmChart from './BilladmChart.vue'; // 注意导入新名称
+import BilladmChart from "@/components/da_view/BilladmChart.vue";
 
-// 定义图表数据结构
 const props = defineProps({
   charts: {
     type: Array,
@@ -32,14 +31,12 @@ const props = defineProps({
       );
     }
   },
-  // 可选：自定义列数
   columns: {
     type: Number,
     default: 2
   }
 });
 
-// 计算 grid 布局样式
 const gridStyle = computed(() => {
   return {
     display: 'grid',
@@ -51,10 +48,7 @@ const gridStyle = computed(() => {
 
 // 处理全屏切换
 const handleFullscreenChange = (index, isFullscreen) => {
-  // 更新对应图表的全屏状态
   props.charts[index].isFullscreen = isFullscreen;
-
-  // 可选：关闭其他图表的全屏状态（实现单个全屏）
   props.charts.forEach((chart, i) => {
     if (i !== index) {
       chart.isFullscreen = false;
