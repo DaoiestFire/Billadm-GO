@@ -4,7 +4,7 @@ import {queryTrCountOnCondition, queryTrsOnCondition, queryTrStatisticsOnConditi
 import NotificationUtil from "@/backend/notification.js";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {dateToUnixTimestamp} from "@/backend/functions.js";
-import {setToEndOfDay, setToStartOfDay} from "@/backend/timerange.js";
+import {getThisMonthRange, setToEndOfDay, setToStartOfDay} from "@/backend/timerange.js";
 
 export const useTrViewStore = defineStore('trView', () => {
     // 定义状态
@@ -13,7 +13,7 @@ export const useTrViewStore = defineStore('trView', () => {
     const currentPage = ref(1) // 当前页数
     const pageSize = ref(20) // 每页记录数
     const trCount = ref(0) // 总记录数
-    const timeRange = ref([]) // 时间选择器
+    const timeRange = ref(getThisMonthRange()) // 时间选择器
     const trStatistics = ref({}) // 时间范围内消费记录的统计数据
 
     // computed
