@@ -1,4 +1,3 @@
-<!-- components/BilladmChartDisplay.vue -->
 <template>
   <div class="billadm-chart-display">
     <div class="charts-grid" :style="gridStyle">
@@ -10,7 +9,6 @@
           :height="chart.height || '300px'"
           :fullscreen="chart.isFullscreen"
           @update:fullscreen="handleFullscreenChange(index, $event)"
-          class="chart-grid-item"
       />
     </div>
   </div>
@@ -41,7 +39,7 @@ const gridStyle = computed(() => {
   return {
     display: 'grid',
     'grid-template-columns': `repeat(${props.columns}, 1fr)`,
-    gap: '20px',
+    gap: '16px',
     width: '100%'
   };
 });
@@ -60,16 +58,8 @@ const handleFullscreenChange = (index, isFullscreen) => {
 <style scoped>
 .billadm-chart-display {
   width: 100%;
-  padding: 20px;
+  padding: 8px;
   box-sizing: border-box;
-}
-
-.charts-grid {
-  width: 100%;
-}
-
-.chart-grid-item {
-  /* 可以在这里添加额外的边距或样式 */
 }
 
 /* 响应式：小屏幕下变为单列 */
