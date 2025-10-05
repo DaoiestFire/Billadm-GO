@@ -1,14 +1,21 @@
 <template>
   <div class="menu-bar">
-    <BilladmIconButton :svg="iconBills" label="消费记录" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                       :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
-                       @click="navigate('tr_view')" :isActive="route.path === '/tr_view'"/>
-    <BilladmIconButton :svg="iconStatistic" label="数据分析" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                       :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
-                       @click="navigate('da_view')" :isActive="route.path === '/da_view'"/>
-    <BilladmIconButton :svg="iconSettings" label="应用设置" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                       :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
-                       @click="navigate('settings_view')" :isActive="route.path === '/settings_view'"/>
+    <div class="top-groups">
+      <BilladmIconButton :svg="iconBills" label="消费记录" tooltip-placement="right"
+                         :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+                         :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
+                         @click="navigate('tr_view')" :isActive="route.path === '/tr_view'"/>
+      <BilladmIconButton :svg="iconStatistic" label="数据分析" tooltip-placement="right"
+                         :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+                         :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
+                         @click="navigate('da_view')" :isActive="route.path === '/da_view'"/>
+    </div>
+    <div class="bottom-groups">
+      <BilladmIconButton :svg="iconSettings" label="应用设置" tooltip-placement="right"
+                         :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+                         :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
+                         @click="navigate('settings_view')" :isActive="route.path === '/settings_view'"/>
+    </div>
   </div>
 </template>
 
@@ -35,7 +42,17 @@ const navigate = (path) => {
 .menu-bar {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: relative;
+  height: 100%;
+}
+
+.top-groups {
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-groups {
+  display: flex;
+  flex-direction: column;
 }
 </style>
