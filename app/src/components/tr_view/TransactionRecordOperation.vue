@@ -198,7 +198,7 @@ function handleSubmit() {
 .form-item {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .form-item label {
