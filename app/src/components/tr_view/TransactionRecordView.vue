@@ -3,9 +3,9 @@
     <!-- 上栏：工具栏 -->
     <div class="top-bar">
       <div class="left-groups">
-        <BilladmIconButton :svg="iconLeft" label="向前一天" width="30px" height="30px" bg-size="26px"
-                           :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
-                           tooltipPlacement="bottom" @click="goToPreviousDay"/>
+        <billadm-icon-button :svg="iconLeft" label="向前一天" width="30px" height="30px" bg-size="26px"
+                             :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
+                             tooltipPlacement="bottom" @click="goToPreviousDay"/>
         <el-date-picker
             v-model="trViewStore.timeRange"
             type="daterange"
@@ -17,9 +17,9 @@
             style="width: 200px;"
             :shortcuts="shortcuts"
         />
-        <BilladmIconButton :svg="iconRight" label="向后一天" width="30px" height="30px" bg-size="26px"
-                           :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
-                           tooltipPlacement="bottom" @click="goToNextDay"/>
+        <billadm-icon-button :svg="iconRight" label="向后一天" width="30px" height="30px" bg-size="26px"
+                             :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
+                             tooltipPlacement="bottom" @click="goToNextDay"/>
       </div>
       <div class="center-groups">
       </div>
@@ -30,18 +30,18 @@
 
     <!-- 中间栏：消费记录表 -->
     <div class="middle-section">
-      <TransactionRecordTable :items="trViewStore.tableData" :columnStyles="columnStyles" :headerHeight="40"
-                              :rowHeight="40" @edit-item="onEditItem"/>
+      <transaction-record-table :items="trViewStore.tableData" :columnStyles="columnStyles" :headerHeight="40"
+                                :rowHeight="40" @edit-item="onEditItem"/>
     </div>
 
     <!-- 下栏：分页组件 -->
     <div class="bottom-bar">
-      <CustomSelect v-model="trViewStore.pageSize" :options="options" direction="up"/>
-      <Pagination v-model:current-page="trViewStore.currentPage" :pages="trViewStore.pages"/>
+      <custom-select v-model="trViewStore.pageSize" :options="options" direction="up"/>
+      <pagination v-model:current-page="trViewStore.currentPage" :pages="trViewStore.pages"/>
     </div>
   </div>
-  <TransactionRecordOperation v-model:modelValue="recordData" v-model:visible="showDialog" :title="dialogTitle"
-                              :onConfirm="handleConfirm"/>
+  <transaction-record-operation v-model:modelValue="recordData" v-model:visible="showDialog" :title="dialogTitle"
+                                :onConfirm="handleConfirm"/>
 </template>
 
 <script setup>
@@ -60,8 +60,8 @@ import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/b
 import {
   getLastMonthRange,
   getLastWeekRange,
-  getNextDay,
-  getPreviousDay,
+  getNextPeriod,
+  getPrevPeriod,
   getThisMonthRange,
   getThisWeekRange,
   getTodayRange
@@ -188,9 +188,7 @@ const goToPreviousDay = () => {
   if (!Array.isArray(range)) {
     return;
   }
-  range[0] = getPreviousDay(range[0]);
-  range[1] = getPreviousDay(range[1]);
-  trViewStore.timeRange = range;
+  trViewStore.timeRange = getPrevPeriod(range[0], range[1]);
 }
 
 const goToNextDay = () => {
@@ -198,9 +196,7 @@ const goToNextDay = () => {
   if (!Array.isArray(range)) {
     return;
   }
-  range[0] = getNextDay(range[0]);
-  range[1] = getNextDay(range[1]);
-  trViewStore.timeRange = range;
+  trViewStore.timeRange = getNextPeriod(range[0], range[1]);
 }
 </script>
 
