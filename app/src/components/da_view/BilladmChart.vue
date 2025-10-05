@@ -74,9 +74,7 @@ watch(
 
 // 切换全屏状态
 const toggleFullscreen = () => {
-  isFullscreen.value = !isFullscreen.value;
-  emit('update:fullscreen', isFullscreen.value);
-  chartHeight.value = isFullscreen.value ? '600px' : props.height;
+  emit('update:fullscreen', !isFullscreen.value);
 };
 </script>
 
