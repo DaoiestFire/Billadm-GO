@@ -64,6 +64,7 @@ import {
   getPrevPeriod,
   getThisMonthRange,
   getThisWeekRange,
+  getThisYearRange,
   getTodayRange
 } from "@/backend/timerange.js";
 import {useCssVariables} from "@/css/css.js";
@@ -102,6 +103,10 @@ const shortcuts = [
   {
     text: '上月',
     value: getLastMonthRange,
+  },
+  {
+    text: '本年',
+    value: getThisYearRange,
   }
 ]
 

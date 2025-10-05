@@ -130,6 +130,22 @@ export function getLastMonthRange() {
     return [setToStartOfDay(start), setToEndOfDay(end)];
 }
 
+/**
+ * 获取今年的时间范围 [开始, 结束]
+ * @returns {Array<Date>} 包含今年开始和结束时间的数组
+ */
+export function getThisYearRange() {
+    const today = new Date();
+    const year = today.getFullYear();
+
+    // 今年1月1日
+    const start = new Date(year, 0, 1);
+    // 今年12月31日
+    const end = new Date(year, 12, 0);
+
+    return [setToStartOfDay(start), setToEndOfDay(end)];
+}
+
 export function getPreviousDay(date) {
     const result = new Date(date);
     result.setDate(result.getDate() - 1);
@@ -211,7 +227,6 @@ function shiftPeriod(startDate, endDate, direction) {
         newStart.setFullYear(startDate.getFullYear() + direction);
         const newEnd = new Date(endDate);
         newEnd.setFullYear(endDate.getFullYear() + direction);
-        console.log("年")
         return [newStart, newEnd];
     }
 
@@ -220,7 +235,6 @@ function shiftPeriod(startDate, endDate, direction) {
     newStart.setDate(startDate.getDate() + direction);
     const newEnd = new Date(endDate);
     newEnd.setDate(endDate.getDate() + direction);
-    console.log("com")
     return [newStart, newEnd];
 }
 
