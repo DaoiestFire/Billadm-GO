@@ -91,7 +91,7 @@ const props = defineProps({
     default: false
   },
   item: {
-    type: [Object, null],
+    type: [Object, String, null],
     default: null
   }
 });

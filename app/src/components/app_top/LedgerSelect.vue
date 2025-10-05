@@ -133,7 +133,7 @@ const createLedgerFunc = () => {
 const deleteLedgerFunc = (id, name) => {
   dialogItem.value = id;
   title.value = '删除账本';
-  message.value = `确认删除账本<${name}>吗？`;
+  message.value = `确认删除账本<<<${name}>>>吗？`;
   confirmLabel.value = '删除';
   confirmColor.value = negativeColor.value;
   cancelColor.value = positiveColor.value;
