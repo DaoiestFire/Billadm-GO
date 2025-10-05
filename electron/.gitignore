@@ -4,6 +4,7 @@ logs
 # build
 *.db
 *.exe
+*.sql
 dist
 # Electron-Forge
 out/

@@ -6,6 +6,10 @@ import (
 )
 
 func GetRootDir() string {
+	if Config.Mode == "debug" {
+		dir, _ := os.Getwd()
+		return dir
+	}
 	exePath, err := os.Executable()
 	if err != nil {
 		return ""
