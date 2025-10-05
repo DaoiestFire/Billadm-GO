@@ -4,11 +4,11 @@
       {{ selectedLabel || placeholder }}
     </button>
     <div v-show="isOpen" :class="['dropdown', direction === 'up' ? 'dropdown-up' : 'dropdown-down']">
-      <div v-for="option in options" :key="option.value" class="option" @click="selectOption(option)"
-           :style="[{
-             '--bg-width': (props.width - 4) + 'px',
-             '--bg-height': (props.height - 4) + 'px'
-              }]">
+      <div
+          v-for="option in options"
+          :key="option.value"
+          class="option"
+          @click="selectOption(option)">
         {{ option.label }}
       </div>
     </div>
@@ -49,6 +49,8 @@ const props = defineProps({
 const isOpen = ref(false);
 const selectedLabel = ref('');
 const selectWrapper = ref(null);
+const innerWidth = (props.width - 4) + 'px';
+const innerHeight = (props.height - 4) + 'px';
 
 // Toggle dropdown
 function toggleDropdown() {
@@ -155,8 +157,8 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: var(--bg-width);
-  height: var(--bg-height);
+  width: v-bind(innerWidth);
+  height: v-bind(innerHeight);
   border-radius: 4px;
   z-index: -1;
   transition: background-color 0.3s ease;

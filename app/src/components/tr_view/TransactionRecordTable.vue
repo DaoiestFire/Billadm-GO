@@ -1,16 +1,16 @@
 <template>
-  <div class="tr-table-container" :style="containerStyle">
+  <div class="tr-table-container">
     <el-scrollbar>
       <table class="tr-table">
         <thead>
-        <tr :style="headerRowStyle">
+        <tr class="tr-table-header-row">
           <th v-for="styleItem in columnStyles" :key="styleItem.field" :style="getColumnStyle(styleItem)">
             {{ styleItem.name }}
           </th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, index) in items" :key="item.transaction_id" :style="rowStyle">
+        <tr class="tr-table-body-row" v-for="(item, index) in items" :key="item.transaction_id">
           <td v-for="styleItem in columnStyles" :key="styleItem.field"
               :style="formatCellStyle(styleItem.field, item)">
             <template v-if="styleItem.field === 'actions'">
@@ -71,12 +71,12 @@ const props = defineProps({
     required: true
   },
   headerHeight: {
-    type: Number,
-    default: 50
+    type: String,
+    default: '50px'
   },
   rowHeight: {
-    type: Number,
-    default: 40
+    type: String,
+    default: '40px'
   },
   columnStyles: {
     type: Array,
@@ -170,21 +170,6 @@ const formatTime = (timestamp) => {
 const formatTransactionType = (type) => {
   return type === 'expense' ? '支出' : type === 'income' ? '收入' : '转账'
 }
-
-const containerStyle = {
-  '--row-height': `${props.rowHeight}px`,
-  '--header-height': `${props.headerHeight}px`,
-}
-
-const headerRowStyle = {
-  height: 'var(--header-height)',
-  lineHeight: 'var(--header-height)',
-}
-
-const rowStyle = {
-  height: 'var(--row-height)',
-  lineHeight: 'var(--row-height)',
-}
 </script>
 
 <style scoped>
@@ -234,6 +219,16 @@ const rowStyle = {
   table-layout: fixed;
 }
 
+.tr-table-header-row {
+  height: v-bind(headerHeight);
+  line-height: v-bind(headerHeight);
+}
+
+.tr-table-body-row {
+  height: v-bind(rowHeight);
+  line-height: v-bind(rowHeight);
+}
+
 .tr-table th,
 .tr-table td {
   padding: 0;
@@ -250,7 +245,6 @@ const rowStyle = {
   top: 0;
 }
 
-/* 斑马纹样式 */
 .tr-table tbody tr:nth-child(odd) {
   background-color: var(--billadm-color-table-odd-row-bg-color);
 }

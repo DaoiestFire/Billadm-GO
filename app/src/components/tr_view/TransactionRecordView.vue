@@ -30,8 +30,7 @@
 
     <!-- 中间栏：消费记录表 -->
     <div class="middle-section">
-      <transaction-record-table :items="trViewStore.tableData" :columnStyles="columnStyles" :headerHeight="40"
-                                :rowHeight="40" @edit-item="onEditItem"/>
+      <transaction-record-table :items="trViewStore.tableData" :columnStyles="columnStyles" @edit-item="onEditItem"/>
     </div>
 
     <!-- 下栏：分页组件 -->
