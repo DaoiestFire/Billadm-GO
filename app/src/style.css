@@ -26,7 +26,7 @@
     --billadm-ui-size-menu-width: 40px;
 
     /* 文本 */
-    --billadm-color-text-major-color: #000000;
+    --billadm-color-text-major-color: #333;
     --billadm-color-text-minor-color: #7b7b7b;
     --billadm-size-text-large-size: 18px;
     --billadm-size-text-title-size: 16px;
@@ -51,6 +51,5 @@ body {
     font-style: normal;
     font-weight: normal;
     font-size: var(--billadm-size-text-base-size);
-    color: #333;
-    margin: 0;
+    color: var(--billadm-color-text-major-color);
 }

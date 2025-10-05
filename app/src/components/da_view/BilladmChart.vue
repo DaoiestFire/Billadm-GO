@@ -3,13 +3,12 @@
     <!-- 图表头部 -->
     <div class="chart-header">
       <h3 class="chart-title">{{ title }}</h3>
-      <button
-          class="fullscreen-btn"
+      <BilladmIconButton
+          :svg="isFullscreen?iconOffScreen:iconFullScreen"
+          :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
+          :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
           @click="toggleFullscreen"
-          :aria-label="isFullscreen ? '退出全屏' : '全屏显示'"
-      >
-        {{ isFullscreen ? '×' : '⛶' }}
-      </button>
+      />
     </div>
 
     <!-- 图表容器 -->
@@ -25,7 +24,14 @@
 
 <script setup>
 import {ref, watch} from 'vue';
+import BilladmIconButton from "@/components/BilladmIconButton.vue";
+import iconFullScreen from '@/assets/icons/full-screen.svg?raw';
+import iconOffScreen from '@/assets/icons/off-screen.svg?raw';
 import VChart from 'vue-echarts';
+import {useCssVariables} from "@/css/css.js";
+
+// css variables
+const {iconColor, hoverBgColor, iconActiveFgColor, uiSizeMenuWidth} = useCssVariables()
 
 // 接收 props
 const props = defineProps({
@@ -90,7 +96,6 @@ const toggleFullscreen = () => {
   left: 10%;
   width: 80% !important;
   height: 70%;
-  z-index: 1000;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
@@ -99,16 +104,13 @@ const toggleFullscreen = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  background-color: var(--billadm-color-minor-backgroud-color);
 }
 
 .chart-title {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
+  font-size: var(--billadm-size-text-title-size);
+  color: var(--billadm-color-text-major-color);
 }
 
 .fullscreen-btn {
