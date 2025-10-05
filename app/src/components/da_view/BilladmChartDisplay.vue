@@ -1,17 +1,19 @@
 <template>
-  <div class="billadm-chart-display">
-    <div class="charts-grid" :style="gridStyle">
-      <BilladmChart
-          v-for="(chart, index) in charts"
-          :key="index"
-          :title="chart.title"
-          :option="chart.option"
-          :height="chart.height || '300px'"
-          :fullscreen="chart.isFullscreen"
-          @update:fullscreen="handleFullscreenChange(index, $event)"
-      />
+  <el-scrollbar>
+    <div class="billadm-chart-display">
+      <div class="charts-grid" :style="gridStyle">
+        <BilladmChart
+            v-for="(chart, index) in charts"
+            :key="index"
+            :title="chart.title"
+            :option="chart.option"
+            :height="chart.height || '300px'"
+            :fullscreen="chart.isFullscreen"
+            @update:fullscreen="handleFullscreenChange(index, $event)"
+        />
+      </div>
     </div>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script setup>

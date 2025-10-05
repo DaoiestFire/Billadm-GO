@@ -1,22 +1,23 @@
 <template>
   <div class="billadm-chart" :class="{ fullscreen: isFullscreen }">
-    <!-- 图表头部 -->
     <div class="chart-header">
       <h3 class="chart-title">{{ title }}</h3>
       <BilladmIconButton
-          :svg="isFullscreen?iconOffScreen:iconFullScreen"
-          :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-          :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
+          :svg="isFullscreen ? iconOffScreen : iconFullScreen"
+          :width="uiSizeMenuWidth"
+          :height="uiSizeMenuWidth"
+          :color="iconColor"
+          :hover-bg-color="hoverBgColor"
+          :active-fg-color="iconActiveFgColor"
           @click="toggleFullscreen"
       />
     </div>
-
-    <!-- 图表容器 -->
-    <div class="chart-container" :style="{ height: chartHeight }">
+    <div class="chart-container">
       <v-chart
+          ref="chartRef"
           :option="option"
           :autoresize="true"
-          :style="{ height: '100%' }"
+          class="billadm-chart-instance"
       />
     </div>
   </div>
@@ -31,9 +32,8 @@ import VChart from 'vue-echarts';
 import {useCssVariables} from "@/css/css.js";
 
 // css variables
-const {iconColor, hoverBgColor, iconActiveFgColor, uiSizeMenuWidth} = useCssVariables()
+const {iconColor, hoverBgColor, iconActiveFgColor, uiSizeMenuWidth} = useCssVariables();
 
-// 接收 props
 const props = defineProps({
   title: {
     type: String,
@@ -43,36 +43,26 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  height: {
-    type: String,
-    default: '300px'
-  },
   fullscreen: {
     type: Boolean,
     default: false
   }
 });
 
-// 定义 emits 事件
 const emit = defineEmits(['update:fullscreen']);
 
-// 是否全屏状态
 const isFullscreen = ref(props.fullscreen);
 
-// 实际图表高度（考虑全屏时更高）
-const chartHeight = ref(props.height);
+const chartRef = ref(null);
 
-// 监听父组件传入的 fullscreen 变化
 watch(
     () => props.fullscreen,
     (newVal) => {
       isFullscreen.value = newVal;
-      chartHeight.value = newVal ? '600px' : props.height;
     },
     {immediate: true}
 );
 
-// 切换全屏状态
 const toggleFullscreen = () => {
   emit('update:fullscreen', !isFullscreen.value);
 };
@@ -91,7 +81,7 @@ const toggleFullscreen = () => {
   position: fixed;
   top: 10%;
   left: 10%;
-  width: 80% !important;
+  width: 80%;
   height: 80%;
   border-radius: 16px;
   z-index: 4;
@@ -112,6 +102,15 @@ const toggleFullscreen = () => {
 }
 
 .chart-container {
+  position: relative;
   width: 100%;
+  height: 0;
+  padding-bottom: 66.67%;
+}
+
+.billadm-chart .billadm-chart-instance {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 </style>
