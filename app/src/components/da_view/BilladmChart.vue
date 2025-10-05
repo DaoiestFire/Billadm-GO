@@ -102,8 +102,8 @@ const toggleFullscreen = () => {
 .chart-container {
   position: relative;
   width: 100%;
-  height: 0;
-  padding-bottom: 66.67%;
+  aspect-ratio: 3 / 2;
+  max-height: 100%;
 }
 
 .billadm-chart .billadm-chart-instance {

@@ -7,7 +7,6 @@
             :key="index"
             :title="chart.title"
             :option="chart.option"
-            :height="chart.height || '300px'"
             :fullscreen="chart.isFullscreen"
             @update:fullscreen="handleFullscreenChange(index, $event)"
         />
