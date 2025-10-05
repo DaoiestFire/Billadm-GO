@@ -29,9 +29,6 @@
 
     <div class="middle-section">
     </div>
-
-    <div class="bottom-bar">
-    </div>
   </div>
 </template>
 
@@ -40,16 +37,7 @@ import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import iconLeft from '@/assets/icons/left.svg?raw';
 import iconRight from '@/assets/icons/right.svg?raw';
 import {useTrViewStore} from "@/stores/trViewStore.js";
-import {
-  getLastMonthRange,
-  getLastWeekRange,
-  getNextPeriod,
-  getPrevPeriod, getShortcuts,
-  getThisMonthRange,
-  getThisWeekRange,
-  getThisYearRange,
-  getTodayRange
-} from "@/backend/timerange.js";
+import {getNextPeriod, getPrevPeriod, getShortcuts,} from "@/backend/timerange.js";
 import {useCssVariables} from "@/css/css.js";
 
 // css variables
@@ -114,16 +102,5 @@ const goToNextDay = () => {
 .middle-section {
   flex: 1;
   overflow: hidden;
-}
-
-.bottom-bar {
-  background: var(--billadm-color-major-backgroud-color);
-  height: 30px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
 }
 </style>
