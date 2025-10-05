@@ -15,7 +15,7 @@
             size="small"
             :editable="false"
             style="width: 200px;"
-            :shortcuts="shortcuts"
+            :shortcuts="getShortcuts()"
         />
         <billadm-icon-button :svg="iconRight" label="向后一天" width="30px" height="30px" bg-size="26px"
                              :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
@@ -57,16 +57,7 @@ import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
 import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/tr.js";
-import {
-  getLastMonthRange,
-  getLastWeekRange,
-  getNextPeriod,
-  getPrevPeriod,
-  getThisMonthRange,
-  getThisWeekRange,
-  getThisYearRange,
-  getTodayRange
-} from "@/backend/timerange.js";
+import {getNextPeriod, getPrevPeriod, getShortcuts} from "@/backend/timerange.js";
 import {useCssVariables} from "@/css/css.js";
 
 // css variables
@@ -81,33 +72,6 @@ const options = [
   {label: '每页10行', value: 10},
   {label: '每页20行', value: 20},
   {label: '每页50行', value: 50}
-]
-
-const shortcuts = [
-  {
-    text: '今天',
-    value: getTodayRange,
-  },
-  {
-    text: '本周',
-    value: getThisWeekRange,
-  },
-  {
-    text: '本月',
-    value: getThisMonthRange,
-  },
-  {
-    text: '上周',
-    value: getLastWeekRange,
-  },
-  {
-    text: '上月',
-    value: getLastMonthRange,
-  },
-  {
-    text: '本年',
-    value: getThisYearRange,
-  }
 ]
 
 const columnStyles = [
@@ -151,7 +115,6 @@ const columnStyles = [
     width: '120px',
   }
 ]
-
 
 // 消费记录表单
 const showDialog = ref(false);

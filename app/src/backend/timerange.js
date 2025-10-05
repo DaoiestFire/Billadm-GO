@@ -242,3 +242,32 @@ function shiftPeriod(startDate, endDate, direction) {
 function isSameMonth(date1, date2) {
     return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
 }
+
+export function getShortcuts() {
+    return [
+        {
+            text: '今天',
+            value: getTodayRange,
+        },
+        {
+            text: '本周',
+            value: getThisWeekRange,
+        },
+        {
+            text: '本月',
+            value: getThisMonthRange,
+        },
+        {
+            text: '上周',
+            value: getLastWeekRange,
+        },
+        {
+            text: '上月',
+            value: getLastMonthRange,
+        },
+        {
+            text: '本年',
+            value: getThisYearRange,
+        }
+    ]
+}
