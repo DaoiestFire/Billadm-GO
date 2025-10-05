@@ -163,7 +163,7 @@ function handleConfirm() {
 
 .modal-title {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--billadm-size-text-large-size);
   font-weight: 600;
   color: var(--billadm-color-text-major-color);
 }
@@ -174,7 +174,7 @@ function handleConfirm() {
 
 .modal-message {
   margin: 0 0 16px 0;
-  font-size: 16px;
+  font-size: var(--billadm-size-text-title-size);
   color: var(--billadm-color-text-minor-color);
   white-space: pre-line;
 }

@@ -168,7 +168,7 @@ function handleConfirm() {
 
 .confirm-message {
   margin: 0 0 20px 0;
-  font-size: 16px;
+  font-size: var(--billadm-size-text-title-size);
   text-align: left;
 }
 
@@ -180,7 +180,7 @@ function handleConfirm() {
 
 .error-message {
   color: #e74c3c;
-  font-size: 14px;
+  font-size: var(--billadm-size-text-base-size);
   margin: 0 0 16px 0;
   text-align: left;
   min-height: 20px;

@@ -28,6 +28,10 @@
     /* 文本 */
     --billadm-color-text-major-color: #000000;
     --billadm-color-text-minor-color: #7b7b7b;
+    --billadm-size-text-large-size: 18px;
+    --billadm-size-text-title-size: 16px;
+    --billadm-size-text-base-size: 14px;
+    --billadm-size-text-small-size: 13px;
 }
 
 /* 中文字体 */
@@ -46,7 +50,7 @@ body {
     font-family: 'SourceHanSans', 'Roboto';
     font-style: normal;
     font-weight: normal;
-    font-size: 14px;
+    font-size: var(--billadm-size-text-base-size);
     color: #333;
     margin: 0;
 }

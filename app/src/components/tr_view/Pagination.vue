@@ -91,7 +91,7 @@ function handlePageChange(page) {
   gap: 8px;
   padding: 0 10px;
   user-select: none;
-  font-size: 14px;
+  font-size: var(--billadm-size-text-base-size);
 }
 
 .page-list {

@@ -182,7 +182,7 @@ function handleSubmit() {
 }
 
 .dialog-title {
-  font-size: 20px;
+  font-size: var(--billadm-size-text-large-size);
   font-weight: bold;
   text-align: left;
   margin-bottom: 24px;
@@ -202,7 +202,7 @@ function handleSubmit() {
 }
 
 .form-item label {
-  font-size: 14px;
+  font-size: var(--billadm-size-text-base-size);
   color: var(--billadm-color-icon-color);
   font-weight: 500;
 }

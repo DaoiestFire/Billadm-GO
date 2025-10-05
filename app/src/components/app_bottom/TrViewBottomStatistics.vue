@@ -41,7 +41,7 @@ const statistics = computed(() => {
 <style scoped>
 .tr-view-bottom-statistics {
   display: flex;
-  font-size: 14px;
+  font-size: var(--billadm-size-text-base-size);
   gap: 8px;
 }
 
