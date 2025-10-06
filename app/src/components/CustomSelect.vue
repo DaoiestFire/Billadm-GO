@@ -1,154 +1,205 @@
 <template>
-  <div class="custom-select" :style="{ width: width+'px' }" ref="selectWrapper">
-    <button @click="toggleDropdown" class="select-button" :style="{ height: height+'px' }">
+  <div
+      class="billadm-select"
+      :style="{ width: width + 'px' }"
+      ref="selectWrapper"
+  >
+    <!-- 选择按钮 -->
+    <button
+        @click="toggleDropdown"
+        class="select-button"
+        :style="{ height: height + 'px' }"
+        :class="{ 'is-open': isOpen }"
+    >
       {{ selectedLabel || placeholder }}
     </button>
-    <div v-show="isOpen" :class="['dropdown', direction === 'up' ? 'dropdown-up' : 'dropdown-down']">
+
+    <!-- 下拉菜单 -->
+    <div
+        v-show="isOpen"
+        :class="[
+        'dropdown',
+        direction === 'up' ? 'dropdown-up' : 'dropdown-down'
+      ]"
+        :style="{ maxHeight: dropdownMaxHeight }"
+    >
       <div
           v-for="option in options"
           :key="option.value"
           class="option"
-          @click="selectOption(option)">
+          @click="selectOption(option)"
+      >
         {{ option.label }}
+      </div>
+      <!-- 无选项提示 -->
+      <div v-if="options.length === 0" class="option disabled">
+        无数据
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {onMounted, onUnmounted, ref, watch} from 'vue';
+import {computed, onMounted, onUnmounted, ref, watch} from 'vue';
 
-const selectedValue = defineModel()
+// 使用 defineModel 支持 v-model
+const selectedValue = defineModel();
 
-// Props
+// Props 定义
 const props = defineProps({
   options: {
     type: Array,
-    required: true
+    required: true,
+    validator: (val) =>
+        val.every((item) => 'value' in item && 'label' in item),
   },
   placeholder: {
     type: String,
-    default: '请选择'
+    default: '请选择',
   },
   direction: {
     type: String,
+    validator: (value) => ['down', 'up'].includes(value),
     default: 'down',
-    validator: value => ['down', 'up'].includes(value)
   },
   width: {
     type: Number,
-    default: 100
+    default: 100,
   },
   height: {
     type: Number,
-    default: 28
-  }
+    default: 28,
+  },
+  // 下拉框最大高度（可选 prop）
+  dropdownMaxHeight: {
+    type: String,
+    default: '200px',
+  },
 });
 
-// Data
+// 数据响应式
 const isOpen = ref(false);
 const selectedLabel = ref('');
 const selectWrapper = ref(null);
-const innerWidth = (props.width - 4) + 'px';
-const innerHeight = (props.height - 4) + 'px';
 
-// Toggle dropdown
+// 计算内部宽高（用于 hover 背景）
+const innerWidth = computed(() => props.width - 4 + 'px');
+const innerHeight = computed(() => props.height - 4 + 'px');
+
+// 切换下拉框
 function toggleDropdown() {
   isOpen.value = !isOpen.value;
 }
 
-// Select option
+// 选择选项
 function selectOption(option) {
   selectedValue.value = option.value;
   selectedLabel.value = option.label;
   isOpen.value = false;
 }
 
+// 监听 options 变化，同步 label 显示
 watch(
     () => props.options,
     (newOptions) => {
       if (newOptions.length === 0) {
-        selectedLabel.value = ''
+        selectedLabel.value = '';
         return;
       }
-      // 如果没有选中值，无需处理
-      if (selectedValue.value === undefined || selectedValue.value === null || !selectedValue.value) {
-        selectedLabel.value = ''
-        return
+
+      const currentValue = selectedValue.value;
+      if (
+          currentValue === undefined ||
+          currentValue === null ||
+          currentValue === ''
+      ) {
+        selectedLabel.value = '';
+        return;
       }
 
-      const option = newOptions.find(option => option.value === selectedValue.value)
-      if (option) {
-        selectedLabel.value = option.label
+      const matched = newOptions.find((opt) => opt.value === currentValue);
+      if (matched) {
+        selectedLabel.value = matched.label;
       } else {
-        selectedValue.value = ''
+        selectedValue.value = '';
+        selectedLabel.value = '';
       }
     },
     {deep: true, immediate: true}
-)
+);
 
-// 关闭下拉框的函数
+// 点击外部关闭下拉框
 function closeDropdown(event) {
-  // 如果点击在组件外部，则关闭
   if (selectWrapper.value && !selectWrapper.value.contains(event.target)) {
     isOpen.value = false;
   }
 }
 
-// 组件挂载后添加事件监听
 onMounted(() => {
   document.addEventListener('click', closeDropdown);
 });
 
-// 组件卸载前移除事件监听，防止内存泄漏
 onUnmounted(() => {
   document.removeEventListener('click', closeDropdown);
 });
 </script>
 
 <style scoped>
-.custom-select {
+.billadm-select {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: inline-block;
 }
 
 .select-button {
   width: 100%;
+  padding: 0;
   text-align: center;
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 4px;
-  background: white;
+  background-color: var(--billadm-color-major-backgroud-color);
+  color: var(--billadm-color-text-major-color);
   cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+.select-button:hover {
+  border-color: var(--billadm-color-positive-color);
 }
 
 .dropdown {
   position: absolute;
+  top: 100%;
+  left: 0;
   width: 100%;
+  max-height: v-bind(dropdownMaxHeight);
   overflow-y: auto;
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 4px;
-  background: white;
-  z-index: 10;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  font-size: 14px;
+}
+
+.dropdown-up {
+  top: auto;
+  bottom: 110%;
 }
 
 .dropdown-down {
   top: 110%;
 }
 
-.dropdown-up {
-  bottom: 110%;
-}
-
 .option {
   cursor: pointer;
   white-space: nowrap;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 30px;
+  user-select: none;
+  position: relative;
 }
 
 .option:hover::after {
@@ -160,8 +211,14 @@ onUnmounted(() => {
   width: v-bind(innerWidth);
   height: v-bind(innerHeight);
   border-radius: 4px;
+  background-color: var(--billadm-color-icon-hover-bg-color);
   z-index: -1;
   transition: background-color 0.3s ease;
-  background-color: var(--billadm-color-icon-hover-bg-color);
+}
+
+.option.disabled {
+  color: #999;
+  cursor: not-allowed;
+  font-style: italic;
 }
 </style>
