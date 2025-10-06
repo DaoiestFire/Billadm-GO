@@ -3,23 +3,10 @@
     <!-- 上栏：工具栏 -->
     <div class="top-bar">
       <div class="left-groups">
-        <billadm-icon-button :svg="iconLeft" label="向前一天" width="30px" height="30px" bg-size="26px"
-                             :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
-                             tooltipPlacement="bottom" @click="goToPreviousDay"/>
-        <el-date-picker
+        <billadm-time-select
             v-model="trViewStore.timeRange"
-            type="daterange"
-            range-separator="~"
-            start-placeholder="起始时间"
-            end-placeholder="结束时间"
-            size="small"
-            :editable="false"
-            style="width: 200px;"
-            :shortcuts="getShortcuts()"
+            v-model:timeRangeType="trViewStore.timeRangeType"
         />
-        <billadm-icon-button :svg="iconRight" label="向后一天" width="30px" height="30px" bg-size="26px"
-                             :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
-                             tooltipPlacement="bottom" @click="goToNextDay"/>
       </div>
       <div class="center-groups">
       </div>
@@ -35,35 +22,12 @@
 
 <script setup>
 import {ref} from 'vue';
-import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import BilladmChartDisplay from "@/components/da_view/BilladmChartDisplay.vue";
-import iconLeft from '@/assets/icons/left.svg?raw';
-import iconRight from '@/assets/icons/right.svg?raw';
+import BilladmTimeSelect from "@/components/BilladmTimeSelect.vue";
 import {useTrViewStore} from "@/stores/trViewStore.js";
-import {getNextPeriod, getPrevPeriod, getShortcuts,} from "@/backend/timerange.js";
-import {useCssVariables} from "@/css/css.js";
-
-// css variables
-const {hoverBgColor, iconColor} = useCssVariables();
 
 // store
 const trViewStore = useTrViewStore();
-
-const goToPreviousDay = () => {
-  let range = trViewStore.timeRange;
-  if (!Array.isArray(range)) {
-    return;
-  }
-  trViewStore.timeRange = getPrevPeriod(range[0], range[1]);
-}
-
-const goToNextDay = () => {
-  let range = trViewStore.timeRange;
-  if (!Array.isArray(range)) {
-    return;
-  }
-  trViewStore.timeRange = getNextPeriod(range[0], range[1]);
-}
 
 // 图表
 const chartData = ref([

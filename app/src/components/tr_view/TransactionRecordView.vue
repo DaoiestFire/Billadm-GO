@@ -3,25 +3,10 @@
     <!-- 上栏：工具栏 -->
     <div class="top-bar">
       <div class="left-groups">
-        <billadm-select v-model="trViewStore.timeRangeType" :options="getTimeRangeTypes()" :height="24" :width="30"
-                        direction="down"/>
-        <billadm-icon-button :svg="iconLeft" label="向前一天" width="30px" height="30px" bg-size="26px"
-                             :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
-                             tooltipPlacement="bottom" @click="goToPreviousDay"/>
-        <el-date-picker
+        <billadm-time-select
             v-model="trViewStore.timeRange"
-            :type="trViewStore.timeRangeType"
-            range-separator="~"
-            start-placeholder="起始时间"
-            end-placeholder="结束时间"
-            size="small"
-            :editable="false"
-            style="width: 200px;"
-            :shortcuts="getShortcuts()"
+            v-model:timeRangeType="trViewStore.timeRangeType"
         />
-        <billadm-icon-button :svg="iconRight" label="向后一天" width="30px" height="30px" bg-size="26px"
-                             :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
-                             tooltipPlacement="bottom" @click="goToNextDay"/>
       </div>
       <div class="center-groups">
       </div>
@@ -51,24 +36,13 @@ import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.
 import Pagination from '@/components/tr_view/Pagination.vue';
 import BilladmSelect from '@/components/BilladmSelect.vue';
 import TransactionRecordOperation from '@/components/tr_view/TransactionRecordOperation.vue';
-import BilladmIconButton from "@/components/BilladmIconButton.vue";
-import iconLeft from '@/assets/icons/left.svg?raw';
-import iconRight from '@/assets/icons/right.svg?raw';
+import BilladmTimeSelect from "@/components/BilladmTimeSelect.vue";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
 import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/tr.js";
-import {
-  getNextPeriod,
-  getPageSizeOptions,
-  getPrevPeriod,
-  getShortcuts,
-  getTimeRangeTypes
-} from "@/backend/timerange.js";
-import {useCssVariables} from "@/css/css.js";
+import {getNextPeriod, getPageSizeOptions, getPrevPeriod,} from "@/backend/timerange.js";
 
-// css variables
-const {hoverBgColor, iconColor} = useCssVariables();
 
 // store
 const ledgerStore = useLedgerStore();
