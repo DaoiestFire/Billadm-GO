@@ -84,7 +84,7 @@ const {hoverBgColor, iconColor} = useCssVariables();
 const timeRange = computed({
   get: () => props.timeRange,
   set: (val) => {
-    emit('update:modelValue', val);
+    emit('update:timeRange', val);
     emit('change', val, props.timeRangeType);
   }
 });

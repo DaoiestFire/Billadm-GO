@@ -59,7 +59,6 @@ const handleFullscreenChange = (index, isFullscreen) => {
 <style scoped>
 .billadm-chart-display {
   width: 100%;
-  padding: 8px;
   box-sizing: border-box;
 }
 
