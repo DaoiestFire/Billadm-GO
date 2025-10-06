@@ -52,7 +52,7 @@
 import {ref} from 'vue'
 import {useCssVariables} from '@/css/css.js'
 import {useTrViewStore} from "@/stores/trViewStore.js";
-import {deleteTrById} from "@/backend/tr.js";
+import {deleteTrById} from "@/backend/api/tr.js";
 import NotificationUtil from "@/backend/notification.js";
 import BilladmModal from "@/components/BilladmModal.vue";
 

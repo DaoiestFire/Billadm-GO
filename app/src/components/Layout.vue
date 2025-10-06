@@ -46,7 +46,7 @@ import {useTrViewStore} from "@/stores/trViewStore.js";
 import {useCategoryStore} from "@/stores/categoryStore.js";
 import {useTagStore} from "@/stores/tagStore.js";
 import {useCssVariables} from "@/css/css.js";
-import {openWorkspace} from "@/backend/workspace.js";
+import {openWorkspace} from "@/backend/api/workspace.js";
 import NotificationUtil from "@/backend/notification.js";
 
 

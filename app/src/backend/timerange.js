@@ -146,18 +146,6 @@ export function getThisYearRange() {
     return [setToStartOfDay(start), setToEndOfDay(end)];
 }
 
-export function getPreviousDay(date) {
-    const result = new Date(date);
-    result.setDate(result.getDate() - 1);
-    return result;
-}
-
-export function getNextDay(date) {
-    const result = new Date(date);
-    result.setDate(result.getDate() + 1);
-    return result;
-}
-
 /**
  * 判断两个 Date 对象之间的时间区间粒度，并返回向后一个周期的新区间
  * @param {Date} startDate - 开始时间，时分秒毫秒为 0,0,0,0

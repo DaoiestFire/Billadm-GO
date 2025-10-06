@@ -30,7 +30,7 @@ import {useCssVariables} from '@/css/css.js';
 import iconZoomOut from '@/assets/icons/zoom-out.svg?raw';
 import iconZoomIn from '@/assets/icons/zoom-in.svg?raw';
 import iconClose from '@/assets/icons/close.svg?raw';
-import {exitApp} from "@/backend/app.js";
+import {exitApp} from "@/backend/api/app.js";
 
 // 当前视图
 const route = useRoute()

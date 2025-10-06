@@ -1,6 +1,6 @@
 import {describe, it} from "vitest";
-import {createLedgerByName} from "@/backend/ledger.js";
-import {trFormToTrDto, createTrForLedger, deleteTrById, getAllTrsFromLedgerById} from "@/backend/tr.js";
+import {createLedgerByName} from "@/backend/api/ledger.js";
+import {trFormToTrDto, createTrForLedger, deleteTrById, getAllTrsFromLedgerById} from "@/backend/api/tr.js";
 import {TransactionType} from "@/backend/constant.js";
 
 describe('Tr Utils', () => {

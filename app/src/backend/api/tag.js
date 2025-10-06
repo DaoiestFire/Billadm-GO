@@ -1,4 +1,4 @@
-import api_client from "@/backend/api_client.js";
+import api_client from "@/backend/api/api_client.js";
 import {isResponseSuccess} from "@/backend/functions.js";
 
 export async function queryAllTag() {

@@ -40,7 +40,7 @@ import BilladmTimeSelect from "@/components/BilladmTimeSelect.vue";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
-import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/tr.js";
+import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/api/tr.js";
 import {getNextPeriod, getPrevPeriod,} from "@/backend/timerange.js";
 import {PageSizeOptions} from "@/backend/constant.js";
 

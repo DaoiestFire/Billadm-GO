@@ -1,6 +1,6 @@
 import {computed, ref, watch} from "vue";
 import {defineStore} from 'pinia';
-import {queryTrCountOnCondition, queryTrsOnCondition, queryTrStatisticsOnCondition} from "@/backend/tr.js";
+import {queryTrCountOnCondition, queryTrsOnCondition, queryTrStatisticsOnCondition} from "@/backend/api/tr.js";
 import NotificationUtil from "@/backend/notification.js";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {dateToUnixTimestamp} from "@/backend/functions.js";

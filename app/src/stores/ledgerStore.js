@@ -1,8 +1,8 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import {createLedgerByName, deleteLedgerById, queryAllLedgers} from "@/backend/ledger.js";
+import {createLedgerByName, deleteLedgerById, queryAllLedgers} from "@/backend/api/ledger.js";
 import NotificationUtil from "@/backend/notification";
-import {hasOpenedWorkspace} from "@/backend/workspace.js";
+import {hasOpenedWorkspace} from "@/backend/api/workspace.js";
 
 // 定义账本对象的类型 (JavaScript 中主要用于文档和类型提示，TypeScript 中更严格)
 /**

@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import {queryAllCategory} from "@/backend/category.js";
+import {queryAllCategory} from "@/backend/api/category.js";
 import NotificationUtil from "@/backend/notification.js";
 
 export const useCategoryStore = defineStore('category', () => {

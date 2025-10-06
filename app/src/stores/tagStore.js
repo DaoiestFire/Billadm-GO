@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import {queryAllTag} from "@/backend/tag.js";
+import {queryAllTag} from "@/backend/api/tag.js";
 import NotificationUtil from "@/backend/notification.js";
 
 export const useTagStore = defineStore('tag', () => {

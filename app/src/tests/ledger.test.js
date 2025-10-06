@@ -1,4 +1,4 @@
-import {createLedgerByName, queryAllLedgers, getLedgerById} from "@/backend/ledger.js";
+import {createLedgerByName, queryAllLedgers, getLedgerById} from "@/backend/api/ledger.js";
 import {describe, it} from 'vitest';
 
 describe('Ledger Utils', () => {
