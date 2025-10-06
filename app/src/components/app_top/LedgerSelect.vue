@@ -166,6 +166,10 @@ const onConfirm = async (data) => {
   background-color: var(--billadm-color-major-backgroud-color);
 }
 
+.ledger-select:hover {
+  border-color: var(--billadm-color-positive-color);
+}
+
 .select-left {
   flex: 1;
   display: flex;
@@ -189,6 +193,7 @@ const onConfirm = async (data) => {
   background-color: var(--billadm-color-major-backgroud-color);
   overflow-y: auto;
   z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-item {
