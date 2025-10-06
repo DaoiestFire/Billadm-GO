@@ -176,6 +176,7 @@ const onConfirm = async (data) => {
   align-items: center;
   justify-content: center;
   width: 130px;
+  user-select: none;
 }
 
 .select-right {
