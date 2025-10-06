@@ -14,6 +14,7 @@ export const useTrViewStore = defineStore('trView', () => {
     const pageSize = ref(20) // 每页记录数
     const trCount = ref(0) // 总记录数
     const timeRange = ref(getThisMonthRange()) // 时间选择器
+    const timeRangeType = ref('daterange') // 时间选择器
     const trStatistics = ref({}) // 时间范围内消费记录的统计数据
 
     // computed
@@ -110,6 +111,7 @@ export const useTrViewStore = defineStore('trView', () => {
         pageSize,
         trCount,
         timeRange,
+        timeRangeType,
         trStatistics,
         init,
         refreshTableData,

@@ -3,12 +3,14 @@
     <!-- 上栏：工具栏 -->
     <div class="top-bar">
       <div class="left-groups">
+        <billadm-select v-model="trViewStore.timeRangeType" :options="getTimeRangeTypes()" :height="24" :width="30"
+                        direction="down"/>
         <billadm-icon-button :svg="iconLeft" label="向前一天" width="30px" height="30px" bg-size="26px"
                              :color="iconColor" bg-color="transparent" :hover-bg-color="hoverBgColor"
                              tooltipPlacement="bottom" @click="goToPreviousDay"/>
         <el-date-picker
             v-model="trViewStore.timeRange"
-            type="daterange"
+            :type="trViewStore.timeRangeType"
             range-separator="~"
             start-placeholder="起始时间"
             end-placeholder="结束时间"
@@ -35,7 +37,7 @@
 
     <!-- 下栏：分页组件 -->
     <div class="bottom-bar">
-      <billadm-select v-model="trViewStore.pageSize" :options="options" direction="up"/>
+      <billadm-select v-model="trViewStore.pageSize" :options="getPageSizeOptions()" direction="up"/>
       <pagination v-model:current-page="trViewStore.currentPage" :pages="trViewStore.pages"/>
     </div>
   </div>
@@ -56,7 +58,13 @@ import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
 import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/tr.js";
-import {getNextPeriod, getPrevPeriod, getShortcuts} from "@/backend/timerange.js";
+import {
+  getNextPeriod,
+  getPageSizeOptions,
+  getPrevPeriod,
+  getShortcuts,
+  getTimeRangeTypes
+} from "@/backend/timerange.js";
 import {useCssVariables} from "@/css/css.js";
 
 // css variables
@@ -65,13 +73,6 @@ const {hoverBgColor, iconColor} = useCssVariables();
 // store
 const ledgerStore = useLedgerStore();
 const trViewStore = useTrViewStore();
-
-// 视图常量
-const options = [
-  {label: '每页10行', value: 10},
-  {label: '每页20行', value: 20},
-  {label: '每页50行', value: 50}
-]
 
 const columnStyles = [
   {

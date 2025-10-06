@@ -271,3 +271,19 @@ export function getShortcuts() {
         }
     ]
 }
+
+export function getTimeRangeTypes() {
+    return [
+        {label: '年', value: 'yearrange'},
+        {label: '月', value: 'monthrange'},
+        {label: '日', value: 'daterange'}
+    ]
+}
+
+export function getPageSizeOptions() {
+    return [
+        {label: '每页10行', value: 10},
+        {label: '每页20行', value: 20},
+        {label: '每页50行', value: 50}
+    ]
+}
