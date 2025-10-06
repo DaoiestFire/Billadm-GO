@@ -4,8 +4,8 @@
     <div class="top-bar">
       <div class="left-groups">
         <billadm-time-select
-            v-model="trViewStore.timeRange"
-            v-model:timeRangeType="trViewStore.timeRangeType"
+            v-model:time-range="trViewStore.timeRange"
+            v-model:time-range-type="trViewStore.timeRangeType"
         />
       </div>
       <div class="center-groups">
@@ -22,7 +22,7 @@
 
     <!-- 下栏：分页组件 -->
     <div class="bottom-bar">
-      <billadm-select v-model="trViewStore.pageSize" :options="getPageSizeOptions()" direction="up"/>
+      <billadm-select v-model="trViewStore.pageSize" :options="PageSizeOptions" direction="up"/>
       <pagination v-model:current-page="trViewStore.currentPage" :pages="trViewStore.pages"/>
     </div>
   </div>
@@ -41,7 +41,8 @@ import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
 import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/tr.js";
-import {getNextPeriod, getPageSizeOptions, getPrevPeriod,} from "@/backend/timerange.js";
+import {getNextPeriod, getPrevPeriod,} from "@/backend/timerange.js";
+import {PageSizeOptions} from "@/backend/constant.js";
 
 
 // store

@@ -3,7 +3,7 @@
     <!-- 时间范围类型选择 -->
     <billadm-select
         v-model="timeRangeType"
-        :options="getTimeRangeTypes()"
+        :options="TimeRangeTypes"
         :height="24"
         :width="30"
         direction="down"
@@ -33,7 +33,7 @@
         size="small"
         :editable="false"
         style="width: 200px;"
-        :shortcuts="getShortcuts()"
+        :shortcuts="TimeRangeShortcuts"
     />
 
     <!-- 向后按钮 -->
@@ -58,12 +58,13 @@ import BilladmSelect from '@/components/BilladmSelect.vue';
 import BilladmIconButton from '@/components/BilladmIconButton.vue';
 import iconLeft from '@/assets/icons/left.svg?raw';
 import iconRight from '@/assets/icons/right.svg?raw';
-import {getNextPeriod, getPrevPeriod, getShortcuts, getTimeRangeTypes} from '@/backend/timerange.js';
+import {getNextPeriod, getPrevPeriod} from '@/backend/timerange.js';
 import {useCssVariables} from '@/css/css.js';
+import {TimeRangeShortcuts, TimeRangeTypes} from "@/backend/constant.js";
 
 // 接收父组件传入的 v-model 绑定的时间范围和类型
 const props = defineProps({
-  modelValue: {
+  timeRange: {
     type: [Array, String, Date],
     required: true
   },
@@ -74,17 +75,17 @@ const props = defineProps({
 });
 
 // 定义事件
-const emit = defineEmits(['update:modelValue', 'update:timeRangeType', 'change']);
+const emit = defineEmits(['update:timeRange', 'update:timeRangeType', 'change']);
 
 // 样式变量
 const {hoverBgColor, iconColor} = useCssVariables();
 
 // 双向绑定时间范围和类型
 const timeRange = computed({
-  get: () => props.modelValue,
+  get: () => props.timeRange,
   set: (val) => {
     emit('update:modelValue', val);
-    emit('change', val, props.timeRangeType); // 可选：通知外部时间已变更
+    emit('change', val, props.timeRangeType);
   }
 });
 
@@ -92,22 +93,22 @@ const timeRangeType = computed({
   get: () => props.timeRangeType,
   set: (val) => {
     emit('update:timeRangeType', val);
-    emit('change', props.modelValue, val); // 同时触发变更
+    emit('change', props.timeRange, val);
   }
 });
 
 // 按钮点击事件
 const goToPrevious = () => {
-  if (!Array.isArray(props.modelValue)) return;
-  const [start, end] = props.modelValue;
+  if (!Array.isArray(props.timeRange)) return;
+  const [start, end] = props.timeRange;
   const newRange = getPrevPeriod(start, end);
   emit('update:modelValue', newRange);
   emit('change', newRange, props.timeRangeType);
 };
 
 const goToNext = () => {
-  if (!Array.isArray(props.modelValue)) return;
-  const [start, end] = props.modelValue;
+  if (!Array.isArray(props.timeRange)) return;
+  const [start, end] = props.timeRange;
   const newRange = getNextPeriod(start, end);
   emit('update:modelValue', newRange);
   emit('change', newRange, props.timeRangeType);

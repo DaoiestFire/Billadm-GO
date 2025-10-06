@@ -4,8 +4,8 @@
     <div class="top-bar">
       <div class="left-groups">
         <billadm-time-select
-            v-model="trViewStore.timeRange"
-            v-model:timeRangeType="trViewStore.timeRangeType"
+            v-model:time-range="trViewStore.timeRange"
+            v-model:time-range-type="trViewStore.timeRangeType"
         />
       </div>
       <div class="center-groups">
