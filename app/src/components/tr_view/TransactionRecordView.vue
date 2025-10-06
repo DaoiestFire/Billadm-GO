@@ -41,7 +41,6 @@ import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 import NotificationUtil from "@/backend/notification.js";
 import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/api/tr.js";
-import {getNextPeriod, getPrevPeriod,} from "@/backend/timerange.js";
 import {PageSizeOptions} from "@/backend/constant.js";
 
 
@@ -124,22 +123,6 @@ async function handleConfirm(data) {
   } catch (error) {
     NotificationUtil.error(`消费记录操作失败 ${error}`);
   }
-}
-
-const goToPreviousDay = () => {
-  let range = trViewStore.timeRange;
-  if (!Array.isArray(range)) {
-    return;
-  }
-  trViewStore.timeRange = getPrevPeriod(range[0], range[1]);
-}
-
-const goToNextDay = () => {
-  let range = trViewStore.timeRange;
-  if (!Array.isArray(range)) {
-    return;
-  }
-  trViewStore.timeRange = getNextPeriod(range[0], range[1]);
 }
 </script>
 

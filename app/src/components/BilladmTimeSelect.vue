@@ -101,7 +101,7 @@ const timeRangeType = computed({
 const goToPrevious = () => {
   if (!Array.isArray(props.timeRange)) return;
   const [start, end] = props.timeRange;
-  const newRange = getPrevPeriod(start, end);
+  const newRange = getPrevPeriod(start, end, props.timeRangeType);
   emit('update:modelValue', newRange);
   emit('change', newRange, props.timeRangeType);
 };
@@ -109,7 +109,7 @@ const goToPrevious = () => {
 const goToNext = () => {
   if (!Array.isArray(props.timeRange)) return;
   const [start, end] = props.timeRange;
-  const newRange = getNextPeriod(start, end);
+  const newRange = getNextPeriod(start, end, props.timeRangeType);
   emit('update:modelValue', newRange);
   emit('change', newRange, props.timeRangeType);
 };
