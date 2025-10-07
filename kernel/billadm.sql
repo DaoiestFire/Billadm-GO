@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS tbl_billadm_tag
 DELETE
 FROM tbl_billadm_tag
 WHERE name in ('三餐',
+               '商场',
                '外卖',
                '奶茶',
                '零食',
@@ -107,6 +108,7 @@ WHERE name in ('三餐',
 
 INSERT INTO tbl_billadm_tag (name, scope)
 VALUES ('三餐', 'system'),
+       ('商场', 'system'),
        ('外卖', 'system'),
        ('奶茶', 'system'),
        ('零食', 'system'),
