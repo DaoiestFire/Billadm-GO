@@ -58,7 +58,7 @@ import BilladmSelect from '@/components/BilladmSelect.vue';
 import BilladmIconButton from '@/components/BilladmIconButton.vue';
 import iconLeft from '@/assets/icons/left.svg?raw';
 import iconRight from '@/assets/icons/right.svg?raw';
-import {getNextPeriod, getPrevPeriod} from '@/backend/timerange.js';
+import {getNextPeriod, getPrevPeriod, normalizeTimeRange} from '@/backend/timerange.js';
 import {useCssVariables} from '@/css/css.js';
 import {TimeRangeShortcuts, TimeRangeTypes} from "@/backend/constant.js";
 
@@ -84,6 +84,7 @@ const {hoverBgColor, iconColor} = useCssVariables();
 const timeRange = computed({
   get: () => props.timeRange,
   set: (val) => {
+    val = normalizeTimeRange(val[0], val[1], props.timeRangeType);
     emit('update:timeRange', val);
     emit('change', val, props.timeRangeType);
   }

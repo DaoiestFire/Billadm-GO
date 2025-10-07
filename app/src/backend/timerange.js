@@ -272,3 +272,16 @@ function shiftOneYear(startDate, endDate, direction) {
     newEnd.setMonth(12, 0);
     return [setToStartOfDay(newStart), setToEndOfDay(newEnd)];
 }
+
+/**
+ * 规范化时间范围,简单的向前再向后滑动时间戳
+ * @param {Date} startDate - 开始时间，时分秒毫秒为 0,0,0,0
+ * @param {Date} endDate - 结束时间，时分秒毫秒为 23:59:59.999
+ * @param {String} timeRangeType
+ * @returns {[Date, Date]} 新的时间区间
+ */
+export function normalizeTimeRange(startDate, endDate, timeRangeType) {
+    let ret;
+    ret = getPrevPeriod(startDate, endDate, timeRangeType);
+    return getNextPeriod(ret[0], ret[1], timeRangeType);
+}
