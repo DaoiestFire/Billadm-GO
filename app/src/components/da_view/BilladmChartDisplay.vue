@@ -34,6 +34,10 @@ const props = defineProps({
       );
     }
   },
+  trFormList: {
+    type: Array,
+    required: true
+  },
   columns: {
     type: Number,
     default: 2

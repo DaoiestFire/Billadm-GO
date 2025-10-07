@@ -70,7 +70,6 @@
 
 <script setup>
 import {ref, watch} from 'vue';
-import {getTodayMiddleDate} from "@/backend/util.js";
 import {useCategoryStore} from "@/stores/categoryStore.js";
 import {useTagStore} from "@/stores/tagStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
@@ -147,7 +146,9 @@ const getFormDate = () => {
     ts.setHours(12, 0, 0, 0);
     return ts;
   }
-  return getTodayMiddleDate();
+  const noonToday = new Date();
+  noonToday.setHours(12, 0, 0, 0);
+  return noonToday;
 }
 
 // --- 方法 ---

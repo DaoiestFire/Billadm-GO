@@ -17,24 +17,43 @@
     </div>
 
     <div class="middle-section">
-      <billadm-chart-display :charts="chartData"/>
+      <billadm-chart-display :charts="chartData" :tr-form-list="trs"/>
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import BilladmChartDisplay from "@/components/da_view/BilladmChartDisplay.vue";
 import BilladmTimeSelect from "@/components/BilladmTimeSelect.vue";
+import {useLedgerStore} from "@/stores/ledgerStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
+import {dateToUnixTimestamp} from "@/backend/functions.js";
+import {queryTrsOnCondition, trDtoToTrForm} from "@/backend/api/tr.js";
+import NotificationUtil from "@/backend/notification.js";
 
 // store
+const ledgerStore = useLedgerStore();
 const trViewStore = useTrViewStore();
 
 // 组件响应式变量
 const timeRangeType = ref(trViewStore.timeRangeType);
 const timeRange = ref([new Date(trViewStore.timeRange[0]), new Date(trViewStore.timeRange[1])]);
+const trs = ref([]);
 
+watch(() => [timeRange.value, ledgerStore.currentLedger], async () => {
+  try {
+    let condition = {};
+    condition['ledger_id'] = ledgerStore.currentLedgerId;
+    condition['ts_range'] = [dateToUnixTimestamp(timeRange.value[0]), dateToUnixTimestamp(timeRange.value[1])];
+    let trDtos = await queryTrsOnCondition(condition);
+    trs.value = trDtos.map(item => {
+      return trDtoToTrForm(item);
+    })
+  } catch (error) {
+    NotificationUtil.error(`数据分析请求 ${error}`)
+  }
+})
 // 图表
 const chartData = ref([
   {
