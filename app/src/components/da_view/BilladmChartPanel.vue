@@ -89,7 +89,6 @@ const toggleFullscreen = () => {
 </script>
 
 <style scoped>
-/* 添加适当的样式 */
 .billadm-chart-panel {
   background: var(--billadm-color-major-backgroud-color);
   border: 1px solid var(--billadm-color-window-border-color);
