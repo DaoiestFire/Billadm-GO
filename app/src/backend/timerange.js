@@ -244,10 +244,12 @@ function shiftOneWeek(startDate, endDate, direction) {
  */
 function shiftOneMonth(startDate, endDate, direction) {
     let newStart = new Date(startDate);
+    newStart.setDate(1);
     newStart.setMonth(startDate.getMonth() + direction);
     newStart = getStartDayOfMonth(newStart)
 
     let newEnd = new Date(endDate);
+    newEnd.setDate(1);
     newEnd.setMonth(endDate.getMonth() + direction);
     newEnd = getLastDayOfMonth(newEnd)
 
