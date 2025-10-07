@@ -50,7 +50,11 @@
           <!-- 价格 -->
           <div class="form-item">
             <label>价格</label>
-            <el-input-number v-model="formData.price" :min="0" style="width: 100%"/>
+            <el-input-number v-model="formData.price" :min="0" style="width: 100%" :controls="false">
+              <template #suffix>
+                <span>RMB</span>
+              </template>
+            </el-input-number>
           </div>
         </div>
 
