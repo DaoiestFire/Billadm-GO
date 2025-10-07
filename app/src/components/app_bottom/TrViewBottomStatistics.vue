@@ -5,7 +5,7 @@
         v-for="item in statistics"
         :key="item.label"
     >
-      <span class="label">{{ item.label }}</span>
+      <billadm-label>{{ item.label }}</billadm-label>
       <span class="value">{{ formatFloat(item.value) }}</span>
     </div>
   </div>
@@ -13,10 +13,11 @@
 
 <script setup>
 import {computed} from "vue";
+import BilladmLabel from "@/components/text/BilladmLabel.vue";
 import {useTrViewStore} from "@/stores/trViewStore.js";
-import {formatFloat} from "../../backend/functions.js";
+import {formatFloat} from "@/backend/functions.js";
 
-const trViewStore = useTrViewStore()
+const trViewStore = useTrViewStore();
 
 const statistics = computed(() => {
   return [
@@ -50,9 +51,5 @@ const statistics = computed(() => {
   align-items: center;
   justify-content: center;
   gap: 4px;
-}
-
-.label {
-  color: var(--billadm-color-text-minor-color);
 }
 </style>
