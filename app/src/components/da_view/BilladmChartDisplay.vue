@@ -2,7 +2,7 @@
   <el-scrollbar>
     <div class="billadm-chart-display">
       <div class="charts-grid" :style="gridStyle">
-        <BilladmChart
+        <billadm-chart-panel
             v-for="(chart, index) in charts"
             :key="index"
             :title="chart.title"
@@ -17,7 +17,7 @@
 
 <script setup>
 import {computed} from 'vue';
-import BilladmChart from "@/components/da_view/BilladmChart.vue";
+import BilladmChartPanel from "@/components/da_view/BilladmChartPanel.vue";
 
 const props = defineProps({
   charts: {
