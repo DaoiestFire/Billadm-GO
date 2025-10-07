@@ -17,7 +17,7 @@
     </div>
 
     <div class="middle-section">
-      <billadm-chart-display :charts="chartData" :tr-form-list="trs"/>
+      <billadm-chart-display :tr-form-list="trs"/>
     </div>
   </div>
 </template>
@@ -49,50 +49,11 @@ watch(() => [timeRange.value, ledgerStore.currentLedger], async () => {
     let trDtos = await queryTrsOnCondition(condition);
     trs.value = trDtos.map(item => {
       return trDtoToTrForm(item);
-    })
+    });
   } catch (error) {
-    NotificationUtil.error(`数据分析请求 ${error}`)
+    NotificationUtil.error(`数据分析请求 ${error}`);
   }
 })
-// 图表
-const chartData = ref([
-  {
-    title: '销售额趋势',
-    option: {
-      tooltip: {trigger: 'axis'},
-      xAxis: {type: 'category', data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']},
-      yAxis: {type: 'value'},
-      series: [{data: [120, 132, 101, 134, 90, 230, 210], type: 'line'}]
-    },
-    height: '300px',
-    isFullscreen: false
-  },
-  {
-    title: '产品分布',
-    option: {
-      tooltip: {trigger: 'item'},
-      series: [{
-        type: 'pie',
-        data: [
-          {value: 335, name: '商品A'},
-          {value: 310, name: '商品B'},
-          {value: 234, name: '商品C'},
-          {value: 135, name: '商品D'}
-        ]
-      }]
-    },
-    isFullscreen: false
-  },
-  {
-    title: '用户活跃度',
-    option: {
-      xAxis: {type: 'value'},
-      yAxis: {type: 'category', data: ['北京', '上海', '广州', '深圳']},
-      series: [{data: [200, 180, 160, 140], type: 'bar'}]
-    },
-    isFullscreen: false
-  }
-])
 </script>
 
 <style scoped>

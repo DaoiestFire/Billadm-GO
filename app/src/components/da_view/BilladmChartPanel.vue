@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue';
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
 import {useCssVariables} from "@/css/css.js";
 
@@ -21,23 +20,18 @@ const {uiSizeMenuWidth} = useCssVariables();
 const props = defineProps({
   title: {
     type: String,
-    default: '图表标题'
+    default: '图表标题',
+    required: true
   },
   option: {
     type: Object,
     required: true
   },
-  fullscreen: {
-    type: Boolean,
-    default: false
+  type: {
+    type: String,
+    required: true
   }
 });
-
-const isFullscreen = ref(props.fullscreen);
-
-watch(() => props.fullscreen, (newVal) => {
-  isFullscreen.value = newVal;
-}, {immediate: true});
 </script>
 
 <style scoped>

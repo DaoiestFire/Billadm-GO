@@ -10,7 +10,7 @@
           <billadm-chart-panel
               :title="chart.title"
               :option="chart.option"
-              :fullscreen="chart.isFullscreen"
+              :type="chart.type"
           />
         </billadm-fullscreen>
       </div>
@@ -19,21 +19,11 @@
 </template>
 
 <script setup>
-import {computed} from 'vue';
+import {computed, ref} from 'vue';
 import BilladmChartPanel from "@/components/da_view/BilladmChartPanel.vue";
 import BilladmFullscreen from "@/components/common/BilladmFullScreen.vue";
 
 const props = defineProps({
-  charts: {
-    type: Array,
-    required: true,
-    validator: (charts) => {
-      return charts.every(chart =>
-          typeof chart.title === 'string' &&
-          typeof chart.option === 'object'
-      );
-    }
-  },
   trFormList: {
     type: Array,
     required: true
@@ -52,6 +42,14 @@ const gridStyle = computed(() => {
     width: '100%'
   };
 });
+
+
+// 处理传入的trFrom数据生成表格数据
+const generateCharts = () => {
+  return [];
+}
+
+const charts = ref(generateCharts());
 </script>
 
 <style scoped>
