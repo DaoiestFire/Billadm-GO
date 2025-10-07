@@ -43,7 +43,6 @@ const gridStyle = computed(() => {
   };
 });
 
-
 // 处理传入的trFrom数据生成表格数据
 const generateCharts = () => {
   return [];
