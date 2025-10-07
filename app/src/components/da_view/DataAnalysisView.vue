@@ -23,17 +23,17 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue';
+import {ref} from 'vue';
 import BilladmChartDisplay from "@/components/da_view/BilladmChartDisplay.vue";
 import BilladmTimeSelect from "@/components/BilladmTimeSelect.vue";
 import {useTrViewStore} from "@/stores/trViewStore.js";
 
-// 组件响应式变量
-const timeRangeType = ref('');
-const timeRange = ref([]);
-
 // store
 const trViewStore = useTrViewStore();
+
+// 组件响应式变量
+const timeRangeType = ref(trViewStore.timeRangeType);
+const timeRange = ref([new Date(trViewStore.timeRange[0]), new Date(trViewStore.timeRange[1])]);
 
 // 图表
 const chartData = ref([
@@ -74,12 +74,6 @@ const chartData = ref([
     isFullscreen: false
   }
 ])
-
-onMounted(() => {
-  console.log(trViewStore.timeRangeType, trViewStore.timeRange);
-  timeRangeType.value = trViewStore.timeRangeType;
-  timeRange.value = [new Date(trViewStore.timeRange[0]), new Date(trViewStore.timeRange[1])];
-})
 </script>
 
 <style scoped>
