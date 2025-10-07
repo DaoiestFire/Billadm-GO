@@ -1,30 +1,8 @@
+<!-- components/da_view/BilladmChartPanel.vue -->
 <template>
-  <!-- 非全屏时正常渲染 -->
-  <div v-if="!isFullscreen" class="billadm-chart-panel">
-    <div class="panel-header">
-      <h3 class="chart-title">{{ title }}</h3>
-      <BilladmIconButton
-          :svg="iconFullScreen"
-          :width="uiSizeMenuWidth"
-          :height="uiSizeMenuWidth"
-          :color="iconColor"
-          :hover-bg-color="hoverBgColor"
-          :active-fg-color="iconActiveFgColor"
-          @click="toggleFullscreen"
-      />
-    </div>
-    <div class="panel-container">
-      <BilladmChart :option="option"/>
-    </div>
-    <div class="panel-footer">
-    </div>
-  </div>
-
-  <!-- 全屏时使用 teleport 渲染到 body -->
-  <teleport to="body" :disabled="!isFullscreen">
-    <div v-if="isFullscreen" class="billadm-chart-panel fullscreen">
-      <div class="chart-mask" @click.self="toggleFullscreen"></div>
-      <div class="panel-wrapper">
+  <BilladmFullscreen v-model="isFullscreen" :dblclick="true">
+    <template #default="{ toggleFullscreen }">
+      <div class="panel-outer">
         <div class="panel-header">
           <h3 class="chart-title">{{ title }}</h3>
           <BilladmIconButton
@@ -40,17 +18,17 @@
         <div class="panel-container">
           <BilladmChart :option="option"/>
         </div>
-        <div class="panel-footer">
-        </div>
+        <div class="panel-footer"/>
       </div>
-    </div>
-  </teleport>
+    </template>
+  </BilladmFullscreen>
 </template>
 
 <script setup>
 import {ref, watch} from 'vue';
 import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
+import BilladmFullscreen from "@/components/common/BilladmFullscreen.vue"; // 引入新组件
 import iconFullScreen from '@/assets/icons/full-screen.svg?raw';
 import {useCssVariables} from "@/css/css.js";
 
@@ -75,58 +53,30 @@ const emit = defineEmits(['update:fullscreen']);
 
 const isFullscreen = ref(props.fullscreen);
 
-watch(
-    () => props.fullscreen,
-    (newVal) => {
-      isFullscreen.value = newVal;
-    },
-    {immediate: true}
-);
+watch(() => props.fullscreen, (newVal) => {
+  isFullscreen.value = newVal;
+}, {immediate: true});
 
-const toggleFullscreen = () => {
-  emit('update:fullscreen', !isFullscreen.value);
-};
+watch(isFullscreen, (val) => {
+  emit('update:fullscreen', val);
+});
 </script>
 
 <style scoped>
-.billadm-chart-panel {
+.panel-outer {
   background: var(--billadm-color-major-backgroud-color);
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 8px;
   overflow: hidden;
-  position: relative;
-}
-
-.billadm-chart-panel.fullscreen {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.panel-wrapper {
-  width: 80%;
-  height: auto;
-  background: var(--billadm-color-major-backgroud-color);
-  border: 1px solid var(--billadm-color-window-border-color);
-  border-radius: 16px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  width: auto;
+  height: auto;
 }
 
-/* 遮罩层 */
-.chart-mask {
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: -1;
-}
-
+/* header & footer */
 .panel-header, .panel-footer {
-  height: var(--billadm-ui-size-menu-width);
+  height: v-bind(uiSizeMenuWidth);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -142,9 +92,10 @@ const toggleFullscreen = () => {
 }
 
 .panel-container {
+  flex: 1;
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 2;
-  max-height: 100%;
+  min-height: 0;
 }
 </style>
