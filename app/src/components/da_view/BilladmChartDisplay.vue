@@ -2,14 +2,17 @@
   <el-scrollbar>
     <div class="billadm-chart-display">
       <div class="charts-grid" :style="gridStyle">
-        <billadm-chart-panel
+        <billadm-fullscreen
             v-for="(chart, index) in charts"
             :key="index"
-            :title="chart.title"
-            :option="chart.option"
-            :fullscreen="chart.isFullscreen"
-            @update:fullscreen="handleFullscreenChange(index, $event)"
-        />
+            v-model="chart.isFullscreen"
+            :dblclick="true">
+          <billadm-chart-panel
+              :title="chart.title"
+              :option="chart.option"
+              :fullscreen="chart.isFullscreen"
+          />
+        </billadm-fullscreen>
       </div>
     </div>
   </el-scrollbar>
@@ -18,6 +21,7 @@
 <script setup>
 import {computed} from 'vue';
 import BilladmChartPanel from "@/components/da_view/BilladmChartPanel.vue";
+import BilladmFullscreen from "@/components/common/BilladmFullScreen.vue";
 
 const props = defineProps({
   charts: {
@@ -44,16 +48,6 @@ const gridStyle = computed(() => {
     width: '100%'
   };
 });
-
-// 处理全屏切换
-const handleFullscreenChange = (index, isFullscreen) => {
-  props.charts[index].isFullscreen = isFullscreen;
-  props.charts.forEach((chart, i) => {
-    if (i !== index) {
-      chart.isFullscreen = false;
-    }
-  });
-};
 </script>
 
 <style scoped>

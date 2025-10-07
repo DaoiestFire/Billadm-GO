@@ -1,8 +1,8 @@
 <!-- components/BilladmFullscreen.vue -->
 <template>
   <!-- 非全屏状态：正常渲染插槽内容 -->
-  <div v-if="!isFullscreen" class="billadm-fullscreen-wrapper" @dblclick="handleDblClick">
-    <slot :fullscreen="isFullscreen" :toggleFullscreen="toggleFullscreen"/>
+  <div v-if="!isFullscreen" class="billadm-fullscreen-wrapper" @dblclick.stop="handleDblClick">
+    <slot/>
   </div>
 
   <!-- 全屏状态：使用 teleport 渲染到 body -->
@@ -10,7 +10,7 @@
     <div v-if="isFullscreen" class="billadm-fullscreen-wrapper fullscreen">
       <div class="fullscreen-mask" @click.self="toggleFullscreen"></div>
       <div class="fullscreen-panel">
-        <slot :fullscreen="isFullscreen" :toggleFullscreen="toggleFullscreen"/>
+        <slot/>
       </div>
     </div>
   </teleport>

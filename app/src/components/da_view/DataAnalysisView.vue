@@ -4,12 +4,14 @@
     <div class="top-bar">
       <div class="left-groups">
         <billadm-time-select
-            v-model:time-range="trViewStore.timeRange"
-            v-model:time-range-type="trViewStore.timeRangeType"
+            v-model:time-range="timeRange"
+            v-model:time-range-type="timeRangeType"
         />
       </div>
+
       <div class="center-groups">
       </div>
+
       <div class="right-groups">
       </div>
     </div>
@@ -21,10 +23,14 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import BilladmChartDisplay from "@/components/da_view/BilladmChartDisplay.vue";
 import BilladmTimeSelect from "@/components/BilladmTimeSelect.vue";
 import {useTrViewStore} from "@/stores/trViewStore.js";
+
+// 组件响应式变量
+const timeRangeType = ref('');
+const timeRange = ref([]);
 
 // store
 const trViewStore = useTrViewStore();
@@ -68,6 +74,12 @@ const chartData = ref([
     isFullscreen: false
   }
 ])
+
+onMounted(() => {
+  console.log(trViewStore.timeRangeType, trViewStore.timeRange);
+  timeRangeType.value = trViewStore.timeRangeType;
+  timeRange.value = [new Date(trViewStore.timeRange[0]), new Date(trViewStore.timeRange[1])];
+})
 </script>
 
 <style scoped>

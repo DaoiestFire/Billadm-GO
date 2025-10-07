@@ -1,38 +1,22 @@
 <!-- components/da_view/BilladmChartPanel.vue -->
 <template>
-  <BilladmFullscreen v-model="isFullscreen" :dblclick="true">
-    <template #default="{ toggleFullscreen }">
-      <div class="panel-outer">
-        <div class="panel-header">
-          <h3 class="chart-title">{{ title }}</h3>
-          <BilladmIconButton
-              :svg="iconFullScreen"
-              :width="uiSizeMenuWidth"
-              :height="uiSizeMenuWidth"
-              :color="iconColor"
-              :hover-bg-color="hoverBgColor"
-              :active-fg-color="iconActiveFgColor"
-              @click="toggleFullscreen"
-          />
-        </div>
-        <div class="panel-container">
-          <BilladmChart :option="option"/>
-        </div>
-        <div class="panel-footer"/>
-      </div>
-    </template>
-  </BilladmFullscreen>
+  <div class="panel-outer">
+    <div class="panel-header">
+      <h3 class="chart-title">{{ title }}</h3>
+    </div>
+    <div class="panel-container">
+      <BilladmChart :option="option"/>
+    </div>
+    <div class="panel-footer"/>
+  </div>
 </template>
 
 <script setup>
 import {ref, watch} from 'vue';
-import BilladmIconButton from "@/components/BilladmIconButton.vue";
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
-import BilladmFullscreen from "@/components/common/BilladmFullscreen.vue"; // 引入新组件
-import iconFullScreen from '@/assets/icons/full-screen.svg?raw';
 import {useCssVariables} from "@/css/css.js";
 
-const {iconColor, hoverBgColor, iconActiveFgColor, uiSizeMenuWidth} = useCssVariables();
+const {uiSizeMenuWidth} = useCssVariables();
 
 const props = defineProps({
   title: {
@@ -49,17 +33,11 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update:fullscreen']);
-
 const isFullscreen = ref(props.fullscreen);
 
 watch(() => props.fullscreen, (newVal) => {
   isFullscreen.value = newVal;
 }, {immediate: true});
-
-watch(isFullscreen, (val) => {
-  emit('update:fullscreen', val);
-});
 </script>
 
 <style scoped>
