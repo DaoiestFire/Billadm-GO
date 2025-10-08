@@ -12,8 +12,10 @@
 </template>
 
 <script setup>
+import {ref} from 'vue';
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
 import {useCssVariables} from "@/css/css.js";
+import {buildOptionForTradingTrend} from "@/backend/table.js";
 
 const {uiSizeMenuWidth} = useCssVariables();
 
@@ -23,15 +25,24 @@ const props = defineProps({
     default: '图表标题',
     required: true
   },
-  option: {
-    type: Object,
-    required: true
-  },
-  type: {
-    type: String,
+  data: {
+    type: Array,
     required: true
   }
 });
+
+const option = ref({});
+
+const generateOption = (title, data) => {
+  switch (title) {
+    case '交易走势':
+      return buildOptionForTradingTrend(data);
+    default:
+      return buildOptionForTradingTrend(data);
+  }
+}
+
+option.value = generateOption(props.title, props.data);
 </script>
 
 <style scoped>

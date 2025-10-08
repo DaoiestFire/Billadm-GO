@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import {computed, defineEmits, defineProps} from 'vue';
+import {computed, defineProps} from 'vue';
 import BilladmSelect from '@/components/BilladmSelect.vue';
 import BilladmIconButton from '@/components/BilladmIconButton.vue';
 import iconLeft from '@/assets/icons/left.svg?raw';

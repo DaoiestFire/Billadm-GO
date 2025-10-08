@@ -76,7 +76,7 @@ const handleDblClick = () => {
 
 .fullscreen-panel {
   width: 80%;
-  height: 80%;
+  height: auto;
   max-width: 1200px;
   max-height: 800px;
   background: var(--billadm-color-major-backgroud-color);

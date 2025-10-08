@@ -9,8 +9,7 @@
             :dblclick="true">
           <billadm-chart-panel
               :title="chart.title"
-              :option="chart.option"
-              :type="chart.type"
+              :data="chart.data"
           />
         </billadm-fullscreen>
       </div>
@@ -34,6 +33,8 @@ const props = defineProps({
   }
 });
 
+const charts = ref([]);
+
 const gridStyle = computed(() => {
   return {
     display: 'grid',
@@ -45,10 +46,15 @@ const gridStyle = computed(() => {
 
 // 处理传入的trFrom数据生成表格数据
 const generateCharts = () => {
-  return [];
+  let charts = [];
+  charts.push({
+    title: "交易走势",
+    data: props.trFormList,
+  })
+  return charts;
 }
 
-const charts = ref(generateCharts());
+charts.value = generateCharts();
 </script>
 
 <style scoped>
