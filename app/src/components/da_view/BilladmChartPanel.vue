@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {computed} from 'vue';
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
 import {useCssVariables} from "@/css/css.js";
 import {buildOptionForTradingTrend} from "@/backend/table.js";
@@ -31,18 +31,14 @@ const props = defineProps({
   }
 });
 
-const option = ref({});
-
-const generateOption = (title, data) => {
-  switch (title) {
+const option = computed(() => {
+  switch (props.title) {
     case '交易走势':
-      return buildOptionForTradingTrend(data);
+      return buildOptionForTradingTrend(props.data);
     default:
-      return buildOptionForTradingTrend(data);
+      return buildOptionForTradingTrend(props.data);
   }
-}
-
-option.value = generateOption(props.title, props.data);
+});
 </script>
 
 <style scoped>

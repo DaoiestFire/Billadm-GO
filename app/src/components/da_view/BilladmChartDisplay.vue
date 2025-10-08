@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue';
+import {computed} from 'vue';
 import BilladmChartPanel from "@/components/da_view/BilladmChartPanel.vue";
 import BilladmFullscreen from "@/components/common/BilladmFullScreen.vue";
 
@@ -33,7 +33,15 @@ const props = defineProps({
   }
 });
 
-const charts = ref([]);
+const charts = computed(() => {
+  const charts = [];
+  charts.push({
+    title: "交易走势",
+    data: props.trFormList,
+  });
+  console.log(charts)
+  return charts;
+});
 
 const gridStyle = computed(() => {
   return {
@@ -43,18 +51,6 @@ const gridStyle = computed(() => {
     width: '100%'
   };
 });
-
-// 处理传入的trFrom数据生成表格数据
-const generateCharts = () => {
-  let charts = [];
-  charts.push({
-    title: "交易走势",
-    data: props.trFormList,
-  })
-  return charts;
-}
-
-charts.value = generateCharts();
 </script>
 
 <style scoped>
