@@ -21,9 +21,14 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+import {computed} from 'vue';
 
 const props = defineProps({
+  currentPage: {
+    type: Number,
+    required: true,
+    default: 1,
+  },
   pages: {
     type: Number,
     required: true,
@@ -38,12 +43,10 @@ const props = defineProps({
 
 const emit = defineEmits(['update:current-page'])
 
-const currentPage = ref(1)
-
 const displayedPages = computed(() => {
-  const total = props.pages
-  const current = currentPage.value
-  const maxVisible = 10
+  const total = props.pages;
+  const current = props.currentPage;
+  const maxVisible = 10;
 
   if (total <= maxVisible) {
     // 页数少于等于10，直接显示所有页码
@@ -77,8 +80,7 @@ const displayedPages = computed(() => {
 })
 
 function handlePageChange(page) {
-  if (page < 1 || page > props.pages || page === currentPage.value) return
-  currentPage.value = page
+  if (page < 1 || page > props.pages || page === props.currentPage) return
   emit('update:current-page', page)
 }
 </script>
