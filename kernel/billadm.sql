@@ -39,7 +39,18 @@ CREATE TABLE IF NOT EXISTS tbl_billadm_category
 -- 更新内置消费分类
 DELETE
 FROM tbl_billadm_category
-WHERE name in ('餐饮美食', '交通出行', '购物消费', '娱乐休闲', '生活缴费', '医疗健康', '人情往来', '教育学习');
+WHERE name in ('餐饮美食',
+               '交通出行',
+               '购物消费',
+               '娱乐休闲',
+               '生活缴费',
+               '医疗健康',
+               '人情往来',
+               '教育学习',
+               '工资奖金',
+               '二手转卖',
+               '彩票收入',
+               '投资理财');
 
 INSERT INTO tbl_billadm_category (name, scope)
 VALUES ('餐饮美食', 'system'),
@@ -49,7 +60,11 @@ VALUES ('餐饮美食', 'system'),
        ('生活缴费', 'system'),
        ('医疗健康', 'system'),
        ('人情往来', 'system'),
-       ('教育学习', 'system');
+       ('教育学习', 'system'),
+       ('工资奖金', 'system'),
+       ('二手转卖', 'system'),
+       ('彩票收入', 'system'),
+       ('投资理财', 'system');
 
 -- 创建消费标签表
 CREATE TABLE IF NOT EXISTS tbl_billadm_tag
