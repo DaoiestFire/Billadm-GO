@@ -98,7 +98,7 @@ export const useTrViewStore = defineStore('trView', () => {
         await refreshTableData();
     })
 
-    watch(() => [ledgerStore.currentLedger, LedgerpageSize.value, tsRange.value], async () => {
+    watch(() => [ledgerStore.currentLedger, pageSize.value, tsRange.value], async () => {
         resetView();
         await refreshPages();
         await refreshTableData();
