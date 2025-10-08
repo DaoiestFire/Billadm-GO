@@ -33,7 +33,6 @@
  * chart.setOption(option);
  */
 export function buildOptionForTradingTrend(data) {
-    console.log(data)
     // 定义交易类型
     const types = ['income', 'expense', 'transfer'];
 

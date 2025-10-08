@@ -39,7 +39,6 @@ const charts = computed(() => {
     title: "交易走势",
     data: props.trFormList,
   });
-  console.log(charts)
   return charts;
 });
 

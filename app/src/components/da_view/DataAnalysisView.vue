@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import BilladmChartDisplay from "@/components/da_view/BilladmChartDisplay.vue";
 import BilladmTimeSelect from "@/components/BilladmTimeSelect.vue";
 import {useLedgerStore} from "@/stores/ledgerStore.js";
@@ -41,7 +41,7 @@ const timeRangeType = ref(trViewStore.timeRangeType);
 const timeRange = ref([new Date(trViewStore.timeRange[0]), new Date(trViewStore.timeRange[1])]);
 const trs = ref([]);
 
-watch(() => [timeRange.value, ledgerStore.currentLedger], async () => {
+const refreshTrs = async () => {
   try {
     let condition = {};
     condition['ledger_id'] = ledgerStore.currentLedgerId;
@@ -53,7 +53,11 @@ watch(() => [timeRange.value, ledgerStore.currentLedger], async () => {
   } catch (error) {
     NotificationUtil.error(`数据分析请求 ${error}`);
   }
-})
+}
+
+watch(() => [timeRange.value, ledgerStore.currentLedger], refreshTrs);
+
+onMounted(refreshTrs);
 </script>
 
 <style scoped>
