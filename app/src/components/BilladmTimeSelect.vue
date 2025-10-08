@@ -93,7 +93,8 @@ const timeRange = computed({
 const timeRangeType = computed({
   get: () => props.timeRangeType,
   set: (val) => {
-    val = normalizeTimeRange(val[0], val[1], props.timeRangeType);
+    let timeRange = normalizeTimeRange(props.timeRange[0], props.timeRange[1], val);
+    emit('update:timeRange', timeRange);
     emit('update:timeRangeType', val);
     emit('change', props.timeRange, val);
   }
