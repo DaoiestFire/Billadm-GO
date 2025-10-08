@@ -22,6 +22,8 @@
  * };
  */
 
+import {TransactionType} from "@/backend/constant.js";
+
 /**
  * 根据交易记录数据生成 ECharts 折线图配置项，展示按月分类的收入、支出、转账金额趋势。
  *
@@ -33,9 +35,6 @@
  * chart.setOption(option);
  */
 export function buildOptionForTradingTrend(data) {
-    // 定义交易类型
-    const types = ['income', 'expense', 'transfer'];
-
     // 用于存储每个月每种类型的总金额
     const monthlyData = new Map();
 
@@ -58,7 +57,7 @@ export function buildOptionForTradingTrend(data) {
         }
 
         const monthObj = monthlyData.get(key);
-        if (types.includes(type)) {
+        if (Object.values(TransactionType).includes(type)) {
             monthObj[type] += amount;
         }
     });
@@ -68,7 +67,7 @@ export function buildOptionForTradingTrend(data) {
     const xAxisData = sortedMonths; // 横轴显示月份
 
     // 为每种类型生成数据数组
-    const seriesData = types.map(type =>
+    const seriesData = Object.values(TransactionType).map(type =>
         sortedMonths.map(month => monthlyData.get(month)[type])
     );
 
@@ -104,22 +103,22 @@ export function buildOptionForTradingTrend(data) {
                 name: '收入',
                 type: 'line',
                 data: seriesData[0],
-                smooth: true,
-                emphasis: {focus: 'series'}
+                emphasis: {focus: 'series'},
+                color: '#67C23A'
             },
             {
                 name: '支出',
                 type: 'line',
                 data: seriesData[1],
-                smooth: true,
-                emphasis: {focus: 'series'}
+                emphasis: {focus: 'series'},
+                color: '#f56c6c'
             },
             {
                 name: '转账',
                 type: 'line',
                 data: seriesData[2],
-                smooth: true,
-                emphasis: {focus: 'series'}
+                emphasis: {focus: 'series'},
+                color: '#409eff'
             }
         ]
     };
