@@ -34,8 +34,10 @@ export const useTrViewStore = defineStore('trView', () => {
 
     // 初始化接口
     const init = async () => {
-        await refreshPages()
-        await refreshTableData()
+        resetView();
+        await refreshPages();
+        await refreshTableData();
+        await refreshStatistics();
     }
 
     const refreshPages = async () => {
@@ -48,6 +50,9 @@ export const useTrViewStore = defineStore('trView', () => {
             const trCnt = await queryTrCountOnCondition(condition);
             const pagesVal = Math.ceil(trCnt / pageSize.value);
             pages.value = pagesVal < 1 ? 1 : pagesVal;
+            if (pages.value < currentPage.value) {
+                currentPage.value = pages.value;
+            }
             trCount.value = trCnt;
         } catch (error) {
             NotificationUtil.error(`查询消费记录数量失败 ${error}`);
@@ -89,17 +94,14 @@ export const useTrViewStore = defineStore('trView', () => {
         pageSize.value = 20;
     }
 
-    watch(() => [pageSize.value, currentPage.value, tsRange.value], async () => {
-        await init();
+    watch(() => currentPage.value, async () => {
+        await refreshTableData();
     })
 
-    watch(() => trCount.value, async () => {
-        await refreshStatistics();
-    })
-
-    watch(() => ledgerStore.currentLedger, async () => {
+    watch(() => [ledgerStore.current, LedgerpageSize.value, tsRange.value], async () => {
         resetView();
-        await init();
+        await refreshPages();
+        await refreshTableData();
         await refreshStatistics();
     })
 

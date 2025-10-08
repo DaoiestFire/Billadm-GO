@@ -118,7 +118,8 @@ async function handleConfirm(data) {
     if (opType.value === 'edit') {
       await deleteTrById(data.id);
     }
-    await trViewStore.init();
+    await trViewStore.refreshPages();
+    await trViewStore.refreshTableData();
     await trViewStore.refreshStatistics();
   } catch (error) {
     NotificationUtil.error(`消费记录操作失败 ${error}`);

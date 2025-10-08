@@ -104,8 +104,10 @@ const getShowDeleteTrFunc = (id) => {
     cancelColor.value = positiveColor.value
     confirmFunc.value = async () => {
       try {
-        await deleteTrById(id)
-        await trViewStore.init()
+        await deleteTrById(id);
+        await trViewStore.refreshPages();
+        await trViewStore.refreshTableData();
+        await trViewStore.refreshStatistics();
       } catch (error) {
         NotificationUtil.error(`删除消费记录失败 ${error}`)
       }
