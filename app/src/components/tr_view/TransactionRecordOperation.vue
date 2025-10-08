@@ -97,7 +97,7 @@ const props = defineProps({
       {label: '转账', value: 'transfer'}
     ]
   },
-  timeRange: {
+  modelValue: {
     type: Object,
     default: () => ({})
   },
@@ -111,7 +111,7 @@ const props = defineProps({
 const emit = defineEmits(['update:visible']);
 
 // --- 本地状态 ---
-const formData = ref({...props.timeRange});
+const formData = ref({...props.modelValue});
 
 // --- 监听器 ---
 // 当 visible 变为 true 时，初始化表单数据
@@ -128,7 +128,7 @@ watch(
           description: '-',
           tags: [],
           price: 0,
-          ...props.timeRange
+          ...props.modelValue
         };
       }
     }
