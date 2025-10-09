@@ -29,7 +29,7 @@
           <div class="form-item">
             <label>消费类型</label>
             <el-select v-model="formData.category" placeholder="选择消费类型" style="width: 100%">
-              <el-option v-for="category in categoryStore.categoryNames" :key="category" :value="category"/>
+              <el-option v-for="category in categories" :key="category" :value="category"/>
             </el-select>
           </div>
 
@@ -43,7 +43,7 @@
           <div class="form-item">
             <label>标签</label>
             <el-select v-model="formData.tags" multiple placeholder="添加标签" style="width: 100%">
-              <el-option v-for="tag in tagStore.tagNames" :key="tag" :value="tag"/>
+              <el-option v-for="tag in tags" :key="tag" :value="tag"/>
             </el-select>
           </div>
 
@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 import {useCategoryStore} from "@/stores/categoryStore.js";
 import {useTagStore} from "@/stores/tagStore.js";
 import {useTrViewStore} from "@/stores/trViewStore.js";
@@ -111,7 +111,27 @@ const props = defineProps({
 const emit = defineEmits(['update:visible']);
 
 // --- 本地状态 ---
-const formData = ref({...props.modelValue});
+const formData = ref({
+  id: '',
+  time: new Date(),
+  type: 'expense',
+  category: '',
+  description: '-',
+  tags: [],
+  price: 0,
+});
+
+const categories = computed(() => {
+  let ret = categoryStore.getCategoryNamesByType(formData.value.type);
+  formData.value.category = ret.length > 0 ? ret[0] : '';
+  return ret;
+})
+
+const tags = computed(() => {
+  let ret = tagStore.getTagNamesByCategory(formData.value.category);
+  formData.value.tags = [];
+  return ret;
+})
 
 // --- 监听器 ---
 // 当 visible 变为 true 时，初始化表单数据
@@ -124,7 +144,7 @@ watch(
           id: '',
           time: getFormDate(), // 默认当天12点0分0秒
           type: 'expense',
-          category: categoryStore.categoryNames.length > 0 ? categoryStore.categoryNames[0] : '',
+          category: categories.value.length > 0 ? categories.value[0] : '',
           description: '-',
           tags: [],
           price: 0,

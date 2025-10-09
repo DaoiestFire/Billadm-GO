@@ -27,7 +27,7 @@ export const useCategoryStore = defineStore('category', () => {
     // 更新指定 name 的 category
     const refreshCategory = async () => {
         try {
-            categories.value = await queryCategory()
+            categories.value = await queryCategory('all')
         } catch (error) {
             NotificationUtil.error(`获取全部消费类型失败 ${error}`)
         }

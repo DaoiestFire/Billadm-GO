@@ -26,7 +26,7 @@ export const useTagStore = defineStore('tag', () => {
 
     const refreshTag = async () => {
         try {
-            tags.value = await queryTag()
+            tags.value = await queryTag('all')
         } catch (error) {
             NotificationUtil.error(`获取全部消费标签失败 ${error}`)
         }
