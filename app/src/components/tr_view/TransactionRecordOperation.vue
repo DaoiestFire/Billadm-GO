@@ -19,10 +19,11 @@
           <!-- 交易类型 -->
           <div class="form-item">
             <label>交易类型</label>
-            <el-select v-model="formData.type" placeholder="选择交易类型" style="width: 100%">
-              <el-option v-for="type in typeOptions" :key="type.value" :label="type.label"
-                         :value="type.value"/>
-            </el-select>
+            <el-radio-group v-model="formData.type">
+              <el-radio v-for="type in typeOptions" :key="type.value" :value="type.value">
+                {{ type.label }}
+              </el-radio>
+            </el-radio-group>
           </div>
 
           <!-- 消费类型 -->
