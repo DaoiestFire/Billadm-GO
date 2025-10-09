@@ -1,21 +1,29 @@
-import {defineStore} from 'pinia'
-import {computed, ref} from 'vue'
+import {defineStore} from 'pinia';
+import {computed, ref} from 'vue';
 import {queryTag} from "@/backend/api/tag.js";
 import NotificationUtil from "@/backend/notification.js";
 
 export const useTagStore = defineStore('tag', () => {
     const tags = ref([])
 
-    // 计算属性：获取 tag 名称列表
     const tagNames = computed(() => {
-        return [...tags.value].map(tag => tag.name)
+        const map = {}
+
+        tags.value.forEach(tag => {
+            const {category, name} = tag
+            if (!map[category]) {
+                map[category] = []
+            }
+            map[category].push(name)
+        })
+
+        return map
     })
 
-    const init = async () => {
-        await refreshTag()
+    const getTagNamesByCategory = (category) => {
+        return tagNames.value[category] || []
     }
 
-    // 更新指定 name 的 tag
     const refreshTag = async () => {
         try {
             tags.value = await queryTag()
@@ -24,11 +32,10 @@ export const useTagStore = defineStore('tag', () => {
         }
     }
 
-    // 返回需要在组件中使用的状态、计算属性和方法
     return {
         tags,
         tagNames,
-        init,
+        getTagNamesByCategory,
         refreshTag,
     }
 })

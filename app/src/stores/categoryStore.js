@@ -1,19 +1,28 @@
-import {defineStore} from 'pinia'
-import {computed, ref} from 'vue'
+import {defineStore} from 'pinia';
+import {computed, ref} from 'vue';
 import {queryCategory} from "@/backend/api/category.js";
 import NotificationUtil from "@/backend/notification.js";
 
 export const useCategoryStore = defineStore('category', () => {
-    const categories = ref([])
+    const categories = ref([]);
 
-    // 计算属性：获取 category 名称列表
     const categoryNames = computed(() => {
-        return [...categories.value].map(category => category.name)
-    })
+        const map = {};
 
-    const init = async () => {
-        await refreshCategory()
-    }
+        categories.value.forEach(category => {
+            const {transaction_type, name} = category;
+            if (!map[transaction_type]) {
+                map[transaction_type] = [];
+            }
+            map[transaction_type].push(name);
+        });
+
+        return map;
+    });
+
+    const getCategoryNamesByType = (transactionType) => {
+        return categoryNames.value[transactionType] || [];
+    };
 
     // 更新指定 name 的 category
     const refreshCategory = async () => {
@@ -28,7 +37,7 @@ export const useCategoryStore = defineStore('category', () => {
     return {
         categories,
         categoryNames,
-        init,
+        getCategoryNamesByType,
         refreshCategory,
     }
 })

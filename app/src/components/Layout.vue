@@ -81,8 +81,8 @@ const initWorkspace = async () => {
   }
   await ledgerStore.init();
   await trViewStore.init();
-  await categoryStore.init();
-  await tagStore.init();
+  await categoryStore.refreshCategory();
+  await tagStore.refreshTag();
 }
 
 onMounted(initWorkspace)
