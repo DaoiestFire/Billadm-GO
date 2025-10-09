@@ -32,12 +32,10 @@ CREATE TABLE IF NOT EXISTS tbl_billadm_transaction_record_tag
 -- 创建消费分类表
 CREATE TABLE IF NOT EXISTS tbl_billadm_category
 (
-    name  TEXT PRIMARY KEY,
-    scope TEXT NOT NULL
+    name             TEXT PRIMARY KEY,
+    scope            TEXT NOT NULL,
+    transaction_type TEXT NOT NULL DEFAULT ''
 );
-
-ALTER TABLE tbl_billadm_category
-    ADD COLUMN transaction_type TEXT NOT NULL DEFAULT '';
 
 -- 更新内置消费分类
 DELETE
@@ -53,7 +51,9 @@ WHERE name in ('餐饮美食',
                '工资奖金',
                '二手转卖',
                '彩票收入',
-               '投资理财');
+               '投资理财',
+               '五险一金',
+               '税费党费');
 
 INSERT INTO tbl_billadm_category (name, scope, transaction_type)
 VALUES ('餐饮美食', 'system', 'expense'),
@@ -74,12 +74,10 @@ VALUES ('餐饮美食', 'system', 'expense'),
 -- 创建消费标签表
 CREATE TABLE IF NOT EXISTS tbl_billadm_tag
 (
-    name  TEXT PRIMARY KEY,
-    scope TEXT NOT NULL
+    name     TEXT PRIMARY KEY,
+    scope    TEXT NOT NULL,
+    category TEXT NOT NULL DEFAULT ''
 );
-
-ALTER TABLE tbl_billadm_tag
-    ADD COLUMN category TEXT NOT NULL DEFAULT '';
 
 -- 更新内置的消费标签
 DELETE
@@ -145,7 +143,6 @@ VALUES ('三餐', 'system', '餐饮美食'),
        ('油费', 'system', '交通出行'),
        ('停车', 'system', '交通出行'),
        ('ETC', 'system', '交通出行'),
-
        ('车险', 'system', '交通出行'),
        ('衣物', 'system', '购物消费'),
        ('数码', 'system', '购物消费'),
