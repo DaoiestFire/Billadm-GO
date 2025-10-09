@@ -28,7 +28,7 @@ func GetCategoryService() CategoryService {
 }
 
 type CategoryService interface {
-	QueryAllCategory(ws *workspace.Workspace) ([]models.Category, error)
+	QueryCategory(ws *workspace.Workspace, trType string) ([]models.Category, error)
 }
 
 var _ CategoryService = &categoryServiceImpl{}
@@ -37,13 +37,13 @@ type categoryServiceImpl struct {
 	categoryDao dao.CategoryDao
 }
 
-func (c *categoryServiceImpl) QueryAllCategory(ws *workspace.Workspace) ([]models.Category, error) {
-	ws.GetLogger().Info("start to query all category")
-	categories, err := c.categoryDao.QueryAllCategory(ws)
+func (c *categoryServiceImpl) QueryCategory(ws *workspace.Workspace, trType string) ([]models.Category, error) {
+	ws.GetLogger().Infof("start to query category by %s", trType)
+	categories, err := c.categoryDao.QueryCategory(ws, trType)
 	if err != nil {
 		return nil, err
 	}
 
-	ws.GetLogger().Info("query all category success, length: ", len(categories))
+	ws.GetLogger().Infof("query category success, length: %v", categories)
 	return categories, nil
 }

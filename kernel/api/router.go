@@ -24,9 +24,9 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/tr/put", updateTransactionRecord)
 	ginServer.POST("/api/v1/tr/delete_tr_by_id", deleteTransactionRecord)
 	// category
-	ginServer.POST("/api/v1/category/query_all_category", queryAllCategory)
+	ginServer.GET("/api/v1/category/query_category/:type", queryCategory)
 	// tag
-	ginServer.POST("/api/v1/tag/query_all_tag", queryAllTag)
+	ginServer.GET("/api/v1/tag/query_tag/:category", queryTag)
 	// workspace
 	ginServer.POST("/api/v1/workspace/open_workspace", openWorkspace)
 	ginServer.POST("/api/v1/workspace/is_opened", hasOpenedWorkspace)

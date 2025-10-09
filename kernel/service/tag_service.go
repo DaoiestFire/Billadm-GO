@@ -28,7 +28,7 @@ func GetTagService() TagService {
 }
 
 type TagService interface {
-	QueryAllTag(ws *workspace.Workspace) ([]models.Tag, error)
+	QueryTag(ws *workspace.Workspace, category string) ([]models.Tag, error)
 }
 
 var _ TagService = &tagServiceImpl{}
@@ -37,13 +37,13 @@ type tagServiceImpl struct {
 	tagDao dao.TagDao
 }
 
-func (t *tagServiceImpl) QueryAllTag(ws *workspace.Workspace) ([]models.Tag, error) {
-	ws.GetLogger().Info("start to query all tag")
-	tags, err := t.tagDao.QueryAllTags(ws)
+func (t *tagServiceImpl) QueryTag(ws *workspace.Workspace, category string) ([]models.Tag, error) {
+	ws.GetLogger().Info("start to query tag")
+	tags, err := t.tagDao.QueryTags(ws, category)
 	if err != nil {
 		return nil, err
 	}
 
-	ws.GetLogger().Info("query all tag success, length: ", len(tags))
+	ws.GetLogger().Infof("query tag success, length: %v", tags)
 	return tags, nil
 }
