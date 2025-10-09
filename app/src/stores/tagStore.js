@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import {queryAllTag} from "@/backend/api/tag.js";
+import {queryTag} from "@/backend/api/tag.js";
 import NotificationUtil from "@/backend/notification.js";
 
 export const useTagStore = defineStore('tag', () => {
@@ -18,7 +18,7 @@ export const useTagStore = defineStore('tag', () => {
     // 更新指定 name 的 tag
     const refreshTag = async () => {
         try {
-            tags.value = await queryAllTag()
+            tags.value = await queryTag()
         } catch (error) {
             NotificationUtil.error(`获取全部消费标签失败 ${error}`)
         }

@@ -24,6 +24,13 @@ const api = {
                 throw error;
             });
     },
+    get(url) {
+        return apiClient.get(url)
+            .then(response => response.data)
+            .catch(error => {
+                throw error;
+            });
+    },
 };
 
 export default api;
