@@ -74,9 +74,10 @@ VALUES ('餐饮美食', 'system', 'expense'),
 -- 创建消费标签表
 CREATE TABLE IF NOT EXISTS tbl_billadm_tag
 (
-    name     TEXT PRIMARY KEY,
+    name     TEXT NOT NULL,
     scope    TEXT NOT NULL,
-    category TEXT NOT NULL DEFAULT ''
+    category TEXT NOT NULL DEFAULT '',
+    UNIQUE (name, scope, category)
 );
 
 -- 更新内置的消费标签
@@ -111,6 +112,7 @@ WHERE name in ('三餐',
                '烟酒',
                '充值',
                '汽车',
+               '还款',
                '房租',
                '物业',
                '水电',
