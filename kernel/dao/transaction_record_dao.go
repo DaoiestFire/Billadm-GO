@@ -64,7 +64,7 @@ func (t *transactionRecordDaoImpl) ListAllTrByLedgerId(ws *workspace.Workspace, 
 func (t *transactionRecordDaoImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error) {
 	trs := make([]*models.TransactionRecord, 0)
 	db := ws.GetDb().Where("ledger_id = ?", condition.LedgerID)
-	db = db.Order("transaction_at desc, category desc, price desc")
+	db = db.Order("transaction_at desc, transaction_type desc, category desc, price desc")
 	if condition.Offset != -1 && condition.Limit != -1 {
 		db = db.Offset(condition.Offset).Limit(condition.Limit)
 	}
