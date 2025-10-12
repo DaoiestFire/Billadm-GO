@@ -68,6 +68,7 @@ VALUES ('餐饮美食', 'system', 'expense'),
        ('二手转卖', 'system', 'income'),
        ('彩票收入', 'system', 'income'),
        ('投资理财', 'system', 'income'),
+       ('借贷借款', 'system', 'income'),
        ('五险一金', 'system', 'transfer'),
        ('税费党费', 'system', 'transfer');
 
