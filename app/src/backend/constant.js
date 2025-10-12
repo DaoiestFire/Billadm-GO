@@ -42,7 +42,7 @@ export const TimeRangeShortcuts = [
         value: getLastMonthRange,
     },
     {
-        text: '本年',
+        text: '今年',
         value: getThisYearRange,
     }
 ];
