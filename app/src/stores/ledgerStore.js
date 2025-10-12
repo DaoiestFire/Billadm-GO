@@ -40,10 +40,10 @@ export const useLedgerStore = defineStore('ledger', () => {
             ledgers.value = []
             const ledgersFromServer = await queryAllLedgers()
             if (ledgersFromServer && Array.isArray(ledgersFromServer)) {
+                ledgersFromServer.sort((a, b) => a.created_at - b.created_at);
                 ledgersFromServer.forEach(ledger => {
                     ledgers.value.push(ledger)
                 })
-                ledgers.value.sort((a, b) => a.name.localeCompare(b.name));
             }
             if (currentLedger.value !== null) {
                 setCurrentLedger(currentLedger.value.id)
