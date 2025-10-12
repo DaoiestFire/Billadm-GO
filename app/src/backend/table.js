@@ -1,4 +1,5 @@
 import {TransactionTypeToColor, TransactionTypeToLabel} from "@/backend/constant.js";
+import {formatFloat} from "@/backend/functions.js";
 
 /**
  * 表示一个前端使用的消费记录
@@ -183,7 +184,10 @@ export function buildOptionForTransactionDistribution(data, transactionType) {
     });
 
     // 转换为 ECharts 所需的数据格式
-    const seriesData = Array.from(categoryMap, ([name, value]) => ({name, value}));
+    const seriesData = Array.from(categoryMap, ([name, value]) => ({
+        name: name,
+        value: formatFloat(value)
+    }));
 
     // 如果没有数据，返回空的配置项（避免图表报错）
     if (seriesData.length === 0) {
