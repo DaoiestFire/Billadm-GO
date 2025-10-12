@@ -21,7 +21,7 @@
 import {computed, ref} from 'vue';
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
 import {useCssVariables} from "@/css/css.js";
-import {buildOptionForTradingTrend} from "@/backend/table.js";
+import {buildOptionForTradingTrend, buildOptionForTransactionDistribution} from "@/backend/table.js";
 
 const {uiSizeMenuWidth} = useCssVariables();
 
@@ -43,6 +43,8 @@ const option = computed(() => {
   switch (props.title) {
     case '交易走势':
       return buildOptionForTradingTrend(props.data, tradingTrendChecked.value);
+    case '消费分布':
+      return buildOptionForTransactionDistribution(props.data, 'expense');
     default:
       return buildOptionForTradingTrend(props.data, tradingTrendChecked.value);
   }

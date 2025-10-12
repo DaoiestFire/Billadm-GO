@@ -157,3 +157,89 @@ export function buildOptionForTradingTrend(data, displayTypes) {
         })
     };
 }
+
+/**
+ * 根据交易记录数据生成 ECharts 饼图配置项，展示指定交易类型下各消费类别的金额分布。
+ *
+ * @param {TrForm[]} data - 交易记录对象数组
+ * @param {string} transactionType - 交易类型，取值为 'income', 'expense', 'transfer' 之一
+ * @returns {Object} ECharts 的 option 配置对象
+ *
+ * @example
+ * const option = buildOptionForTransactionDistribution(transactionData, 'expense');
+ * chart.setOption(option);
+ */
+export function buildOptionForTransactionDistribution(data, transactionType) {
+    // 过滤出指定类型的交易
+    const filteredData = data.filter(item => item.type === transactionType);
+
+    // 统计每个 category 的总金额
+    const categoryMap = new Map();
+
+    filteredData.forEach(item => {
+        const {category, price} = item;
+        const current = categoryMap.get(category) || 0;
+        categoryMap.set(category, current + price);
+    });
+
+    // 转换为 ECharts 所需的数据格式
+    const seriesData = Array.from(categoryMap, ([name, value]) => ({name, value}));
+
+    // 如果没有数据，返回空的配置项（避免图表报错）
+    if (seriesData.length === 0) {
+        return {
+            title: {
+                text: '暂无数据',
+                left: 'center',
+                top: 'center',
+                textStyle: {
+                    color: '#999'
+                }
+            },
+            tooltip: {show: false},
+            series: []
+        };
+    }
+
+    return {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}: {c} ({d}%)'
+        },
+        legend: {
+            type: 'scroll',
+            orient: 'vertical',
+            right: 10,
+            top: 20,
+            bottom: 20
+        },
+        series: [
+            {
+                name: TransactionTypeToLabel.get(transactionType) || transactionType,
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['40%', '50%'],
+                avoidLabelOverlap: false,
+                label: {
+                    show: true,
+                    formatter: '{b}\n{c} ({d}%)',
+                    fontSize: 12,
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 14,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: true,
+                    smooth: true,
+                    length: 8,
+                    length2: 10
+                },
+                data: seriesData
+            }
+        ]
+    };
+}

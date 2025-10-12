@@ -39,6 +39,10 @@ const charts = computed(() => {
     title: "交易走势",
     data: props.trFormList,
   });
+  charts.push({
+    title: "消费分布",
+    data: props.trFormList,
+  });
   return charts;
 });
 
