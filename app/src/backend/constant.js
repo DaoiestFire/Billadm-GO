@@ -7,11 +7,6 @@ import {
     getTodayRange
 } from "@/backend/timerange.js";
 
-export const TransactionType = Object.freeze({
-    INCOME: 'income',
-    EXPENSE: 'expense',
-    TRANSFER: 'transfer',
-});
 
 export const TransactionTypeToLabel = new Map([
     ['income', '收入'],

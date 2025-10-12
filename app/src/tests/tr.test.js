@@ -1,7 +1,6 @@
 import {describe, it} from "vitest";
 import {createLedgerByName} from "@/backend/api/ledger.js";
-import {trFormToTrDto, createTrForLedger, deleteTrById, getAllTrsFromLedgerById} from "@/backend/api/tr.js";
-import {TransactionType} from "@/backend/constant.js";
+import {createTrForLedger, deleteTrById, getAllTrsFromLedgerById, trFormToTrDto} from "@/backend/api/tr.js";
 
 describe('Tr Utils', () => {
     it('test tr utils', async () => {
@@ -14,7 +13,7 @@ describe('Tr Utils', () => {
         const tr = trFormToTrDto({
             ledger_id: ledgerId,
             price: 1234.5,
-            transaction_type: TransactionType.EXPENSE,
+            transaction_type: 'expense',
             category: '一日三餐',
             description: '这是一个测试消费记录',
             tags: ['tags1', 'tags2'],

@@ -1,4 +1,4 @@
-import {TransactionType, TransactionTypeToColor, TransactionTypeToLabel} from "@/backend/constant.js";
+import {TransactionTypeToColor, TransactionTypeToLabel} from "@/backend/constant.js";
 
 /**
  * 表示一个前端使用的消费记录
@@ -33,7 +33,7 @@ export function buildOptionForTradingTrend(data, displayTypes) {
         // 处理空数据情况
         return {
             tooltip: {trigger: 'axis'},
-            legend: {data: ['收入', '支出', '转账']},
+            legend: {data: displayTypes.map(item => TransactionTypeToLabel.get(item))},
             xAxis: {
                 type: 'category',
                 data: [],
@@ -43,7 +43,7 @@ export function buildOptionForTradingTrend(data, displayTypes) {
                 type: 'value',
                 name: '金额'
             },
-            series: Object.values(TransactionType).map(type => ({
+            series: displayTypes.map(type => ({
                 name: type === 'income' ? '收入' : type === 'expense' ? '支出' : '转账',
                 type: 'line',
                 data: []
