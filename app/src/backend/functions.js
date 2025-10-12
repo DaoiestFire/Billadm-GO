@@ -20,7 +20,7 @@ export function dateToUnixTimestamp(date = new Date()) {
 export function formatFloat(num) {
     // 检查输入是否为有效数字
     if (typeof num !== 'number' || isNaN(num)) {
-        throw new Error('输入必须是一个有效的数字');
+        return 0;
     }
 
     // toFixed 返回字符串，所以需要转换为数字
