@@ -112,7 +112,8 @@ const props = defineProps({
 const emit = defineEmits(['update:visible']);
 
 // --- 本地状态 ---
-const formData = ref({
+
+const emptyData = {
   id: '',
   time: new Date(),
   type: '',
@@ -120,7 +121,8 @@ const formData = ref({
   description: '-',
   tags: [],
   price: 0,
-});
+}
+const formData = ref(emptyData);
 
 const categories = computed(() => {
   return categoryStore.getCategoryNamesByType(formData.value.type);
@@ -197,6 +199,7 @@ const getFormDate = () => {
 
 // --- 方法 ---
 function close() {
+  formData.value = emptyData;
   emit('update:visible', false);
 }
 
