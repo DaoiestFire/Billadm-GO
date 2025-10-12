@@ -1,4 +1,4 @@
-import {TransactionType} from "@/backend/constant.js";
+import {TransactionType, TransactionTypeToColor, TransactionTypeToLabel} from "@/backend/constant.js";
 
 /**
  * 表示一个前端使用的消费记录
@@ -18,14 +18,18 @@ import {TransactionType} from "@/backend/constant.js";
  * 横轴覆盖从最早交易到最晚交易之间的所有月份，缺失月份自动填充 0。
  *
  * @param {TrForm[]} data - 交易记录对象数组
+ * @param {String[]} displayTypes - 需要显示的交易类型
  * @returns {Object} ECharts 的 option 配置对象
  *
  * @example
  * const option = buildOptionForTradingTrend(transactionData);
  * chart.setOption(option);
  */
-export function buildOptionForTradingTrend(data) {
-    if (!data || data.length === 0) {
+export function buildOptionForTradingTrend(data, displayTypes) {
+
+    let filteredData = data.filter(item => displayTypes.includes(item.type));
+
+    if (!filteredData || filteredData.length === 0) {
         // 处理空数据情况
         return {
             tooltip: {trigger: 'axis'},
@@ -51,7 +55,7 @@ export function buildOptionForTradingTrend(data) {
     let minYear = Infinity, minMonth = Infinity;
     let maxYear = -Infinity, maxMonth = -Infinity;
 
-    data.forEach(item => {
+    filteredData.forEach(item => {
         const date = item.time;
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
@@ -91,7 +95,7 @@ export function buildOptionForTradingTrend(data) {
     });
 
     // 遍历交易数据，累加金额
-    data.forEach(item => {
+    filteredData.forEach(item => {
         const date = item.time;
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
@@ -99,7 +103,7 @@ export function buildOptionForTradingTrend(data) {
         const type = item.type;
         const amount = item.price;
 
-        if (monthlyData.has(key) && Object.values(TransactionType).includes(type)) {
+        if (monthlyData.has(key)) {
             monthlyData.get(key)[type] += amount;
         }
     });
@@ -108,8 +112,11 @@ export function buildOptionForTradingTrend(data) {
     const xAxisData = totalMonths;
 
     // 构建每种类型的序列数据
-    const seriesData = Object.values(TransactionType).map(type =>
-        xAxisData.map(month => monthlyData.get(month)[type])
+    const seriesDataMap = new Map(
+        displayTypes.map(type => [
+            type,
+            xAxisData.map(month => monthlyData.get(month)[type])
+        ])
     );
 
     return {
@@ -125,7 +132,7 @@ export function buildOptionForTradingTrend(data) {
             }
         },
         legend: {
-            data: ['收入', '支出', '转账']
+            data: displayTypes.map(item => TransactionTypeToLabel.get(item))
         },
         xAxis: {
             type: 'category',
@@ -139,28 +146,14 @@ export function buildOptionForTradingTrend(data) {
                 formatter: '{value}'
             }
         },
-        series: [
-            {
-                name: '收入',
+        series: displayTypes.map(item => {
+            return {
+                name: TransactionTypeToLabel.get(item),
                 type: 'line',
-                data: seriesData[0],
+                data: seriesDataMap.get(item),
                 emphasis: {focus: 'series'},
-                color: '#67C23A'
-            },
-            {
-                name: '支出',
-                type: 'line',
-                data: seriesData[1],
-                emphasis: {focus: 'series'},
-                color: '#f56c6c'
-            },
-            {
-                name: '转账',
-                type: 'line',
-                data: seriesData[2],
-                emphasis: {focus: 'series'},
-                color: '#409eff'
+                color: TransactionTypeToColor.get(item)
             }
-        ]
+        })
     };
 }

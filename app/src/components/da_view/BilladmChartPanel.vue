@@ -7,12 +7,18 @@
     <div class="panel-container">
       <BilladmChart :option="option"/>
     </div>
-    <div class="panel-footer"/>
+    <div class="panel-footer">
+      <el-checkbox-group v-if="title==='交易走势'" v-model="tradingTrendChecked">
+        <el-checkbox label="收入" value="income"/>
+        <el-checkbox label="支出" value="expense"/>
+        <el-checkbox label="转账" value="transfer"/>
+      </el-checkbox-group>
+    </div>
   </div>
 </template>
 
 <script setup>
-import {computed} from 'vue';
+import {computed, ref} from 'vue';
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
 import {useCssVariables} from "@/css/css.js";
 import {buildOptionForTradingTrend} from "@/backend/table.js";
@@ -31,12 +37,14 @@ const props = defineProps({
   }
 });
 
+const tradingTrendChecked = ref(['income', 'expense', 'transfer'])
+
 const option = computed(() => {
   switch (props.title) {
     case '交易走势':
-      return buildOptionForTradingTrend(props.data);
+      return buildOptionForTradingTrend(props.data, tradingTrendChecked.value);
     default:
-      return buildOptionForTradingTrend(props.data);
+      return buildOptionForTradingTrend(props.data, tradingTrendChecked.value);
   }
 });
 </script>

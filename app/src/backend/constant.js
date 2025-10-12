@@ -13,6 +13,18 @@ export const TransactionType = Object.freeze({
     TRANSFER: 'transfer',
 });
 
+export const TransactionTypeToLabel = new Map([
+    ['income', '收入'],
+    ['expense', '支出'],
+    ['transfer', '转账']
+]);
+
+export const TransactionTypeToColor = new Map([
+    ['income', '#67C23A'],
+    ['expense', '#f56c6c'],
+    ['transfer', '#409eff']
+]);
+
 export const TimeRangeShortcuts = [
     {
         text: '今天',
