@@ -1,54 +1,58 @@
 <template>
   <div class="billadm-time-select">
     <!-- 时间范围类型选择 -->
-    <billadm-select
-        v-model="timeRangeType"
-        :options="TimeRangeTypes"
-        :height="24"
-        :width="30"
-        direction="down"
-    />
+    <div class="group">
+      <billadm-label>时间粒度</billadm-label>
+      <billadm-select
+          v-model="timeRangeType"
+          :options="TimeRangeTypes"
+          :height="24"
+          :width="60"
+          direction="down"
+      />
+    </div>
 
-    <!-- 向前按钮 -->
-    <billadm-icon-button
-        :svg="iconLeft"
-        label="向前一天"
-        width="30px"
-        height="30px"
-        bg-size="26px"
-        :color="iconColor"
-        bg-color="transparent"
-        :hover-bg-color="hoverBgColor"
-        tooltipPlacement="bottom"
-        @click="goToPrevious"
-    />
-
-    <!-- 日期选择器 -->
-    <el-date-picker
-        v-model="timeRange"
-        :type="timeRangeType"
-        range-separator="~"
-        start-placeholder="起始时间"
-        end-placeholder="结束时间"
-        size="small"
-        :editable="false"
-        style="width: 200px;"
-        :shortcuts="TimeRangeShortcuts"
-    />
-
-    <!-- 向后按钮 -->
-    <billadm-icon-button
-        :svg="iconRight"
-        label="向后一天"
-        width="30px"
-        height="30px"
-        bg-size="26px"
-        :color="iconColor"
-        bg-color="transparent"
-        :hover-bg-color="hoverBgColor"
-        tooltipPlacement="bottom"
-        @click="goToNext"
-    />
+    <div class="group">
+      <billadm-label>时间范围</billadm-label>
+      <!-- 向前按钮 -->
+      <billadm-icon-button
+          :svg="iconLeft"
+          label="向前一天"
+          width="30px"
+          height="30px"
+          bg-size="26px"
+          :color="iconColor"
+          bg-color="transparent"
+          :hover-bg-color="hoverBgColor"
+          tooltipPlacement="bottom"
+          @click="goToPrevious"
+      />
+      <!-- 日期选择器 -->
+      <el-date-picker
+          v-model="timeRange"
+          :type="timeRangeType"
+          range-separator="~"
+          start-placeholder="起始时间"
+          end-placeholder="结束时间"
+          size="small"
+          :editable="false"
+          style="width: 200px;"
+          :shortcuts="TimeRangeShortcuts"
+      />
+      <!-- 向后按钮 -->
+      <billadm-icon-button
+          :svg="iconRight"
+          label="向后一天"
+          width="30px"
+          height="30px"
+          bg-size="26px"
+          :color="iconColor"
+          bg-color="transparent"
+          :hover-bg-color="hoverBgColor"
+          tooltipPlacement="bottom"
+          @click="goToNext"
+      />
+    </div>
   </div>
 </template>
 
@@ -61,6 +65,7 @@ import iconRight from '@/assets/icons/right.svg?raw';
 import {getNextPeriod, getPrevPeriod, normalizeTimeRange} from '@/backend/timerange.js';
 import {useCssVariables} from '@/css/css.js';
 import {TimeRangeShortcuts, TimeRangeTypes} from "@/backend/constant.js";
+import BilladmLabel from "@/components/text/BilladmLabel.vue";
 
 // 接收父组件传入的 v-model 绑定的时间范围和类型
 const props = defineProps({
@@ -122,6 +127,14 @@ const goToNext = () => {
 .billadm-time-select {
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  gap: 16px;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 </style>
