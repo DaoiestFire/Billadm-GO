@@ -123,15 +123,11 @@ const formData = ref({
 });
 
 const categories = computed(() => {
-  let ret = categoryStore.getCategoryNamesByType(formData.value.type);
-  formData.value.category = ret.length > 0 ? ret[0] : '';
-  return ret;
+  return categoryStore.getCategoryNamesByType(formData.value.type);
 })
 
 const tags = computed(() => {
-  let ret = tagStore.getTagNamesByCategory(formData.value.category);
-  formData.value.tags = [];
-  return ret;
+  return tagStore.getTagNamesByCategory(formData.value.category);
 })
 
 // --- 监听器 ---
@@ -140,19 +136,46 @@ watch(
     () => props.visible,
     (newVal) => {
       if (newVal) {
-        // 合并默认值与传入的 modelValue
         formData.value = {
           id: '',
-          time: getFormDate(), // 默认当天12点0分0秒
+          time: getFormDate(),
           type: 'expense',
-          category: categories.value.length > 0 ? categories.value[0] : '',
+          category: '',
           description: '-',
           tags: [],
           price: 0,
           ...props.modelValue
         };
       }
-    }
+    },
+    {immediate: false}
+);
+
+// 监听 formData.type 变化，自动设置 category（如果当前为空）
+watch(
+    () => formData.value.type,
+    (newType) => {
+      const availableCategories = categoryStore.getCategoryNamesByType(newType);
+      if (availableCategories.length > 0) {
+        if (!formData.value.category || !availableCategories.includes(formData.value.category)) {
+          formData.value.category = availableCategories[0];
+        }
+      } else {
+        formData.value.category = '';
+      }
+    },
+    {immediate: true}
+);
+
+// 监听 formData.category 变化，自动清空无效 tags
+watch(
+    () => formData.value.category,
+    (newCategory) => {
+      const availableTags = tagStore.getTagNamesByCategory(newCategory);
+      // 清理掉当前 tags 中不属于新 category 的标签
+      formData.value.tags = formData.value.tags.filter(tag => availableTags.includes(tag));
+    },
+    {immediate: true}
 );
 
 // 如果选了时间范围以结束时间的12点作为消费时间，否则以当天12点作为消费时间
