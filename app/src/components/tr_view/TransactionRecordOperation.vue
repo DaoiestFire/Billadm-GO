@@ -115,7 +115,7 @@ const emit = defineEmits(['update:visible']);
 const formData = ref({
   id: '',
   time: new Date(),
-  type: 'expense',
+  type: '',
   category: '',
   description: '-',
   tags: [],
