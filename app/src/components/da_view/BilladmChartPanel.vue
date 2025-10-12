@@ -13,6 +13,11 @@
         <el-checkbox label="支出" value="expense"/>
         <el-checkbox label="转账" value="transfer"/>
       </el-checkbox-group>
+      <el-radio-group v-if="title=== '消费分布'" v-model="transactionTypeChecked">
+        <el-radio value="income">收入</el-radio>
+        <el-radio value="expense">支出</el-radio>
+        <el-radio value="transfer">转账</el-radio>
+      </el-radio-group>
     </div>
   </div>
 </template>
@@ -38,13 +43,14 @@ const props = defineProps({
 });
 
 const tradingTrendChecked = ref(['income', 'expense', 'transfer'])
+const transactionTypeChecked = ref('expense')
 
 const option = computed(() => {
   switch (props.title) {
     case '交易走势':
       return buildOptionForTradingTrend(props.data, tradingTrendChecked.value);
     case '消费分布':
-      return buildOptionForTransactionDistribution(props.data, 'expense');
+      return buildOptionForTransactionDistribution(props.data, transactionTypeChecked.value);
     default:
       return buildOptionForTradingTrend(props.data, tradingTrendChecked.value);
   }
