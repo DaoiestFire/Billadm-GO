@@ -12,12 +12,12 @@ func ServeAPI(ginServer *gin.Engine) {
 	// app
 	ginServer.POST("/api/v1/app/exit_app", exitApp)
 	// ledger
-	ginServer.POST("/api/v1/ledger/query_all_ledgers", queryAllLedgers)
+	ginServer.POST("/api/v1/ledger/query_all_ledger", queryAllLedgers)
 	ginServer.POST("/api/v1/ledger/post", createLedger)
 	ginServer.POST("/api/v1/ledger/put", updateLedger)
 	ginServer.POST("/api/v1/ledger/delete", deleteLedger)
 	// transaction record
-	ginServer.POST("/api/v1/tr/query_all_trs", queryAllTrs)
+	ginServer.POST("/api/v1/tr/query_all_tr", queryAllTrs)
 	ginServer.POST("/api/v1/tr/query_trs_on_condition", queryTrsOnCondition)
 	ginServer.POST("/api/v1/tr/query_tr_count_on_condition", queryTrCountOnCondition)
 	ginServer.POST("/api/v1/tr/create_tr", createTransactionRecord)
@@ -26,7 +26,7 @@ func ServeAPI(ginServer *gin.Engine) {
 	// category
 	ginServer.GET("/api/v1/category/query_category/:type", queryCategory)
 	// tag
-	ginServer.GET("/api/v1/tag/query_tags/:category", queryTags)
+	ginServer.GET("/api/v1/tag/query_tag/:category", queryTags)
 	// workspace
 	ginServer.POST("/api/v1/workspace/open_workspace", openWorkspace)
 	ginServer.POST("/api/v1/workspace/is_opened", hasOpenedWorkspace)

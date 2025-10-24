@@ -2,7 +2,7 @@ import api_client from "@/backend/api/api-client.ts";
 import type {Ledger, Result} from "@/types/billadm";
 
 export async function queryAllLedgers(): Promise<Ledger[]> {
-    const resp: Result<Ledger[]> = await api_client.post('/v1/ledger/query_all_ledgers', {
+    const resp: Result<Ledger[]> = await api_client.post('/v1/ledger/query_all_ledger', {
         'ledgerId': 'all',
     });
     api_client.isRespSuccess(resp, 'queryAllLedgers错误: ');

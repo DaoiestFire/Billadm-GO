@@ -2,7 +2,7 @@ import api_client from "@/backend/api/api-client.ts";
 import type {Result, TransactionRecord, TrQueryCondition, TrStatistics} from "@/types/billadm";
 
 export async function getAllTrsFromLedgerById(id: string): Promise<TransactionRecord[]> {
-    const resp: Result<TransactionRecord[]> = await api_client.post('/v1/tr/query_all_trs', {
+    const resp: Result<TransactionRecord[]> = await api_client.post('/v1/tr/query_all_tr', {
         'ledgerId': id,
     });
     api_client.isRespSuccess(resp, 'getAllTrsFromLedgerById错误: ');
