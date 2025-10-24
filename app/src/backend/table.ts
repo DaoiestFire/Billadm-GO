@@ -62,7 +62,7 @@ export function buildOptionForTradingTrend(data: TrForm[], displayTypes: string[
         }
     }
 
-    const monthlyData = new Map<string, { income: number expense: number transfer: number }>()
+    const monthlyData = new Map<string, { income: number; expense: number; transfer: number }>()
     totalMonths.forEach(month => {
         monthlyData.set(month, {income: 0, expense: 0, transfer: 0})
     })

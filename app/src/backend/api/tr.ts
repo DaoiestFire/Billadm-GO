@@ -10,7 +10,7 @@ export async function getAllTrsFromLedgerById(id: string): Promise<TransactionRe
 }
 
 export async function queryTrsOnCondition(condition: TrQueryCondition): Promise<TransactionRecord[]> {
-    const resp: Result<TransactionRecord[]> = await api_client.post('/v1/tr/query_trs_on_condition', condition);
+    const resp: Result<TransactionRecord[]> = await api_client.post('/v1/tr/query_tr_on_condition', condition);
     api_client.isRespSuccess(resp, 'queryTrsOnCondition错误: ');
     return resp.data;
 }

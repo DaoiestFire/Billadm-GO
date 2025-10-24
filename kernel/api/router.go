@@ -18,7 +18,7 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/ledger/delete", deleteLedger)
 	// transaction record
 	ginServer.POST("/api/v1/tr/query_all_tr", queryAllTrs)
-	ginServer.POST("/api/v1/tr/query_trs_on_condition", queryTrsOnCondition)
+	ginServer.POST("/api/v1/tr/query_tr_on_condition", queryTrsOnCondition)
 	ginServer.POST("/api/v1/tr/query_tr_count_on_condition", queryTrCountOnCondition)
 	ginServer.POST("/api/v1/tr/create_tr", createTransactionRecord)
 	ginServer.POST("/api/v1/tr/put", updateTransactionRecord)
