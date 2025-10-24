@@ -168,6 +168,7 @@ export function buildOptionForTransactionDistribution(data: TrForm[], transactio
     }
 
     return {
+        title: {text: ''},
         tooltip: {
             trigger: 'item',
             formatter: '{b}: {c} ({d}%)'
