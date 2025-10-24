@@ -26,7 +26,7 @@ func ServeAPI(ginServer *gin.Engine) {
 	// category
 	ginServer.GET("/api/v1/category/query_category/:type", queryCategory)
 	// tag
-	ginServer.GET("/api/v1/tag/query_tag/:category", queryTag)
+	ginServer.GET("/api/v1/tag/query_tags/:category", queryTags)
 	// workspace
 	ginServer.POST("/api/v1/workspace/open_workspace", openWorkspace)
 	ginServer.POST("/api/v1/workspace/is_opened", hasOpenedWorkspace)

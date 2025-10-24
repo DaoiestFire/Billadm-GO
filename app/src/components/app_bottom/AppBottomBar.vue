@@ -24,14 +24,14 @@
   </div>
 </template>
 
-<script setup>
-import {computed, onMounted, ref} from "vue";
-import {useRoute} from "vue-router";
-import BilladmIconButton from "@/components/BilladmIconButton.vue";
-import TrViewBottomStatistics from "@/components/app_bottom/TrViewBottomStatistics.vue";
-import BilladmModal from "@/components/BilladmModal.vue";
-import iconInfo from '@/assets/icons/info.svg?raw';
-import {useCssVariables} from '@/css/css.js';
+<script setup lang="ts">
+import {computed, onMounted, ref} from "vue"
+import {useRoute} from "vue-router"
+import BilladmIconButton from "@/components/BilladmIconButton.vue"
+import TrViewBottomStatistics from "@/components/app_bottom/TrViewBottomStatistics.vue"
+import BilladmModal from "@/components/BilladmModal.vue"
+import iconInfo from '@/assets/icons/info.svg?raw'
+import {useCssVariables} from '@/css/css.ts'
 
 
 // css variables
@@ -43,13 +43,13 @@ const shouldShowStatistics = computed(() => {
   return route.path === '/tr_view'
 })
 
-const showAboutApp = ref(false);
-let appName = '';
-let appVersion = '';
+const showAboutApp = ref(false)
+let appName = ''
+let appVersion = ''
 
 onMounted(async () => {
-  appName = await window.electronAPI.getAppInfo('name');
-  appVersion = await window.electronAPI.getAppInfo('version');
+  appName = await window.electronAPI.getAppInfo('name')
+  appVersion = await window.electronAPI.getAppInfo('version')
 })
 </script>
 

@@ -40,8 +40,8 @@
   </Teleport>
 </template>
 
-<script setup>
-import {ref, watch} from 'vue';
+<script setup lang="ts">
+import {ref, watch} from 'vue'
 
 // --- Props ---
 const props = defineProps({
@@ -79,29 +79,29 @@ const props = defineProps({
   },
   mode: {
     type: String,
-    validator: (val) => ['directory', 'file'].includes(val),
+    validator: (val: string) => ['directory', 'file'].includes(val),
     default: 'directory',
   },
   filters: {
     type: Array,
     default: () => [],
   },
-});
+})
 
 // --- Emits ---
-const emit = defineEmits(['update:visible', 'confirm']);
+const emit = defineEmits(['update:visible', 'confirm'])
 
 // --- 本地状态 ---
-const selectedPath = ref('');
-const error = ref('');
+const selectedPath = ref('')
+const error = ref('')
 
 // --- 监听 visible 变化，重置状态 ---
 watch(
     () => props.visible,
     (newVal) => {
       if (newVal) {
-        selectedPath.value = '';
-        error.value = '';
+        selectedPath.value = ''
+        error.value = ''
       }
     }
 );
@@ -110,36 +110,36 @@ watch(
 
 // 关闭对话框
 function closeDialog() {
-  emit('update:visible', false);
+  emit('update:visible', false)
 }
 
 // 打开系统文件/目录选择器（需要平台支持）
 async function handleBrowse() {
   try {
-    error.value = '';
-    let result;
+    error.value = ''
+    let result
     result = await window.electronAPI.openDialog({
       properties: props.mode === 'directory' ? ['openDirectory'] : ['openFile'],
       filters: props.mode === 'file' && props.filters.length > 0 ? props.filters : undefined,
-    });
+    })
 
     if (result.canceled || !result.filePaths || result.filePaths.length === 0) {
-      return;
+      return
     }
-    selectedPath.value = result.filePaths[0];
+    selectedPath.value = result.filePaths[0]
   } catch (err) {
-    error.value = `选择失败: ${err.message}`;
+    error.value = `选择失败: ${err.message}`
   }
 }
 
 function handleConfirm() {
   if (!selectedPath.value) {
-    error.value = '请先选择一个路径';
-    return;
+    error.value = '请先选择一个路径'
+    return
   }
 
-  emit('confirm', selectedPath.value);
-  closeDialog();
+  emit('confirm', selectedPath.value)
+  closeDialog()
 }
 </script>
 

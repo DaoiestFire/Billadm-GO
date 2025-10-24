@@ -6,11 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/billadm/models"
+	"github.com/billadm/models/dto"
 	"github.com/billadm/service"
 	"github.com/billadm/workspace"
 )
 
-func queryTag(c *gin.Context) {
+func queryTags(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
@@ -22,13 +23,19 @@ func queryTag(c *gin.Context) {
 	}
 
 	category := c.Param("category")
-
-	tags, err := service.GetTagService().QueryTag(ws, category)
+	tags, err := service.GetTagService().QueryTags(ws, category)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()
 		return
 	}
 
-	ret.Data = tags
+	tagDtos := make([]dto.TagDto, 0)
+	for _, tag := range tags {
+		tagDto := dto.TagDto{}
+		tagDto.FromTag(&tag)
+		tagDtos = append(tagDtos, tagDto)
+	}
+
+	ret.Data = tagDtos
 }

@@ -45,91 +45,71 @@
   </Teleport>
 </template>
 
-<script setup>
-import {nextTick, ref, watch} from 'vue';
+<script setup lang="ts">
+import {nextTick, ref, watch} from 'vue'
+import {ElInput} from 'element-plus'
 
-// --- Props 定义 ---
-const props = defineProps({
-  visible: {
-    type: Boolean,
-    required: false
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  message: {
-    type: String,
-    default: ''
-  },
-  cancelLabel: {
-    type: String,
-    default: '取消'
-  },
-  confirmLabel: {
-    type: String,
-    default: '确认'
-  },
-  cancelColor: {
-    type: String,
-    default: '#666'
-  },
-  confirmColor: {
-    type: String,
-    default: '#007bff'
-  },
-  showInput: {
-    type: Boolean,
-    default: false
-  },
-  inputPlaceholder: {
-    type: String,
-    default: '请输入...'
-  },
-  showButtons: {
-    type: Boolean,
-    default: false
-  },
-  item: {
-    type: [Object, String, null],
-    default: null
-  }
-});
+interface Props {
+  visible?: boolean
+  title?: string
+  message?: string
+  cancelLabel?: string
+  confirmLabel?: string
+  cancelColor?: string
+  confirmColor?: string
+  showInput?: boolean
+  inputPlaceholder?: string
+  showButtons?: boolean
+  item?: string | null
+}
 
-// --- Emits 定义 ---
-const emit = defineEmits(['update:visible', 'confirm']);
+const props = withDefaults(defineProps<Props>(), {
+  visible: false,
+  title: '',
+  message: '',
+  cancelLabel: '取消',
+  confirmLabel: '确认',
+  cancelColor: '#666',
+  confirmColor: '#007bff',
+  showInput: false,
+  inputPlaceholder: '请输入...',
+  showButtons: true,
+  item: null
+})
 
-// --- 本地状态 ---
-const inputValue = ref('');
-const inputRef = ref(null);
+const emit = defineEmits<{
+  (e: 'update:visible', visible: boolean): void
+  (e: 'confirm', data: {
+    input: string | null
+    item: Props['item']
+  }): void
+}>()
 
-// --- 监听器 ---
+const inputValue = ref('')
+const inputRef = ref<InstanceType<typeof ElInput> | null>(null)
 watch(
     () => props.visible,
     (newVal) => {
       if (newVal && props.showInput) {
         nextTick(() => {
-          if (inputRef.value) {
-            inputRef.value.focus();
-          }
-        });
+          inputRef.value?.focus()
+        })
       }
     }
-);
+)
 
-// --- 方法 ---
 function closeDialog() {
-  emit('update:visible', false);
-  inputValue.value = '';
+  emit('update:visible', false)
+  inputValue.value = ''
 }
 
 function handleConfirm() {
   const data = {
     input: props.showInput ? inputValue.value : null,
     item: props.item
-  };
-  emit('confirm', data);
-  closeDialog();
+  }
+  emit('confirm', data)
+  closeDialog()
 }
 </script>
 
@@ -148,7 +128,7 @@ function handleConfirm() {
 }
 
 .billadm-modal {
-  background-color: var(--billadm-color-major-backgroud-color);
+  background-color: var(--billadm-color-major-background-color);
   border-radius: 8px;
   padding: 16px;
   margin-top: calc(100vh / 4);

@@ -8,8 +8,8 @@ import (
 	"github.com/billadm/models"
 )
 
-func JsonQueryCondition(c *gin.Context, result *models.Result) (*QueryCondition, bool) {
-	ret := &QueryCondition{
+func JsonQueryCondition(c *gin.Context, result *models.Result) (*TrQueryCondition, bool) {
+	ret := &TrQueryCondition{
 		Offset:          -1,
 		Limit:           -1,
 		TsRange:         make([]int64, 0),
@@ -17,24 +17,24 @@ func JsonQueryCondition(c *gin.Context, result *models.Result) (*QueryCondition,
 	}
 	if err := c.BindJSON(ret); nil != err {
 		result.Code = -1
-		result.Msg = fmt.Sprintf("parses request failed: %v", err)
+		result.Msg = fmt.Sprintf("解析消费记录查询条件失败: %v", err)
 		return nil, false
 	}
 	return ret, true
 }
 
-type QueryCondition struct {
-	LedgerID        string   `json:"ledger_id"`
+type TrQueryCondition struct {
+	LedgerID        string   `json:"ledgerId"`
 	Offset          int      `json:"offset"`
 	Limit           int      `json:"limit"`
-	TsRange         []int64  `json:"ts_range"`
-	TransactionType []string `json:"transaction_type"`
+	TsRange         []int64  `json:"tsRange"`
+	TransactionType []string `json:"transactionType"`
 }
 
-func (qc *QueryCondition) Validate(result *models.Result) bool {
+func (qc *TrQueryCondition) Validate(result *models.Result) bool {
 	if len(qc.LedgerID) == 0 {
 		result.Code = -1
-		result.Msg = fmt.Sprintf("invalid ledger id: %s", qc.LedgerID)
+		result.Msg = fmt.Sprintf("账本Id不可为空: %s", qc.LedgerID)
 		return false
 	}
 	return true

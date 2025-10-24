@@ -17,7 +17,7 @@
   </el-scrollbar>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {computed} from 'vue';
 import BilladmChartPanel from "@/components/da_view/BilladmChartPanel.vue";
 import BilladmFullscreen from "@/components/common/BilladmFullScreen.vue";

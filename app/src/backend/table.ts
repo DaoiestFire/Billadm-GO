@@ -1,32 +1,14 @@
-import {TransactionTypeToColor, TransactionTypeToLabel} from "@/backend/constant.js";
-import {formatFloat} from "@/backend/functions.js";
+import {TransactionTypeToColor, TransactionTypeToLabel} from '@/backend/constant.ts'
+import {formatFloat} from '@/backend/functions.ts'
 
-/**
- * 表示一个前端使用的消费记录
- *
- * @typedef {Object} TrForm
- * @property {string} id - 交易ID. 对应transaction_id.
- * @property {Date} time - 交易时间. 对应transaction_at. 时间戳转Date对象.
- * @property {string} type - 交易类型 (e.g., 'income', 'expense', 'transfer'). 对应transaction_type.
- * @property {string} category - 消费类型. 对应category.
- * @property {string} description - 描述. 对应description.
- * @property {Array<string>} tags - 标签. 对应tags.
- * @property {number} price - 金额. 对应price.
- */
+import type {TrForm} from '@/types/billadm'
+import type {EChartsOption} from "echarts"
 
 /**
  * 根据交易记录数据生成 ECharts 折线图配置项，展示按月分类的收入、支出、转账金额趋势。
  * 横轴覆盖从最早交易到最晚交易之间的所有月份，缺失月份自动填充 0。
- *
- * @param {TrForm[]} data - 交易记录对象数组
- * @param {String[]} displayTypes - 需要显示的交易类型
- * @returns {Object} ECharts 的 option 配置对象
- *
- * @example
- * const option = buildOptionForTradingTrend(transactionData);
- * chart.setOption(option);
  */
-export function buildOptionForTradingTrend(data, displayTypes) {
+export function buildOptionForTradingTrend(data: TrForm[], displayTypes: string[]): EChartsOption {
 
     let filteredData = data.filter(item => displayTypes.includes(item.type));
 

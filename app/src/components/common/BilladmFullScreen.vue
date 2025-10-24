@@ -16,7 +16,7 @@
   </teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {ref, watch} from 'vue';
 
 const props = defineProps({
@@ -34,7 +34,6 @@ const emit = defineEmits(['update:modelValue']);
 
 const isFullscreen = ref(props.modelValue);
 
-// 监听 v-model 的变化
 watch(
     () => props.modelValue,
     (newVal) => {
@@ -42,7 +41,6 @@ watch(
     }
 );
 
-// 同步状态给父组件
 watch(isFullscreen, (val) => {
   emit('update:modelValue', val);
 });
@@ -79,7 +77,7 @@ const handleDblClick = () => {
   height: auto;
   max-width: 1200px;
   max-height: 800px;
-  background: var(--billadm-color-major-backgroud-color);
+  background: var(--billadm-color-major-background-color);
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 16px;
   overflow: hidden;

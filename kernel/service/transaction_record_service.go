@@ -33,9 +33,9 @@ func GetTrService() TransactionRecordService {
 type TransactionRecordService interface {
 	CreateTr(ws *workspace.Workspace, dto *dto.TransactionRecordDto) (string, error)
 	ListAllTrsByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*dto.TransactionRecordDto, error)
-	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*dto.TransactionRecordDto, error)
-	QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error)
-	QueryTrStatisticsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (*dto.TrStatistics, error)
+	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*dto.TransactionRecordDto, error)
+	QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (int64, error)
+	QueryTrStatisticsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (*dto.TrStatistics, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 }
 
@@ -108,7 +108,7 @@ func (t *transactionRecordServiceImpl) ListAllTrsByLedgerId(ws *workspace.Worksp
 	return trDtos, err
 }
 
-func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*dto.TransactionRecordDto, error) {
+func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*dto.TransactionRecordDto, error) {
 	ws.GetLogger().Infof("start to query trs, condition: %#v", condition)
 
 	var err error
@@ -137,7 +137,7 @@ func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspa
 	return trDtos, err
 }
 
-func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error) {
+func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (int64, error) {
 	ws.GetLogger().Infof("start to query count of transaction records")
 	cnt, err := t.trDao.QueryCountOnCondition(ws, condition)
 	if err != nil {
@@ -148,7 +148,7 @@ func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ws *workspace.Wor
 	return cnt, nil
 }
 
-func (t *transactionRecordServiceImpl) QueryTrStatisticsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (*dto.TrStatistics, error) {
+func (t *transactionRecordServiceImpl) QueryTrStatisticsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (*dto.TrStatistics, error) {
 	ws.GetLogger().Infof("start to query tr statistics")
 
 	ret := &dto.TrStatistics{}

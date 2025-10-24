@@ -1,0 +1,33 @@
+import type {TransactionRecord, TrForm} from "@/types/billadm";
+import {dateToUnixTimestamp} from "@/backend/functions.ts";
+
+/**
+ * 构造符合后端 TransactionRecordDto 的请求对象 表单数据转化为dto
+ */
+export function trFormToTrDto(data: TrForm, ledgerId: string = ''): TransactionRecord {
+    return {
+        ledgerId,
+        transactionId: data.id,
+        price: data.price,
+        transactionType: data.type,
+        category: data.category,
+        description: data.description,
+        tags: data.tags,
+        transactionAt: dateToUnixTimestamp(data.time),
+    };
+}
+
+/**
+ * 将后端返回的 TransactionRecord DTO 转换为前端使用的 TrForm 表单对象
+ */
+export function trDtoToTrForm(dto: TransactionRecord): TrForm {
+    return {
+        id: dto.transactionId,
+        price: dto.price,
+        type: dto.transactionType,
+        category: dto.category,
+        description: dto.description,
+        tags: dto.tags,
+        time: new Date(dto.transactionAt * 1000),
+    };
+}

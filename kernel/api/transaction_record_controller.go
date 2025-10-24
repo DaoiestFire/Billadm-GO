@@ -28,10 +28,10 @@ func queryAllTrs(c *gin.Context) {
 		return
 	}
 
-	ledgerId, ok := arg["ledger_id"].(string)
+	ledgerId, ok := arg["ledgerId"].(string)
 	if !ok {
 		ret.Code = -1
-		ret.Msg = "ledger_id field not exist in request body"
+		ret.Msg = "ledgerId在请求体中不存在"
 		return
 	}
 
@@ -151,10 +151,10 @@ func deleteTransactionRecord(c *gin.Context) {
 		return
 	}
 
-	trId, ok := arg["tr_id"].(string)
+	trId, ok := arg["trId"].(string)
 	if !ok {
 		ret.Code = -1
-		ret.Msg = "tr_id field not exist in request body"
+		ret.Msg = "trId在请求体中不存在"
 		return
 	}
 

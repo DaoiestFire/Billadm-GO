@@ -30,18 +30,20 @@
                                 :onConfirm="handleConfirm"/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {ref} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
 import Pagination from '@/components/tr_view/Pagination.vue';
 import BilladmSelect from '@/components/BilladmSelect.vue';
 import TransactionRecordOperation from '@/components/tr_view/TransactionRecordOperation.vue';
 import BilladmTimeSelect from "@/components/BilladmTimeSelect.vue";
-import {useLedgerStore} from "@/stores/ledgerStore.js";
-import {useTrViewStore} from "@/stores/trViewStore.js";
-import NotificationUtil from "@/backend/notification.js";
-import {createTrForLedger, deleteTrById, trDtoToTrForm, trFormToTrDto} from "@/backend/api/tr.js";
-import {PageSizeOptions} from "@/backend/constant.js";
+import {useLedgerStore} from "@/stores/ledgerStore.ts";
+import {useTrViewStore} from "@/stores/trViewStore.ts";
+import NotificationUtil from "@/backend/notification.ts";
+import {createTrForLedger, deleteTrById} from "@/backend/api/tr.ts";
+import {PageSizeOptions} from "@/backend/constant.ts";
+import {trDtoToTrForm, trFormToTrDto} from "@/backend/dto-utils.ts";
+import type {TransactionRecord, TrForm} from "@/types/billadm";
 
 
 // store
@@ -104,14 +106,14 @@ const onCreate = () => {
   showDialog.value = true;
 }
 
-const onEditItem = (item) => {
+const onEditItem = (item: TransactionRecord) => {
   dialogTitle.value = '编辑消费记录';
   recordData.value = trDtoToTrForm(item);
   opType.value = 'edit';
   showDialog.value = true;
 }
 
-async function handleConfirm(data) {
+async function handleConfirm(data: TrForm) {
   try {
     const transactionRecord = trFormToTrDto(data, ledgerStore.currentLedgerId);
     await createTrForLedger(transactionRecord);
@@ -135,7 +137,7 @@ async function handleConfirm(data) {
 }
 
 .top-bar {
-  background: var(--billadm-color-major-backgroud-color);
+  background: var(--billadm-color-major-background-color);
   height: 30px;
   flex-shrink: 0;
   display: flex;
@@ -186,7 +188,7 @@ async function handleConfirm(data) {
 }
 
 .bottom-bar {
-  background: var(--billadm-color-major-backgroud-color);
+  background: var(--billadm-color-major-background-color);
   height: 30px;
   flex-shrink: 0;
   display: flex;

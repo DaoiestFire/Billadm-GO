@@ -1,8 +1,8 @@
-import {createMemoryHistory, createRouter} from 'vue-router';
-import Layout from '@/components/Layout.vue';
-import TransactionRecordView from '@/components/tr_view/TransactionRecordView.vue';
-import DataAnalysisView from '@/components/da_view/DataAnalysisView.vue';
-import SettingsView from "@/components/settings_view/SettingsView.vue";
+import {createMemoryHistory, createRouter} from 'vue-router'
+import Layout from '@/components/Layout.vue'
+import TransactionRecordView from '@/components/tr_view/TransactionRecordView.vue'
+import DataAnalysisView from '@/components/da_view/DataAnalysisView.vue'
+import SettingsView from '@/components/settings_view/SettingsView.vue'
 
 const routes = [
     {

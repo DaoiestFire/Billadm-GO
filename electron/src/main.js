@@ -35,7 +35,7 @@ let billadmCfg = {
     width: 1600,
     height: 1000,
     workspaceDir: '',
-}
+};
 
 function readBilladmFile() {
     const homeDir = os.homedir();
@@ -184,9 +184,9 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         if (kernelProcess && kernelProcess.exitCode === null) {
-            kernelProcess.kill()
+            kernelProcess.kill();
         }
-        saveBilladmConfig()
+        saveBilladmConfig();
         app.quit();
     }
 });

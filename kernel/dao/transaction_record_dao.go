@@ -29,9 +29,9 @@ func GetTrDao() TransactionRecordDao {
 type TransactionRecordDao interface {
 	CreateTr(ws *workspace.Workspace, record *models.TransactionRecord) error
 	ListAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*models.TransactionRecord, error)
-	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error)
-	QueryCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error)
-	QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (float64, error)
+	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*models.TransactionRecord, error)
+	QueryCountOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (int64, error)
+	QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (float64, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 	CountTrByLedgerId(ws *workspace.Workspace, ledgerId string) (int64, error)
 	DeleteAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) error
@@ -61,7 +61,7 @@ func (t *transactionRecordDaoImpl) ListAllTrByLedgerId(ws *workspace.Workspace, 
 	return trs, nil
 }
 
-func (t *transactionRecordDaoImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) ([]*models.TransactionRecord, error) {
+func (t *transactionRecordDaoImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*models.TransactionRecord, error) {
 	trs := make([]*models.TransactionRecord, 0)
 	db := ws.GetDb().Where("ledger_id = ?", condition.LedgerID)
 	db = db.Order("transaction_at desc, transaction_type asc, category desc, price desc")
@@ -81,7 +81,7 @@ func (t *transactionRecordDaoImpl) QueryTrsOnCondition(ws *workspace.Workspace, 
 	return trs, nil
 }
 
-func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (int64, error) {
+func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (int64, error) {
 	var count int64
 	db := ws.GetDb().Model(&models.TransactionRecord{})
 	db = db.Where("ledger_id = ?", condition.LedgerID)
@@ -95,7 +95,7 @@ func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace
 	return count, nil
 }
 
-func (t *transactionRecordDaoImpl) QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.QueryCondition) (float64, error) {
+func (t *transactionRecordDaoImpl) QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (float64, error) {
 	var price sql.NullFloat64
 	db := ws.GetDb().Model(&models.TransactionRecord{})
 	db = db.Where("ledger_id = ?", condition.LedgerID)

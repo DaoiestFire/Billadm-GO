@@ -22,25 +22,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {computed, ref} from 'vue';
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
-import {useCssVariables} from "@/css/css.js";
-import {buildOptionForTradingTrend, buildOptionForTransactionDistribution} from "@/backend/table.js";
+import {useCssVariables} from "@/css/css.ts";
+import {buildOptionForTradingTrend, buildOptionForTransactionDistribution} from "@/backend/table.ts";
+import type {TrForm} from "@/types/billadm";
 
 const {uiSizeMenuWidth} = useCssVariables();
 
-const props = defineProps({
-  title: {
-    type: String,
-    default: '图表标题',
-    required: true
-  },
-  data: {
-    type: Array,
-    required: true
-  }
-});
+const props = defineProps<{
+  title: string
+  data: TrForm[]
+}>();
 
 const tradingTrendChecked = ref(['income', 'expense', 'transfer'])
 const transactionTypeChecked = ref('expense')
@@ -59,7 +53,7 @@ const option = computed(() => {
 
 <style scoped>
 .panel-outer {
-  background: var(--billadm-color-major-backgroud-color);
+  background: var(--billadm-color-major-background-color);
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 8px;
   overflow: hidden;

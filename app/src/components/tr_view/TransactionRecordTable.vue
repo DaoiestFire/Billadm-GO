@@ -48,12 +48,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {ref} from 'vue'
-import {useCssVariables} from '@/css/css.js'
-import {useTrViewStore} from "@/stores/trViewStore.js";
-import {deleteTrById} from "@/backend/api/tr.js";
-import NotificationUtil from "@/backend/notification.js";
+import {useCssVariables} from '@/css/css.ts'
+import {useTrViewStore} from "@/stores/trViewStore.ts";
+import {deleteTrById} from "@/backend/api/tr.ts";
+import NotificationUtil from "@/backend/notification.ts";
 import BilladmModal from "@/components/BilladmModal.vue";
 
 // emit

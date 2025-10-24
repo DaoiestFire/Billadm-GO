@@ -46,108 +46,133 @@
   </div>
 </template>
 
-<script setup>
-import {computed, ref} from 'vue'
-import iconAdd from "@/assets/icons/add.svg?raw";
-import iconTrash from "@/assets/icons/trash.svg?raw";
-import BilladmModal from "@/components/BilladmModal.vue";
-import BilladmIconButton from "@/components/BilladmIconButton.vue";
-import {useLedgerStore} from "@/stores/ledgerStore.js";
-import {useCssVariables} from "@/css/css.js";
+<script setup lang="ts">
+import {computed, onMounted, onUnmounted, ref} from 'vue'
+import iconAdd from '@/assets/icons/add.svg?raw'
+import iconTrash from '@/assets/icons/trash.svg?raw'
+import BilladmModal from '@/components/BilladmModal.vue'
+import BilladmIconButton from '@/components/BilladmIconButton.vue'
+import {useLedgerStore} from '@/stores/ledgerStore'
+import {useCssVariables} from '@/css/css'
+import type {Ledger} from '@/types/billadm'
 
-// css variables
-const {iconColor, hoverBgColor} = useCssVariables()
+// -----------------------------
+// 🔹 定义 Props 接口
+// -----------------------------
+interface Props {
+  height?: string
+  placeholder?: string
+}
 
-// store
-const ledgerStore = useLedgerStore()
-
-// 定义组件属性
-const props = defineProps({
-  height: {
-    type: String,
-    default: '30px'
-  },
-  placeholder: {
-    type: String,
-    default: '选择账本'
-  }
+// 设置默认值（类型安全）
+withDefaults(defineProps<Props>(), {
+  height: '30px',
+  placeholder: '选择账本',
 })
 
-const options = computed(() => {
-  if (!Array.isArray(ledgerStore.ledgers)) {
-    return []
-  }
+// -----------------------------
+// 🔹 CSS 变量 & Store
+// -----------------------------
+const {iconColor, hoverBgColor, positiveColor, negativeColor} = useCssVariables()
+const ledgerStore = useLedgerStore()
 
-  return ledgerStore.ledgers.map(ledger => ({
+// -----------------------------
+// 🔹 下拉选项计算
+// -----------------------------
+const options = computed(() => {
+  if (!Array.isArray(ledgerStore.ledgers)) return []
+  return ledgerStore.ledgers.map((ledger: Ledger) => ({
     label: ledger.name,
     value: ledger.id,
   }))
 })
 
-// 是否显示下拉框
+// -----------------------------
+// 🔹 下拉框控制
+// -----------------------------
 const showDropdown = ref(false)
 
-// 切换下拉框显示状态
 const toggleDropdown = () => {
   showDropdown.value = !showDropdown.value
 }
 
-// 选择一个选项
-const selectOption = (option) => {
-  ledgerStore.setCurrentLedger(option.value);
-  showDropdown.value = false;
+const selectOption = (option: { label: string; value: string }) => {
+  ledgerStore.setCurrentLedger(option.value)
+  showDropdown.value = false
 }
 
-// 点击外部区域关闭下拉框
-document.addEventListener('click', (event) => {
-  const target = event.target
+// -----------------------------
+// 🔹 外部点击关闭逻辑（防内存泄漏）
+// -----------------------------
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
   const selectContainer = target.closest('.ledger-select-container')
   if (!selectContainer) {
     showDropdown.value = false
   }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
 })
 
-// 引用颜色
-const {positiveColor, negativeColor} = useCssVariables()
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 
-// 各种框的控制变量
-const showLedgerConfirmDialog = ref(false);
-const showLedgerInput = ref(false);
-const title = ref('');
-const message = ref('');
-const confirmLabel = ref('确认');
-const confirmColor = ref('');
-const cancelColor = ref('');
-const dialogItem = ref(null);
+// -----------------------------
+// 🔹 模态框控制状态
+// -----------------------------
+const showLedgerConfirmDialog = ref(false)
+const showLedgerInput = ref(false)
 
+// 使用 shallowRef 优化（这些是字符串/颜色，不会深层响应）
+const title = ref('')
+const message = ref('')
+const confirmLabel = ref('确认')
+const confirmColor = ref('')
+const cancelColor = ref('')
+
+// dialogItem 可能是 string 或 null
+const dialogItem = ref<string | null>(null)
+
+// -----------------------------
+// 🔹 按钮事件处理
+// -----------------------------
 const createLedgerFunc = () => {
-  title.value = '新建账本';
-  message.value = '输入账本名称';
-  confirmLabel.value = '创建';
-  confirmColor.value = positiveColor.value;
-  cancelColor.value = negativeColor.value;
-  showLedgerInput.value = true;
-  showLedgerConfirmDialog.value = true;
+  title.value = '新建账本'
+  message.value = '输入账本名称'
+  confirmLabel.value = '创建'
+  confirmColor.value = positiveColor.value
+  cancelColor.value = negativeColor.value
+  showLedgerInput.value = true
+  showLedgerConfirmDialog.value = true
 }
 
-const deleteLedgerFunc = (id, name) => {
-  dialogItem.value = id;
-  title.value = '删除账本';
-  message.value = `确认删除账本<<<${name}>>>吗？`;
-  confirmLabel.value = '删除';
-  confirmColor.value = negativeColor.value;
-  cancelColor.value = positiveColor.value;
-  showLedgerInput.value = false;
-  showLedgerConfirmDialog.value = true;
+const deleteLedgerFunc = (id: string, name: string) => {
+  dialogItem.value = id
+  title.value = '删除账本'
+  message.value = `确认删除账本<<<${name}>>>吗？`
+  confirmLabel.value = '删除'
+  confirmColor.value = negativeColor.value
+  cancelColor.value = positiveColor.value
+  showLedgerInput.value = false
+  showLedgerConfirmDialog.value = true
 }
 
-const onConfirm = async (data) => {
-  if (confirmLabel.value === '创建') {
-    await ledgerStore.createLedger(data.input);
+// -----------------------------
+// 🔹 确认回调
+// -----------------------------
+const onConfirm = async (data: {
+  input: string | null
+  item: string | null | undefined
+}) => {
+  if (confirmLabel.value === '创建' && data.input) {
+    await ledgerStore.createLedger(data.input)
   }
 
-  if (confirmLabel.value === '删除') {
-    await ledgerStore.deleteLedger(data.item);
+  if (confirmLabel.value === '删除' && data.item) {
+    await ledgerStore.deleteLedger(data.item)
   }
 }
 </script>
@@ -163,7 +188,7 @@ const onConfirm = async (data) => {
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 8px;
   cursor: pointer;
-  background-color: var(--billadm-color-major-backgroud-color);
+  background-color: var(--billadm-color-major-background-color);
 }
 
 .ledger-select:hover {
@@ -191,7 +216,7 @@ const onConfirm = async (data) => {
   left: 0;
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 4px;
-  background-color: var(--billadm-color-major-backgroud-color);
+  background-color: var(--billadm-color-major-background-color);
   overflow-y: auto;
   z-index: 3;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);

@@ -36,7 +36,7 @@
           end-placeholder="结束时间"
           size="small"
           :editable="false"
-          style="width: 200px;"
+          style="width: 200px"
           :shortcuts="TimeRangeShortcuts"
       />
       <!-- 向后按钮 -->
@@ -56,71 +56,69 @@
   </div>
 </template>
 
-<script setup>
-import {computed, defineProps} from 'vue';
-import BilladmSelect from '@/components/BilladmSelect.vue';
-import BilladmIconButton from '@/components/BilladmIconButton.vue';
-import iconLeft from '@/assets/icons/left.svg?raw';
-import iconRight from '@/assets/icons/right.svg?raw';
-import {getNextPeriod, getPrevPeriod, normalizeTimeRange} from '@/backend/timerange.js';
-import {useCssVariables} from '@/css/css.js';
-import {TimeRangeShortcuts, TimeRangeTypes} from "@/backend/constant.js";
-import BilladmLabel from "@/components/text/BilladmLabel.vue";
+<script setup lang="ts">
+import {computed} from 'vue'
+import BilladmSelect from '@/components/BilladmSelect.vue'
+import BilladmIconButton from '@/components/BilladmIconButton.vue'
+import iconLeft from '@/assets/icons/left.svg?raw'
+import iconRight from '@/assets/icons/right.svg?raw'
+import {getNextPeriod, getPrevPeriod, normalizeTimeRange} from '@/backend/timerange.ts'
+import {useCssVariables} from '@/css/css.ts'
+import {TimeRangeShortcuts, TimeRangeTypes} from "@/backend/constant.ts"
+import BilladmLabel from "@/components/text/BilladmLabel.vue"
+import type {TimeRangeType} from "@/types/billadm";
 
-// 接收父组件传入的 v-model 绑定的时间范围和类型
-const props = defineProps({
-  timeRange: {
-    type: [Array, String, Date],
-    required: true
-  },
-  timeRangeType: {
-    type: String,
-    required: true
-  }
-});
+// 👇 定义 Props 类型
+interface Props {
+  timeRange: Date[]
+  timeRangeType: TimeRangeType
+}
+
+// 使用类型声明 defineProps
+const props = withDefaults(defineProps<Props>(), {})
 
 // 定义事件
-const emit = defineEmits(['update:timeRange', 'update:timeRangeType', 'change']);
+const emit = defineEmits(['update:timeRange', 'update:timeRangeType', 'change'])
 
 // 样式变量
-const {hoverBgColor, iconColor} = useCssVariables();
+const {hoverBgColor, iconColor} = useCssVariables()
 
 // 双向绑定时间范围和类型
 const timeRange = computed({
   get: () => props.timeRange,
   set: (val) => {
-    val = normalizeTimeRange(val[0], val[1], props.timeRangeType);
-    emit('update:timeRange', val);
-    emit('change', val, props.timeRangeType);
+    val = normalizeTimeRange(val[0], val[1], props.timeRangeType)
+    emit('update:timeRange', val)
+    emit('change', val, props.timeRangeType)
   }
-});
+})
 
 const timeRangeType = computed({
   get: () => props.timeRangeType,
   set: (val) => {
-    let timeRange = normalizeTimeRange(props.timeRange[0], props.timeRange[1], val);
-    emit('update:timeRange', timeRange);
-    emit('update:timeRangeType', val);
-    emit('change', props.timeRange, val);
+    let timeRange = normalizeTimeRange(props.timeRange[0], props.timeRange[1], val)
+    emit('update:timeRange', timeRange)
+    emit('update:timeRangeType', val)
+    emit('change', props.timeRange, val)
   }
-});
+})
 
 // 按钮点击事件
 const goToPrevious = () => {
-  if (!Array.isArray(props.timeRange)) return;
-  const [start, end] = props.timeRange;
-  const newRange = getPrevPeriod(start, end, props.timeRangeType);
-  emit('update:timeRange', newRange);
-  emit('change', newRange, props.timeRangeType);
-};
+  if (!Array.isArray(props.timeRange)) return
+  const [start, end] = props.timeRange
+  const newRange = getPrevPeriod(start, end, props.timeRangeType)
+  emit('update:timeRange', newRange)
+  emit('change', newRange, props.timeRangeType)
+}
 
 const goToNext = () => {
-  if (!Array.isArray(props.timeRange)) return;
-  const [start, end] = props.timeRange;
-  const newRange = getNextPeriod(start, end, props.timeRangeType);
-  emit('update:timeRange', newRange);
-  emit('change', newRange, props.timeRangeType);
-};
+  if (!Array.isArray(props.timeRange)) return
+  const [start, end] = props.timeRange
+  const newRange = getNextPeriod(start, end, props.timeRangeType)
+  emit('update:timeRange', newRange)
+  emit('change', newRange, props.timeRangeType)
+}
 </script>
 
 <style scoped>

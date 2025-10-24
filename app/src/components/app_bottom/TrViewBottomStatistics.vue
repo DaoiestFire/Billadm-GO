@@ -11,11 +11,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {computed} from "vue";
 import BilladmLabel from "@/components/text/BilladmLabel.vue";
-import {useTrViewStore} from "@/stores/trViewStore.js";
-import {formatFloat} from "@/backend/functions.js";
+import {useTrViewStore} from "@/stores/trViewStore.ts";
+import {formatFloat} from "@/backend/functions.ts";
 
 const trViewStore = useTrViewStore();
 
@@ -26,14 +26,14 @@ const statistics = computed(() => {
       value: trViewStore.trCount,
     }, {
       label: '收入',
-      value: trViewStore.trStatistics?.income ?? 0,
+      value: trViewStore.trStatistics.income,
     }, {
       label: '支出',
-      value: trViewStore.trStatistics?.expense ?? 0,
+      value: trViewStore.trStatistics.expense,
     },
     {
       label: '转账',
-      value: trViewStore.trStatistics?.transfer ?? 0,
+      value: trViewStore.trStatistics.transfer,
     }
   ];
 })

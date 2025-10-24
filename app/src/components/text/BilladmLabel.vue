@@ -5,12 +5,9 @@
   </span>
 </template>
 
-<script setup>
-defineProps({
-  label: {
-    type: String,
-    default: ''
-  }
+<script setup lang="ts">
+withDefaults(defineProps<{ label?: string }>(), {
+  label: ''
 })
 </script>
 

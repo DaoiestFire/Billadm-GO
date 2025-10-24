@@ -19,9 +19,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {useRoute, useRouter} from 'vue-router'
-import {useCssVariables} from '@/css/css'
+import {useCssVariables} from '@/css/css.js'
 import iconBills from '@/assets/icons/bills.svg?raw'
 import iconStatistic from '@/assets/icons/statistic.svg?raw'
 import iconSettings from '@/assets/icons/settings.svg?raw'
@@ -33,8 +33,8 @@ const {iconColor, hoverBgColor, iconActiveFgColor, uiSizeMenuWidth} = useCssVari
 const router = useRouter()
 const route = useRoute()
 
-const navigate = (path) => {
-  router.push(path);
+const navigate = (path: string) => {
+  router.push(path)
 }
 </script>
 

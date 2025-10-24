@@ -39,48 +39,42 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {computed, onMounted, onUnmounted, ref, watch} from 'vue';
 
 // 使用 defineModel 支持 v-model
 const selectedValue = defineModel();
 
-// Props 定义
-const props = defineProps({
-  options: {
-    type: Array,
-    required: true,
-    validator: (val) =>
-        val.every((item) => 'value' in item && 'label' in item),
-  },
-  placeholder: {
-    type: String,
-    default: '请选择',
-  },
-  direction: {
-    type: String,
-    validator: (value) => ['down', 'up'].includes(value),
-    default: 'down',
-  },
-  width: {
-    type: Number,
-    default: 100,
-  },
-  height: {
-    type: Number,
-    default: 28,
-  },
-  // 下拉框最大高度（可选 prop）
-  dropdownMaxHeight: {
-    type: String,
-    default: '200px',
-  },
-});
+// 定义下拉选项的类型
+interface Option {
+  value: string
+  label: string
+  // 可选：其他字段
+  disabled?: boolean
+}
+
+// 定义 Props 类型
+interface Props {
+  options: Option[]
+  placeholder?: string
+  direction?: 'down' | 'up'
+  width?: number
+  height?: number
+  dropdownMaxHeight?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: '请选择',
+  direction: 'down',
+  width: 100,
+  height: 28,
+  dropdownMaxHeight: '200px',
+})
 
 // 数据响应式
-const isOpen = ref(false);
-const selectedLabel = ref('');
-const selectWrapper = ref(null);
+const isOpen = ref<boolean>(false);
+const selectedLabel = ref<string>('');
+const selectWrapper = ref<HTMLDivElement | null>(null);
 
 // 计算内部宽高（用于 hover 背景）
 const innerWidth = computed(() => props.width - 4 + 'px');
@@ -92,7 +86,7 @@ function toggleDropdown() {
 }
 
 // 选择选项
-function selectOption(option) {
+function selectOption(option: Option) {
   selectedValue.value = option.value;
   selectedLabel.value = option.label;
   isOpen.value = false;
@@ -129,8 +123,8 @@ watch(
 );
 
 // 点击外部关闭下拉框
-function closeDropdown(event) {
-  if (selectWrapper.value && !selectWrapper.value.contains(event.target)) {
+function closeDropdown(event: MouseEvent) {
+  if (selectWrapper.value && !selectWrapper.value.contains(event.target as Node)) {
     isOpen.value = false;
   }
 }
@@ -156,7 +150,7 @@ onUnmounted(() => {
   text-align: center;
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 4px;
-  background-color: var(--billadm-color-major-backgroud-color);
+  background-color: var(--billadm-color-major-background-color);
   color: var(--billadm-color-text-major-color);
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;

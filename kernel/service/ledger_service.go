@@ -81,14 +81,14 @@ func (l *ledgerServiceImpl) ListAllLedger(ws *workspace.Workspace) ([]models.Led
 func (l *ledgerServiceImpl) QueryLedgerById(ws *workspace.Workspace, ledgerId string) (*models.Ledger, error) {
 	ws.GetLogger().Infof("start to query ledger by id, id: %s", ledgerId)
 
-	ledgers, err := l.ledgerDao.QueryLedgerById(ws, ledgerId)
+	ledger, err := l.ledgerDao.QueryLedgerById(ws, ledgerId)
 	if err != nil {
 		ws.GetLogger().Errorf("query ledger by id failed, id: %s, err: %v", ledgerId, err)
 		return nil, err
 	}
 
 	ws.GetLogger().Infof("end to query ledger by id, id: %s", ledgerId)
-	return ledgers, nil
+	return ledger, nil
 }
 
 func (l *ledgerServiceImpl) DeleteLedgerById(ws *workspace.Workspace, ledgerId string) error {

@@ -1,9 +1,7 @@
 /**
  * 获取本月第一天的时间
- * @param {Date} date - 输入的日期对象
- * @returns {Date} 时间设置为 00:00:00 的新日期对象
  */
-export function getStartDayOfMonth(date) {
+export function getStartDayOfMonth(date: Date): Date {
     let newDate = new Date(date);
     newDate.setDate(1);
     newDate = setToStartOfDay(newDate);
@@ -12,10 +10,8 @@ export function getStartDayOfMonth(date) {
 
 /**
  * 获取本月最后一天的时间
- * @param {Date} date - 输入的日期对象
- * @returns {Date} 时间设置为 23:59:59 的新日期对象
  */
-export function getLastDayOfMonth(date) {
+export function getLastDayOfMonth(date: Date): Date {
     let newDate = new Date(date);
     newDate.setMonth(newDate.getMonth() + 1);
     newDate.setDate(0);
@@ -25,10 +21,8 @@ export function getLastDayOfMonth(date) {
 
 /**
  * 设置日期对象的时间部分为 00:00:00
- * @param {Date} date - 输入的日期对象
- * @returns {Date} 时间设置为 00:00:00 的新日期对象
  */
-export function setToStartOfDay(date) {
+export function setToStartOfDay(date: Date): Date {
     const newDate = new Date(date);
     newDate.setHours(0, 0, 0, 0);
     return newDate;
@@ -36,10 +30,8 @@ export function setToStartOfDay(date) {
 
 /**
  * 设置日期对象的时间部分为 23:59:59
- * @param {Date} date - 输入的日期对象
- * @returns {Date} 时间设置为 23:59:59 的新日期对象
  */
-export function setToEndOfDay(date) {
+export function setToEndOfDay(date: Date): Date {
     const newDate = new Date(date);
     newDate.setHours(23, 59, 59, 999);
     return newDate;
@@ -47,19 +39,16 @@ export function setToEndOfDay(date) {
 
 /**
  * 获取今天的时间范围 [开始, 结束]
- * @returns {Array<Date>} 包含今天开始和结束时间的数组
  */
-export function getTodayRange() {
+export function getTodayRange(): [Date, Date] {
     const today = new Date();
     return [setToStartOfDay(today), setToEndOfDay(today)];
 }
 
 /**
  * 获取本周的时间范围 [开始, 结束]
- * 假设一周从星期一开始
- * @returns {Array<Date>} 包含本周开始和结束时间的数组
  */
-export function getThisWeekRange() {
+export function getThisWeekRange(): [Date, Date] {
     const today = new Date();
     const day = today.getDay(); // 0 (Sunday) to 6 (Saturday)
 
@@ -80,9 +69,8 @@ export function getThisWeekRange() {
 
 /**
  * 获取本月的时间范围 [开始, 结束]
- * @returns {Array<Date>} 包含本月开始和结束时间的数组
  */
-export function getThisMonthRange(today = new Date()) {
+export function getThisMonthRange(today: Date = new Date()): [Date, Date] {
     const year = today.getFullYear();
     const month = today.getMonth();
 
@@ -94,10 +82,8 @@ export function getThisMonthRange(today = new Date()) {
 
 /**
  * 获取上周的时间范围 [开始, 结束]
- * 假设一周从星期一开始
- * @returns {Array<Date>} 包含上周开始和结束时间的数组
  */
-export function getLastWeekRange(today = new Date()) {
+export function getLastWeekRange(today: Date = new Date()): [Date, Date] {
     const day = today.getDay(); // 0 (Sunday) to 6 (Saturday)
 
     // 计算距离上周一的天数差
@@ -117,9 +103,8 @@ export function getLastWeekRange(today = new Date()) {
 
 /**
  * 获取上月的时间范围 [开始, 结束]
- * @returns {Array<Date>} 包含上月开始和结束时间的数组
  */
-export function getLastMonthRange(today = new Date()) {
+export function getLastMonthRange(today: Date = new Date()): [Date, Date] {
     const year = today.getFullYear();
     const month = today.getMonth();
 
@@ -141,9 +126,8 @@ export function getLastMonthRange(today = new Date()) {
 
 /**
  * 获取今年的时间范围 [开始, 结束]
- * @returns {Array<Date>} 包含今年开始和结束时间的数组
  */
-export function getThisYearRange(today = new Date()) {
+export function getThisYearRange(today: Date = new Date()): [Date, Date] {
     const year = today.getFullYear();
 
     // 今年1月1日
@@ -161,7 +145,7 @@ export function getThisYearRange(today = new Date()) {
  * @param {String} timeRangeType
  * @returns {[Date, Date]} 新的时间区间
  */
-export function getNextPeriod(startDate, endDate, timeRangeType) {
+export function getNextPeriod(startDate: Date, endDate: Date, timeRangeType: string): [Date, Date] {
     return shiftPeriod(startDate, endDate, 1, timeRangeType);
 }
 
@@ -172,11 +156,11 @@ export function getNextPeriod(startDate, endDate, timeRangeType) {
  * @param {String} timeRangeType
  * @returns {[Date, Date]} 新的时间区间
  */
-export function getPrevPeriod(startDate, endDate, timeRangeType) {
+export function getPrevPeriod(startDate: Date, endDate: Date, timeRangeType: string): [Date, Date] {
     return shiftPeriod(startDate, endDate, -1, timeRangeType);
 }
 
-function shiftPeriod(startDate, endDate, direction, timeRangeType) {
+function shiftPeriod(startDate: Date, endDate: Date, direction: number, timeRangeType: string): [Date, Date] {
     startDate = new Date(startDate);
     endDate = new Date(endDate);
     startDate = setToStartOfDay(startDate);
@@ -212,7 +196,7 @@ function shiftPeriod(startDate, endDate, direction, timeRangeType) {
  * @param {Number} direction - 向前还是向后的标记
  * @returns {[Date, Date]} 新的时间区间
  */
-function shiftOneDay(startDate, endDate, direction) {
+function shiftOneDay(startDate: Date, endDate: Date, direction: number): [Date, Date] {
     const newStart = new Date(startDate);
     newStart.setDate(startDate.getDate() + direction);
     const newEnd = new Date(endDate);
@@ -227,7 +211,7 @@ function shiftOneDay(startDate, endDate, direction) {
  * @param {Number} direction - 向前还是向后的标记
  * @returns {[Date, Date]} 新的时间区间
  */
-function shiftOneWeek(startDate, endDate, direction) {
+function shiftOneWeek(startDate: Date, endDate: Date, direction: number): [Date, Date] {
     const newStart = new Date(startDate);
     newStart.setDate(startDate.getDate() + 7 * direction);
     const newEnd = new Date(endDate);
@@ -242,7 +226,7 @@ function shiftOneWeek(startDate, endDate, direction) {
  * @param {Number} direction - 向前还是向后的标记
  * @returns {[Date, Date]} 新的时间区间
  */
-function shiftOneMonth(startDate, endDate, direction) {
+function shiftOneMonth(startDate: Date, endDate: Date, direction: number): [Date, Date] {
     let newStart = new Date(startDate);
     newStart.setDate(1);
     newStart.setMonth(startDate.getMonth() + direction);
@@ -263,7 +247,7 @@ function shiftOneMonth(startDate, endDate, direction) {
  * @param {Number} direction - 向前还是向后的标记
  * @returns {[Date, Date]} 新的时间区间
  */
-function shiftOneYear(startDate, endDate, direction) {
+function shiftOneYear(startDate: Date, endDate: Date, direction: number): [Date, Date] {
     const newStart = new Date(startDate);
     newStart.setFullYear(startDate.getFullYear() + direction);
     newStart.setMonth(0, 1);
@@ -280,7 +264,7 @@ function shiftOneYear(startDate, endDate, direction) {
  * @param {String} timeRangeType
  * @returns {[Date, Date]} 新的时间区间
  */
-export function normalizeTimeRange(startDate, endDate, timeRangeType) {
+export function normalizeTimeRange(startDate: Date, endDate: Date, timeRangeType: string): [Date, Date] {
     let ret;
     ret = getPrevPeriod(startDate, endDate, timeRangeType);
     return getNextPeriod(ret[0], ret[1], timeRangeType);

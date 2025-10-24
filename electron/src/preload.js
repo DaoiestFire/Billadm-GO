@@ -1,4 +1,4 @@
-const {contextBridge, ipcRenderer} = require('electron')
+const {contextBridge, ipcRenderer} = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
     minimizeWindow: () => {
@@ -19,4 +19,4 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getAppInfo: async (field) => {
         return await ipcRenderer.invoke('app', field);
     },
-})
+});

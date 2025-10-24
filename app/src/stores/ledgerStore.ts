@@ -1,22 +1,15 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import {createLedgerByName, deleteLedgerById, queryAllLedgers} from "@/backend/api/ledger.js";
-import NotificationUtil from "@/backend/notification";
-import {hasOpenedWorkspace} from "@/backend/api/workspace.js";
+import {createLedgerByName, deleteLedgerById, queryAllLedgers} from "@/backend/api/ledger.ts"
+import NotificationUtil from "@/backend/notification"
+import {hasOpenedWorkspace} from "@/backend/api/workspace.ts"
+import type {Ledger, WorkspaceStatus} from "@/types/billadm"
 
-// 定义账本对象的类型 (JavaScript 中主要用于文档和类型提示，TypeScript 中更严格)
-/**
- * @typedef {Object} Ledger
- * @property {string} id - 账本唯一标识符
- * @property {string} name - 账本名称
- * @property {string} created_at - 创建时间 (unix timestamp)
- * @property {string} updated_at - 更新时间 (unix timestamp)
- */
 
 export const useLedgerStore = defineStore('ledger', () => {
-    const workspaceStatus = ref({})
-    const ledgers = ref([])
-    const currentLedger = ref(null)
+    const workspaceStatus = ref({} as WorkspaceStatus)
+    const ledgers = ref([] as Ledger[])
+    const currentLedger = ref({} as Ledger | null)
 
     const currentLedgerId = computed(() => {
         return currentLedger.value ? currentLedger.value.id : ''
@@ -40,7 +33,7 @@ export const useLedgerStore = defineStore('ledger', () => {
             ledgers.value = []
             const ledgersFromServer = await queryAllLedgers()
             if (ledgersFromServer && Array.isArray(ledgersFromServer)) {
-                ledgersFromServer.sort((a, b) => a.created_at - b.created_at);
+                ledgersFromServer.sort((a, b) => a.createdAt - b.createdAt)
                 ledgersFromServer.forEach(ledger => {
                     ledgers.value.push(ledger)
                 })
@@ -49,7 +42,10 @@ export const useLedgerStore = defineStore('ledger', () => {
                 setCurrentLedger(currentLedger.value.id)
             }
             if (currentLedger.value === null && ledgers.value.length > 0) {
-                setCurrentLedger(ledgers.value[0].id)
+                const firstLedger = ledgers.value[0]
+                if (firstLedger) {
+                    setCurrentLedger(firstLedger.id)
+                }
             }
         } catch (error) {
             NotificationUtil.error(`获取全部账本失败 ${error}`)
@@ -57,7 +53,7 @@ export const useLedgerStore = defineStore('ledger', () => {
     }
 
     // 添加账本
-    const createLedger = async (name) => {
+    const createLedger = async (name: string) => {
         try {
             await createLedgerByName(name)
             await refreshLedgers()
@@ -68,7 +64,7 @@ export const useLedgerStore = defineStore('ledger', () => {
     }
 
     // 删除账本
-    const deleteLedger = async (id) => {
+    const deleteLedger = async (id: string) => {
         try {
             await deleteLedgerById(id)
             await refreshLedgers()
@@ -79,14 +75,14 @@ export const useLedgerStore = defineStore('ledger', () => {
     }
 
     // 设置当前账本
-    const setCurrentLedger = (id) => {
+    const setCurrentLedger = (id: string) => {
         if (id === null) {
             currentLedger.value = null
             return
         }
-        const ledger = ledgers.value.find(l => l.id === id)
+        const ledger: Ledger | undefined = ledgers.value.find(l => l.id === id)
         if (ledger) {
-            currentLedger.value = {...ledger} // 创建副本，避免直接引用
+            currentLedger.value = JSON.parse(JSON.stringify(ledger)) // 创建副本，避免直接引用
         } else {
             currentLedger.value = null
         }

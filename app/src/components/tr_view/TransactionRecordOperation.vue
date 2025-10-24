@@ -69,11 +69,11 @@
   </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {computed, ref, watch} from 'vue';
-import {useCategoryStore} from "@/stores/categoryStore.js";
-import {useTagStore} from "@/stores/tagStore.js";
-import {useTrViewStore} from "@/stores/trViewStore.js";
+import {useCategoryStore} from "@/stores/categoryStore.ts";
+import {useTagStore} from "@/stores/tagStore.ts";
+import {useTrViewStore} from "@/stores/trViewStore.ts";
 
 // store
 const categoryStore = useCategoryStore();

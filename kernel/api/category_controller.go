@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/billadm/models"
+	"github.com/billadm/models/dto"
 	"github.com/billadm/service"
 	"github.com/billadm/workspace"
 )
@@ -23,7 +24,6 @@ func queryCategory(c *gin.Context) {
 
 	// 支持all, income, expense, transfer
 	trType := c.Param("type")
-
 	categories, err := service.GetCategoryService().QueryCategory(ws, trType)
 	if err != nil {
 		ret.Code = -1
@@ -31,5 +31,12 @@ func queryCategory(c *gin.Context) {
 		return
 	}
 
-	ret.Data = categories
+	categoryDtos := make([]dto.CategoryDto, 0)
+	for _, category := range categories {
+		categoryDto := dto.CategoryDto{}
+		categoryDto.FromCategory(&category)
+		categoryDtos = append(categoryDtos, categoryDto)
+	}
+
+	ret.Data = categoryDtos
 }

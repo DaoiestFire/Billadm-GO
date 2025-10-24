@@ -1,8 +1,9 @@
 package workspace
 
 import (
-	"github.com/sirupsen/logrus"
 	"sync"
+
+	"github.com/sirupsen/logrus"
 )
 
 const (

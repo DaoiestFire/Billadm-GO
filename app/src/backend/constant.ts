@@ -5,7 +5,7 @@ import {
     getThisWeekRange,
     getThisYearRange,
     getTodayRange
-} from "@/backend/timerange.js";
+} from "@/backend/timerange.ts";
 
 
 export const TransactionTypeToLabel = new Map([

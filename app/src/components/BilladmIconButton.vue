@@ -10,66 +10,44 @@
   </button>
 </template>
 
-<script setup>
-import {computed} from 'vue';
-import BilladmIcon from "@/components/BilladmIcon.vue";
+<script setup lang="ts">
+import {computed} from 'vue'
+import BilladmIcon from '@/components/BilladmIcon.vue'
 
-const props = defineProps({
-  svg: {
-    type: String,
-    required: true
-  },
-  label: {
-    type: String,
-    default: ''
-  },
-  width: {
-    type: String,
-    default: '30px'
-  },
-  height: {
-    type: String,
-    default: '30px'
-  },
-  iconSize: {
-    type: [String, Number],
-    default: '20px'
-  },
-  color: {
-    type: String,
-    default: '#7b7b7b'
-  },
-  bgColor: {
-    type: String,
-    default: 'transparent'
-  },
-  bgSize: {
-    type: [String, Number],
-    default: '30px'
-  },
-  hoverBgColor: {
-    type: String,
-    default: 'white'
-  },
-  isActive: {
-    type: Boolean,
-    default: false
-  },
-  activeFgColor: {
-    type: String,
-    default: 'white'
-  },
-  tooltipPlacement: {
-    type: String,
-    default: 'bottom',
-  },
+interface Props {
+  svg: string                    // 必填，图标 SVG 路径或名称
+  label?: string                 // 可选，tooltip 文本
+  width?: string                 // 按钮宽度
+  height?: string                // 按钮高度
+  iconSize?: string | number     // 图标大小
+  color?: string                 // 默认图标颜色
+  bgColor?: string               // 按钮背景色
+  bgSize?: string | number       // 悬浮/激活时背景圆大小
+  hoverBgColor?: string          // 悬浮时背景色
+  isActive?: boolean             // 是否处于激活状态
+  activeFgColor?: string         // 激活时图标颜色
+  tooltipPlacement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  label: '',
+  width: '30px',
+  height: '30px',
+  iconSize: '20px',
+  color: '#7b7b7b',
+  bgColor: 'transparent',
+  bgSize: '30px',
+  hoverBgColor: 'white',
+  isActive: false,
+  activeFgColor: 'white',
+  tooltipPlacement: 'bottom',
 })
 
 const buttonStyle = computed(() => {
   return {
-    width: typeof props.width === 'number' ? `${props.width}px` : props.width,
-    height: typeof props.height === 'number' ? `${props.height}px` : props.height,
-    backgroundColor: props.bgColor
+    width: props.width,
+    height: props.height,
+    backgroundColor: props.bgColor,
   }
 })
 </script>

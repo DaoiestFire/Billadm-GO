@@ -5,13 +5,12 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-
 	"github.com/billadm/constant"
 	"github.com/billadm/models"
+	"github.com/billadm/models/dto"
 	"github.com/billadm/service"
 	"github.com/billadm/workspace"
+	"github.com/gin-gonic/gin"
 )
 
 func queryAllLedgers(c *gin.Context) {
@@ -30,17 +29,16 @@ func queryAllLedgers(c *gin.Context) {
 		return
 	}
 
-	ledgerId, ok := arg["ledger_id"].(string)
+	ledgerId, ok := arg["ledgerId"].(string)
 	if !ok {
 		ret.Code = -1
-		ret.Msg = "ledger_id field not exist in request body"
+		ret.Msg = "ledgerId在请求体中不存在"
 		return
 	}
 
 	var ledgers []models.Ledger
 	var err error
 	if ledgerId == constant.All {
-		// 返回全部的账本信息
 		ledgers, err = service.GetLedgerService().ListAllLedger(ws)
 		if err != nil {
 			ret.Code = -1
@@ -48,22 +46,28 @@ func queryAllLedgers(c *gin.Context) {
 			return
 		}
 	} else {
-		// 查询指定id的账本
+		var ledger *models.Ledger
 		ledgerIds := strings.Split(ledgerId, ",")
 		for _, id := range ledgerIds {
 			id = strings.TrimSpace(id)
-			ledger, err := service.GetLedgerService().QueryLedgerById(ws, id)
+			ledger, err = service.GetLedgerService().QueryLedgerById(ws, id)
 			if err != nil {
-				logrus.Errorf("query ledger by id: %s err: %v", id, err)
 				ret.Code = -1
-				ret.Msg = fmt.Sprintf("ledger not found, id: %s", id)
+				ret.Msg = fmt.Sprintf("查询账本 %s 失败: %v", id, err)
 				return
 			}
 			ledgers = append(ledgers, *ledger)
 		}
 	}
 
-	ret.Data = ledgers
+	ledgerDtos := make([]dto.LedgerDto, 0)
+	for _, ledger := range ledgers {
+		ledgerDto := dto.LedgerDto{}
+		ledgerDto.FromLedger(&ledger)
+		ledgerDtos = append(ledgerDtos, ledgerDto)
+	}
+
+	ret.Data = ledgerDtos
 }
 
 func createLedger(c *gin.Context) {
@@ -85,11 +89,10 @@ func createLedger(c *gin.Context) {
 	ledgerName, ok := arg["name"].(string)
 	if !ok {
 		ret.Code = -1
-		ret.Msg = "name field not exist in request body"
+		ret.Msg = "name在请求体中不存在"
 		return
 	}
 
-	// 在指定用户下创建账本
 	ledgerId, err := service.GetLedgerService().CreateLedger(ws, ledgerName)
 	if err != nil {
 		ret.Code = -1
@@ -120,10 +123,10 @@ func deleteLedger(c *gin.Context) {
 		return
 	}
 
-	trId, ok := arg["ledger_id"].(string)
+	trId, ok := arg["ledgerId"].(string)
 	if !ok {
 		ret.Code = -1
-		ret.Msg = "ledger_id field not exist in request body"
+		ret.Msg = "ledgerId在请求体中不存在"
 		return
 	}
 
