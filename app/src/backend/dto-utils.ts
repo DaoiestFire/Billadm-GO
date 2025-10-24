@@ -6,7 +6,7 @@ import {dateToUnixTimestamp} from "@/backend/functions.ts";
  */
 export function trFormToTrDto(data: TrForm, ledgerId: string = ''): TransactionRecord {
     return {
-        ledgerId,
+        ledgerId: ledgerId,
         transactionId: data.id,
         price: data.price,
         transactionType: data.type,
