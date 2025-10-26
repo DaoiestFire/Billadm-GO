@@ -26,6 +26,7 @@ declare module 'vue' {
     ASelect: typeof import('ant-design-vue/es')['Select']
     ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
     ASpace: typeof import('ant-design-vue/es')['Space']
+    ATypographyText: typeof import('ant-design-vue/es')['TypographyText']
     BilladmChart: typeof import('./../components/da_view/BilladmChart.vue')['default']
     BilladmChartDisplay: typeof import('./../components/da_view/BilladmChartDisplay.vue')['default']
     BilladmChartPanel: typeof import('./../components/da_view/BilladmChartPanel.vue')['default']

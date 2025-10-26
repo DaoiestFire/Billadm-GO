@@ -2,7 +2,7 @@
   <div class="billadm-time-select">
     <!-- 时间范围类型选择 -->
     <div class="group">
-      <billadm-label>时间粒度</billadm-label>
+      <a-typography-text>时间粒度</a-typography-text>
       <billadm-select
           v-model="timeRangeType"
           :options="TimeRangeTypes"
@@ -13,7 +13,7 @@
     </div>
 
     <div class="group">
-      <billadm-label>时间范围</billadm-label>
+      <a-typography-text>时间范围</a-typography-text>
       <!-- 向前按钮 -->
       <billadm-icon-button
           :svg="iconLeft"
@@ -65,7 +65,6 @@ import iconRight from '@/assets/icons/right.svg?raw'
 import {getNextPeriod, getPrevPeriod, normalizeTimeRange} from '@/backend/timerange.ts'
 import {useCssVariables} from '@/css/css.ts'
 import {TimeRangeShortcuts, TimeRangeTypes} from "@/backend/constant.ts"
-import BilladmLabel from "@/components/BilladmLabel.vue"
 import type {TimeRangeType} from "@/types/billadm";
 
 // 👇 定义 Props 类型
