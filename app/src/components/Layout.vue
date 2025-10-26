@@ -1,17 +1,9 @@
 <template>
   <a-layout style="height: 100vh">
-    <a-modal v-model:open="showWorkspaceSelect"
-             title="新建工作目录或打开已存在的工作目录"
-             ok-text="确认"
-             cancel-text="取消"
-             @ok="handleOpenWorkspace">
-      <a-input-search
-          v-model:value="workspaceDir"
-          placeholder="选择工作目录"
-          enter-button="打开目录"
-          @search="handleBrowse"
-      />
-    </a-modal>
+    <billadm-file-select v-model="showWorkspaceSelect"
+                         title="新建工作目录或打开已存在的工作目录"
+                         @confirm="handleOpenWorkspace"
+    />
     <a-layout-header class="headerStyle">
       <app-top-bar/>
     </a-layout-header>
@@ -51,32 +43,14 @@ const categoryStore = useCategoryStore();
 const tagStore = useTagStore();
 
 const showWorkspaceSelect = ref(true);
-const workspaceDir = ref('');
-const browseMode = ref('directory');
 
-const handleOpenWorkspace = async () => {
+const handleOpenWorkspace = async (workspaceDir: string) => {
   try {
-    await openWorkspace(workspaceDir.value);
+    await openWorkspace(workspaceDir);
     await initWorkspace();
   } catch (error) {
     NotificationUtil.error(`打开工作空间失败 ${error}`);
     showWorkspaceSelect.value = true;
-  }
-}
-
-async function handleBrowse() {
-  try {
-    let result
-    result = await window.electronAPI.openDialog({
-      properties: browseMode.value === 'directory' ? ['openDirectory'] : ['openFile'],
-    })
-
-    if (result.canceled || !result.filePaths || result.filePaths.length === 0) {
-      return
-    }
-    workspaceDir.value = result.filePaths[0]
-  } catch (err) {
-    NotificationUtil.error(`选择目录失败 ${err}`)
   }
 }
 

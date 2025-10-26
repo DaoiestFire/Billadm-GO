@@ -22,6 +22,7 @@ declare module 'vue' {
     BilladmChart: typeof import('./../components/da_view/BilladmChart.vue')['default']
     BilladmChartDisplay: typeof import('./../components/da_view/BilladmChartDisplay.vue')['default']
     BilladmChartPanel: typeof import('./../components/da_view/BilladmChartPanel.vue')['default']
+    BilladmFileSelect: typeof import('./../components/BilladmFileSelect.vue')['default']
     BilladmFullScreen: typeof import('./../components/common/BilladmFullScreen.vue')['default']
     BilladmIcon: typeof import('./../components/BilladmIcon.vue')['default']
     BilladmIconButton: typeof import('./../components/BilladmIconButton.vue')['default']
