@@ -1,42 +1,28 @@
 <template>
   <div class="menu-bar">
     <div class="left-groups">
-      <AppDisplay size="30px"/>
-      <LedgerSelect/>
+      <a-avatar shape="square" :src="IconBilladm"/>
     </div>
     <div class="center-groups">
       Billadm-{{ route.name }}
     </div>
     <div class="right-groups">
-      <BilladmIconButton :svg="iconZoomOut" label="最小化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                         :color="iconColor" :hover-bg-color="hoverBgColor"
-                         tooltip-placement="bottom-start" @click="onMinimize"/>
-      <BilladmIconButton :svg="iconZoomIn" label="最大化" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                         :color="iconColor" :hover-bg-color="hoverBgColor"
-                         tooltip-placement="bottom-start" @click="onMaximize"/>
-      <BilladmIconButton :svg="iconClose" label="关闭" :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                         :color="iconColor" :hover-bg-color="hoverBgColor"
-                         tooltip-placement="bottom-start" @click="onClose"/>
+      <a-button type="text" :icon="h(LineOutlined)" @click="onMinimize"/>
+      <a-button type="text" :icon="h(BorderOutlined)" @click="onMaximize"/>
+      <a-button type="text" :icon="h(CloseOutlined)" @click="onClose"/>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import {h} from 'vue';
 import {useRoute} from 'vue-router'
-import BilladmIconButton from '@/components/BilladmIconButton.vue'
-import LedgerSelect from "@/components/app_top/LedgerSelect.vue"
-import AppDisplay from "@/components/app_top/AppDisplay.vue"
-import {useCssVariables} from '@/css/css.ts'
-import iconZoomOut from '@/assets/icons/zoom-out.svg?raw'
-import iconZoomIn from '@/assets/icons/zoom-in.svg?raw'
-import iconClose from '@/assets/icons/close.svg?raw'
 import {exitApp} from "@/backend/api/app.ts"
+import {BorderOutlined, CloseOutlined, LineOutlined} from "@ant-design/icons-vue";
+import IconBilladm from '@/assets/icons/billadm.svg';
 
 // 当前视图
 const route = useRoute()
-
-// css variables
-const {hoverBgColor, iconColor, uiSizeMenuWidth} = useCssVariables()
 
 // 窗口控制
 const onMinimize = () => {
@@ -48,10 +34,9 @@ const onMaximize = () => {
 }
 
 const onClose = async () => {
-  exitApp()
+  await exitApp()
   window.electronAPI.closeWindow();
 }
-
 </script>
 
 <style scoped>
@@ -59,6 +44,9 @@ const onClose = async () => {
   -webkit-app-region: drag;
   display: flex;
   align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0 8px;
   position: relative;
 }
 
@@ -71,9 +59,9 @@ const onClose = async () => {
   margin-right: auto;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
-/* 中间按钮 */
 .center-groups {
   position: absolute;
   left: 50%;
@@ -83,5 +71,8 @@ const onClose = async () => {
 /* 右边按钮组 */
 .right-groups {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 </style>

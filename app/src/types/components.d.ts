@@ -8,6 +8,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AAvatar: typeof import('ant-design-vue/es')['Avatar']
+    AButton: typeof import('ant-design-vue/es')['Button']
     AInputSearch: typeof import('ant-design-vue/es')['InputSearch']
     ALayout: typeof import('ant-design-vue/es')['Layout']
     ALayoutContent: typeof import('ant-design-vue/es')['LayoutContent']
@@ -19,6 +21,7 @@ declare module 'vue' {
     AppDisplay: typeof import('./../components/app_top/AppDisplay.vue')['default']
     AppLeftBar: typeof import('./../components/AppLeftBar.vue')['default']
     AppTopBar: typeof import('./../components/app_top/AppTopBar.vue')['default']
+    ASpace: typeof import('ant-design-vue/es')['Space']
     BilladmChart: typeof import('./../components/da_view/BilladmChart.vue')['default']
     BilladmChartDisplay: typeof import('./../components/da_view/BilladmChartDisplay.vue')['default']
     BilladmChartPanel: typeof import('./../components/da_view/BilladmChartPanel.vue')['default']
