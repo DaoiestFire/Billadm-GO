@@ -9,15 +9,20 @@
       Billadm-{{ route.name }}
     </div>
     <div class="right-groups">
-      <a-button type="text" :icon="h(LineOutlined)" @click="onMinimize"/>
-      <a-button type="text" :icon="h(BorderOutlined)" @click="onMaximize"/>
-      <a-button type="text" :icon="h(CloseOutlined)" @click="onClose"/>
+      <a-button type="text" @click="onMinimize">
+        <LineOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+      </a-button>
+      <a-button type="text" @click="onMaximize">
+        <BorderOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+      </a-button>
+      <a-button type="text" @click="onClose">
+        <CloseOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+      </a-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {h} from 'vue';
 import {useRoute} from 'vue-router'
 import {exitApp} from "@/backend/api/app.ts"
 import {BorderOutlined, CloseOutlined, LineOutlined} from "@ant-design/icons-vue";
@@ -64,6 +69,7 @@ const onClose = async () => {
 
 /* 左边按钮 将它与后面的元素隔开 */
 .left-groups {
+  margin-left: 8px;
   margin-right: auto;
   display: flex;
   align-items: center;
@@ -82,5 +88,6 @@ const onClose = async () => {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  margin-right: 8px;
 }
 </style>

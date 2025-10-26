@@ -1,34 +1,36 @@
 <template>
   <div class="menu-bar">
     <div class="top-groups">
-      <BilladmIconButton :svg="iconBills" label="消费记录" tooltip-placement="right"
-                         :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                         :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
-                         @click="navigate('tr_view')" :isActive="route.path === '/tr_view'"/>
-      <BilladmIconButton :svg="iconStatistic" label="数据分析" tooltip-placement="right"
-                         :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                         :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
-                         @click="navigate('da_view')" :isActive="route.path === '/da_view'"/>
+      <a-button :type="route.path==='/ledger_view' ? 'primary': 'text'" @click="navigate('ledger_view')">
+        <template #icon>
+          <BookOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        </template>
+      </a-button>
+      <a-button :type="route.path==='/tr_view' ? 'primary': 'text'" @click="navigate('tr_view')">
+        <template #icon>
+          <TransactionOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        </template>
+      </a-button>
+      <a-button :type="route.path==='/da_view' ? 'primary': 'text'" @click="navigate('da_view')">
+        <template #icon>
+          <LineChartOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        </template>
+      </a-button>
     </div>
     <div class="bottom-groups">
-      <BilladmIconButton :svg="iconSettings" label="应用设置" tooltip-placement="right"
-                         :width="uiSizeMenuWidth" :height="uiSizeMenuWidth"
-                         :color="iconColor" :hover-bg-color="hoverBgColor" :active-fg-color="iconActiveFgColor"
-                         @click="navigate('settings_view')" :isActive="route.path === '/settings_view'"/>
+      <a-button :type="route.path==='/settings_view' ? 'primary': 'text'" @click="navigate('settings_view')">
+        <template #icon>
+          <SettingOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        </template>
+      </a-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {useRoute, useRouter} from 'vue-router'
-import {useCssVariables} from '@/css/css.js'
-import iconBills from '@/assets/icons/bills.svg?raw'
-import iconStatistic from '@/assets/icons/statistic.svg?raw'
-import iconSettings from '@/assets/icons/settings.svg?raw'
-import BilladmIconButton from '@/components/BilladmIconButton.vue'
+import {useRoute, useRouter} from 'vue-router';
+import {BookOutlined, LineChartOutlined, SettingOutlined, TransactionOutlined} from "@ant-design/icons-vue";
 
-// css variables
-const {iconColor, hoverBgColor, iconActiveFgColor, uiSizeMenuWidth} = useCssVariables()
 
 const router = useRouter()
 const route = useRoute()
@@ -42,17 +44,23 @@ const navigate = (path: string) => {
 .menu-bar {
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
 }
 
 .top-groups {
   margin-bottom: auto;
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .bottom-groups {
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 </style>

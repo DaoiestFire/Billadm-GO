@@ -54,6 +54,7 @@ declare module 'vue' {
     FileDirSelect: typeof import('./../components/FileDirSelect.vue')['default']
     Layout: typeof import('./../components/Layout.vue')['default']
     LedgerSelect: typeof import('./../components/app_top/LedgerSelect.vue')['default']
+    LedgerView: typeof import('./../components/ledger_view/LedgerView.vue')['default']
     Pagination: typeof import('./../components/tr_view/Pagination.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
