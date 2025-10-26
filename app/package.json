@@ -6,6 +6,7 @@
     "build": "vue-tsc -b && vite build"
   },
   "dependencies": {
+    "ant-design-vue": "^4.2.6",
     "axios": "^1.11.0",
     "echarts": "^6.0.0",
     "normalize.css": "^8.0.1",
