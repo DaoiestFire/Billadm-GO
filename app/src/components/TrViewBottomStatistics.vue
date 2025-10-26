@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import {computed} from "vue";
-import BilladmLabel from "@/components/text/BilladmLabel.vue";
+import BilladmLabel from "@/components/BilladmLabel.vue";
 import {useTrViewStore} from "@/stores/trViewStore.ts";
 import {formatFloat} from "@/backend/functions.ts";
 

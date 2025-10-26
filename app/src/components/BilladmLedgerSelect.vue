@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import {useLedgerStore} from '@/stores/ledgerStore';
+import {useLedgerStore} from '@/stores/ledgerStore.ts';
 import type {Ledger} from '@/types/billadm';
 
 const ledgerStore = useLedgerStore();

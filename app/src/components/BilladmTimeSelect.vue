@@ -65,7 +65,7 @@ import iconRight from '@/assets/icons/right.svg?raw'
 import {getNextPeriod, getPrevPeriod, normalizeTimeRange} from '@/backend/timerange.ts'
 import {useCssVariables} from '@/css/css.ts'
 import {TimeRangeShortcuts, TimeRangeTypes} from "@/backend/constant.ts"
-import BilladmLabel from "@/components/text/BilladmLabel.vue"
+import BilladmLabel from "@/components/BilladmLabel.vue"
 import type {TimeRangeType} from "@/types/billadm";
 
 // 👇 定义 Props 类型

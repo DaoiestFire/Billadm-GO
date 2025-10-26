@@ -22,7 +22,7 @@ declare module 'vue' {
     AppBottomBar: typeof import('./../components/app_bottom/AppBottomBar.vue')['default']
     AppDisplay: typeof import('./../components/app_top/AppDisplay.vue')['default']
     AppLeftBar: typeof import('./../components/AppLeftBar.vue')['default']
-    AppTopBar: typeof import('./../components/app_top/AppTopBar.vue')['default']
+    AppTopBar: typeof import('./../components/AppTopBar.vue')['default']
     ASelect: typeof import('ant-design-vue/es')['Select']
     ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
     ASpace: typeof import('ant-design-vue/es')['Space']
@@ -33,8 +33,8 @@ declare module 'vue' {
     BilladmFullScreen: typeof import('./../components/common/BilladmFullScreen.vue')['default']
     BilladmIcon: typeof import('./../components/BilladmIcon.vue')['default']
     BilladmIconButton: typeof import('./../components/BilladmIconButton.vue')['default']
-    BilladmLabel: typeof import('./../components/text/BilladmLabel.vue')['default']
-    BilladmLedgerSelect: typeof import('./../components/app_top/BilladmLedgerSelect.vue')['default']
+    BilladmLabel: typeof import('./../components/BilladmLabel.vue')['default']
+    BilladmLedgerSelect: typeof import('./../components/BilladmLedgerSelect.vue')['default']
     BilladmModal: typeof import('./../components/BilladmModal.vue')['default']
     BilladmSelect: typeof import('./../components/BilladmSelect.vue')['default']
     BilladmTimeSelect: typeof import('./../components/BilladmTimeSelect.vue')['default']
@@ -67,6 +67,6 @@ declare module 'vue' {
     TransactionRecordOperation: typeof import('./../components/tr_view/TransactionRecordOperation.vue')['default']
     TransactionRecordTable: typeof import('./../components/tr_view/TransactionRecordTable.vue')['default']
     TransactionRecordView: typeof import('./../components/tr_view/TransactionRecordView.vue')['default']
-    TrViewBottomStatistics: typeof import('./../components/app_bottom/TrViewBottomStatistics.vue')['default']
+    TrViewBottomStatistics: typeof import('./../components/TrViewBottomStatistics.vue')['default']
   }
 }
