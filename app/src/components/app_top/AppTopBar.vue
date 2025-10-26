@@ -1,7 +1,9 @@
 <template>
   <div class="menu-bar">
-    <div class="left-groups">
+    <div class="avatar">
       <a-avatar shape="square" :src="IconBilladm"/>
+    </div>
+    <div class="left-groups">
     </div>
     <div class="center-groups">
       Billadm-{{ route.name }}
@@ -46,12 +48,18 @@ const onClose = async () => {
   align-items: center;
   justify-content: center;
   height: 100%;
-  margin: 0 8px;
   position: relative;
 }
 
 .menu-bar > * {
   -webkit-app-region: no-drag;
+}
+
+.avatar {
+  width: var(--billadm-size-sider-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 左边按钮 将它与后面的元素隔开 */
