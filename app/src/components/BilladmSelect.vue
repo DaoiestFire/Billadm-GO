@@ -47,10 +47,8 @@ const selectedValue = defineModel();
 
 // 定义下拉选项的类型
 interface Option {
-  value: string
+  value: string | number
   label: string
-  // 可选：其他字段
-  disabled?: boolean
 }
 
 // 定义 Props 类型

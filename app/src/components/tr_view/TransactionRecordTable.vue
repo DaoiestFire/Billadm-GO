@@ -10,13 +10,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="tr-table-body-row" v-for="(item, index) in items" :key="item.transaction_id">
+        <tr class="tr-table-body-row" v-for="(item, index) in items" :key="item.transactionId">
           <td v-for="styleItem in columnStyles" :key="styleItem.field"
               :style="formatCellStyle(styleItem.field, item)">
             <template v-if="styleItem.field === 'actions'">
               <div class="action-buttons">
                 <button class="btn-edit" @click="handleEdit(item)">编辑</button>
-                <button class="btn-delete" @click="getShowDeleteTrFunc(item.transaction_id)()">删除</button>
+                <button class="btn-delete" @click="getShowDeleteTrFunc(item.transactionId)()">删除</button>
               </div>
             </template>
             <template v-if="styleItem.field === 'tags'">
@@ -43,7 +43,7 @@
         :cancel-color="cancelColor"
         :confirm-label="confirmLabel"
         :confirm-color="confirmColor"
-        @confirm="confirmFunc"
+        @confirm="handleConfirm"
     />
   </div>
 </template>
@@ -51,74 +51,109 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import {useCssVariables} from '@/css/css.ts'
-import {useTrViewStore} from "@/stores/trViewStore.ts";
-import {deleteTrById} from "@/backend/api/tr.ts";
-import NotificationUtil from "@/backend/notification.ts";
-import BilladmModal from "@/components/BilladmModal.vue";
+import {useTrViewStore} from '@/stores/trViewStore.ts'
+import {deleteTrById} from '@/backend/api/tr.ts'
+import NotificationUtil from '@/backend/notification.ts'
+import BilladmModal from '@/components/BilladmModal.vue'
+import type {TransactionRecord} from '@/types/billadm'
 
-// emit
-const emit = defineEmits(['edit-item'])
+// =======================
+// 🔹 类型定义
+// =======================
 
-// store
-const trViewStore = useTrViewStore()
+interface ColumnStyle {
+  field: keyof TransactionRecord | 'index' | 'actions'
+  name: string
+  width: string
+}
 
-// 引用颜色
-const {positiveColor, negativeColor} = useCssVariables()
+// Props 类型
+interface Props {
+  items: TransactionRecord[]
+  headerHeight?: string
+  rowHeight?: string
+  columnStyles?: ColumnStyle[]
+}
 
-const props = defineProps({
-  items: {
-    type: Array,
-    required: true
-  },
-  headerHeight: {
-    type: String,
-    default: '50px'
-  },
-  rowHeight: {
-    type: String,
-    default: '40px'
-  },
-  columnStyles: {
-    type: Array,
-    default: []
-  },
+// Emit 事件类型
+interface Emits {
+  (e: 'edit-item', item: TransactionRecord): void
+}
+
+// =======================
+// 🔹 Props & Emits
+// =======================
+
+// 使用 withDefaults 定义带默认值的 props（TS 安全）
+withDefaults(defineProps<Props>(), {
+  headerHeight: '50px',
+  rowHeight: '40px',
+  columnStyles: () => []
 })
 
-// 各种框的控制变量
-const showTrConfirmDialog = ref(false)
-const message = ref('')
-const confirmLabel = ref('确认')
-const confirmColor = ref('')
-const cancelColor = ref('')
-const confirmFunc = ref(null)
+// 类型安全的 emit
+const emit = defineEmits<Emits>()
 
-const handleEdit = (item) => {
+// =======================
+// 🔹 Store & 工具
+// =======================
+
+const trViewStore = useTrViewStore()
+const {positiveColor, negativeColor} = useCssVariables()
+
+// =======================
+// 🔹 模态框控制
+// =======================
+
+const showTrConfirmDialog = ref(false)
+const message = ref<string>('')
+const confirmLabel = ref<string>('确认')
+const confirmColor = ref<string>('')
+const cancelColor = ref<string>('')
+const confirmFunc = ref<(() => Promise<void>) | null>(null)
+
+// =======================
+// 🔹 事件处理
+// =======================
+
+const handleEdit = (item: TransactionRecord): void => {
   emit('edit-item', item)
 }
 
-const getShowDeleteTrFunc = (id) => {
-  return () => {
+const handleConfirm = async () => {
+  if (confirmFunc.value) {
+    await confirmFunc.value()
+  }
+}
+
+const getShowDeleteTrFunc = (id: string) => {
+  return (): void => {
     message.value = '确认删除消费记录吗？'
     confirmLabel.value = '删除'
     confirmColor.value = negativeColor.value
     cancelColor.value = positiveColor.value
-    confirmFunc.value = async () => {
+    confirmFunc.value = async (): Promise<void> => {
       try {
-        await deleteTrById(id);
-        await trViewStore.refreshPages();
-        await trViewStore.refreshTableData();
-        await trViewStore.refreshStatistics();
-      } catch (error) {
-        NotificationUtil.error(`删除消费记录失败 ${error}`)
+        await deleteTrById(id)
+        await trViewStore.refreshPages()
+        await trViewStore.refreshTableData()
+        await trViewStore.refreshStatistics()
+      } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : String(error)
+        NotificationUtil.error(`删除消费记录失败: ${msg}`)
       }
     }
     showTrConfirmDialog.value = true
   }
 }
 
-// 获取表头风格
-const getColumnStyle = (item) => {
-  const width = item.width || 'auto'
+// =======================
+// 🔹 样式与格式化函数
+// =======================
+
+// 表头列样式
+const getColumnStyle = (styleItem: ColumnStyle): Record<string, string | undefined> => {
+  const width = styleItem.width || 'auto'
   return {
     width,
     minWidth: width === 'auto' ? 'auto' : undefined,
@@ -126,51 +161,51 @@ const getColumnStyle = (item) => {
   }
 }
 
-// 获取表格样式
-const formatCellStyle = (field, item) => {
-  switch (field) {
-    case 'transaction_type':
-      return formatTransactionTypeStyle(item.transaction_type)
-    default:
-      return {}
+// 单元格样式（字段级）
+const formatCellStyle = (field: string, item: TransactionRecord): Record<string, string> => {
+  if (field === 'transaction_type') {
+    return formatTransactionTypeStyle(item.transactionType)
   }
+  return {}
 }
 
-// 获取价格样式
-const formatTransactionTypeStyle = (type) => {
-  let color = ''
-  if (type === 'expense') {
-    color = '#F56C6C'
-  } else if (type === 'income') {
-    color = '#67C23A'
-  } else if (type === 'transfer') {
-    color = '#409EFF'
+// 交易类型对应颜色
+const formatTransactionTypeStyle = (type: string): Record<string, string> => {
+  const colors: Record<string, string> = {
+    expense: '#F56C6C',
+    income: '#67C23A',
+    transfer: '#409EFF'
   }
-  return {color}
+  return {color: colors[type] || ''}
 }
 
-// 格式化数据
-const formatCell = (field, value) => {
+// 格式化单元格内容
+const formatCell = (field: string, value: unknown): string | number => {
   switch (field) {
     case 'transaction_at':
-      return formatTime(value)
+      return formatTime(value as number)
     case 'transaction_type':
-      return formatTransactionType(value)
+      return formatTransactionType(value as string)
     default:
-      return value
+      return value as string | number
   }
 }
 
-// 格式化时间
-const formatTime = (timestamp) => {
+// 时间格式化
+const formatTime = (timestamp: number): string => {
   if (!timestamp) return ''
   const date = new Date(timestamp * 1000)
   return date.toLocaleString()
 }
 
-// 格式化交易类型
-const formatTransactionType = (type) => {
-  return type === 'expense' ? '支出' : type === 'income' ? '收入' : '转账'
+// 交易类型中文映射
+const formatTransactionType = (type: string): string => {
+  const map: Record<string, string> = {
+    expense: '支出',
+    income: '收入',
+    transfer: '转账'
+  }
+  return map[type] || type
 }
 </script>
 

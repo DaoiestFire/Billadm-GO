@@ -60,7 +60,7 @@ interface Props {
   showInput?: boolean
   inputPlaceholder?: string
   showButtons?: boolean
-  item?: string | null
+  item?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -74,14 +74,14 @@ const props = withDefaults(defineProps<Props>(), {
   showInput: false,
   inputPlaceholder: '请输入...',
   showButtons: true,
-  item: null
+  item: ''
 })
 
 const emit = defineEmits<{
   (e: 'update:visible', visible: boolean): void
   (e: 'confirm', data: {
-    input: string | null
-    item: Props['item']
+    input: string
+    item: string
   }): void
 }>()
 
@@ -105,7 +105,7 @@ function closeDialog() {
 
 function handleConfirm() {
   const data = {
-    input: props.showInput ? inputValue.value : null,
+    input: props.showInput ? inputValue.value : '',
     item: props.item
   }
   emit('confirm', data)
