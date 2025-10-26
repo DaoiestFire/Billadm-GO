@@ -11,7 +11,11 @@
       <a-layout-sider :style="siderStyle" :width="siderWidthSize">
         <app-left-bar/>
       </a-layout-sider>
-      <a-layout-content :style="contentStyle">Content</a-layout-content>
+      <a-layout-content :style="contentStyle">
+        <a-card style="height: 100%">
+          <router-view/>
+        </a-card>
+      </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
@@ -27,14 +31,14 @@ import {openWorkspace} from "@/backend/api/workspace.ts";
 import NotificationUtil from "@/backend/notification.ts";
 
 
-const {majorBgColor, minorBgColor, siderWidthSize} = useCssVariables();
+const {minorBgColor, siderWidthSize} = useCssVariables();
 
 const siderStyle: CSSProperties = {
   backgroundColor: minorBgColor.value,
 };
 
 const contentStyle: CSSProperties = {
-  backgroundColor: majorBgColor.value,
+  backgroundColor: minorBgColor.value,
 };
 
 const ledgerStore = useLedgerStore();
