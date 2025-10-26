@@ -1,128 +1,107 @@
 <template>
-  <div class="layout">
-    <FileDirSelect v-model:visible="showWorkspaceSelect"
-                   title="新建工作目录或打开已存在的工作目录"
-                   :cancel-color="negativeColor"
-                   :confirm-color="positiveColor"
-                   @confirm="handleOpenWorkspace"
-    />
-    <!-- 上栏：菜单栏 -->
-    <div class="top-bar">
-      <AppTopBar/>
-    </div>
-
-    <!-- 中间栏：左中右 -->
-    <div class="middle-section">
-      <!-- 左侧功能栏 -->
-      <div class="left-panel">
-        <AppLeftBar/>
-      </div>
-
-      <!-- 中间阅览区 -->
-      <div class="center-panel">
-        <router-view/>
-      </div>
-
-      <!-- 右侧功能栏 -->
-      <div class="right-panel">
-      </div>
-    </div>
-
-    <!-- 下栏：详情栏 -->
-    <div class="bottom-bar">
-      <AppBottomBar/>
-    </div>
-  </div>
+  <a-layout style="height: 100vh">
+    <a-modal v-model:open="showWorkspaceSelect"
+             title="新建工作目录或打开已存在的工作目录"
+             ok-text="确认"
+             cancel-text="取消"
+             @ok="handleOpenWorkspace">
+      <a-input-search
+          v-model:value="workspaceDir"
+          placeholder="选择工作目录"
+          enter-button="打开目录"
+          @search="handleBrowse"
+      />
+    </a-modal>
+    <a-layout-header class="headerStyle">
+      <app-top-bar/>
+    </a-layout-header>
+    <a-layout style="height: 100%">
+      <a-layout-sider :style="siderStyle" :width="siderWidthSize">
+        <app-left-bar/>
+      </a-layout-sider>
+      <a-layout-content :style="contentStyle">Content</a-layout-content>
+    </a-layout>
+  </a-layout>
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue"
-import AppTopBar from '@/components/app_top/AppTopBar.vue'
-import AppLeftBar from '@/components/AppLeftBar.vue'
-import AppBottomBar from "@/components/app_bottom/AppBottomBar.vue"
-import FileDirSelect from "@/components/FileDirSelect.vue"
-import {useLedgerStore} from "@/stores/ledgerStore.ts"
-import {useTrViewStore} from "@/stores/trViewStore.ts"
-import {useCategoryStore} from "@/stores/categoryStore.ts"
-import {useTagStore} from "@/stores/tagStore.ts"
-import {useCssVariables} from "@/css/css.ts"
-import {openWorkspace} from "@/backend/api/workspace.ts"
-import NotificationUtil from "@/backend/notification.ts"
+import {type CSSProperties, onMounted, ref} from "vue";
+import {useCssVariables} from "@/css/css.ts";
+import {useLedgerStore} from "@/stores/ledgerStore.ts";
+import {useTrViewStore} from "@/stores/trViewStore.ts";
+import {useCategoryStore} from "@/stores/categoryStore.ts";
+import {useTagStore} from "@/stores/tagStore.ts";
+import {openWorkspace} from "@/backend/api/workspace.ts";
+import NotificationUtil from "@/backend/notification.ts";
 
 
-const ledgerStore = useLedgerStore()
-const trViewStore = useTrViewStore()
-const categoryStore = useCategoryStore()
-const tagStore = useTagStore()
+const {majorBgColor, minorBgColor, siderWidthSize} = useCssVariables();
 
-// 引用颜色
-const {positiveColor, negativeColor} = useCssVariables()
+const siderStyle: CSSProperties = {
+  backgroundColor: minorBgColor.value,
+};
 
-const showWorkspaceSelect = ref(false)
+const contentStyle: CSSProperties = {
+  backgroundColor: majorBgColor.value,
+};
 
-const handleOpenWorkspace = async (workspace: string) => {
+const ledgerStore = useLedgerStore();
+const trViewStore = useTrViewStore();
+const categoryStore = useCategoryStore();
+const tagStore = useTagStore();
+
+const showWorkspaceSelect = ref(true);
+const workspaceDir = ref('');
+const browseMode = ref('directory');
+
+const handleOpenWorkspace = async () => {
   try {
-    await openWorkspace(workspace)
-    await initWorkspace()
+    await openWorkspace(workspaceDir.value);
+    await initWorkspace();
   } catch (error) {
-    NotificationUtil.error(`打开工作空间失败 ${error}`)
-    showWorkspaceSelect.value = true
+    NotificationUtil.error(`打开工作空间失败 ${error}`);
+    showWorkspaceSelect.value = true;
+  }
+}
+
+async function handleBrowse() {
+  try {
+    let result
+    result = await window.electronAPI.openDialog({
+      properties: browseMode.value === 'directory' ? ['openDirectory'] : ['openFile'],
+    })
+
+    if (result.canceled || !result.filePaths || result.filePaths.length === 0) {
+      return
+    }
+    workspaceDir.value = result.filePaths[0]
+  } catch (err) {
+    NotificationUtil.error(`选择目录失败 ${err}`)
   }
 }
 
 const initWorkspace = async () => {
-  await ledgerStore.refreshWorkspaceStatus()
+  await ledgerStore.refreshWorkspaceStatus();
   if (!ledgerStore.workspaceStatus.isOpened) {
-    showWorkspaceSelect.value = true
-    return
+    showWorkspaceSelect.value = true;
+    return;
   } else {
-    showWorkspaceSelect.value = false
-    window.electronAPI.setWorkspace(ledgerStore.workspaceStatus.workspaceDir)
+    showWorkspaceSelect.value = false;
+    window.electronAPI.setWorkspace(ledgerStore.workspaceStatus.workspaceDir);
   }
-  await ledgerStore.init()
-  await trViewStore.init()
-  await categoryStore.refreshCategory()
-  await tagStore.refreshTag()
+  await ledgerStore.init();
+  await trViewStore.init();
+  await categoryStore.refreshCategory();
+  await tagStore.refreshTag();
 }
 
 onMounted(initWorkspace)
 </script>
 
 <style scoped>
-.layout {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: var(--billadm-color-minor-background-color);
-}
-
-.top-bar {
-  background: var(--billadm-color-minor-background-color);
-  height: var(--billadm-ui-size-menu-width);
-}
-
-.middle-section {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-}
-
-.left-panel,
-.right-panel {
-  width: var(--billadm-ui-size-menu-width);
-  background: var(--billadm-color-minor-background-color);
-}
-
-.center-panel {
-  border-radius: 8px;
-  border: 1px solid var(--billadm-color-window-border-color);
-  padding: 8px;
-  background-color: var(--billadm-color-major-background-color);
-  flex: 1;
-}
-
-.bottom-bar {
-  background: var(--billadm-color-minor-backgroud-color);
-  height: var(--billadm-ui-size-menu-width);
+.headerStyle {
+  height: var(--billadm-size-header-height);
+  background-color: var(--billadm-color-minor-background);
+  padding: 0;
 }
 </style>

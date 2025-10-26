@@ -10,7 +10,9 @@ function getCssVariable(variableName: string) {
 }
 
 export function useCssVariables() {
-    const minorBgColor = ref(getCssVariable('--billadm-color-minor-background-color'))
+    const majorBgColor = ref(getCssVariable('--billadm-color-major-background'))
+    const minorBgColor = ref(getCssVariable('--billadm-color-minor-background'))
+    const siderWidthSize = ref(getCssVariable('--billadm-size-sider-width'))
     const hoverBgColor = ref(getCssVariable('--billadm-color-icon-hover-bg-color'))
     const iconColor = ref(getCssVariable('--billadm-color-icon-color'))
     const iconActiveFgColor = ref(getCssVariable('--billadm-color-icon-active-fg-color'))
@@ -19,7 +21,9 @@ export function useCssVariables() {
     const uiSizeMenuWidth = ref(getCssVariable('--billadm-ui-size-menu-width'))
 
     return {
+        majorBgColor,
         minorBgColor,
+        siderWidthSize,
         hoverBgColor,
         iconColor,
         iconActiveFgColor,

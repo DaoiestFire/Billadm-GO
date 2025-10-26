@@ -1,7 +1,7 @@
 :root {
     /* 窗口的颜色 */
     --billadm-color-major-background-color: #ffffff;
-    --billadm-color-minor-background-color: #f6f6f6;
+    --billadm-color-minor-background-color: #f5f5f5;
     --billadm-color-window-border-color: #e0e0e0;
 
     /* 按钮的颜色 */
@@ -32,6 +32,14 @@
     --billadm-size-text-title-size: 16px;
     --billadm-size-text-base-size: 14px;
     --billadm-size-text-small-size: 13px;
+
+    /* 颜色 */
+    --billadm-color-major-background: #ffffff;
+    --billadm-color-minor-background: #f5f5f5;
+
+    /* 尺寸 */
+    --billadm-size-header-height: 40px;
+    --billadm-size-sider-width: 48px;
 }
 
 /* 中文字体 */

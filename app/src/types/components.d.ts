@@ -8,6 +8,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AInputSearch: typeof import('ant-design-vue/es')['InputSearch']
+    ALayout: typeof import('ant-design-vue/es')['Layout']
+    ALayoutContent: typeof import('ant-design-vue/es')['LayoutContent']
+    ALayoutFooter: typeof import('ant-design-vue/es')['LayoutFooter']
+    ALayoutHeader: typeof import('ant-design-vue/es')['LayoutHeader']
+    ALayoutSider: typeof import('ant-design-vue/es')['LayoutSider']
+    AModal: typeof import('ant-design-vue/es')['Modal']
     AppBottomBar: typeof import('./../components/app_bottom/AppBottomBar.vue')['default']
     AppDisplay: typeof import('./../components/app_top/AppDisplay.vue')['default']
     AppLeftBar: typeof import('./../components/AppLeftBar.vue')['default']
