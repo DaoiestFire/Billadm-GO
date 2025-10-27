@@ -9,6 +9,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "ant-design-vue": "^4.2.6",
     "axios": "^1.11.0",
+    "dayjs": "^1.11.18",
     "echarts": "^6.0.0",
     "normalize.css": "^8.0.1",
     "pinia": "^3.0.3",

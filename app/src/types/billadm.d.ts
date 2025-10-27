@@ -121,4 +121,4 @@ export interface WorkspaceStatus {
 /**
  * 时间选择器类型
  */
-type TimeRangeType = 'yearrange' | 'monthrange' | 'daterange'
+type TimeRangeType = 'year' | 'month' | 'date'

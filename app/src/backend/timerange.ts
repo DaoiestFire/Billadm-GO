@@ -1,271 +1,183 @@
+import dayjs, {Dayjs} from 'dayjs';
+
 /**
- * 获取本月第一天的时间
+ * 设置日期为当天的开始: 00:00:00.000
  */
-export function getStartDayOfMonth(date: Date): Date {
-    let newDate = new Date(date);
-    newDate.setDate(1);
-    newDate = setToStartOfDay(newDate);
-    return newDate;
+export function setToStartOfDay(date: Dayjs): Dayjs {
+    return date.startOf('day');
 }
 
 /**
- * 获取本月最后一天的时间
+ * 设置日期为当天的结束: 23:59:59.999
  */
-export function getLastDayOfMonth(date: Date): Date {
-    let newDate = new Date(date);
-    newDate.setMonth(newDate.getMonth() + 1);
-    newDate.setDate(0);
-    newDate = setToEndOfDay(new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0));
-    return newDate;
+export function setToEndOfDay(date: Dayjs): Dayjs {
+    return date.endOf('day');
 }
 
 /**
- * 设置日期对象的时间部分为 00:00:00
+ * 获取本月第一天
  */
-export function setToStartOfDay(date: Date): Date {
-    const newDate = new Date(date);
-    newDate.setHours(0, 0, 0, 0);
-    return newDate;
+export function getStartDayOfMonth(date: Dayjs): Dayjs {
+    return date.startOf('month');
 }
 
 /**
- * 设置日期对象的时间部分为 23:59:59
+ * 获取本月最后一天
  */
-export function setToEndOfDay(date: Date): Date {
-    const newDate = new Date(date);
-    newDate.setHours(23, 59, 59, 999);
-    return newDate;
+export function getLastDayOfMonth(date: Dayjs): Dayjs {
+    return date.endOf('month');
 }
 
 /**
  * 获取今天的时间范围 [开始, 结束]
  */
-export function getTodayRange(): [Date, Date] {
-    const today = new Date();
+export function getTodayRange(): [Dayjs, Dayjs] {
+    const today = dayjs();
     return [setToStartOfDay(today), setToEndOfDay(today)];
 }
 
 /**
  * 获取本周的时间范围 [开始, 结束]
+ * 默认周一为一周开始（符合中国习惯）
  */
-export function getThisWeekRange(): [Date, Date] {
-    const today = new Date();
-    const day = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+export function getThisWeekRange(): [Dayjs, Dayjs] {
+    const start = dayjs().startOf('week').add(1, 'day'); // 周一
+    const end = dayjs().endOf('week').add(1, 'day');     // 周日
+    return [start, end];
+}
 
-    // 计算距离周一的天数差
-    // 如果是周日(day=0)，则距离周一有6天；其他情况减1
-    const daysToMonday = day === 0 ? 6 : day - 1;
-
-    const monday = new Date(today);
-    monday.setDate(today.getDate() - daysToMonday);
-    const start = setToStartOfDay(monday);
-
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
-    const end = setToEndOfDay(sunday);
-
+/**
+ * 获取上周的时间范围 [开始, 结束]
+ */
+export function getLastWeekRange(): [Dayjs, Dayjs] {
+    const start = dayjs().subtract(1, 'week').startOf('week').add(1, 'day'); // 上周一
+    const end = dayjs().subtract(1, 'week').endOf('week').add(1, 'day');     // 上周日
     return [start, end];
 }
 
 /**
  * 获取本月的时间范围 [开始, 结束]
  */
-export function getThisMonthRange(today: Date = new Date()): [Date, Date] {
-    const year = today.getFullYear();
-    const month = today.getMonth();
-
-    const start = new Date(year, month, 1);
-    const end = new Date(year, month + 1, 0); // 下个月的第0天即为本月最后一天
-
-    return [setToStartOfDay(start), setToEndOfDay(end)];
-}
-
-/**
- * 获取上周的时间范围 [开始, 结束]
- */
-export function getLastWeekRange(today: Date = new Date()): [Date, Date] {
-    const day = today.getDay(); // 0 (Sunday) to 6 (Saturday)
-
-    // 计算距离上周一的天数差
-    // 如果是周日(day=0)，则距离上周一有13天；其他情况加6
-    const daysToLastMonday = day === 0 ? 13 : day + 6;
-
-    const lastMonday = new Date(today);
-    lastMonday.setDate(today.getDate() - daysToLastMonday);
-    const start = setToStartOfDay(lastMonday);
-
-    const lastSunday = new Date(lastMonday);
-    lastSunday.setDate(lastMonday.getDate() + 6);
-    const end = setToEndOfDay(lastSunday);
-
-    return [start, end];
+export function getThisMonthRange(date: Dayjs = dayjs()): [Dayjs, Dayjs] {
+    return [date.startOf('month'), date.endOf('month')];
 }
 
 /**
  * 获取上月的时间范围 [开始, 结束]
  */
-export function getLastMonthRange(today: Date = new Date()): [Date, Date] {
-    const year = today.getFullYear();
-    const month = today.getMonth();
-
-    // 上个月
-    let prevMonth, prevYear;
-    if (month === 0) {
-        prevMonth = 11;
-        prevYear = year - 1;
-    } else {
-        prevMonth = month - 1;
-        prevYear = year;
-    }
-
-    const start = new Date(prevYear, prevMonth, 1);
-    const end = new Date(prevYear, prevMonth + 1, 0); // 当月的第0天即为上月最后一天
-
-    return [setToStartOfDay(start), setToEndOfDay(end)];
+export function getLastMonthRange(date: Dayjs = dayjs()): [Dayjs, Dayjs] {
+    const prevMonth = date.subtract(1, 'month');
+    return [prevMonth.startOf('month'), prevMonth.endOf('month')];
 }
 
 /**
  * 获取今年的时间范围 [开始, 结束]
  */
-export function getThisYearRange(today: Date = new Date()): [Date, Date] {
-    const year = today.getFullYear();
+export function getThisYearRange(date: Dayjs = dayjs()): [Dayjs, Dayjs] {
+    return [date.startOf('year'), date.endOf('year')];
+}
 
-    // 今年1月1日
-    const start = new Date(year, 0, 1);
-    // 今年12月31日
-    const end = new Date(year, 12, 0);
+// -------------------------------
+// 时间区间滑动函数
+// -------------------------------
 
-    return [setToStartOfDay(start), setToEndOfDay(end)];
+type TimeRangeType = 'daterange' | 'monthrange' | 'yearrange';
+
+/**
+ * 向前或向后调整时间范围一天
+ */
+function shiftOneDay(start: Dayjs, end: Dayjs, direction: number): [Dayjs, Dayjs] {
+    return [
+        start.add(direction, 'day'),
+        end.add(direction, 'day')
+    ];
 }
 
 /**
- * 判断两个 Date 对象之间的时间区间粒度，并返回向后一个周期的新区间
- * @param {Date} startDate - 开始时间，时分秒毫秒为 0,0,0,0
- * @param {Date} endDate - 结束时间，时分秒毫秒为 23:59:59.999
- * @param {String} timeRangeType
- * @returns {[Date, Date]} 新的时间区间
+ * 向前或向后调整时间范围一周
  */
-export function getNextPeriod(startDate: Date, endDate: Date, timeRangeType: string): [Date, Date] {
-    return shiftPeriod(startDate, endDate, 1, timeRangeType);
+function shiftOneWeek(start: Dayjs, end: Dayjs, direction: number): [Dayjs, Dayjs] {
+    return [
+        start.add(7 * direction, 'day'),
+        end.add(7 * direction, 'day')
+    ];
 }
 
 /**
- * 判断两个 Date 对象之间的时间区间粒度，并返回向前一个周期的新区间
- * @param {Date} startDate - 开始时间，时分秒毫秒为 0,0,0,0
- * @param {Date} endDate - 结束时间，时分秒毫秒为 23:59:59.999
- * @param {String} timeRangeType
- * @returns {[Date, Date]} 新的时间区间
+ * 向前或向后调整时间范围一月
  */
-export function getPrevPeriod(startDate: Date, endDate: Date, timeRangeType: string): [Date, Date] {
-    return shiftPeriod(startDate, endDate, -1, timeRangeType);
+function shiftOneMonth(start: Dayjs, end: Dayjs, direction: number): [Dayjs, Dayjs] {
+    return [
+        start.add(direction, 'month').startOf('month'),
+        end.add(direction, 'month').endOf('month')
+    ];
 }
 
-function shiftPeriod(startDate: Date, endDate: Date, direction: number, timeRangeType: string): [Date, Date] {
-    startDate = new Date(startDate);
-    endDate = new Date(endDate);
-    startDate = setToStartOfDay(startDate);
-    endDate = setToEndOfDay(endDate);
+/**
+ * 向前或向后调整时间范围一年
+ */
+function shiftOneYear(start: Dayjs, end: Dayjs, direction: number): [Dayjs, Dayjs] {
+    return [
+        start.add(direction, 'year').startOf('year'),
+        end.add(direction, 'year').endOf('year')
+    ];
+}
 
-    const diffMs = endDate.getTime() - startDate.getTime();
-    const dayMs = 24 * 60 * 60 * 1000;
-    const weekMs = 7 * dayMs;
-
+/**
+ * 判断两个时间之间的时间粒度，并返回向前/向后一个周期的新区间
+ */
+function shiftPeriod(
+    startDate: Dayjs,
+    endDate: Dayjs,
+    direction: number,
+    timeRangeType: TimeRangeType
+): [Dayjs, Dayjs] {
     switch (timeRangeType) {
         case 'daterange':
-            // 2个情况 如果时间范围是一周则滑动一周，否则滑动一天
-            if (Math.abs(diffMs - (weekMs - 1)) < 2000) {
+            // 判断是否为一周
+            if (endDate.diff(startDate, 'day') === 6) {
                 return shiftOneWeek(startDate, endDate, direction);
             }
             return shiftOneDay(startDate, endDate, direction);
         case 'monthrange':
-            // 滑动一月
             return shiftOneMonth(startDate, endDate, direction);
         case 'yearrange':
-            // 滑动一年
             return shiftOneYear(startDate, endDate, direction);
         default:
-            // 滑动一天
             return shiftOneDay(startDate, endDate, direction);
     }
 }
 
 /**
- * 向前或向后调整时间范围一天
- * @param {Date} startDate - 开始时间，时分秒毫秒为 0,0,0,0
- * @param {Date} endDate - 结束时间，时分秒毫秒为 23:59:59.999
- * @param {Number} direction - 向前还是向后的标记
- * @returns {[Date, Date]} 新的时间区间
+ * 获取下一个周期的时间范围
  */
-function shiftOneDay(startDate: Date, endDate: Date, direction: number): [Date, Date] {
-    const newStart = new Date(startDate);
-    newStart.setDate(startDate.getDate() + direction);
-    const newEnd = new Date(endDate);
-    newEnd.setDate(endDate.getDate() + direction);
-    return [newStart, newEnd];
+export function getNextPeriod(
+    startDate: Dayjs,
+    endDate: Dayjs,
+    timeRangeType: TimeRangeType
+): [Dayjs, Dayjs] {
+    return shiftPeriod(startDate, endDate, 1, timeRangeType);
 }
 
 /**
- * 向前或向后调整时间范围一周
- * @param {Date} startDate - 开始时间，时分秒毫秒为 0,0,0,0
- * @param {Date} endDate - 结束时间，时分秒毫秒为 23:59:59.999
- * @param {Number} direction - 向前还是向后的标记
- * @returns {[Date, Date]} 新的时间区间
+ * 获取上一个周期的时间范围
  */
-function shiftOneWeek(startDate: Date, endDate: Date, direction: number): [Date, Date] {
-    const newStart = new Date(startDate);
-    newStart.setDate(startDate.getDate() + 7 * direction);
-    const newEnd = new Date(endDate);
-    newEnd.setDate(endDate.getDate() + 7 * direction);
-    return [newStart, newEnd];
+export function getPrevPeriod(
+    startDate: Dayjs,
+    endDate: Dayjs,
+    timeRangeType: TimeRangeType
+): [Dayjs, Dayjs] {
+    return shiftPeriod(startDate, endDate, -1, timeRangeType);
 }
 
 /**
- * 向前或向后调整时间范围一月
- * @param {Date} startDate - 开始时间，时分秒毫秒为 0,0,0,0
- * @param {Date} endDate - 结束时间，时分秒毫秒为 23:59:59.999
- * @param {Number} direction - 向前还是向后的标记
- * @returns {[Date, Date]} 新的时间区间
+ * 规范化时间范围：先向前再向后，确保对齐到标准周期
  */
-function shiftOneMonth(startDate: Date, endDate: Date, direction: number): [Date, Date] {
-    let newStart = new Date(startDate);
-    newStart.setDate(1);
-    newStart.setMonth(startDate.getMonth() + direction);
-    newStart = getStartDayOfMonth(newStart)
-
-    let newEnd = new Date(endDate);
-    newEnd.setDate(1);
-    newEnd.setMonth(endDate.getMonth() + direction);
-    newEnd = getLastDayOfMonth(newEnd)
-
-    return [setToStartOfDay(newStart), setToEndOfDay(newEnd)];
-}
-
-/**
- * 向前或向后调整时间范围一年
- * @param {Date} startDate - 开始时间，时分秒毫秒为 0,0,0,0
- * @param {Date} endDate - 结束时间，时分秒毫秒为 23:59:59.999
- * @param {Number} direction - 向前还是向后的标记
- * @returns {[Date, Date]} 新的时间区间
- */
-function shiftOneYear(startDate: Date, endDate: Date, direction: number): [Date, Date] {
-    const newStart = new Date(startDate);
-    newStart.setFullYear(startDate.getFullYear() + direction);
-    newStart.setMonth(0, 1);
-    const newEnd = new Date(endDate);
-    newEnd.setFullYear(endDate.getFullYear() + direction);
-    newEnd.setMonth(12, 0);
-    return [setToStartOfDay(newStart), setToEndOfDay(newEnd)];
-}
-
-/**
- * 规范化时间范围,简单的向前再向后滑动时间戳
- * @param {Date} startDate - 开始时间，时分秒毫秒为 0,0,0,0
- * @param {Date} endDate - 结束时间，时分秒毫秒为 23:59:59.999
- * @param {String} timeRangeType
- * @returns {[Date, Date]} 新的时间区间
- */
-export function normalizeTimeRange(startDate: Date, endDate: Date, timeRangeType: string): [Date, Date] {
-    let ret;
-    ret = getPrevPeriod(startDate, endDate, timeRangeType);
-    return getNextPeriod(ret[0], ret[1], timeRangeType);
+export function normalizeTimeRange(
+    startDate: Dayjs,
+    endDate: Dayjs,
+    timeRangeType: TimeRangeType
+): [Dayjs, Dayjs] {
+    const prev = getPrevPeriod(startDate, endDate, timeRangeType);
+    return getNextPeriod(prev[0], prev[1], timeRangeType);
 }

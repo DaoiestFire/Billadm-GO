@@ -23,6 +23,8 @@ declare module 'vue' {
     AppDisplay: typeof import('./../components/app_top/AppDisplay.vue')['default']
     AppLeftBar: typeof import('./../components/AppLeftBar.vue')['default']
     AppTopBar: typeof import('./../components/AppTopBar.vue')['default']
+    ARangePicker: typeof import('ant-design-vue/es')['RangePicker']
+    ASegmented: typeof import('ant-design-vue/es')['Segmented']
     ASelect: typeof import('ant-design-vue/es')['Select']
     ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
     ASpace: typeof import('ant-design-vue/es')['Space']

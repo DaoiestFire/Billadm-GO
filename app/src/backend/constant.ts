@@ -20,38 +20,40 @@ export const TransactionTypeToColor = new Map([
     ['transfer', '#409eff']
 ]);
 
-export const TimeRangeShortcuts = [
+export const TimeRangePresets = [
     {
-        text: '今天',
-        value: getTodayRange,
+        label: '今天',
+        value: getTodayRange(),
     },
     {
-        text: '本周',
-        value: getThisWeekRange,
+        label: '本周',
+        value: getThisWeekRange(),
     },
     {
-        text: '本月',
-        value: getThisMonthRange,
+        label: '本月',
+        value: getThisMonthRange(),
     },
     {
-        text: '上周',
-        value: getLastWeekRange,
+        label: '上周',
+        value: getLastWeekRange(),
     },
     {
-        text: '上月',
-        value: getLastMonthRange,
+        label: '上月',
+        value: getLastMonthRange(),
     },
     {
-        text: '今年',
-        value: getThisYearRange,
+        label: '今年',
+        value: getThisYearRange(),
     }
 ];
 
-export const TimeRangeTypes = [
-    {label: '年', value: 'yearrange'},
-    {label: '月', value: 'monthrange'},
-    {label: '日', value: 'daterange'}
-];
+export const TimeRangeTypes = {
+    '日': 'date',
+    '月': 'month',
+    '年': 'year'
+} as const;
+
+export const TimeRangeTypeLabels = ['年', '月', '日'];
 
 export const PageSizeOptions = [
     {label: '每页10行', value: 10},
