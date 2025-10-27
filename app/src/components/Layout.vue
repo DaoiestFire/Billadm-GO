@@ -12,7 +12,7 @@
         <app-left-bar/>
       </a-layout-sider>
       <a-layout-content :style="contentStyle">
-        <a-card style="height: 100%">
+        <a-card style="height: 100%;padding: 16px" :body-style="{padding:'0px',height:'100%'}" :bordered="false">
           <router-view/>
         </a-card>
       </a-layout-content>

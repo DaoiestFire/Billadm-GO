@@ -3,8 +3,7 @@ import {defineStore} from 'pinia'
 import {queryTrCountOnCondition, queryTrsOnCondition, queryTrStatisticsOnCondition} from "@/backend/api/tr.ts"
 import NotificationUtil from "@/backend/notification.ts"
 import {useLedgerStore} from "@/stores/ledgerStore.ts"
-import {dateToUnixTimestamp} from "@/backend/functions.ts"
-import {getThisMonthRange, setToEndOfDay, setToStartOfDay} from "@/backend/timerange.ts"
+import {getTodayRange, setToEndOfDay, setToStartOfDay} from "@/backend/timerange.ts"
 import type {TimeRangeType, TransactionRecord, TrQueryCondition, TrStatistics} from "@/types/billadm"
 
 export const useTrViewStore = defineStore('trView', () => {
@@ -14,7 +13,7 @@ export const useTrViewStore = defineStore('trView', () => {
     const currentPage = ref(1) // 当前页数
     const pageSize = ref(20) // 每页记录数
     const trCount = ref(0) // 总记录数
-    const timeRange = ref(getThisMonthRange()) // 时间选择器
+    const timeRange = ref(getTodayRange()) // 时间选择器
     const timeRangeType = ref('daterange' as TimeRangeType) // 时间选择器
     const trStatistics = ref({income: 0, expense: 0, transfer: 0} as TrStatistics) // 时间范围内消费记录的统计数据
 
@@ -23,10 +22,9 @@ export const useTrViewStore = defineStore('trView', () => {
         if (!Array.isArray(timeRange.value) || timeRange.value.length < 2) {
             return null
         }
-
         const startTs = timeRange.value[0]
         const endTs = timeRange.value[1]
-        return [dateToUnixTimestamp(setToStartOfDay(startTs)), dateToUnixTimestamp(setToEndOfDay(endTs))]
+        return [setToStartOfDay(startTs).unix(), setToEndOfDay(endTs).unix()]
     })
 
     // ledgerStore

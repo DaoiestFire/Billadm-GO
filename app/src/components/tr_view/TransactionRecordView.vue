@@ -1,5 +1,5 @@
 <template>
-  <a-layout style="height: 100vh">
+  <a-layout style="height: 100%">
     <a-layout-header class="headerStyle">
       <div class="left-groups">
         <a-segmented v-model:value="timeRangeTypeLabel" :options="TimeRangeTypeLabels"/>
@@ -8,7 +8,13 @@
             <LeftOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
           </template>
         </a-button>
-        <a-range-picker v-model:value="timeRange" :picker="timeRangeType" :presets="TimeRangePresets" inputReadOnly/>
+        <a-range-picker
+            v-model:value="timeRange"
+            :picker="timeRangeType"
+            :presets="TimeRangePresets"
+            inputReadOnly
+            @change="handleTimeRangeChange"
+        />
         <a-button type="text" @click="goToNext">
           <template #icon>
             <RightOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
@@ -24,10 +30,9 @@
       </div>
     </a-layout-header>
     <a-layout-content :style="contentStyle">
-      <transaction-record-table :items="trViewStore.tableData" :columnStyles="columnStyles" @edit-item="onEditItem"/>
+      <transaction-record-table :items="trViewStore.tableData" @edit-item="onEditItem"/>
     </a-layout-content>
     <a-layout-footer>
-      <billadm-select v-model="trViewStore.pageSize" :options="PageSizeOptions" direction="up"/>
       <pagination v-model:current-page="trViewStore.currentPage" :pages="trViewStore.pages"/>
     </a-layout-footer>
   </a-layout>
@@ -44,7 +49,7 @@ import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {useTrViewStore} from "@/stores/trViewStore.ts";
 import NotificationUtil from "@/backend/notification.ts";
 import {createTrForLedger, deleteTrById} from "@/backend/api/tr.ts";
-import {PageSizeOptions, TimeRangePresets, TimeRangeTypeLabels, TimeRangeTypes} from "@/backend/constant.ts";
+import {TimeRangePresets, TimeRangeTypeLabels, TimeRangeTypes} from "@/backend/constant.ts";
 import {trDtoToTrForm, trFormToTrDto} from "@/backend/dto-utils.ts";
 import type {TransactionRecord, TrForm} from "@/types/billadm";
 import {useCssVariables} from "@/css/css.ts";
@@ -66,6 +71,7 @@ const {majorBgColor} = useCssVariables();
 
 const contentStyle: CSSProperties = {
   backgroundColor: majorBgColor.value,
+  "margin-bottom": "auto"
 };
 
 const goToPrevious = () => {
@@ -76,51 +82,13 @@ const goToNext = () => {
   timeRange.value = getNextPeriod(timeRange.value[0], timeRange.value[1], timeRangeType.value)
 }
 
+const handleTimeRangeChange = (dates: [string, string] | [Dayjs, Dayjs]) => {
+  trViewStore.timeRange = dates as [Dayjs, Dayjs];
+}
+
 // store
 const ledgerStore = useLedgerStore();
 const trViewStore = useTrViewStore();
-
-const columnStyles = [
-  {
-    field: 'index',
-    name: '序号',
-    width: '100px',
-  },
-  {
-    field: 'transaction_at',
-    name: '交易时间',
-    width: '200px',
-  },
-  {
-    field: 'transaction_type',
-    name: '交易类型',
-    width: '100px',
-  },
-  {
-    field: 'category',
-    name: '消费类型',
-    width: '100px',
-  },
-  {
-    field: 'description',
-    name: '描述',
-    width: 'auto',
-  },
-  {
-    field: 'tags',
-    name: '标签',
-    width: 'auto',
-  },
-  {
-    field: 'price',
-    name: '价格',
-  },
-  {
-    field: 'actions',
-    name: '操作',
-    width: '120px',
-  }
-]
 
 // 消费记录表单
 const showDialog = ref(false);
@@ -161,9 +129,9 @@ async function handleConfirm(data: TrForm) {
 
 <style scoped>
 .headerStyle {
-  height: var(--billadm-size-header-height);
+  height: auto;
   background-color: var(--billadm-color-major-background);
-  padding: 0;
+  padding: 0 0 16px 0;
   display: flex;
   align-items: start;
   justify-content: center;
