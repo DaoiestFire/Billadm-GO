@@ -8,7 +8,7 @@
             <LeftOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
           </template>
         </a-button>
-        <a-range-picker v-model:value="timeRange" :picker="timeRangeType" :presets="TimeRangePresets"/>
+        <a-range-picker v-model:value="timeRange" :picker="timeRangeType" :presets="TimeRangePresets" inputReadOnly/>
         <a-button type="text" @click="goToNext">
           <template #icon>
             <RightOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
