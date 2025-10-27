@@ -1,4 +1,5 @@
 import dayjs, {Dayjs} from 'dayjs';
+import type {TimeRangeType} from "@/types/billadm";
 
 /**
  * 设置日期为当天的开始: 00:00:00.000
@@ -81,8 +82,6 @@ export function getThisYearRange(date: Dayjs = dayjs()): [Dayjs, Dayjs] {
 // 时间区间滑动函数
 // -------------------------------
 
-type TimeRangeType = 'daterange' | 'monthrange' | 'yearrange';
-
 /**
  * 向前或向后调整时间范围一天
  */
@@ -133,15 +132,15 @@ function shiftPeriod(
     timeRangeType: TimeRangeType
 ): [Dayjs, Dayjs] {
     switch (timeRangeType) {
-        case 'daterange':
+        case 'date':
             // 判断是否为一周
             if (endDate.diff(startDate, 'day') === 6) {
                 return shiftOneWeek(startDate, endDate, direction);
             }
             return shiftOneDay(startDate, endDate, direction);
-        case 'monthrange':
+        case 'month':
             return shiftOneMonth(startDate, endDate, direction);
-        case 'yearrange':
+        case 'year':
             return shiftOneYear(startDate, endDate, direction);
         default:
             return shiftOneDay(startDate, endDate, direction);

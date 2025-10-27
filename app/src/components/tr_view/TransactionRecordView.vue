@@ -3,13 +3,13 @@
     <a-layout-header class="headerStyle">
       <div class="left-groups">
         <a-segmented v-model:value="timeRangeTypeLabel" :options="TimeRangeTypeLabels"/>
-        <a-button type="text">
+        <a-button type="text" @click="goToPrevious">
           <template #icon>
             <LeftOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
           </template>
         </a-button>
         <a-range-picker v-model:value="timeRange" :picker="timeRangeType" :presets="TimeRangePresets"/>
-        <a-button type="text">
+        <a-button type="text" @click="goToNext">
           <template #icon>
             <RightOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
           </template>
@@ -50,13 +50,14 @@ import type {TransactionRecord, TrForm} from "@/types/billadm";
 import {useCssVariables} from "@/css/css.ts";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons-vue";
 import type {Dayjs} from 'dayjs';
+import {getNextPeriod, getPrevPeriod, getTodayRange} from "@/backend/timerange.ts";
 
 type RangeValue = [Dayjs, Dayjs];
 type TimeRangeLabel = keyof typeof TimeRangeTypes;
 type TimeRangeType = (typeof TimeRangeTypes)[TimeRangeLabel];
 
 const timeRangeTypeLabel = ref<TimeRangeLabel>('日');
-const timeRange = ref<RangeValue>();
+const timeRange = ref<RangeValue>(getTodayRange());
 const timeRangeType = computed<TimeRangeType>(() => {
   return TimeRangeTypes[timeRangeTypeLabel.value];
 })
@@ -66,6 +67,14 @@ const {majorBgColor} = useCssVariables();
 const contentStyle: CSSProperties = {
   backgroundColor: majorBgColor.value,
 };
+
+const goToPrevious = () => {
+  timeRange.value = getPrevPeriod(timeRange.value[0], timeRange.value[1], timeRangeType.value)
+}
+
+const goToNext = () => {
+  timeRange.value = getNextPeriod(timeRange.value[0], timeRange.value[1], timeRangeType.value)
+}
 
 // store
 const ledgerStore = useLedgerStore();
