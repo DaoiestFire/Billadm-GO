@@ -23,24 +23,13 @@
           <SettingOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
         </template>
       </a-button>
-      <a-button type="text">
-        <template #icon>
-          <QuestionCircleOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
-        </template>
-      </a-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {useRoute, useRouter} from 'vue-router';
-import {
-  BookOutlined,
-  LineChartOutlined,
-  QuestionCircleOutlined,
-  SettingOutlined,
-  TransactionOutlined
-} from "@ant-design/icons-vue";
+import {BookOutlined, LineChartOutlined, SettingOutlined, TransactionOutlined} from "@ant-design/icons-vue";
 
 
 const router = useRouter()

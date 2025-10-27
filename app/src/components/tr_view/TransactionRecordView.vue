@@ -11,7 +11,9 @@
       <div class="center-groups">
       </div>
       <div class="right-groups">
-        <button class="btn-add" @click="onCreate">新增记录</button>
+        <a-button type="primary" @click="onCreate">
+          新增记录
+        </a-button>
       </div>
     </div>
 
