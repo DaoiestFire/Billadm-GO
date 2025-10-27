@@ -33,7 +33,6 @@
       <transaction-record-table :items="trViewStore.tableData" @edit-item="onEditItem"/>
     </a-layout-content>
     <a-layout-footer>
-      <pagination v-model:current-page="trViewStore.currentPage" :pages="trViewStore.pages"/>
     </a-layout-footer>
   </a-layout>
   <transaction-record-operation v-model:modelValue="recordData" v-model:visible="showDialog" :title="dialogTitle"
@@ -43,7 +42,6 @@
 <script setup lang="ts">
 import {computed, type CSSProperties, ref} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
-import Pagination from '@/components/tr_view/Pagination.vue';
 import TransactionRecordOperation from '@/components/tr_view/TransactionRecordOperation.vue';
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {useTrViewStore} from "@/stores/trViewStore.ts";
