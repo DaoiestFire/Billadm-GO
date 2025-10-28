@@ -74,50 +74,6 @@ interface Props {
 
 defineProps<Props>()
 
-// Emit 事件类型
-// interface Emits {
-//   (e: 'edit-item', item: TransactionRecord): void
-// }
-
-
-// 类型安全的 emit
-// const emit = defineEmits<Emits>()
-//
-// const trViewStore = useTrViewStore()
-
-
-// const getShowDeleteTrFunc = (id: string) => {
-//   return (): void => {
-//     message.value = '确认删除消费记录吗？'
-//     confirmLabel.value = '删除'
-//     confirmColor.value = negativeColor.value
-//     cancelColor.value = positiveColor.value
-//     confirmFunc.value = async (): Promise<void> => {
-//       try {
-//         await deleteTrById(id)
-//         await trViewStore.refreshPages()
-//         await trViewStore.refreshTableData()
-//         await trViewStore.refreshStatistics()
-//       } catch (error: unknown) {
-//         const msg = error instanceof Error ? error.message : String(error)
-//         NotificationUtil.error(`删除消费记录失败: ${msg}`)
-//       }
-//     }
-//     showTrConfirmDialog.value = true
-//   }
-// }
-
-// 交易类型对应颜色
-// const formatTransactionTypeStyle = (type: string): Record<string, string> => {
-//   const colors: Record<string, string> = {
-//     expense: '#F56C6C',
-//     income: '#67C23A',
-//     transfer: '#409EFF'
-//   }
-//   return {color: colors[type] || ''}
-// }
-
-// 交易类型中文映射
 const formatTransactionType = (type: string): string => {
   const map: Record<string, string> = {
     expense: '支出',

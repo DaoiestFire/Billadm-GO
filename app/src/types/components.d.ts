@@ -19,6 +19,7 @@ declare module 'vue' {
     ALayoutSider: typeof import('ant-design-vue/es')['LayoutSider']
     AMenu: typeof import('ant-design-vue/es')['Menu']
     AModal: typeof import('ant-design-vue/es')['Modal']
+    APagination: typeof import('ant-design-vue/es')['Pagination']
     AppBottomBar: typeof import('./../components/app_bottom/AppBottomBar.vue')['default']
     AppDisplay: typeof import('./../components/app_top/AppDisplay.vue')['default']
     AppLeftBar: typeof import('./../components/AppLeftBar.vue')['default']

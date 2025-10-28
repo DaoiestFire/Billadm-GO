@@ -30,9 +30,15 @@
       </div>
     </a-layout-header>
     <a-layout-content :style="contentStyle">
-      <transaction-record-table :items="trViewStore.tableData" @edit-item="onEditItem"/>
+      <transaction-record-table :items="trViewStore.tableData"/>
     </a-layout-content>
-    <a-layout-footer>
+    <a-layout-footer class="footerStyle">
+      <a-pagination
+          v-model:current="trViewStore.currentPage"
+          v-model:pageSize="trViewStore.pageSize"
+          show-size-changer
+          :total="trViewStore.trCount"
+      />
     </a-layout-footer>
   </a-layout>
   <transaction-record-operation v-model:modelValue="recordData" v-model:visible="showDialog" :title="dialogTitle"
@@ -95,18 +101,10 @@ const recordData = ref({});
 const opType = ref('create');
 const dialogTitle = ref('');
 
-// 功能函数
 const onCreate = () => {
   dialogTitle.value = '新建消费记录';
   recordData.value = {};
   opType.value = 'create';
-  showDialog.value = true;
-}
-
-const onEditItem = (item: TransactionRecord) => {
-  dialogTitle.value = '编辑消费记录';
-  recordData.value = trDtoToTrForm(item);
-  opType.value = 'edit';
   showDialog.value = true;
 }
 
@@ -133,6 +131,15 @@ async function handleConfirm(data: TrForm) {
   padding: 0 0 16px 0;
   display: flex;
   align-items: start;
+  justify-content: center;
+}
+
+.footerStyle {
+  height: auto;
+  background-color: var(--billadm-color-major-background);
+  padding: 16px 0 0 0;
+  display: flex;
+  align-items: end;
   justify-content: center;
 }
 
