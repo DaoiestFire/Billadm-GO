@@ -11,7 +11,7 @@ import (
 	"github.com/billadm/workspace"
 )
 
-func queryCategory(c *gin.Context) {
+func queryCategoryByType(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 

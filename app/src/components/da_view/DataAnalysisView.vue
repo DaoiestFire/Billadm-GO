@@ -10,7 +10,7 @@
 import {onMounted, ref} from 'vue'
 import BilladmChartDisplay from "@/components/da_view/BilladmChartDisplay.vue"
 import {useLedgerStore} from "@/stores/ledgerStore.ts"
-import {queryTrsOnCondition} from "@/backend/api/tr.ts"
+import {queryTrOnCondition} from "@/backend/api/tr.ts"
 import NotificationUtil from "@/backend/notification.ts"
 import {trDtoToTrForm} from "@/backend/dto-utils.ts"
 import type {TrForm, TrQueryCondition} from "@/types/billadm"
@@ -25,7 +25,7 @@ const refreshTrs = async () => {
     let condition = {} as TrQueryCondition
     condition.ledgerId = ledgerStore.currentLedgerId
     // condition.tsRange = [dateToUnixTimestamp(timeRange.value[0]), dateToUnixTimestamp(timeRange.value[1])]
-    let trDtos = await queryTrsOnCondition(condition)
+    let trDtos = await queryTrOnCondition(condition)
     trs.value = trDtos.map(item => {
       return trDtoToTrForm(item)
     });

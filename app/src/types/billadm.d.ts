@@ -104,10 +104,10 @@ export interface TrStatistics {
  */
 export interface TrQueryCondition {
     ledgerId: string;
-    offset: number;
-    limit: number;
-    tsRange: number[];
-    transactionType: string[];
+    tsRange?: number[];
+    transactionType?: string[];
+    offset?: number;
+    limit?: number;
 }
 
 /**

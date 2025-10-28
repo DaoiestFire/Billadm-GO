@@ -12,40 +12,7 @@ import (
 	"github.com/billadm/workspace"
 )
 
-func queryAllTrs(c *gin.Context) {
-	ret := models.NewResult()
-	defer c.JSON(http.StatusOK, ret)
-
-	ws := workspace.Manager.OpenedWorkspace()
-	if ws == nil {
-		ret.Code = -1
-		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
-		return
-	}
-
-	arg, ok := JsonArg(c, ret)
-	if !ok {
-		return
-	}
-
-	ledgerId, ok := arg["ledgerId"].(string)
-	if !ok {
-		ret.Code = -1
-		ret.Msg = "ledgerId在请求体中不存在"
-		return
-	}
-
-	trs, err := service.GetTrService().ListAllTrsByLedgerId(ws, ledgerId)
-	if err != nil {
-		ret.Code = -1
-		ret.Msg = err.Error()
-		return
-	}
-
-	ret.Data = trs
-}
-
-func queryTrsOnCondition(c *gin.Context) {
+func queryTrOnCondition(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
@@ -135,7 +102,7 @@ func updateTransactionRecord(c *gin.Context) {
 
 }
 
-func deleteTransactionRecord(c *gin.Context) {
+func deleteTransactionRecordById(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 

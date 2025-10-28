@@ -170,6 +170,18 @@ export function getPrevPeriod(
 }
 
 /**
+ * 转化Dayjs时间范围为unix秒级时间戳范围
+ */
+export function convertToUnixTimeRange(timeRange: [Dayjs, Dayjs]): [number, number] {
+    if (!Array.isArray(timeRange) || timeRange.length < 2) {
+        return [setToStartOfDay(dayjs()).unix(), setToEndOfDay(dayjs()).unix()]
+    }
+    const startTs = timeRange[0]
+    const endTs = timeRange[1]
+    return [setToStartOfDay(startTs).unix(), setToEndOfDay(endTs).unix()]
+}
+
+/**
  * 规范化时间范围：先向前再向后，确保对齐到标准周期
  */
 export function normalizeTimeRange(

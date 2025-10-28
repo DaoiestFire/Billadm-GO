@@ -1,6 +1,6 @@
 import {computed, ref, watch} from "vue"
 import {defineStore} from 'pinia'
-import {queryTrCountOnCondition, queryTrsOnCondition, queryTrStatisticsOnCondition} from "@/backend/api/tr.ts"
+import {queryTrCountOnCondition, queryTrOnCondition, queryTrStatisticsOnCondition} from "@/backend/api/tr.ts"
 import NotificationUtil from "@/backend/notification.ts"
 import {useLedgerStore} from "@/stores/ledgerStore.ts"
 import {getTodayRange, setToEndOfDay, setToStartOfDay} from "@/backend/timerange.ts"
@@ -67,7 +67,7 @@ export const useTrViewStore = defineStore('trView', () => {
             if (tsRange.value !== null) {
                 condition.tsRange = tsRange.value
             }
-            tableData.value = await queryTrsOnCondition(condition)
+            tableData.value = await queryTrOnCondition(condition)
         } catch (error) {
             NotificationUtil.error(`消费记录数据刷新失败 ${error}`)
         }

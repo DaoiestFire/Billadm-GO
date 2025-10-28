@@ -10,26 +10,25 @@ import (
 
 func ServeAPI(ginServer *gin.Engine) {
 	// app
-	ginServer.POST("/api/v1/app/exit_app", exitApp)
+	ginServer.POST("/api/v1/app/exit-app", exitApp)
 	// ledger
-	ginServer.POST("/api/v1/ledger/query_all_ledger", queryAllLedgers)
+	ginServer.POST("/api/v1/ledger/query-all", queryAllLedgers)
 	ginServer.POST("/api/v1/ledger/post", createLedger)
 	ginServer.POST("/api/v1/ledger/put", updateLedger)
 	ginServer.POST("/api/v1/ledger/delete", deleteLedger)
 	// transaction record
-	ginServer.POST("/api/v1/tr/query_all_tr", queryAllTrs)
-	ginServer.POST("/api/v1/tr/query_tr_on_condition", queryTrsOnCondition)
-	ginServer.POST("/api/v1/tr/query_tr_count_on_condition", queryTrCountOnCondition)
-	ginServer.POST("/api/v1/tr/create_tr", createTransactionRecord)
+	ginServer.POST("/api/v1/tr/query", queryTrOnCondition)
+	ginServer.POST("/api/v1/tr/query-count", queryTrCountOnCondition)
+	ginServer.POST("/api/v1/tr/create", createTransactionRecord)
 	ginServer.POST("/api/v1/tr/put", updateTransactionRecord)
-	ginServer.POST("/api/v1/tr/delete_tr_by_id", deleteTransactionRecord)
+	ginServer.POST("/api/v1/tr/delete-by-id", deleteTransactionRecordById)
 	// category
-	ginServer.GET("/api/v1/category/query_category/:type", queryCategory)
+	ginServer.GET("/api/v1/category/query/:type", queryCategoryByType)
 	// tag
-	ginServer.GET("/api/v1/tag/query_tag/:category", queryTags)
+	ginServer.GET("/api/v1/tag/query/:category", queryTagsByCategory)
 	// workspace
-	ginServer.POST("/api/v1/workspace/open_workspace", openWorkspace)
-	ginServer.POST("/api/v1/workspace/is_opened", hasOpenedWorkspace)
+	ginServer.POST("/api/v1/workspace/open", openWorkspace)
+	ginServer.POST("/api/v1/workspace/is-opened", hasOpenedWorkspace)
 	// statistics
 	ginServer.POST("/api/v1/statistics/tr", getTrStatistics)
 }

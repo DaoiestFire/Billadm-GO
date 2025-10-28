@@ -32,7 +32,6 @@ func GetTrService() TransactionRecordService {
 
 type TransactionRecordService interface {
 	CreateTr(ws *workspace.Workspace, dto *dto.TransactionRecordDto) (string, error)
-	ListAllTrsByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*dto.TransactionRecordDto, error)
 	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*dto.TransactionRecordDto, error)
 	QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (int64, error)
 	QueryTrStatisticsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (*dto.TrStatistics, error)
@@ -77,35 +76,6 @@ func (t *transactionRecordServiceImpl) CreateTr(ws *workspace.Workspace, trDto *
 
 	ws.GetLogger().Infof("create transaction record success, ledger id: %s, description: %s", trDto.LedgerID, trDto.Description)
 	return transactionID, nil
-}
-
-func (t *transactionRecordServiceImpl) ListAllTrsByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*dto.TransactionRecordDto, error) {
-	ws.GetLogger().Infof("start to list all transaction record, ledger id: %s", ledgerId)
-
-	var err error
-	// 先查询到所有的tr
-	trs, err := t.trDao.ListAllTrByLedgerId(ws, ledgerId)
-	if err != nil {
-		return nil, err
-	}
-
-	// 再查询tr的tags进行组装
-	trDtos := make([]*dto.TransactionRecordDto, 0, len(trs))
-	for _, tr := range trs {
-		trTags, err := t.trTagDao.QueryTrTagsByTrId(ws, tr.TransactionID)
-		if err != nil {
-			return nil, err
-		}
-		trDto := &dto.TransactionRecordDto{}
-		trDto.FromTransactionRecord(tr)
-		for _, tag := range trTags {
-			trDto.Tags = append(trDto.Tags, tag.Tag)
-		}
-		trDtos = append(trDtos, trDto)
-	}
-
-	ws.GetLogger().Infof("list all transaction record success, ledger id: %s, len: %d", ledgerId, len(trs))
-	return trDtos, err
 }
 
 func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*dto.TransactionRecordDto, error) {

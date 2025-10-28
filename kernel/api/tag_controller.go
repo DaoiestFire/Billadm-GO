@@ -11,7 +11,7 @@ import (
 	"github.com/billadm/workspace"
 )
 
-func queryTags(c *gin.Context) {
+func queryTagsByCategory(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 

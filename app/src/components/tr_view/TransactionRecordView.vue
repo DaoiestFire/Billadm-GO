@@ -13,7 +13,6 @@
             :picker="timeRangeType"
             :presets="TimeRangePresets"
             inputReadOnly
-            @change="handleTimeRangeChange"
         />
         <a-button type="text" @click="goToNext">
           <template #icon>
@@ -45,15 +44,19 @@
 </template>
 
 <script setup lang="ts">
-import {computed, type CSSProperties, ref} from 'vue';
+import {computed, type CSSProperties, ref, watch} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
 import TransactionRecordOperation from '@/components/tr_view/TransactionRecordOperation.vue';
 import {TimeRangePresets, TimeRangeTypeLabels, TimeRangeTypes} from "@/backend/constant.ts";
-import type {TransactionRecord} from "@/types/billadm";
+import type {TransactionRecord, TrQueryCondition} from "@/types/billadm";
 import {useCssVariables} from "@/css/css.ts";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons-vue";
 import type {Dayjs} from 'dayjs';
-import {getNextPeriod, getPrevPeriod, getTodayRange} from "@/backend/timerange.ts";
+import {convertToUnixTimeRange, getNextPeriod, getPrevPeriod, getTodayRange} from "@/backend/timerange.ts";
+import {getTrOnCondition, getTrTotalOnCondition} from "@/backend/functions.ts";
+import {useLedgerStore} from "@/stores/ledgerStore.ts";
+
+const ledgerStore = useLedgerStore();
 
 const {majorBgColor} = useCssVariables();
 
@@ -82,16 +85,34 @@ const goToNext = () => {
   timeRange.value = getNextPeriod(timeRange.value[0], timeRange.value[1], timeRangeType.value)
 }
 
-const handleTimeRangeChange = (dates: [string, string] | [Dayjs, Dayjs]) => {
-  timeRange.value = dates as [Dayjs, Dayjs];
-}
-
 // 消费记录
 const tableData = ref<TransactionRecord[]>([]);
 // 分页
 const currentPage = ref<number>(1);
 const pageSize = ref<number>(20);
 const trTotal = ref<number>(0);
+
+const initTable = async () => {
+  const trTotalCondition: TrQueryCondition = {
+    ledgerId: ledgerStore.currentLedgerId,
+    tsRange: convertToUnixTimeRange(timeRange.value)
+  }
+  trTotal.value = await getTrTotalOnCondition(trTotalCondition);
+  const trCondition: TrQueryCondition = {
+    ledgerId: ledgerStore.currentLedgerId,
+    tsRange: convertToUnixTimeRange(timeRange.value),
+    offset: pageSize.value * (currentPage.value - 1),
+    limit: pageSize.value
+  }
+  tableData.value = await getTrOnCondition(trCondition);
+}
+
+watch([timeRange, currentPage, pageSize], () => {
+  console.log(timeRange.value);
+  console.log(currentPage.value);
+  console.log(pageSize.value);
+  initTable();
+}, {immediate: true});
 
 // 消费记录表单
 const showDialog = ref(false);
