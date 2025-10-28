@@ -69,6 +69,7 @@ const {majorBgColor} = useCssVariables();
 
 const contentStyle: CSSProperties = {
   backgroundColor: majorBgColor.value,
+  "overflow-y": "auto",
   "margin-bottom": "auto"
 };
 

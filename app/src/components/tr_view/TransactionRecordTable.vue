@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" :data-source="items" :pagination="false" :scroll="{y:'500px'}">
+  <a-table :columns="columns" :data-source="items" :pagination="false" :sticky="true">
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex==='transactionAt'">
         {{ formatTimestamp(record.transactionAt) }}
