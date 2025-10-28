@@ -30,37 +30,40 @@
       </div>
     </a-layout-header>
     <a-layout-content :style="contentStyle">
-      <transaction-record-table :items="trViewStore.tableData"/>
+      <transaction-record-table :items="tableData"/>
     </a-layout-content>
     <a-layout-footer class="footerStyle">
       <a-pagination
-          v-model:current="trViewStore.currentPage"
-          v-model:pageSize="trViewStore.pageSize"
+          v-model:current="currentPage"
+          v-model:pageSize="pageSize"
+          :total="trTotal"
           show-size-changer
-          :total="trViewStore.trCount"
       />
     </a-layout-footer>
   </a-layout>
-  <transaction-record-operation v-model:modelValue="recordData" v-model:visible="showDialog" :title="dialogTitle"
-                                :onConfirm="handleConfirm"/>
+  <transaction-record-operation v-model:modelValue="recordData" v-model:visible="showDialog" :title="dialogTitle"/>
 </template>
 
 <script setup lang="ts">
 import {computed, type CSSProperties, ref} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
 import TransactionRecordOperation from '@/components/tr_view/TransactionRecordOperation.vue';
-import {useLedgerStore} from "@/stores/ledgerStore.ts";
-import {useTrViewStore} from "@/stores/trViewStore.ts";
-import NotificationUtil from "@/backend/notification.ts";
-import {createTrForLedger, deleteTrById} from "@/backend/api/tr.ts";
 import {TimeRangePresets, TimeRangeTypeLabels, TimeRangeTypes} from "@/backend/constant.ts";
-import {trDtoToTrForm, trFormToTrDto} from "@/backend/dto-utils.ts";
-import type {TransactionRecord, TrForm} from "@/types/billadm";
+import type {TransactionRecord} from "@/types/billadm";
 import {useCssVariables} from "@/css/css.ts";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons-vue";
 import type {Dayjs} from 'dayjs';
 import {getNextPeriod, getPrevPeriod, getTodayRange} from "@/backend/timerange.ts";
 
+const {majorBgColor} = useCssVariables();
+
+const contentStyle: CSSProperties = {
+  backgroundColor: majorBgColor.value,
+  "overflow-y": "auto",
+  "margin-bottom": "auto"
+};
+
+// 时间区间
 type RangeValue = [Dayjs, Dayjs];
 type TimeRangeLabel = keyof typeof TimeRangeTypes;
 type TimeRangeType = (typeof TimeRangeTypes)[TimeRangeLabel];
@@ -71,14 +74,6 @@ const timeRangeType = computed<TimeRangeType>(() => {
   return TimeRangeTypes[timeRangeTypeLabel.value];
 })
 
-const {majorBgColor} = useCssVariables();
-
-const contentStyle: CSSProperties = {
-  backgroundColor: majorBgColor.value,
-  "overflow-y": "auto",
-  "margin-bottom": "auto"
-};
-
 const goToPrevious = () => {
   timeRange.value = getPrevPeriod(timeRange.value[0], timeRange.value[1], timeRangeType.value)
 }
@@ -88,12 +83,15 @@ const goToNext = () => {
 }
 
 const handleTimeRangeChange = (dates: [string, string] | [Dayjs, Dayjs]) => {
-  trViewStore.timeRange = dates as [Dayjs, Dayjs];
+  timeRange.value = dates as [Dayjs, Dayjs];
 }
 
-// store
-const ledgerStore = useLedgerStore();
-const trViewStore = useTrViewStore();
+// 消费记录
+const tableData = ref<TransactionRecord[]>([]);
+// 分页
+const currentPage = ref<number>(1);
+const pageSize = ref<number>(20);
+const trTotal = ref<number>(0);
 
 // 消费记录表单
 const showDialog = ref(false);
@@ -106,21 +104,6 @@ const onCreate = () => {
   recordData.value = {};
   opType.value = 'create';
   showDialog.value = true;
-}
-
-async function handleConfirm(data: TrForm) {
-  try {
-    const transactionRecord = trFormToTrDto(data, ledgerStore.currentLedgerId);
-    await createTrForLedger(transactionRecord);
-    if (opType.value === 'edit') {
-      await deleteTrById(data.id);
-    }
-    await trViewStore.refreshPages();
-    await trViewStore.refreshTableData();
-    await trViewStore.refreshStatistics();
-  } catch (error) {
-    NotificationUtil.error(`消费记录操作失败 ${error}`);
-  }
 }
 </script>
 
