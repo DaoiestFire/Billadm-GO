@@ -36,6 +36,7 @@
           v-model:current="currentPage"
           v-model:pageSize="pageSize"
           :total="trTotal"
+          :show-total="total => `共${total}记录`"
           show-size-changer
       />
     </a-layout-footer>
@@ -108,9 +109,6 @@ const initTable = async () => {
 }
 
 watch([timeRange, currentPage, pageSize], () => {
-  console.log(timeRange.value);
-  console.log(currentPage.value);
-  console.log(pageSize.value);
   initTable();
 }, {immediate: true});
 

@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" :data-source="items" :pagination="false" :sticky="true">
+  <a-table :columns="columns" :data-source="items" :pagination="false" :sticky="true" size="small">
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex==='transactionAt'">
         {{ formatTimestamp(record.transactionAt) }}
@@ -34,21 +34,23 @@ import type {TransactionRecord} from '@/types/billadm';
 import {formatTimestamp} from "@/backend/functions.ts";
 
 const columns = [
-  // {
-  //   title: '序号',
-  //   dataIndex: 'index'
-  // },
   {
     title: '消费时间',
-    dataIndex: 'transactionAt'
+    dataIndex: 'transactionAt',
+    width: 150,
+    align: 'center'
   },
   {
     title: '交易类型',
-    dataIndex: 'transactionType'
+    dataIndex: 'transactionType',
+    width: 150,
+    align: 'center'
   },
   {
     title: '消费类型',
-    dataIndex: 'category'
+    dataIndex: 'category',
+    width: 150,
+    align: 'center'
   },
   {
     title: '标签',
@@ -60,11 +62,15 @@ const columns = [
   },
   {
     title: '价格',
-    dataIndex: 'price'
+    dataIndex: 'price',
+    width: 150,
+    align: 'center'
   },
   {
     title: '操作',
-    dataIndex: 'action'
+    dataIndex: 'action',
+    width: 150,
+    align: 'center'
   }
 ];
 

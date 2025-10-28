@@ -17,7 +17,7 @@ export function formatFloat(num: number): number {
  * @param format 格式，默认为 'YYYY-MM-DD HH:mm:ss'
  * @returns 格式化后的时间字符串
  */
-export function formatTimestamp(timestamp: number, format: string = 'YYYY年MM月DD日'): string {
+export function formatTimestamp(timestamp: number, format: string = 'YYYY-MM-DD'): string {
     return dayjs(timestamp * 1000).format(format);
 }
 
