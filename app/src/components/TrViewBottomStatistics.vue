@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import {computed} from "vue";
-import {useTrViewStore} from "@/stores/trViewStore.ts";
+import {useTrViewStore} from "@/stores/trQueryConditionStore.ts";
 import {formatFloat} from "@/backend/functions.ts";
 
 const trViewStore = useTrViewStore();

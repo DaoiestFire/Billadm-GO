@@ -73,7 +73,7 @@
 import {computed, ref, watch} from 'vue';
 import {useCategoryStore} from "@/stores/categoryStore.ts";
 import {useTagStore} from "@/stores/tagStore.ts";
-import {useTrViewStore} from "@/stores/trViewStore.ts";
+import {useTrViewStore} from "@/stores/trQueryConditionStore.ts";
 
 // store
 const categoryStore = useCategoryStore();

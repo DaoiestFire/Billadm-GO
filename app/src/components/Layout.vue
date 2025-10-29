@@ -24,7 +24,6 @@
 import {type CSSProperties, onMounted, ref} from "vue";
 import {useCssVariables} from "@/css/css.ts";
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
-import {useTrViewStore} from "@/stores/trViewStore.ts";
 import {useCategoryStore} from "@/stores/categoryStore.ts";
 import {useTagStore} from "@/stores/tagStore.ts";
 import {openWorkspace} from "@/backend/api/workspace.ts";
@@ -42,7 +41,6 @@ const contentStyle: CSSProperties = {
 };
 
 const ledgerStore = useLedgerStore();
-const trViewStore = useTrViewStore();
 const categoryStore = useCategoryStore();
 const tagStore = useTagStore();
 
@@ -68,7 +66,6 @@ const initWorkspace = async () => {
     window.electronAPI.setWorkspace(ledgerStore.workspaceStatus.workspaceDir);
   }
   await ledgerStore.init();
-  await trViewStore.init();
   await categoryStore.refreshCategory();
   await tagStore.refreshTag();
 }

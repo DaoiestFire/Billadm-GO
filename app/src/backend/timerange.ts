@@ -1,5 +1,5 @@
 import dayjs, {Dayjs} from 'dayjs';
-import type {TimeRangeType} from "@/types/billadm";
+import type {TimeRangeTypeValue} from "@/types/billadm";
 
 /**
  * 设置日期为当天的开始: 00:00:00.000
@@ -129,9 +129,9 @@ function shiftPeriod(
     startDate: Dayjs,
     endDate: Dayjs,
     direction: number,
-    timeRangeType: TimeRangeType
+    TimeRangeValue: TimeRangeTypeValue
 ): [Dayjs, Dayjs] {
-    switch (timeRangeType) {
+    switch (TimeRangeValue) {
         case 'date':
             // 判断是否为一周
             if (endDate.diff(startDate, 'day') === 6) {
@@ -153,9 +153,9 @@ function shiftPeriod(
 export function getNextPeriod(
     startDate: Dayjs,
     endDate: Dayjs,
-    timeRangeType: TimeRangeType
+    TimeRangeValue: TimeRangeTypeValue
 ): [Dayjs, Dayjs] {
-    return shiftPeriod(startDate, endDate, 1, timeRangeType);
+    return shiftPeriod(startDate, endDate, 1, TimeRangeValue);
 }
 
 /**
@@ -164,9 +164,9 @@ export function getNextPeriod(
 export function getPrevPeriod(
     startDate: Dayjs,
     endDate: Dayjs,
-    timeRangeType: TimeRangeType
+    TimeRangeValue: TimeRangeTypeValue
 ): [Dayjs, Dayjs] {
-    return shiftPeriod(startDate, endDate, -1, timeRangeType);
+    return shiftPeriod(startDate, endDate, -1, TimeRangeValue);
 }
 
 /**
@@ -187,8 +187,8 @@ export function convertToUnixTimeRange(timeRange: [Dayjs, Dayjs]): [number, numb
 export function normalizeTimeRange(
     startDate: Dayjs,
     endDate: Dayjs,
-    timeRangeType: TimeRangeType
+    TimeRangeValue: TimeRangeTypeValue
 ): [Dayjs, Dayjs] {
-    const prev = getPrevPeriod(startDate, endDate, timeRangeType);
-    return getNextPeriod(prev[0], prev[1], timeRangeType);
+    const prev = getPrevPeriod(startDate, endDate, TimeRangeValue);
+    return getNextPeriod(prev[0], prev[1], TimeRangeValue);
 }

@@ -2,15 +2,15 @@
   <a-layout style="height: 100%">
     <a-layout-header class="headerStyle">
       <div class="left-groups">
-        <a-segmented v-model:value="timeRangeTypeLabel" :options="TimeRangeTypeLabels"/>
+        <a-segmented v-model:value="trQueryConditionStore.timeRangeTypeLabel" :options="TimeRangeTypeLabels"/>
         <a-button type="text" @click="goToPrevious">
           <template #icon>
             <LeftOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
           </template>
         </a-button>
         <a-range-picker
-            v-model:value="timeRange"
-            :picker="timeRangeType"
+            v-model:value="trQueryConditionStore.timeRange"
+            :picker="trQueryConditionStore.timeRangeTypeValue"
             :presets="TimeRangePresets"
             inputReadOnly
         />
@@ -23,7 +23,7 @@
       <div class="center-groups">
       </div>
       <div class="right-groups">
-        <a-button type="primary" @click="onCreate">
+        <a-button type="primary">
           新增记录
         </a-button>
       </div>
@@ -41,23 +41,19 @@
       />
     </a-layout-footer>
   </a-layout>
-  <transaction-record-operation v-model:modelValue="recordData" v-model:visible="showDialog" :title="dialogTitle"/>
 </template>
 
 <script setup lang="ts">
-import {computed, type CSSProperties, ref, watch} from 'vue';
+import {type CSSProperties, ref, watch} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
-import TransactionRecordOperation from '@/components/tr_view/TransactionRecordOperation.vue';
-import {TimeRangePresets, TimeRangeTypeLabels, TimeRangeTypes} from "@/backend/constant.ts";
+import {TimeRangePresets, TimeRangeTypeLabels} from "@/backend/constant.ts";
 import type {TransactionRecord, TrQueryCondition} from "@/types/billadm";
 import {useCssVariables} from "@/css/css.ts";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons-vue";
-import type {Dayjs} from 'dayjs';
-import {convertToUnixTimeRange, getNextPeriod, getPrevPeriod, getTodayRange} from "@/backend/timerange.ts";
+import {convertToUnixTimeRange, getNextPeriod, getPrevPeriod} from "@/backend/timerange.ts";
 import {getTrOnCondition, getTrTotalOnCondition} from "@/backend/functions.ts";
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
-
-const ledgerStore = useLedgerStore();
+import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 
 const {majorBgColor} = useCssVariables();
 
@@ -67,23 +63,19 @@ const contentStyle: CSSProperties = {
   "margin-bottom": "auto"
 };
 
-// 时间区间
-type RangeValue = [Dayjs, Dayjs];
-type TimeRangeLabel = keyof typeof TimeRangeTypes;
-type TimeRangeType = (typeof TimeRangeTypes)[TimeRangeLabel];
-
-const timeRangeTypeLabel = ref<TimeRangeLabel>('日');
-const timeRange = ref<RangeValue>(getTodayRange());
-const timeRangeType = computed<TimeRangeType>(() => {
-  return TimeRangeTypes[timeRangeTypeLabel.value];
-})
+const ledgerStore = useLedgerStore();
+const trQueryConditionStore = useTrQueryConditionStore();
 
 const goToPrevious = () => {
-  timeRange.value = getPrevPeriod(timeRange.value[0], timeRange.value[1], timeRangeType.value)
+  trQueryConditionStore.timeRange = getPrevPeriod(trQueryConditionStore.timeRange[0],
+      trQueryConditionStore.timeRange[1],
+      trQueryConditionStore.timeRangeTypeValue);
 }
 
 const goToNext = () => {
-  timeRange.value = getNextPeriod(timeRange.value[0], timeRange.value[1], timeRangeType.value)
+  trQueryConditionStore.timeRange = getNextPeriod(trQueryConditionStore.timeRange[0],
+      trQueryConditionStore.timeRange[1],
+      trQueryConditionStore.timeRangeTypeValue);
 }
 
 // 消费记录
@@ -93,37 +85,24 @@ const currentPage = ref<number>(1);
 const pageSize = ref<number>(20);
 const trTotal = ref<number>(0);
 
-const initTable = async () => {
+const refreshTable = async () => {
   const trTotalCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
-    tsRange: convertToUnixTimeRange(timeRange.value)
+    tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange)
   }
   trTotal.value = await getTrTotalOnCondition(trTotalCondition);
   const trCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
-    tsRange: convertToUnixTimeRange(timeRange.value),
+    tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange),
     offset: pageSize.value * (currentPage.value - 1),
     limit: pageSize.value
   }
   tableData.value = await getTrOnCondition(trCondition);
 }
 
-watch([timeRange, currentPage, pageSize], () => {
-  initTable();
+watch([trQueryConditionStore.timeRange, currentPage, pageSize], () => {
+  refreshTable();
 }, {immediate: true});
-
-// 消费记录表单
-const showDialog = ref(false);
-const recordData = ref({});
-const opType = ref('create');
-const dialogTitle = ref('');
-
-const onCreate = () => {
-  dialogTitle.value = '新建消费记录';
-  recordData.value = {};
-  opType.value = 'create';
-  showDialog.value = true;
-}
 </script>
 
 <style scoped>
