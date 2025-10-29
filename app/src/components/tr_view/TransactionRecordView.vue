@@ -48,7 +48,7 @@ import {type CSSProperties, ref, watch} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
 import {TimeRangePresets, TimeRangeTypeLabels} from "@/backend/constant.ts";
 import type {TransactionRecord, TrQueryCondition} from "@/types/billadm";
-import {useCssVariables} from "@/css/css.ts";
+import {useCssVariables} from "@/backend/css.ts";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons-vue";
 import {convertToUnixTimeRange, getNextPeriod, getPrevPeriod} from "@/backend/timerange.ts";
 import {getTrOnCondition, getTrTotalOnCondition} from "@/backend/functions.ts";

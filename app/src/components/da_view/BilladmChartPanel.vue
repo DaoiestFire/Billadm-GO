@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
-import {useCssVariables} from "@/css/css.ts";
+import {useCssVariables} from "@/backend/css.ts";
 import {buildOptionForTradingTrend, buildOptionForTransactionDistribution} from "@/backend/table.ts";
 import type {TrForm} from "@/types/billadm";
 

@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import {type CSSProperties, onMounted, ref} from "vue";
-import {useCssVariables} from "@/css/css.ts";
+import {useCssVariables} from "@/backend/css.ts";
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {useCategoryStore} from "@/stores/categoryStore.ts";
 import {useTagStore} from "@/stores/tagStore.ts";
