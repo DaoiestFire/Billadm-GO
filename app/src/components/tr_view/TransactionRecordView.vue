@@ -100,9 +100,15 @@ const refreshTable = async () => {
   tableData.value = await getTrOnCondition(trCondition);
 }
 
-watch([trQueryConditionStore.timeRange, currentPage, pageSize], () => {
-  refreshTable();
-}, {immediate: true});
+watch(() => [
+      trQueryConditionStore.timeRange,
+      ledgerStore.currentLedgerId,
+      currentPage.value,
+      pageSize.value
+    ],
+    () => {
+      refreshTable();
+    }, {immediate: true});
 </script>
 
 <style scoped>
