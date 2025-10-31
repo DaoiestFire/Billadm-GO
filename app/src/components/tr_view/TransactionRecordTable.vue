@@ -22,8 +22,8 @@
       </template>
 
       <template v-else-if="column.dataIndex === 'action'">
-        <a-button type="text">编辑</a-button>
-        <a-button type="text">删除</a-button>
+        <a-button type="text" @click="handleEdit(record as TransactionRecord)" style="color: #1677ff">编辑</a-button>
+        <a-button type="text" @click="handleDelete(record as TransactionRecord)" style="color: #f5222d">删除</a-button>
       </template>
     </template>
   </a-table>
@@ -79,6 +79,22 @@ interface Props {
 }
 
 defineProps<Props>()
+
+// 定义可触发的事件
+const emit = defineEmits<{
+  (e: 'edit', record: TransactionRecord): void;
+  (e: 'delete', record: TransactionRecord): void;
+}>();
+
+// 处理编辑操作
+const handleEdit = (record: TransactionRecord) => {
+  emit('edit', record);
+};
+
+// 处理删除操作
+const handleDelete = (record: TransactionRecord) => {
+  emit('delete', record);
+};
 
 const formatTransactionType = (type: string): string => {
   const map: Record<string, string> = {

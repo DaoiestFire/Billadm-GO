@@ -29,7 +29,7 @@
       </div>
     </a-layout-header>
     <a-layout-content :style="contentStyle">
-      <transaction-record-table :items="tableData" @update-item="updateTr"/>
+      <transaction-record-table :items="tableData" @edit="updateTr" @delete=""/>
     </a-layout-content>
     <a-layout-footer class="footerStyle">
       <a-pagination
@@ -195,16 +195,16 @@ const resetTrForm = () => {
   }
 }
 
-const onConfirm = () => {
+const onConfirm = async () => {
   const tr = trFormToTrDto(trForm.value, ledgerStore.currentLedgerId);
   if (tr.transactionId === '') {
     // 新建
-    createTransactionRecord(tr);
+    await createTransactionRecord(tr);
   } else {
     // 更新
-    updateTransactionRecord(tr);
+    await updateTransactionRecord(tr);
   }
-  refreshTable();
+  await refreshTable();
   closeTrDrawer();
 }
 
@@ -214,8 +214,8 @@ watch(() => [
       currentPage.value,
       pageSize.value
     ],
-    () => {
-      refreshTable();
+    async () => {
+      await refreshTable();
     }, {immediate: true});
 </script>
 
