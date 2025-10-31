@@ -29,7 +29,7 @@
       </div>
     </a-layout-header>
     <a-layout-content :style="contentStyle">
-      <transaction-record-table :items="tableData" @edit="updateTr" @delete=""/>
+      <transaction-record-table :items="tableData" @edit="updateTr" @delete="deleteTr"/>
     </a-layout-content>
     <a-layout-footer class="footerStyle">
       <a-pagination
@@ -97,6 +97,7 @@ import {LeftOutlined, RightOutlined} from "@ant-design/icons-vue";
 import {convertToUnixTimeRange, getNextPeriod, getPrevPeriod} from "@/backend/timerange.ts";
 import {
   createTransactionRecord,
+  deleteTransactionRecord,
   getTrOnCondition,
   getTrTotalOnCondition,
   updateTransactionRecord
@@ -177,6 +178,11 @@ const updateTr = (tr: TransactionRecord) => {
   drawerTitle.value = '编辑消费记录';
   trForm.value = trDtoToTrForm(tr);
   openTrDrawer.value = true;
+}
+
+const deleteTr = async (tr: TransactionRecord) => {
+  await deleteTransactionRecord(tr.transactionId);
+  await refreshTable();
 }
 
 const closeTrDrawer = () => {

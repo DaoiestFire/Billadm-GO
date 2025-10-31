@@ -23,7 +23,12 @@
 
       <template v-else-if="column.dataIndex === 'action'">
         <a-button type="text" @click="handleEdit(record as TransactionRecord)" style="color: #1677ff">编辑</a-button>
-        <a-button type="text" @click="handleDelete(record as TransactionRecord)" style="color: #f5222d">删除</a-button>
+        <a-popconfirm title="确认删除吗"
+                      ok-text="确认"
+                      @confirm="handleDelete(record as TransactionRecord)"
+                      :showCancel="false">
+          <a-button type="text" style="color: #f5222d">删除</a-button>
+        </a-popconfirm>
       </template>
     </template>
   </a-table>

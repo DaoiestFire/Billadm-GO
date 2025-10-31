@@ -27,6 +27,7 @@ declare module 'vue' {
     AMenu: typeof import('ant-design-vue/es')['Menu']
     AModal: typeof import('ant-design-vue/es')['Modal']
     APagination: typeof import('ant-design-vue/es')['Pagination']
+    APopconfirm: typeof import('ant-design-vue/es')['Popconfirm']
     AppBottomBar: typeof import('./../components/app_bottom/AppBottomBar.vue')['default']
     AppDisplay: typeof import('./../components/app_top/AppDisplay.vue')['default']
     AppLeftBar: typeof import('./../components/AppLeftBar.vue')['default']
