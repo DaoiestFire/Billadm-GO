@@ -23,7 +23,7 @@
       <div class="center-groups">
       </div>
       <div class="right-groups">
-        <a-button type="primary">
+        <a-button type="primary" @click="createTr">
           新增记录
         </a-button>
       </div>
@@ -40,6 +40,50 @@
           show-size-changer
       />
     </a-layout-footer>
+    <a-drawer
+        :title="drawerTitle"
+        :open="openTrDrawer"
+        :body-style="{ paddingBottom: '80px' }"
+        :footer-style="{ textAlign: 'right' }"
+        @close="closeTrDrawer"
+        :closable="false"
+    >
+      <a-form :model="trForm">
+        <a-form-item label="时间" name="time">
+          <a-date-picker v-model:value="trForm.time" style="width: 100%"/>
+        </a-form-item>
+
+        <a-form-item label="类型" name="type">
+          <a-radio-group v-model:value="trForm.type" button-style="solid">
+            <a-radio-button value="income">收入</a-radio-button>
+            <a-radio-button value="expense">支出</a-radio-button>
+            <a-radio-button value="transfer">转账</a-radio-button>
+          </a-radio-group>
+        </a-form-item>
+
+        <a-form-item label="分类" name="category">
+          <a-select v-model:value="trForm.category"/>
+        </a-form-item>
+
+        <a-form-item label="标签" name="tags">
+          <a-select v-model:value="trForm.tags" mode="multiple" placeholder="选择一个或多个标签"/>
+        </a-form-item>
+
+        <a-form-item label="描述" name="description">
+          <a-input v-model:value="trForm.description" placeholder="描述消费内容" allowClear/>
+        </a-form-item>
+
+        <a-form-item label="金额" name="price">
+          <a-input-number v-model:value="trForm.price" prefix="￥" :controls="false" :min="0" style="width: 100%"/>
+        </a-form-item>
+      </a-form>
+      <template #extra>
+        <a-space>
+          <a-button>取消</a-button>
+          <a-button type="primary">确认</a-button>
+        </a-space>
+      </template>
+    </a-drawer>
   </a-layout>
 </template>
 
@@ -47,13 +91,14 @@
 import {type CSSProperties, ref, watch} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
 import {TimeRangePresets, TimeRangeTypeLabels} from "@/backend/constant.ts";
-import type {TransactionRecord, TrQueryCondition} from "@/types/billadm";
+import type {TransactionRecord, TrForm, TrQueryCondition} from "@/types/billadm";
 import {useCssVariables} from "@/backend/css.ts";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons-vue";
 import {convertToUnixTimeRange, getNextPeriod, getPrevPeriod} from "@/backend/timerange.ts";
 import {getTrOnCondition, getTrTotalOnCondition} from "@/backend/functions.ts";
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
+import dayjs from "dayjs";
 
 const {majorBgColor} = useCssVariables();
 
@@ -98,6 +143,32 @@ const refreshTable = async () => {
     limit: pageSize.value
   }
   tableData.value = await getTrOnCondition(trCondition);
+}
+
+const openTrDrawer = ref(false);
+const drawerTitle = ref('');
+const trForm = ref<TrForm>({} as TrForm);
+
+const createTr = () => {
+  resetTrForm();
+  drawerTitle.value = '新增消费记录';
+  openTrDrawer.value = true;
+}
+
+const closeTrDrawer = () => {
+  openTrDrawer.value = false;
+}
+
+const resetTrForm = () => {
+  trForm.value = {
+    id: '',
+    price: 0,
+    type: 'expense',
+    category: '',
+    description: '',
+    tags: [],
+    time: dayjs()
+  }
 }
 
 watch(() => [

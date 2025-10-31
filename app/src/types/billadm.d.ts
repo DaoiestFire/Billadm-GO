@@ -32,7 +32,7 @@ export interface TrForm {
     /**
      * 交易时间. 对应 transaction_at. 时间戳转 Date 对象.
      */
-    time: Date;
+    time: Dayjs;
 }
 
 export interface ApiClient {
