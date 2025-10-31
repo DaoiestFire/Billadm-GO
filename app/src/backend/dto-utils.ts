@@ -1,5 +1,5 @@
 import type {TransactionRecord, TrForm} from "@/types/billadm";
-import {dateToUnixTimestamp} from "@/backend/functions.ts";
+import dayjs from "dayjs";
 
 /**
  * 构造符合后端 TransactionRecordDto 的请求对象 表单数据转化为dto
@@ -13,7 +13,7 @@ export function trFormToTrDto(data: TrForm, ledgerId: string = ''): TransactionR
         category: data.category,
         description: data.description,
         tags: data.tags,
-        transactionAt: dateToUnixTimestamp(data.time),
+        transactionAt: data.time.unix(),
     };
 }
 
@@ -28,6 +28,6 @@ export function trDtoToTrForm(dto: TransactionRecord): TrForm {
         category: dto.category,
         description: dto.description,
         tags: dto.tags,
-        time: new Date(dto.transactionAt * 1000),
+        time: dayjs(dto.transactionAt * 1000),
     };
 }

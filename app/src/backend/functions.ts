@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import type {TransactionRecord, TrQueryCondition} from "@/types/billadm";
-import {queryTrCountOnCondition, queryTrOnCondition} from "@/backend/api/tr.ts";
+import {createTrForLedger, deleteTrById, queryTrCountOnCondition, queryTrOnCondition} from "@/backend/api/tr.ts";
 import NotificationUtil from "@/backend/notification.ts";
 
 export function dateToUnixTimestamp(date: Date = new Date()): number {
@@ -39,5 +39,30 @@ export async function getTrOnCondition(condition: TrQueryCondition): Promise<Tra
     } catch (error) {
         NotificationUtil.error(`查询消费记录失败 ${error}`)
         return [];
+    }
+}
+
+export async function createTransactionRecord(tr: TransactionRecord) {
+    try {
+        await createTrForLedger(tr);
+    } catch (error) {
+        NotificationUtil.error(`创建消费记录失败 ${error}`)
+    }
+}
+
+export async function deleteTransactionRecord(trId: string) {
+    try {
+        await deleteTrById(trId);
+    } catch (error) {
+        NotificationUtil.error(`删除消费记录失败 ${error}`)
+    }
+}
+
+export async function updateTransactionRecord(tr: TransactionRecord) {
+    try {
+        await deleteTrById(tr.transactionId);
+        await createTrForLedger(tr);
+    } catch (error) {
+        NotificationUtil.error(`更新消费记录失败 ${error}`)
     }
 }

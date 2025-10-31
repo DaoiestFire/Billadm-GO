@@ -25,7 +25,9 @@ export const useTagStore = defineStore('tag', () => {
     })
 
     const getTagNamesByCategory = (category: string) => {
-        return tagNames.value.get(category) || []
+        return tagNames.value.get(category)?.map(value => {
+            return {value};
+        }) || []
     }
 
     const refreshTag = async () => {

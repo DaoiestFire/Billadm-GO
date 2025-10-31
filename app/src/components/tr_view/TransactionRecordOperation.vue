@@ -73,12 +73,10 @@
 import {computed, ref, watch} from 'vue';
 import {useCategoryStore} from "@/stores/categoryStore.ts";
 import {useTagStore} from "@/stores/tagStore.ts";
-import {useTrViewStore} from "@/stores/trQueryConditionStore.ts";
 
 // store
 const categoryStore = useCategoryStore();
 const tagStore = useTagStore();
-const trViewStore = useTrViewStore();
 
 // --- Props ---
 const props = defineProps({
@@ -179,36 +177,6 @@ watch(
     },
     {immediate: true}
 );
-
-// 如果选了时间范围以结束时间的12点作为消费时间，否则以当天12点作为消费时间
-const getFormDate = () => {
-  if (Array.isArray(trViewStore.timeRange) && trViewStore.timeRange.length === 2) {
-    let ts = trViewStore.timeRange[1];
-    let now = new Date();
-    if (ts > now) {
-      now.setHours(12, 0, 0, 0);
-      return now;
-    }
-    ts.setHours(12, 0, 0, 0);
-    return ts;
-  }
-  const noonToday = new Date();
-  noonToday.setHours(12, 0, 0, 0);
-  return noonToday;
-}
-
-// --- 方法 ---
-function close() {
-  formData.value = emptyData;
-  emit('update:visible', false);
-}
-
-function handleSubmit() {
-  if (typeof props.onConfirm === 'function') {
-    props.onConfirm(formData.value);
-  }
-  close();
-}
 </script>
 
 <style scoped>

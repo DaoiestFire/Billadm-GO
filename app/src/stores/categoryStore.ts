@@ -25,7 +25,9 @@ export const useCategoryStore = defineStore('category', () => {
     });
 
     const getCategoryNamesByType = (transactionType: string) => {
-        return categoryNames.value.get(transactionType) || [];
+        return categoryNames.value.get(transactionType)?.map(value => {
+            return {value};
+        }) || [];
     };
 
     // 更新指定 name 的 category

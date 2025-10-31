@@ -29,7 +29,7 @@
       </div>
     </a-layout-header>
     <a-layout-content :style="contentStyle">
-      <transaction-record-table :items="tableData"/>
+      <transaction-record-table :items="tableData" @update-item="updateTr"/>
     </a-layout-content>
     <a-layout-footer class="footerStyle">
       <a-pagination
@@ -62,11 +62,11 @@
         </a-form-item>
 
         <a-form-item label="分类" name="category">
-          <a-select v-model:value="trForm.category"/>
+          <a-select v-model:value="trForm.category" :options="categories"/>
         </a-form-item>
 
         <a-form-item label="标签" name="tags">
-          <a-select v-model:value="trForm.tags" mode="multiple" placeholder="选择一个或多个标签"/>
+          <a-select v-model:value="trForm.tags" :options="tags" mode="multiple" placeholder="选择一个或多个标签"/>
         </a-form-item>
 
         <a-form-item label="描述" name="description">
@@ -79,8 +79,8 @@
       </a-form>
       <template #extra>
         <a-space>
-          <a-button>取消</a-button>
-          <a-button type="primary">确认</a-button>
+          <a-button @click="closeTrDrawer">取消</a-button>
+          <a-button type="primary" @click="onConfirm">确认</a-button>
         </a-space>
       </template>
     </a-drawer>
@@ -88,17 +88,25 @@
 </template>
 
 <script setup lang="ts">
-import {type CSSProperties, ref, watch} from 'vue';
+import {computed, type CSSProperties, ref, watch} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
 import {TimeRangePresets, TimeRangeTypeLabels} from "@/backend/constant.ts";
 import type {TransactionRecord, TrForm, TrQueryCondition} from "@/types/billadm";
 import {useCssVariables} from "@/backend/css.ts";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons-vue";
 import {convertToUnixTimeRange, getNextPeriod, getPrevPeriod} from "@/backend/timerange.ts";
-import {getTrOnCondition, getTrTotalOnCondition} from "@/backend/functions.ts";
+import {
+  createTransactionRecord,
+  getTrOnCondition,
+  getTrTotalOnCondition,
+  updateTransactionRecord
+} from "@/backend/functions.ts";
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 import dayjs from "dayjs";
+import {useCategoryStore} from "@/stores/categoryStore.ts";
+import {useTagStore} from "@/stores/tagStore.ts";
+import {trDtoToTrForm, trFormToTrDto} from "@/backend/dto-utils.ts";
 
 const {majorBgColor} = useCssVariables();
 
@@ -110,6 +118,8 @@ const contentStyle: CSSProperties = {
 
 const ledgerStore = useLedgerStore();
 const trQueryConditionStore = useTrQueryConditionStore();
+const categoryStore = useCategoryStore();
+const tagStore = useTagStore();
 
 const goToPrevious = () => {
   trQueryConditionStore.timeRange = getPrevPeriod(trQueryConditionStore.timeRange[0],
@@ -149,9 +159,23 @@ const openTrDrawer = ref(false);
 const drawerTitle = ref('');
 const trForm = ref<TrForm>({} as TrForm);
 
+const categories = computed(() => {
+  return categoryStore.getCategoryNamesByType(trForm.value.type);
+})
+
+const tags = computed(() => {
+  return tagStore.getTagNamesByCategory(trForm.value.category);
+})
+
 const createTr = () => {
   resetTrForm();
   drawerTitle.value = '新增消费记录';
+  openTrDrawer.value = true;
+}
+
+const updateTr = (tr: TransactionRecord) => {
+  drawerTitle.value = '编辑消费记录';
+  trForm.value = trDtoToTrForm(tr);
   openTrDrawer.value = true;
 }
 
@@ -169,6 +193,19 @@ const resetTrForm = () => {
     tags: [],
     time: dayjs()
   }
+}
+
+const onConfirm = () => {
+  const tr = trFormToTrDto(trForm.value, ledgerStore.currentLedgerId);
+  if (tr.transactionId === '') {
+    // 新建
+    createTransactionRecord(tr);
+  } else {
+    // 更新
+    updateTransactionRecord(tr);
+  }
+  refreshTable();
+  closeTrDrawer();
 }
 
 watch(() => [
