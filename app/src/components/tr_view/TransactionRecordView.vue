@@ -186,6 +186,7 @@ const deleteTr = async (tr: TransactionRecord) => {
 }
 
 const closeTrDrawer = () => {
+  resetTrForm();
   openTrDrawer.value = false;
 }
 
@@ -198,10 +199,11 @@ const resetTrForm = () => {
     description: '',
     tags: [],
     time: dayjs()
-  }
+  };
 }
 
 const onConfirm = async () => {
+  trForm.value.time = trForm.value.time.hour(12).minute(0).second(0);
   const tr = trFormToTrDto(trForm.value, ledgerStore.currentLedgerId);
   if (tr.transactionId === '') {
     // 新建
