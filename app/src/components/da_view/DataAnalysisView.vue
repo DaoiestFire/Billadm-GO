@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <div class="middle-section">
-      <billadm-chart-display :tr-form-list="trs"/>
+<!--      <billadm-chart-display :tr-form-list="trs"/>-->
     </div>
   </div>
 </template>
