@@ -107,7 +107,6 @@ import {
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 import dayjs from "dayjs";
-import {useTagStore} from "@/stores/tagStore.ts";
 import {trDtoToTrForm, trFormToTrDto} from "@/backend/dto-utils.ts";
 import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
 
@@ -121,7 +120,6 @@ const contentStyle: CSSProperties = {
 
 const ledgerStore = useLedgerStore();
 const trQueryConditionStore = useTrQueryConditionStore();
-const tagStore = useTagStore();
 
 const goToPrevious = () => {
   trQueryConditionStore.timeRange = getPrevPeriod(trQueryConditionStore.timeRange[0],
