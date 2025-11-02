@@ -63,15 +63,15 @@ const handleBrowse = async () => {
     if (!result.canceled && result.filePaths && result.filePaths.length > 0) {
       inputPath.value = result.filePaths[0]
     }
-  } catch (err) {
-    NotificationUtil.error(`选择失败：${err}`)
+  } catch (error) {
+    NotificationUtil.error('选择路径失败', `${error}`)
   }
 }
 
 // 确认回调
 const handleOk = () => {
   if (!inputPath.value) {
-    NotificationUtil.warning('请选择一个有效的路径')
+    NotificationUtil.error('路径为空', '请选择一个有效的路径')
     return
   }
   emit('confirm', inputPath.value)

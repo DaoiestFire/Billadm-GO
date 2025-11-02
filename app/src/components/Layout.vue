@@ -47,7 +47,7 @@ const handleOpenWorkspace = async (workspaceDir: string) => {
     await openWorkspace(workspaceDir);
     await initWorkspace();
   } catch (error) {
-    NotificationUtil.error(`打开工作空间失败 ${error}`);
+    NotificationUtil.error('打开工作空间失败', `${error}`);
     showWorkspaceSelect.value = true;
   }
 }

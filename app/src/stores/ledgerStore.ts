@@ -20,11 +20,7 @@ export const useLedgerStore = defineStore('ledger', () => {
     })
 
     const init = async () => {
-        try {
-            await refreshLedgers()
-        } catch (error) {
-            NotificationUtil.error(`获取全部账本失败 ${error}`)
-        }
+        await refreshLedgers();
     }
 
     // 访问后端更新账本
@@ -48,7 +44,7 @@ export const useLedgerStore = defineStore('ledger', () => {
                 }
             }
         } catch (error) {
-            NotificationUtil.error(`获取全部账本失败 ${error}`)
+            NotificationUtil.error('查询账本失败', `${error}`)
         }
     }
 
@@ -57,9 +53,9 @@ export const useLedgerStore = defineStore('ledger', () => {
         try {
             await createLedgerByName(name)
             await refreshLedgers()
-            NotificationUtil.success(`账本 ${name} 创建成功`)
+            NotificationUtil.success(`创建账本 ${name} 成功`)
         } catch (error) {
-            NotificationUtil.error(`账本 ${name} 创建失败 ${error}`)
+            NotificationUtil.error(`创建账本 ${name} 失败`, `${error}`)
         }
     }
 
@@ -68,9 +64,9 @@ export const useLedgerStore = defineStore('ledger', () => {
         try {
             await deleteLedgerById(id)
             await refreshLedgers()
-            NotificationUtil.success(`账本删除成功`)
+            NotificationUtil.success(`删除账本成功`)
         } catch (error) {
-            NotificationUtil.error(`账本删除失败`)
+            NotificationUtil.error(`删除账本失败`)
         }
     }
 
@@ -92,7 +88,7 @@ export const useLedgerStore = defineStore('ledger', () => {
         try {
             workspaceStatus.value = await hasOpenedWorkspace();
         } catch (error) {
-            NotificationUtil.error(`工作空间状态刷新失败 ${error}`)
+            NotificationUtil.error('查询工作空间状态失败', `${error}`)
         }
     }
 

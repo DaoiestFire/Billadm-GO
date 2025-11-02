@@ -26,7 +26,7 @@ export async function getTrTotalOnCondition(condition: TrQueryCondition): Promis
     try {
         return await queryTrCountOnCondition(condition);
     } catch (error) {
-        NotificationUtil.error(`查询消费记录数量失败 ${error}`);
+        NotificationUtil.error('查询消费记录数量失败', `${error}`);
         return 0;
     }
 }
@@ -35,7 +35,7 @@ export async function getTrOnCondition(condition: TrQueryCondition): Promise<Tra
     try {
         return await queryTrOnCondition(condition);
     } catch (error) {
-        NotificationUtil.error(`查询消费记录失败 ${error}`);
+        NotificationUtil.error('查询消费记录失败', `${error}`);
         return [];
     }
 }
@@ -44,7 +44,7 @@ export async function createTransactionRecord(tr: TransactionRecord) {
     try {
         await createTrForLedger(tr);
     } catch (error) {
-        NotificationUtil.error(`创建消费记录失败 ${error}`);
+        NotificationUtil.error('创建消费记录失败', `${error}`);
     }
 }
 
@@ -52,7 +52,7 @@ export async function deleteTransactionRecord(trId: string) {
     try {
         await deleteTrById(trId);
     } catch (error) {
-        NotificationUtil.error(`删除消费记录失败 ${error}`);
+        NotificationUtil.error('删除消费记录失败', `${error}`);
     }
 }
 
@@ -61,7 +61,7 @@ export async function updateTransactionRecord(tr: TransactionRecord) {
         await deleteTrById(tr.transactionId);
         await createTrForLedger(tr);
     } catch (error) {
-        NotificationUtil.error(`更新消费记录失败 ${error}`);
+        NotificationUtil.error('更新消费记录失败', `${error}`);
     }
 }
 
@@ -72,7 +72,7 @@ export async function getCategoryByType(trType: string): Promise<Category[]> {
     try {
         return await queryCategory(trType);
     } catch (error) {
-        NotificationUtil.error(`查询 ${trType} 消费类型失败 ${error}`);
+        NotificationUtil.error(`查询 ${trType} 消费类型失败`, `${error}`);
         return [];
     }
 }
@@ -81,7 +81,7 @@ export async function getTagsByCategory(category: string): Promise<Tag[]> {
     try {
         return await queryTags(category);
     } catch (error) {
-        NotificationUtil.error(`查询 ${category} 消费标签失败 ${error}`);
+        NotificationUtil.error(`查询 ${category} 消费标签失败`, `${error}`);
         return [];
     }
 }
