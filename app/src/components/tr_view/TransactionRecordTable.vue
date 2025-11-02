@@ -39,6 +39,7 @@ import type {TransactionRecord} from '@/types/billadm';
 import {formatTimestamp} from "@/backend/functions.ts";
 import {useCssVariables} from "@/backend/css.ts";
 import type {CSSProperties} from "vue";
+import type {ColumnsType} from "ant-design-vue/es/table";
 
 const {positiveColor, negativeColor} = useCssVariables();
 const editButtonStyle: CSSProperties = {
@@ -49,7 +50,7 @@ const deleteButtonStyle: CSSProperties = {
 };
 
 
-const columns = [
+const columns: ColumnsType = [
   {
     title: '消费时间',
     dataIndex: 'transactionAt',
