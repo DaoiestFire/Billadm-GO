@@ -17,8 +17,6 @@ export function useCssVariables() {
     const negativeColor = ref(getCssVariable('--billadm-color-negative'))
 
     const hoverBgColor = ref(getCssVariable('--billadm-color-icon-hover-bg-color'))
-    const iconColor = ref(getCssVariable('--billadm-color-icon-color'))
-    const iconActiveFgColor = ref(getCssVariable('--billadm-color-icon-active-fg-color'))
     const uiSizeMenuWidth = ref(getCssVariable('--billadm-ui-size-menu-width'))
 
     return {
@@ -29,8 +27,6 @@ export function useCssVariables() {
         negativeColor,
 
         hoverBgColor,
-        iconColor,
-        iconActiveFgColor,
         uiSizeMenuWidth,
     }
 }
