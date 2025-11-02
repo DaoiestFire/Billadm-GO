@@ -22,12 +22,12 @@
       </template>
 
       <template v-else-if="column.dataIndex === 'action'">
-        <a-button type="text" @click="handleEdit(record as TransactionRecord)" style="color: #1677ff">编辑</a-button>
+        <a-button type="text" @click="handleEdit(record as TransactionRecord)" :style="editButtonStyle">编辑</a-button>
         <a-popconfirm title="确认删除吗"
                       ok-text="确认"
                       @confirm="handleDelete(record as TransactionRecord)"
                       :showCancel="false">
-          <a-button type="text" style="color: #f5222d">删除</a-button>
+          <a-button type="text" :style="deleteButtonStyle">删除</a-button>
         </a-popconfirm>
       </template>
     </template>
@@ -37,6 +37,17 @@
 <script setup lang="ts">
 import type {TransactionRecord} from '@/types/billadm';
 import {formatTimestamp} from "@/backend/functions.ts";
+import {useCssVariables} from "@/backend/css.ts";
+import type {CSSProperties} from "vue";
+
+const {positiveColor, negativeColor} = useCssVariables();
+const editButtonStyle: CSSProperties = {
+  color: positiveColor.value,
+};
+const deleteButtonStyle: CSSProperties = {
+  color: negativeColor.value,
+};
+
 
 const columns = [
   {
