@@ -51,13 +51,9 @@ const refreshData = async () => {
 /**
  * 查询条件，账本改变都需要刷新数据
  */
-watch(() => [
-      trQueryConditionStore.timeRange,
-      ledgerStore.currentLedgerId,
-    ],
-    async () => {
+watch(() => [trQueryConditionStore.timeRange, ledgerStore.currentLedgerId,], async () => {
       await refreshData();
-    }, {immediate: true}
+    }
 );
 </script>
 

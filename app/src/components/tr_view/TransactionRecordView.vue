@@ -131,7 +131,7 @@ const refreshTable = async () => {
 const defaultTrForm: TrForm = {
   id: '',
   price: 0,
-  type: 'expense',
+  type: '',
   category: '',
   description: '-',
   tags: [],
@@ -184,12 +184,14 @@ const onConfirm = async () => {
 
 // 查询条件变化 → 重置分页 + 刷新
 watch(() => [trQueryConditionStore.timeRange, ledgerStore.currentLedgerId], async () => {
-  if (currentPage.value !== 1) {
-    currentPage.value = 1;
-    return
-  }
-  await refreshTable();
-}, {immediate: true});
+      if (!ledgerStore.currentLedgerId) return;
+      if (currentPage.value !== 1) {
+        currentPage.value = 1;
+        return;
+      }
+      await refreshTable();
+    }
+);
 
 // 分页变化 → 仅刷新
 watch(() => [currentPage.value, pageSize.value], async () => {
@@ -200,6 +202,7 @@ watch(() => [currentPage.value, pageSize.value], async () => {
  * 如果当前分类不为空则选择查看分类是否在列表中，不在列表中则需要选择第一个分类作为分类
  */
 watch(() => trForm.value.type, async () => {
+      if (trForm.value.type === '') return;
       const categoryList = await getCategoryByType(trForm.value.type);
       categories.value = categoryList.map(category => {
         return {
@@ -214,7 +217,7 @@ watch(() => trForm.value.type, async () => {
       } else {
         trForm.value.category = '';
       }
-    }, {immediate: true}
+    }
 );
 /**
  * 分类变化时要重新刷新标签列表清除不在候选中的标签
@@ -239,7 +242,7 @@ watch(() => trForm.value.category, async () => {
       } else {
         trForm.value.tags = [];
       }
-    }, {immediate: true}
+    }
 );
 </script>
 
