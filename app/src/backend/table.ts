@@ -1,5 +1,5 @@
 import type {TransactionRecord} from '@/types/billadm'
-import type {EChartsOption} from "echarts"
+import type {EChartsOption, LegendComponentOption} from "echarts"
 import {TransactionTypeToColor, TransactionTypeToLabel} from '@/backend/constant'
 import {formatFloat} from '@/backend/functions'
 import {trDtoToTrForm} from "@/backend/dto-utils.ts";
@@ -17,7 +17,9 @@ export function buildOptionForTradingTrend(trList: TransactionRecord[], displayT
     if (!filteredData || filteredData.length === 0) {
         return {
             tooltip: {trigger: 'axis'},
-            legend: {data: displayTypes.map(item => TransactionTypeToLabel.get(item))},
+            legend: {
+                data: displayTypes.map(item => TransactionTypeToLabel.get(item))
+            } as LegendComponentOption,
             xAxis: {
                 type: 'category',
                 data: [],
@@ -77,34 +79,48 @@ export function buildOptionForTradingTrend(trList: TransactionRecord[], displayT
         const type = item.type
         const amount = item.price
 
-        if (monthlyData.has(key)) {
-            monthlyData.get(key)[type] += amount
+        if (!monthlyData.has(key)) {
+            return;
+        }
+
+        const data = monthlyData.get(key);
+        if (!data) return;
+        switch (type) {
+            case 'income':
+                data.income += amount;
+                break
+            case 'expense':
+                data.expense += amount;
+                break
+            case 'transfer':
+                data.transfer += amount;
+                break
         }
     })
 
     const xAxisData = totalMonths
     const seriesDataMap = new Map<string, number[]>(
-        displayTypes.map(type => [
-            type,
-            xAxisData.map(month => monthlyData.get(month)[type])
-        ])
+        displayTypes.map(type => [type, xAxisData.map(month => {
+            const data = monthlyData.get(month);
+            if (!data) return 0;
+            switch (type) {
+                case 'income':
+                    return data.income;
+                case 'expense':
+                    return data.expense;
+                case 'transfer':
+                    return data.transfer;
+                default:
+                    return 0;
+            }
+        })])
     )
 
     return {
-        tooltip: {
-            trigger: 'axis',
-            formatter: (params: any) => {
-                const date = params[0].name
-                let tooltip = `${date}<br/>`
-                params.forEach(param => {
-                    tooltip += `${param.marker}${param.seriesName}: ${param.value.toFixed(2)}<br/>`
-                })
-                return tooltip
-            }
-        },
+        tooltip: {trigger: 'axis'},
         legend: {
             data: displayTypes.map(item => TransactionTypeToLabel.get(item))
-        },
+        } as LegendComponentOption,
         xAxis: {
             type: 'category',
             data: xAxisData,
