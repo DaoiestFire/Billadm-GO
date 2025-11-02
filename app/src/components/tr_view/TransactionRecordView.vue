@@ -206,6 +206,9 @@ const onConfirm = async () => {
   closeTrDrawer();
 }
 
+/**
+ * 查询条件，账本，当前页码改变，页数改变都需要刷新表格
+ */
 watch(() => [
       trQueryConditionStore.timeRange,
       ledgerStore.currentLedgerId,
@@ -216,7 +219,10 @@ watch(() => [
       await refreshTable();
     }, {immediate: true}
 );
-
+/**
+ * 交易类型变化时要重新刷新分类列表并如果当前分类为空则选择第一个分类作为分类
+ * 如果当前分类不为空则选择查看分类是否在列表中，不在列表中则需要选择第一个分类作为分类
+ */
 watch(() => trForm.value.type, async () => {
       const categoryList = await getCategoryByType(trForm.value.type);
       categories.value = categoryList.map(category => {
@@ -224,16 +230,39 @@ watch(() => trForm.value.type, async () => {
           value: category.name,
         };
       });
+      const categoryNames = categoryList.map(category => category.name);
+      if (categoryNames.length > 0) {
+        if (!trForm.value.category || !categoryNames.includes(trForm.value.category)) {
+          trForm.value.category = categoryNames[0] as string;
+        }
+      } else {
+        trForm.value.category = '';
+      }
     }, {immediate: true}
 );
-
+/**
+ * 分类变化时要重新刷新标签列表清除不在候选中的标签
+ */
 watch(() => trForm.value.category, async () => {
+      if (trForm.value.category === '') return;
       const tagList = await getTagsByCategory(trForm.value.category);
       tags.value = tagList.map(tag => {
         return {
           value: tag.name,
         };
       });
+      const tagNames = tagList.map(tag => tag.name);
+      if (tagNames.length > 0) {
+        let newTags: string[] = [];
+        trForm.value.tags.forEach(tag => {
+          if (tag && tagNames.includes(tag)) {
+            newTags.push(tag);
+          }
+        });
+        trForm.value.tags = newTags;
+      } else {
+        trForm.value.tags = [];
+      }
     }, {immediate: true}
 );
 </script>
