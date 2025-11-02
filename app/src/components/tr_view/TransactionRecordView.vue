@@ -119,7 +119,6 @@ const refreshTable = async () => {
     tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange)
   };
   trTotal.value = await getTrTotalOnCondition(trTotalCondition);
-  console.log(currentPage.value)
   const trCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
     tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange),
