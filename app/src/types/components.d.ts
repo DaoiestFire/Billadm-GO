@@ -57,6 +57,7 @@ declare module 'vue' {
     BilladmLedgerSelect: typeof import('./../components/BilladmLedgerSelect.vue')['default']
     BilladmModal: typeof import('./../components/BilladmModal.vue')['default']
     BilladmSelect: typeof import('./../components/BilladmSelect.vue')['default']
+    BilladmTimeRangePicker: typeof import('./../components/common/BilladmTimeRangePicker.vue')['default']
     BilladmTimeSelect: typeof import('./../components/BilladmTimeSelect.vue')['default']
     DataAnalysisView: typeof import('./../components/da_view/DataAnalysisView.vue')['default']
     DisplayIcon: typeof import('./../components/DisplayIcon.vue')['default']
