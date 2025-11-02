@@ -172,6 +172,9 @@ const tags = ref<DefaultOptionType[]>([]);
 
 const createTr = () => {
   trForm.value.type = 'expense';
+  if (trQueryConditionStore.timeRange) {
+    trForm.value.time = trQueryConditionStore.timeRange[1];
+  }
   drawerTitle.value = '新增消费记录';
   openTrDrawer.value = true;
 }
