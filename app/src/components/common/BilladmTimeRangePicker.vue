@@ -3,7 +3,7 @@
   <div class="billadm-time-range-picker">
     <a-segmented
         v-model:value="timeRangeTypeLabel"
-        :options="TimeRangeTypeLabels"
+        :options="Object.keys(TimeRangeLabelToValue)"
         @change="handleSegmentChange"
     />
     <a-button type="text" @click="goToPrevious">
@@ -27,12 +27,7 @@
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import {
-  TimeRangeLabelToValue,
-  TimeRangePresets,
-  TimeRangeTypeLabels,
-  TimeRangeValueToLabel
-} from '@/backend/constant.ts';
+import {TimeRangeLabelToValue, TimeRangePresets, TimeRangeValueToLabel} from '@/backend/constant.ts';
 import {getNextPeriod, getPrevPeriod, setToEndOfDay, setToStartOfDay} from '@/backend/timerange.ts';
 import {LeftOutlined, RightOutlined} from '@ant-design/icons-vue';
 import {Dayjs} from 'dayjs';

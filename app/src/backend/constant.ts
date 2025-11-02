@@ -58,5 +58,3 @@ export const TimeRangeLabelToValue = {
     '月': 'month',
     '年': 'year'
 } as const;
-
-export const TimeRangeTypeLabels = ['年', '月', '日'];
