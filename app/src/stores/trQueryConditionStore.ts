@@ -1,22 +1,15 @@
-import {computed, ref} from "vue"
+import {ref} from "vue"
 import {defineStore} from 'pinia'
 import {getThisMonthRange} from "@/backend/timerange.ts"
-import type {RangeValue, TimeRangeTypeLabel, TimeRangeTypeValue} from "@/types/billadm"
-import {TimeRangeTypes} from "@/backend/constant.ts";
+import type {RangeValue, TimeRangeTypeValue} from "@/types/billadm"
 
 export const useTrQueryConditionStore = defineStore('trQueryCondition', () => {
 
     const timeRange = ref<RangeValue>(getThisMonthRange()); // 时间范围
-    const timeRangeTypeLabel = ref('日' as TimeRangeTypeLabel); // 时间类型标签
-
-
-    const timeRangeTypeValue = computed<TimeRangeTypeValue>(() => {
-        return TimeRangeTypes[timeRangeTypeLabel.value];
-    })
+    const timeRangeType = ref('date' as TimeRangeTypeValue); // 时间类型标签
 
     return {
         timeRange,
-        timeRangeTypeLabel,
-        timeRangeTypeValue,
+        timeRangeType,
     }
 })

@@ -2,23 +2,10 @@
   <a-layout style="height: 100%">
     <a-layout-header class="headerStyle">
       <div class="left-groups">
-        <a-segmented v-model:value="trQueryConditionStore.timeRangeTypeLabel" :options="TimeRangeTypeLabels"/>
-        <a-button type="text" @click="goToPrevious">
-          <template #icon>
-            <LeftOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
-          </template>
-        </a-button>
-        <a-range-picker
-            v-model:value="trQueryConditionStore.timeRange"
-            :picker="trQueryConditionStore.timeRangeTypeValue"
-            :presets="TimeRangePresets"
-            inputReadOnly
+        <BilladmTimeRangePicker
+            v-model:time-range="trQueryConditionStore.timeRange"
+            v-model:time-range-type="trQueryConditionStore.timeRangeType"
         />
-        <a-button type="text" @click="goToNext">
-          <template #icon>
-            <RightOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
-          </template>
-        </a-button>
       </div>
       <div class="center-groups">
       </div>
@@ -90,11 +77,9 @@
 <script setup lang="ts">
 import {type CSSProperties, ref, watch} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
-import {TimeRangePresets, TimeRangeTypeLabels} from "@/backend/constant.ts";
 import type {TransactionRecord, TrForm, TrQueryCondition} from "@/types/billadm";
 import {useCssVariables} from "@/backend/css.ts";
-import {LeftOutlined, RightOutlined} from "@ant-design/icons-vue";
-import {convertToUnixTimeRange, getNextPeriod, getPrevPeriod} from "@/backend/timerange.ts";
+import {convertToUnixTimeRange} from "@/backend/timerange.ts";
 import {
   createTransactionRecord,
   deleteTransactionRecord,
@@ -120,18 +105,6 @@ const contentStyle: CSSProperties = {
 
 const ledgerStore = useLedgerStore();
 const trQueryConditionStore = useTrQueryConditionStore();
-
-const goToPrevious = () => {
-  trQueryConditionStore.timeRange = getPrevPeriod(trQueryConditionStore.timeRange[0],
-      trQueryConditionStore.timeRange[1],
-      trQueryConditionStore.timeRangeTypeValue);
-}
-
-const goToNext = () => {
-  trQueryConditionStore.timeRange = getNextPeriod(trQueryConditionStore.timeRange[0],
-      trQueryConditionStore.timeRange[1],
-      trQueryConditionStore.timeRangeTypeValue);
-}
 
 // 消费记录
 const tableData = ref<TransactionRecord[]>([]);

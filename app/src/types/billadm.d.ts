@@ -1,5 +1,4 @@
 import type {Dayjs} from "dayjs";
-import {TimeRangeTypes} from "@/backend/constant.ts";
 
 /**
  * 表示一个前端使用的消费记录
@@ -125,5 +124,5 @@ export interface WorkspaceStatus {
  * 时间范围类型 时间范围标签类型 时间范围值类型
  */
 type RangeValue = [Dayjs, Dayjs];
-type TimeRangeTypeLabel = keyof typeof TimeRangeTypes;
-type TimeRangeTypeValue = (typeof TimeRangeTypes)[TimeRangeTypeLabel];
+type TimeRangeTypeValue = 'date' | 'month' | 'year';
+type TimeRangeTypeLabel = '日' | '月' | '年';

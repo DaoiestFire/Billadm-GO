@@ -47,16 +47,16 @@ export const TimeRangePresets = [
     }
 ];
 
-export const TimeRangeTypes = {
+export const TimeRangeValueToLabel = {
+    'date': '日',
+    'month': '月',
+    'year': '年'
+} as const;
+
+export const TimeRangeLabelToValue = {
     '日': 'date',
     '月': 'month',
     '年': 'year'
 } as const;
 
 export const TimeRangeTypeLabels = ['年', '月', '日'];
-
-export const PageSizeOptions = [
-    {label: '每页10行', value: 10},
-    {label: '每页20行', value: 20},
-    {label: '每页50行', value: 50}
-];

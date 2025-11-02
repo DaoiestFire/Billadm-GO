@@ -27,18 +27,28 @@
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import {TimeRangePresets, TimeRangeTypeLabels, TimeRangeTypes} from '@/backend/constant.ts';
-import {getNextPeriod, getPrevPeriod} from '@/backend/timerange.ts';
+import {
+  TimeRangeLabelToValue,
+  TimeRangePresets,
+  TimeRangeTypeLabels,
+  TimeRangeValueToLabel
+} from '@/backend/constant.ts';
+import {getNextPeriod, getPrevPeriod, setToEndOfDay, setToStartOfDay} from '@/backend/timerange.ts';
 import {LeftOutlined, RightOutlined} from '@ant-design/icons-vue';
-import dayjs, {Dayjs} from 'dayjs';
-import type {TimeRangeTypeLabel} from '@/types/billadm';
+import {Dayjs} from 'dayjs';
+import type {RangeValue, TimeRangeTypeValue} from '@/types/billadm';
+import type {SegmentedValue} from "ant-design-vue/es/segmented/src/segmented";
 
-const timeRange = defineModel<[Dayjs, Dayjs]>({required: true});
-const timeRangeTypeLabel = defineModel<TimeRangeTypeLabel>({required: true});
+const timeRange = defineModel<RangeValue>('timeRange', {required: true});
+const timeRangeTypeValue = defineModel<TimeRangeTypeValue>('timeRangeType', {required: true});
 
-// 根据当前 label 获取对应的 picker 类型 ('date' | 'month' | 'year')
-const timeRangeTypeValue = computed(() => {
-  return TimeRangeTypes[timeRangeTypeLabel.value];
+const timeRangeTypeLabel = computed({
+  get() {
+    return TimeRangeValueToLabel[timeRangeTypeValue.value];
+  },
+  set(val) {
+    timeRangeTypeValue.value = TimeRangeLabelToValue[val];
+  }
 });
 
 // 上一周期
@@ -51,30 +61,24 @@ const goToNext = () => {
   timeRange.value = getNextPeriod(timeRange.value[0], timeRange.value[1], timeRangeTypeValue.value);
 };
 
-// 切换时间类型时，重置为当前周期
-const handleSegmentChange = () => {
-  const now = dayjs();
-  let start: Dayjs, end: Dayjs;
-
-  switch (timeRangeTypeLabel.value) {
+// 切换时间类型时 修改时间范围
+const handleSegmentChange = (val: SegmentedValue) => {
+  let start: Dayjs = timeRange.value[0], end: Dayjs = timeRange.value[1];
+  switch (val) {
     case '日':
-      start = now.startOf('day');
-      end = now.endOf('day');
+      start = start.startOf('day');
+      end = end.endOf('day');
       break;
     case '月':
-      start = now.startOf('month');
-      end = now.endOf('month');
+      start = start.startOf('month');
+      end = end.endOf('month');
       break;
     case '年':
-      start = now.startOf('year');
-      end = now.endOf('year');
+      start = start.startOf('year');
+      end = end.endOf('year');
       break;
-    default:
-      start = now.startOf('month');
-      end = now.endOf('month');
   }
-
-  timeRange.value = [start, end];
+  timeRange.value = [setToStartOfDay(start), setToEndOfDay(end)];
 };
 </script>
 
