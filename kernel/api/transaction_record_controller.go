@@ -19,7 +19,7 @@ func queryTrOnCondition(c *gin.Context) {
 	ws := workspace.Manager.OpenedWorkspace()
 	if ws == nil {
 		ret.Code = -1
-		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFound
 		return
 	}
 
@@ -46,7 +46,7 @@ func queryTrCountOnCondition(c *gin.Context) {
 	ws := workspace.Manager.OpenedWorkspace()
 	if ws == nil {
 		ret.Code = -1
-		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFound
 		return
 	}
 
@@ -73,7 +73,7 @@ func createTransactionRecord(c *gin.Context) {
 	ws := workspace.Manager.OpenedWorkspace()
 	if ws == nil {
 		ret.Code = -1
-		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFound
 		return
 	}
 
@@ -109,7 +109,7 @@ func deleteTransactionRecordById(c *gin.Context) {
 	ws := workspace.Manager.OpenedWorkspace()
 	if ws == nil {
 		ret.Code = -1
-		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFound
 		return
 	}
 

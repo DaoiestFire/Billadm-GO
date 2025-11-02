@@ -18,7 +18,7 @@ func queryCategoryByType(c *gin.Context) {
 	ws := workspace.Manager.OpenedWorkspace()
 	if ws == nil {
 		ret.Code = -1
-		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFound
 		return
 	}
 
