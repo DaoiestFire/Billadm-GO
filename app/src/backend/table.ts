@@ -1,13 +1,17 @@
-import type {TrForm} from '@/types/billadm'
+import type {TransactionRecord} from '@/types/billadm'
 import type {EChartsOption} from "echarts"
 import {TransactionTypeToColor, TransactionTypeToLabel} from '@/backend/constant'
 import {formatFloat} from '@/backend/functions'
+import {trDtoToTrForm} from "@/backend/dto-utils.ts";
 
 /**
  * 根据交易记录数据生成 ECharts 折线图配置项，展示按月分类的收入、支出、转账金额趋势。
  * 横轴覆盖从最早交易到最晚交易之间的所有月份，缺失月份自动填充 0。
  */
-export function buildOptionForTradingTrend(data: TrForm[], displayTypes: string[]): EChartsOption {
+export function buildOptionForTradingTrend(trList: TransactionRecord[], displayTypes: string[]): EChartsOption {
+
+    const data = trList.map(tr => trDtoToTrForm(tr));
+
     const filteredData = data.filter(item => displayTypes.includes(item.type))
 
     if (!filteredData || filteredData.length === 0) {
@@ -36,8 +40,8 @@ export function buildOptionForTradingTrend(data: TrForm[], displayTypes: string[
 
     filteredData.forEach(item => {
         const date = item.time
-        const year = date.getFullYear()
-        const month = date.getMonth() + 1
+        const year = date.year()
+        const month = date.month() + 1
 
         if (year < minYear || (year === minYear && month < minMonth)) {
             minYear = year
@@ -69,7 +73,7 @@ export function buildOptionForTradingTrend(data: TrForm[], displayTypes: string[
 
     filteredData.forEach(item => {
         const date = item.time
-        const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+        const key = `${date.year()}-${String(date.month() + 1).padStart(2, '0')}`
         const type = item.type
         const amount = item.price
 
@@ -82,7 +86,7 @@ export function buildOptionForTradingTrend(data: TrForm[], displayTypes: string[
     const seriesDataMap = new Map<string, number[]>(
         displayTypes.map(type => [
             type,
-            xAxisData.map(month => monthlyData.get(month)![type])
+            xAxisData.map(month => monthlyData.get(month)[type])
         ])
     )
 
@@ -127,16 +131,9 @@ export function buildOptionForTradingTrend(data: TrForm[], displayTypes: string[
 
 /**
  * 根据交易记录数据生成 ECharts 饼图配置项，展示指定交易类型下各消费类别的金额分布。
- *
- * @param {TrForm[]} data - 交易记录对象数组
- * @param {string} transactionType - 交易类型，取值为 'income', 'expense', 'transfer' 之一
- * @returns {Object} ECharts 的 option 配置对象
- *
- * @example
- * const option = buildOptionForTransactionDistribution(transactionData, 'expense')
- * chart.setOption(option)
  */
-export function buildOptionForTransactionDistribution(data: TrForm[], transactionType: string): EChartsOption {
+export function buildOptionForTransactionDistribution(trList: TransactionRecord[], transactionType: string): EChartsOption {
+    const data = trList.map(tr => trDtoToTrForm(tr));
     const filteredData = data.filter(item => item.type === transactionType)
 
     const categoryMap = new Map<string, number>()

@@ -117,14 +117,15 @@ const refreshTable = async () => {
   const trTotalCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
     tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange)
-  }
+  };
   trTotal.value = await getTrTotalOnCondition(trTotalCondition);
+  console.log(currentPage.value)
   const trCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
     tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange),
     offset: pageSize.value * (currentPage.value - 1),
     limit: pageSize.value
-  }
+  };
   tableData.value = await getTrOnCondition(trCondition);
 }
 
@@ -182,19 +183,19 @@ const onConfirm = async () => {
   closeTrDrawer();
 }
 
-/**
- * 查询条件，账本，当前页码改变，页数改变都需要刷新表格
- */
-watch(() => [
-      trQueryConditionStore.timeRange,
-      ledgerStore.currentLedgerId,
-      currentPage.value,
-      pageSize.value
-    ],
-    async () => {
-      await refreshTable();
-    }, {immediate: true}
-);
+// 查询条件变化 → 重置分页 + 刷新
+watch(() => [trQueryConditionStore.timeRange, ledgerStore.currentLedgerId], async () => {
+  if (currentPage.value !== 1) {
+    currentPage.value = 1;
+    return
+  }
+  await refreshTable();
+}, {immediate: true});
+
+// 分页变化 → 仅刷新
+watch(() => [currentPage.value, pageSize.value], async () => {
+  await refreshTable();
+});
 /**
  * 交易类型变化时要重新刷新分类列表并如果当前分类为空则选择第一个分类作为分类
  * 如果当前分类不为空则选择查看分类是否在列表中，不在列表中则需要选择第一个分类作为分类

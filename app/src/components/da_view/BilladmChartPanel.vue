@@ -27,13 +27,13 @@ import {computed, ref} from 'vue';
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
 import {useCssVariables} from "@/backend/css.ts";
 import {buildOptionForTradingTrend, buildOptionForTransactionDistribution} from "@/backend/table.ts";
-import type {TrForm} from "@/types/billadm";
+import type {TransactionRecord} from "@/types/billadm";
 
 const {uiSizeMenuWidth} = useCssVariables();
 
 const props = defineProps<{
   title: string
-  data: TrForm[]
+  data: TransactionRecord[]
 }>();
 
 const tradingTrendChecked = ref(['income', 'expense', 'transfer'])

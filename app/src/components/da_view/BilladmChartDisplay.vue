@@ -21,27 +21,28 @@
 import {computed} from 'vue';
 import BilladmChartPanel from "@/components/da_view/BilladmChartPanel.vue";
 import BilladmFullscreen from "@/components/common/BilladmFullScreen.vue";
+import type {TransactionRecord} from "@/types/billadm";
 
-const props = defineProps({
-  trFormList: {
-    type: Array,
-    required: true
-  },
-  columns: {
-    type: Number,
-    default: 2
-  }
-});
+interface Props {
+  trList: TransactionRecord[]
+  columns?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  columns: 2
+})
 
 const charts = computed(() => {
   const charts = [];
   charts.push({
     title: "交易走势",
-    data: props.trFormList,
+    data: props.trList,
+    isFullscreen: false
   });
   charts.push({
     title: "消费分布",
-    data: props.trFormList,
+    data: props.trList,
+    isFullscreen: false
   });
   return charts;
 });
