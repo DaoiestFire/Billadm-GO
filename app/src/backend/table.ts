@@ -105,11 +105,11 @@ export function buildOptionForTradingTrend(trList: TransactionRecord[], displayT
             if (!data) return 0;
             switch (type) {
                 case 'income':
-                    return data.income;
+                    return formatFloat(data.income);
                 case 'expense':
-                    return data.expense;
+                    return formatFloat(data.expense);
                 case 'transfer':
-                    return data.transfer;
+                    return formatFloat(data.transfer);
                 default:
                     return 0;
             }

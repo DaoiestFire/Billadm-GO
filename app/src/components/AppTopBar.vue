@@ -40,8 +40,8 @@ const onMaximize = () => {
   window.electronAPI.maximizeWindow();
 }
 
-const onClose = async () => {
-  await exitApp()
+const onClose = () => {
+  exitApp();
   window.electronAPI.closeWindow();
 }
 </script>
