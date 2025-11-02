@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, type CSSProperties, ref, watch} from 'vue';
+import {type CSSProperties, ref, watch} from 'vue';
 import TransactionRecordTable from '@/components/tr_view/TransactionRecordTable.vue';
 import {TimeRangePresets, TimeRangeTypeLabels} from "@/backend/constant.ts";
 import type {TransactionRecord, TrForm, TrQueryCondition} from "@/types/billadm";
@@ -98,6 +98,8 @@ import {convertToUnixTimeRange, getNextPeriod, getPrevPeriod} from "@/backend/ti
 import {
   createTransactionRecord,
   deleteTransactionRecord,
+  getCategoryByType,
+  getTagsByCategory,
   getTrOnCondition,
   getTrTotalOnCondition,
   updateTransactionRecord
@@ -105,9 +107,9 @@ import {
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 import dayjs from "dayjs";
-import {useCategoryStore} from "@/stores/categoryStore.ts";
 import {useTagStore} from "@/stores/tagStore.ts";
 import {trDtoToTrForm, trFormToTrDto} from "@/backend/dto-utils.ts";
+import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
 
 const {majorBgColor} = useCssVariables();
 
@@ -119,7 +121,6 @@ const contentStyle: CSSProperties = {
 
 const ledgerStore = useLedgerStore();
 const trQueryConditionStore = useTrQueryConditionStore();
-const categoryStore = useCategoryStore();
 const tagStore = useTagStore();
 
 const goToPrevious = () => {
@@ -156,20 +157,23 @@ const refreshTable = async () => {
   tableData.value = await getTrOnCondition(trCondition);
 }
 
+const defaultTrForm: TrForm = {
+  id: '',
+  price: 0,
+  type: 'expense',
+  category: '',
+  description: '-',
+  tags: [],
+  time: dayjs()
+};
 const openTrDrawer = ref(false);
 const drawerTitle = ref('');
 const trForm = ref<TrForm>({} as TrForm);
-
-const categories = computed(() => {
-  return categoryStore.getCategoryNamesByType(trForm.value.type);
-})
-
-const tags = computed(() => {
-  return tagStore.getTagNamesByCategory(trForm.value.category);
-})
+const categories = ref<DefaultOptionType[]>([]);
+const tags = ref<DefaultOptionType[]>([]);
 
 const createTr = () => {
-  resetTrForm();
+  trForm.value.type = 'expense';
   drawerTitle.value = '新增消费记录';
   openTrDrawer.value = true;
 }
@@ -186,20 +190,8 @@ const deleteTr = async (tr: TransactionRecord) => {
 }
 
 const closeTrDrawer = () => {
-  resetTrForm();
+  trForm.value = defaultTrForm;
   openTrDrawer.value = false;
-}
-
-const resetTrForm = () => {
-  trForm.value = {
-    id: '',
-    price: 0,
-    type: 'expense',
-    category: '',
-    description: '-',
-    tags: [],
-    time: dayjs()
-  };
 }
 
 const onConfirm = async () => {
@@ -224,7 +216,28 @@ watch(() => [
     ],
     async () => {
       await refreshTable();
-    }, {immediate: true});
+    }, {immediate: true}
+);
+
+watch(() => trForm.value.type, async () => {
+      const categoryList = await getCategoryByType(trForm.value.type);
+      categories.value = categoryList.map(category => {
+        return {
+          value: category.name,
+        };
+      });
+    }, {immediate: true}
+);
+
+watch(() => trForm.value.category, async () => {
+      const tagList = await getTagsByCategory(trForm.value.category);
+      tags.value = tagList.map(tag => {
+        return {
+          value: tag.name,
+        };
+      });
+    }, {immediate: true}
+);
 </script>
 
 <style scoped>

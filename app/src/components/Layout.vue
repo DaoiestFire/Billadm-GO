@@ -24,8 +24,6 @@
 import {type CSSProperties, onMounted, ref} from "vue";
 import {useCssVariables} from "@/backend/css.ts";
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
-import {useCategoryStore} from "@/stores/categoryStore.ts";
-import {useTagStore} from "@/stores/tagStore.ts";
 import {openWorkspace} from "@/backend/api/workspace.ts";
 import NotificationUtil from "@/backend/notification.ts";
 
@@ -41,8 +39,6 @@ const contentStyle: CSSProperties = {
 };
 
 const ledgerStore = useLedgerStore();
-const categoryStore = useCategoryStore();
-const tagStore = useTagStore();
 
 const showWorkspaceSelect = ref(true);
 
@@ -66,8 +62,6 @@ const initWorkspace = async () => {
     window.electronAPI.setWorkspace(ledgerStore.workspaceStatus.workspaceDir);
   }
   await ledgerStore.init();
-  await categoryStore.refreshCategory();
-  await tagStore.refreshTag();
 }
 
 onMounted(initWorkspace)

@@ -1,7 +1,5 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import {queryCategory} from "@/backend/api/category.ts"
-import NotificationUtil from "@/backend/notification.ts"
 import type {Category} from "@/types/billadm"
 
 export const useCategoryStore = defineStore('category', () => {
@@ -30,20 +28,11 @@ export const useCategoryStore = defineStore('category', () => {
         }) || [];
     };
 
-    // 更新指定 name 的 category
-    const refreshCategory = async () => {
-        try {
-            categories.value = await queryCategory('all')
-        } catch (error) {
-            NotificationUtil.error(`获取全部消费类型失败 ${error}`)
-        }
-    }
 
     // 返回需要在组件中使用的状态、计算属性和方法
     return {
         categories,
         categoryNames,
         getCategoryNamesByType,
-        refreshCategory,
     }
 })
