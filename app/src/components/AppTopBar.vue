@@ -4,7 +4,6 @@
       <a-avatar shape="square" :src="IconBilladm"/>
     </div>
     <div class="left-groups">
-      <billadm-ledger-select/>
     </div>
     <div class="center-groups">
       Billadm-{{ route.name }}
