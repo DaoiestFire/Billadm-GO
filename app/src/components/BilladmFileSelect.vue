@@ -7,6 +7,9 @@
       cancel-text="取消"
       @ok="handleOk"
       @cancel="handleCancel"
+      :closable="false"
+      :esc-to-close="false"
+      :mask-closable="false"
   >
     <a-input-search
         v-model:value="inputPath"

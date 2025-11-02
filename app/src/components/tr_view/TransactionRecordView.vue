@@ -196,7 +196,7 @@ const resetTrForm = () => {
     price: 0,
     type: 'expense',
     category: '',
-    description: '',
+    description: '-',
     tags: [],
     time: dayjs()
   };
