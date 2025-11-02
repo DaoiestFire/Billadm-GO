@@ -190,7 +190,8 @@ watch(() => [trQueryConditionStore.timeRange, ledgerStore.currentLedgerId], asyn
         return;
       }
       await refreshTable();
-    }
+    },
+    {immediate: true}
 );
 
 // 分页变化 → 仅刷新
