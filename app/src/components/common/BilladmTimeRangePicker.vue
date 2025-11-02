@@ -16,6 +16,7 @@
         :picker="timeRangeTypeValue"
         :presets="TimeRangePresets"
         inputReadOnly
+        @change="handleTimeRangeChange"
     />
     <a-button type="text" @click="goToNext">
       <template #icon>
@@ -28,11 +29,11 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {TimeRangeLabelToValue, TimeRangePresets, TimeRangeValueToLabel} from '@/backend/constant.ts';
-import {getNextPeriod, getPrevPeriod, setToEndOfDay, setToStartOfDay} from '@/backend/timerange.ts';
+import {getNextPeriod, getPrevPeriod, normalizeTimeRange} from '@/backend/timerange.ts';
 import {LeftOutlined, RightOutlined} from '@ant-design/icons-vue';
-import {Dayjs} from 'dayjs';
-import type {RangeValue, TimeRangeTypeValue} from '@/types/billadm';
+import type {RangeValue, TimeRangeTypeLabel, TimeRangeTypeValue} from '@/types/billadm';
 import type {SegmentedValue} from "ant-design-vue/es/segmented/src/segmented";
+import type {Dayjs} from "dayjs";
 
 const timeRange = defineModel<RangeValue>('timeRange', {required: true});
 const timeRangeTypeValue = defineModel<TimeRangeTypeValue>('timeRangeType', {required: true});
@@ -58,23 +59,12 @@ const goToNext = () => {
 
 // 切换时间类型时 修改时间范围
 const handleSegmentChange = (val: SegmentedValue) => {
-  let start: Dayjs = timeRange.value[0], end: Dayjs = timeRange.value[1];
-  switch (val) {
-    case '日':
-      start = start.startOf('day');
-      end = end.endOf('day');
-      break;
-    case '月':
-      start = start.startOf('month');
-      end = end.endOf('month');
-      break;
-    case '年':
-      start = start.startOf('year');
-      end = end.endOf('year');
-      break;
-  }
-  timeRange.value = [setToStartOfDay(start), setToEndOfDay(end)];
+  timeRange.value = normalizeTimeRange(timeRange.value, val as TimeRangeTypeLabel);
 };
+
+const handleTimeRangeChange = (val: [string, string] | [Dayjs, Dayjs], _: [string, string]) => {
+  timeRange.value = normalizeTimeRange(val as RangeValue, timeRangeTypeLabel.value);
+}
 </script>
 
 <style scoped>

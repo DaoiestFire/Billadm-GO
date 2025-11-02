@@ -1,5 +1,5 @@
 import dayjs, {Dayjs} from 'dayjs';
-import type {TimeRangeTypeValue} from "@/types/billadm";
+import type {RangeValue, TimeRangeTypeLabel, TimeRangeTypeValue} from "@/types/billadm";
 
 /**
  * 设置日期为当天的开始: 00:00:00.000
@@ -184,11 +184,21 @@ export function convertToUnixTimeRange(timeRange: [Dayjs, Dayjs]): [number, numb
 /**
  * 规范化时间范围：先向前再向后，确保对齐到标准周期
  */
-export function normalizeTimeRange(
-    startDate: Dayjs,
-    endDate: Dayjs,
-    TimeRangeValue: TimeRangeTypeValue
-): [Dayjs, Dayjs] {
-    const prev = getPrevPeriod(startDate, endDate, TimeRangeValue);
-    return getNextPeriod(prev[0], prev[1], TimeRangeValue);
+export function normalizeTimeRange(timeRange: RangeValue, timeRangeType: TimeRangeTypeLabel): [Dayjs, Dayjs] {
+    let start: Dayjs = timeRange[0], end: Dayjs = timeRange[1];
+    switch (timeRangeType) {
+        case '日':
+            start = start.startOf('day');
+            end = end.endOf('day');
+            break;
+        case '月':
+            start = start.startOf('month');
+            end = end.endOf('month');
+            break;
+        case '年':
+            start = start.startOf('year');
+            end = end.endOf('year');
+            break;
+    }
+    return [setToStartOfDay(start), setToEndOfDay(end)];
 }
