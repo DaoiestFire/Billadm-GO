@@ -6,10 +6,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const (
-	ErrOpenedWorkspaceNotFoundMsg = "未打开工作空间"
-)
-
 var Manager = &WsManager{}
 
 type WsManager struct {

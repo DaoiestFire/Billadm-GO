@@ -38,8 +38,8 @@ func hasOpenedWorkspace(c *gin.Context) {
 	defer c.JSON(http.StatusOK, ret)
 
 	if workspace.Manager.OpenedWorkspace() == nil {
-		ret.Code = -1
-		ret.Msg = workspace.ErrOpenedWorkspaceNotFoundMsg
+		ret.Msg = "未打开工作空间"
+		ret.Data = ""
 		return
 	}
 

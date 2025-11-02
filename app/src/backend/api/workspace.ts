@@ -12,7 +12,7 @@ export async function hasOpenedWorkspace(): Promise<WorkspaceStatus> {
     const resp: Result<string> = await api_client.post('/v1/workspace/is-opened');
     api_client.isRespSuccess(resp, 'hasOpenedWorkspace错误: ');
     return {
-        isOpened: resp.code === 0,
+        isOpened: resp.data.length > 0,
         workspaceDir: resp.data,
     };
 }
