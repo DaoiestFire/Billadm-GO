@@ -42,6 +42,7 @@ const trQueryConditionStore = useTrQueryConditionStore();
 const trs = ref<TransactionRecord[]>([]);
 
 const refreshData = async () => {
+  if (!ledgerStore.currentLedgerId) return;
   const trCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
     tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange),
@@ -53,7 +54,8 @@ const refreshData = async () => {
  */
 watch(() => [trQueryConditionStore.timeRange, ledgerStore.currentLedgerId,], async () => {
       await refreshData();
-    }
+    },
+    {immediate: true}
 );
 </script>
 

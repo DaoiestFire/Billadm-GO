@@ -114,6 +114,7 @@ const pageSize = ref<number>(20);
 const trTotal = ref<number>(0);
 
 const refreshTable = async () => {
+  if (!ledgerStore.currentLedgerId) return;
   const trTotalCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
     tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange)
@@ -184,7 +185,6 @@ const onConfirm = async () => {
 
 // 查询条件变化 → 重置分页 + 刷新
 watch(() => [trQueryConditionStore.timeRange, ledgerStore.currentLedgerId], async () => {
-      if (!ledgerStore.currentLedgerId) return;
       if (currentPage.value !== 1) {
         currentPage.value = 1;
         return;
