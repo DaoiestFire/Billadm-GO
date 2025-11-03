@@ -140,7 +140,15 @@ const defaultTrForm: TrForm = {
 };
 const openTrDrawer = ref(false);
 const drawerTitle = ref('');
-const trForm = ref<TrForm>({} as TrForm);
+const trForm = ref<TrForm>({
+  id: defaultTrForm.id,
+  price: defaultTrForm.price,
+  type: defaultTrForm.type,
+  category: defaultTrForm.category,
+  description: defaultTrForm.description,
+  tags: [...defaultTrForm.tags],
+  time: dayjs()
+} as TrForm);
 const categories = ref<DefaultOptionType[]>([]);
 const tags = ref<DefaultOptionType[]>([]);
 
@@ -165,7 +173,15 @@ const deleteTr = async (tr: TransactionRecord) => {
 }
 
 const closeTrDrawer = () => {
-  trForm.value = defaultTrForm;
+  trForm.value = {
+    id: defaultTrForm.id,
+    price: defaultTrForm.price,
+    type: defaultTrForm.type,
+    category: defaultTrForm.category,
+    description: defaultTrForm.description,
+    tags: [...defaultTrForm.tags],
+    time: dayjs()
+  };
   openTrDrawer.value = false;
 }
 
@@ -232,7 +248,7 @@ watch(() => trForm.value.category, async () => {
         };
       });
       const tagNames = tagList.map(tag => tag.name);
-      if (tagNames.length > 0) {
+      if (tagNames.length > 0 && trForm.value.tags) {
         let newTags: string[] = [];
         trForm.value.tags.forEach(tag => {
           if (tag && tagNames.includes(tag)) {
