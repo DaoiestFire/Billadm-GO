@@ -129,24 +129,15 @@ const refreshTable = async () => {
   tableData.value = await getTrOnCondition(trCondition);
 }
 
-const defaultTrForm: TrForm = {
+const openTrDrawer = ref(false);
+const drawerTitle = ref('');
+const trForm = ref<TrForm>({
   id: '',
   price: 0,
   type: '',
   category: '',
   description: '-',
   tags: [],
-  time: dayjs()
-};
-const openTrDrawer = ref(false);
-const drawerTitle = ref('');
-const trForm = ref<TrForm>({
-  id: defaultTrForm.id,
-  price: defaultTrForm.price,
-  type: defaultTrForm.type,
-  category: defaultTrForm.category,
-  description: defaultTrForm.description,
-  tags: [...defaultTrForm.tags],
   time: dayjs()
 } as TrForm);
 const categories = ref<DefaultOptionType[]>([]);
@@ -174,12 +165,12 @@ const deleteTr = async (tr: TransactionRecord) => {
 
 const closeTrDrawer = () => {
   trForm.value = {
-    id: defaultTrForm.id,
-    price: defaultTrForm.price,
-    type: defaultTrForm.type,
-    category: defaultTrForm.category,
-    description: defaultTrForm.description,
-    tags: [...defaultTrForm.tags],
+    id: '',
+    price: 0,
+    type: '',
+    category: '',
+    description: '-',
+    tags: [],
     time: dayjs()
   };
   openTrDrawer.value = false;
