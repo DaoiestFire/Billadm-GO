@@ -66,8 +66,8 @@
       </a-form>
       <template #extra>
         <a-space>
-          <a-button @click="closeTrDrawer" size="large">取消</a-button>
-          <a-button type="primary" @click="onConfirm" size="large">确认</a-button>
+          <a-button @click="closeTrDrawer">取消</a-button>
+          <a-button type="primary" @click="onConfirm">确认</a-button>
         </a-space>
       </template>
     </a-drawer>
