@@ -139,7 +139,7 @@ const trForm = ref<TrForm>({
   description: '-',
   tags: [],
   time: dayjs()
-} as TrForm);
+});
 const categories = ref<DefaultOptionType[]>([]);
 const tags = ref<DefaultOptionType[]>([]);
 
