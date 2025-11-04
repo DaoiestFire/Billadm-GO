@@ -11,11 +11,16 @@
       <a-layout-sider :style="siderStyle" :width="siderWidthSize">
         <app-left-bar/>
       </a-layout-sider>
-      <a-layout-content :style="contentStyle">
-        <a-card style="height: 100%;padding: 16px" :body-style="{padding:'0px',height:'100%'}" :bordered="false">
-          <router-view/>
-        </a-card>
-      </a-layout-content>
+      <a-layout>
+        <a-layout-content :style="contentStyle">
+          <a-card style="height: 100%;padding: 16px" :body-style="{padding:'0px',height:'100%'}" :bordered="false">
+            <router-view/>
+          </a-card>
+        </a-layout-content>
+        <a-layout-footer class="footerStyle">
+
+        </a-layout-footer>
+      </a-layout>
     </a-layout>
   </a-layout>
 </template>
@@ -69,6 +74,12 @@ onMounted(initWorkspace)
 
 <style scoped>
 .headerStyle {
+  height: var(--billadm-size-header-height);
+  background-color: var(--billadm-color-minor-background);
+  padding: 0;
+}
+
+.footerStyle {
   height: var(--billadm-size-header-height);
   background-color: var(--billadm-color-minor-background);
   padding: 0;
