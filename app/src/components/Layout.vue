@@ -18,7 +18,7 @@
           </a-card>
         </a-layout-content>
         <a-layout-footer class="footerStyle">
-
+          <billadm-statistics-footer/>
         </a-layout-footer>
       </a-layout>
     </a-layout>
@@ -31,6 +31,7 @@ import {useCssVariables} from "@/backend/css.ts";
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {openWorkspace} from "@/backend/api/workspace.ts";
 import NotificationUtil from "@/backend/notification.ts";
+import BilladmStatisticsFooter from "@/components/common/BilladmStatisticsFooter.vue";
 
 
 const {minorBgColor, siderWidthSize} = useCssVariables();
@@ -82,6 +83,9 @@ onMounted(initWorkspace)
 .footerStyle {
   height: var(--billadm-size-header-height);
   background-color: var(--billadm-color-minor-background);
-  padding: 0;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
 }
 </style>

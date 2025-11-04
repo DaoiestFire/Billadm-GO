@@ -1,6 +1,12 @@
 import dayjs from "dayjs";
-import type {Category, Tag, TransactionRecord, TrQueryCondition} from "@/types/billadm";
-import {createTrForLedger, deleteTrById, queryTrCountOnCondition, queryTrOnCondition} from "@/backend/api/tr.ts";
+import type {Category, Tag, TransactionRecord, TrQueryCondition, TrStatistics} from "@/types/billadm";
+import {
+    createTrForLedger,
+    deleteTrById,
+    queryTrCountOnCondition,
+    queryTrOnCondition,
+    queryTrStatisticsOnCondition
+} from "@/backend/api/tr.ts";
 import NotificationUtil from "@/backend/notification.ts";
 import {queryCategory} from "@/backend/api/category.ts";
 import {queryTags} from "@/backend/api/tag.ts";
@@ -83,5 +89,17 @@ export async function getTagsByCategory(category: string): Promise<Tag[]> {
     } catch (error) {
         NotificationUtil.error(`查询 ${category} 消费标签失败`, `${error}`);
         return [];
+    }
+}
+
+/**
+ * 统计指标
+ */
+export async function getStatisticsOnCondition(condition: TrQueryCondition): Promise<TrStatistics> {
+    try {
+        return await queryTrStatisticsOnCondition(condition);
+    } catch (error) {
+        NotificationUtil.error('查询统计数据失败', `${error}`);
+        return {income: 0, expense: 0, transfer: 0};
     }
 }
