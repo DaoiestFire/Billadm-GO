@@ -17,7 +17,7 @@
             <router-view/>
           </a-card>
         </a-layout-content>
-        <a-layout-footer class="footerStyle">
+        <a-layout-footer v-if="route.path==='/tr_view'" class="footerStyle">
           <billadm-statistics-footer/>
         </a-layout-footer>
       </a-layout>
@@ -32,6 +32,9 @@ import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {openWorkspace} from "@/backend/api/workspace.ts";
 import NotificationUtil from "@/backend/notification.ts";
 import BilladmStatisticsFooter from "@/components/common/BilladmStatisticsFooter.vue";
+import {useRoute} from "vue-router";
+
+const route = useRoute();
 
 
 const {minorBgColor, siderWidthSize} = useCssVariables();
