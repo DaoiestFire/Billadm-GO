@@ -8,16 +8,16 @@
       <BilladmChart :option="option"/>
     </div>
     <div class="panel-footer">
-      <el-checkbox-group v-if="title==='交易走势'" v-model="tradingTrendChecked">
-        <el-checkbox label="收入" value="income"/>
-        <el-checkbox label="支出" value="expense"/>
-        <el-checkbox label="转账" value="transfer"/>
-      </el-checkbox-group>
-      <el-radio-group v-if="title=== '消费分布'" v-model="transactionTypeChecked">
-        <el-radio value="income">收入</el-radio>
-        <el-radio value="expense">支出</el-radio>
-        <el-radio value="transfer">转账</el-radio>
-      </el-radio-group>
+      <a-checkbox-group
+          v-if="title==='交易走势'"
+          v-model:value="tradingTrendChecked"
+          :options="transactionTypeOptions"
+      />
+      <a-radio-group
+          v-if="title=== '消费分布'"
+          v-model:value="transactionTypeChecked"
+          :options="transactionTypeOptions"
+      />
     </div>
   </div>
 </template>
@@ -35,6 +35,12 @@ const props = defineProps<{
   title: string
   data: TransactionRecord[]
 }>();
+
+const transactionTypeOptions = [
+  {label: '收入', value: 'income'},
+  {label: '支出', value: 'expense'},
+  {label: '转账', value: 'transfer'},
+];
 
 const tradingTrendChecked = ref(['income', 'expense', 'transfer'])
 const transactionTypeChecked = ref('expense')
