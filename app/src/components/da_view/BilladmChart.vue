@@ -8,13 +8,13 @@
 
 <script setup lang="ts">
 import VChart from 'vue-echarts';
+import type {EChartsOption} from "echarts";
 
-const props = defineProps({
-  option: {
-    type: Object,
-    required: true
-  }
-});
+interface Props {
+  option: EChartsOption
+}
+
+defineProps<Props>();
 </script>
 
 <style scoped>
