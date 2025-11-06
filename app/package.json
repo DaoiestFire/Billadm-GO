@@ -20,9 +20,7 @@
   "devDependencies": {
     "@types/node": "^24.6.0",
     "@vitejs/plugin-vue": "^6.0.0",
-    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.1",
-    "element-plus": "2.11.3",
     "jsdom": "^26.1.0",
     "typescript": "~5.9.3",
     "unplugin-auto-import": "^19.3.0",
