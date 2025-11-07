@@ -136,7 +136,7 @@ const trForm = ref<TrForm>({
   price: 0,
   type: '',
   category: '',
-  description: '-',
+  description: '',
   tags: [],
   time: dayjs()
 });
@@ -169,7 +169,7 @@ const closeTrDrawer = () => {
     price: 0,
     type: '',
     category: '',
-    description: '-',
+    description: '',
     tags: [],
     time: dayjs()
   };
@@ -181,6 +181,7 @@ const onConfirm = async () => {
   const tr = trFormToTrDto(trForm.value, ledgerStore.currentLedgerId);
   if (tr.transactionId === '') {
     // 新建
+    if (!tr.description) tr.description = '-';
     await createTransactionRecord(tr);
   } else {
     // 更新
