@@ -1,4 +1,5 @@
 <template>
+  <a-typography-title :level="3" :style="incomeCss">收入</a-typography-title>
   <a-collapse>
     <a-collapse-panel
         v-for="category in incomeCategory"
@@ -16,6 +17,7 @@
       </a-card>
     </a-collapse-panel>
   </a-collapse>
+  <a-typography-title :level="3" :style="expenseCss">支出</a-typography-title>
   <a-collapse>
     <a-collapse-panel
         v-for="category in expenseCategory"
@@ -33,6 +35,7 @@
       </a-card>
     </a-collapse-panel>
   </a-collapse>
+  <a-typography-title :level="3" :style="transferCss">转账</a-typography-title>
   <a-collapse>
     <a-collapse-panel
         v-for="category in transferCategory"
@@ -53,10 +56,24 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, watch} from 'vue';
+import {type CSSProperties, ref, watch} from 'vue';
 import type {Category, Tag, TransactionType} from '@/types/billadm';
 import {useLedgerStore} from '@/stores/ledgerStore.ts';
 import {getCategoryByType, getTagsByCategory} from '@/backend/functions.ts';
+import {TransactionTypeToColor} from "@/backend/constant.ts";
+
+
+const incomeCss: CSSProperties = {
+  color: TransactionTypeToColor.get('income')
+}
+
+const expenseCss: CSSProperties = {
+  color: TransactionTypeToColor.get('expense')
+}
+
+const transferCss: CSSProperties = {
+  color: TransactionTypeToColor.get('transfer')
+}
 
 const ledgerStore = useLedgerStore();
 

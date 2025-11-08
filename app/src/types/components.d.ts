@@ -44,6 +44,7 @@ declare module 'vue' {
     ATabs: typeof import('ant-design-vue/es')['Tabs']
     ATag: typeof import('ant-design-vue/es')['Tag']
     ATypographyText: typeof import('ant-design-vue/es')['TypographyText']
+    ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     BilladmCategoryTagSetting: typeof import('./../components/settings_view/BilladmCategoryTagSetting.vue')['default']
     BilladmChart: typeof import('./../components/da_view/BilladmChart.vue')['default']
     BilladmChartDisplay: typeof import('./../components/da_view/BilladmChartDisplay.vue')['default']
