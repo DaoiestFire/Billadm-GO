@@ -1,58 +1,48 @@
 <template>
-  <a-typography-title :level="3" :style="incomeCss">收入</a-typography-title>
-  <a-collapse>
-    <a-collapse-panel
-        v-for="category in incomeCategory"
-        :key="category.name"
-        :header="category.name"
-    >
-      <a-card>
-        <a-card-grid
-            v-for="tag in category.tags"
-            :key="tag.name"
-            style="width: 25%; text-align: center"
-        >
-          {{ tag.name }}
-        </a-card-grid>
-      </a-card>
-    </a-collapse-panel>
-  </a-collapse>
-  <a-typography-title :level="3" :style="expenseCss">支出</a-typography-title>
-  <a-collapse>
-    <a-collapse-panel
-        v-for="category in expenseCategory"
-        :key="category.name"
-        :header="category.name"
-    >
-      <a-card>
-        <a-card-grid
-            v-for="tag in category.tags"
-            :key="tag.name"
-            style="width: 25%; text-align: center"
-        >
-          {{ tag.name }}
-        </a-card-grid>
-      </a-card>
-    </a-collapse-panel>
-  </a-collapse>
-  <a-typography-title :level="3" :style="transferCss">转账</a-typography-title>
-  <a-collapse>
-    <a-collapse-panel
-        v-for="category in transferCategory"
-        :key="category.name"
-        :header="category.name"
-    >
-      <a-card>
-        <a-card-grid
-            v-for="tag in category.tags"
-            :key="tag.name"
-            style="width: 25%; text-align: center"
-        >
-          {{ tag.name }}
-        </a-card-grid>
-      </a-card>
-    </a-collapse-panel>
-  </a-collapse>
+  <a-row :gutter="16" style="width: 100%">
+    <a-col :span="12">
+      <a-space direction="vertical" style="width: 100%">
+        <div>
+          <a-typography-title :level="3" :style="incomeCss">收入</a-typography-title>
+          <a-collapse>
+            <a-collapse-panel v-for="category in incomeCategory" :key="category.name" :header="category.name">
+              <a-card>
+                <a-card-grid v-for="tag in category.tags" :key="tag.name" style="width: 25%; text-align: center">
+                  {{ tag.name }}
+                </a-card-grid>
+              </a-card>
+            </a-collapse-panel>
+          </a-collapse>
+        </div>
+        <div>
+          <a-typography-title :level="3" :style="transferCss">转账</a-typography-title>
+          <a-collapse>
+            <a-collapse-panel v-for="category in transferCategory" :key="category.name" :header="category.name">
+              <a-card>
+                <a-card-grid v-for="tag in category.tags" :key="tag.name" style="width: 25%; text-align: center">
+                  {{ tag.name }}
+                </a-card-grid>
+              </a-card>
+            </a-collapse-panel>
+          </a-collapse>
+        </div>
+      </a-space>
+    </a-col>
+    <a-col :span="12">
+      <div>
+        <a-typography-title :level="3" :style="expenseCss">支出</a-typography-title>
+        <a-collapse>
+          <a-collapse-panel v-for="category in expenseCategory" :key="category.name" :header="category.name">
+            <a-card>
+              <a-card-grid v-for="tag in category.tags" :key="tag.name" style="width: 25%; text-align: center">
+                {{ tag.name }}
+              </a-card-grid>
+            </a-card>
+          </a-collapse-panel>
+        </a-collapse>
+      </div>
+    </a-col>
+  </a-row>
 </template>
 
 <script lang="ts" setup>
