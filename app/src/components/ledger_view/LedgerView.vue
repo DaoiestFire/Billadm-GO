@@ -15,11 +15,18 @@
       <a-space direction="vertical" style="padding: 16px">
         <a-card v-for="ledger in ledgerStore.ledgers"
                 :key:="ledger.id"
-                title="账本信息"
                 hoverable
         >
-          <template #extra><a href="#">more</a></template>
-          <a-descriptions :title="ledger.name">
+          <a-descriptions :title="ledger.name" layout="vertical">
+            <template #extra>
+              <a-button type="text" :style="editButtonStyle">编辑
+              </a-button>
+              <a-popconfirm title="确认删除吗"
+                            ok-text="确认"
+                            :showCancel="false">
+                <a-button type="text" :style="deleteButtonStyle">删除</a-button>
+              </a-popconfirm>
+            </template>
             <a-descriptions-item label="账本ID">{{ ledger.id }}</a-descriptions-item>
             <a-descriptions-item label="创建时间">{{ formatTimestamp(ledger.createdAt) }}</a-descriptions-item>
             <a-descriptions-item label="更新时间">{{ formatTimestamp(ledger.updatedAt) }}</a-descriptions-item>
@@ -36,8 +43,14 @@ import dayjs from "dayjs";
 import type {CSSProperties} from "vue";
 import {useCssVariables} from "@/backend/css.ts";
 
-const {majorBgColor} = useCssVariables();
+const {majorBgColor, positiveColor, negativeColor} = useCssVariables();
 
+const editButtonStyle: CSSProperties = {
+  color: positiveColor.value,
+};
+const deleteButtonStyle: CSSProperties = {
+  color: negativeColor.value,
+};
 const contentStyle: CSSProperties = {
   backgroundColor: majorBgColor.value,
   "overflow-y": "auto",
