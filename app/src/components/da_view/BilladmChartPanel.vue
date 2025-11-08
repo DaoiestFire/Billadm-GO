@@ -2,15 +2,13 @@
 <template>
   <a-card :title="title" :body-style="bodyCss">
     <template #extra>
-      <a-checkbox-group
-          v-if="title==='交易走势'"
-          v-model:value="tradingTrendChecked"
-          :options="transactionTypeOptions"
+      <a-checkbox-group v-if="title==='交易走势'"
+                        v-model:value="tradingTrendChecked"
+                        :options="transactionTypeOptions"
       />
-      <a-radio-group
-          v-if="title=== '消费分布'"
-          v-model:value="transactionTypeChecked"
-          :options="transactionTypeOptions"
+      <a-radio-group v-if="title=== '消费分布'"
+                     v-model:value="transactionTypeChecked"
+                     :options="transactionTypeOptions"
       />
     </template>
     <BilladmChart :option="option"/>

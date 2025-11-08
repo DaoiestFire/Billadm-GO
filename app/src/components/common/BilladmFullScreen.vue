@@ -76,7 +76,6 @@ const handleDblClick = () => {
   width: 80%;
   height: auto;
   max-width: 1200px;
-  max-height: 800px;
   background: var(--billadm-color-major-background-color);
   border: 1px solid var(--billadm-color-window-border-color);
   border-radius: 16px;
