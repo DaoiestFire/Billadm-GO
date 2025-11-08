@@ -1,5 +1,5 @@
 <template>
-  <a-row :gutter="16" style="width: 100%">
+  <a-row :gutter="16" style="width: 100%;padding: 16px">
     <a-col v-for="(chart, index) in charts" :key="index" :span="colSpan">
       <billadm-fullscreen v-model="chart.isFullscreen" :dblclick="true">
         <billadm-chart-panel :title="chart.title" :data="chart.data"/>

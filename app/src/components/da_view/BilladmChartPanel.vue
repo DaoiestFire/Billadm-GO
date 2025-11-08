@@ -1,6 +1,6 @@
 <!-- components/da_view/BilladmChartPanel.vue -->
 <template>
-  <a-card :title="title" :body-style="bodyCss">
+  <a-card :title="title" :body-style="bodyCss" hoverable>
     <template #extra>
       <a-checkbox-group v-if="title==='交易走势'"
                         v-model:value="tradingTrendChecked"
