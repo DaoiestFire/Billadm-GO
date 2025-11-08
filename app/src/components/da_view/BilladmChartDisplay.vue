@@ -1,70 +1,39 @@
 <template>
-  <div class="billadm-chart-display">
-    <div class="charts-grid" :style="gridStyle">
-      <billadm-fullscreen
-          v-for="(chart, index) in charts"
-          :key="index"
-          v-model="chart.isFullscreen"
-          :dblclick="true">
-        <billadm-chart-panel
-            :title="chart.title"
-            :data="chart.data"
-        />
+  <a-row :gutter="16" style="width: 100%">
+    <a-col v-for="(chart, index) in charts" :key="index" :span="colSpan">
+      <billadm-fullscreen v-model="chart.isFullscreen" :dblclick="true">
+        <billadm-chart-panel :title="chart.title" :data="chart.data"/>
       </billadm-fullscreen>
-    </div>
-  </div>
+    </a-col>
+  </a-row>
 </template>
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import BilladmChartPanel from "@/components/da_view/BilladmChartPanel.vue";
-import BilladmFullscreen from "@/components/common/BilladmFullScreen.vue";
-import type {TransactionRecord} from "@/types/billadm";
+import BilladmChartPanel from '@/components/da_view/BilladmChartPanel.vue';
+import BilladmFullscreen from '@/components/common/BilladmFullScreen.vue';
+import type {TransactionRecord} from '@/types/billadm';
 
 interface Props {
-  trList: TransactionRecord[]
-  columns?: number
+  trList: TransactionRecord[];
+  columns?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  columns: 2
-})
-
-const charts = computed(() => {
-  const charts = [];
-  charts.push({
-    title: "交易走势",
-    data: props.trList,
-    isFullscreen: false
-  });
-  charts.push({
-    title: "消费分布",
-    data: props.trList,
-    isFullscreen: false
-  });
-  return charts;
+  columns: 2,
 });
 
-const gridStyle = computed(() => {
-  return {
-    display: 'grid',
-    'grid-template-columns': `repeat(${props.columns}, 1fr)`,
-    gap: '16px',
-    width: '100%'
-  };
+const charts = computed(() => [
+  {title: '交易走势', data: props.trList, isFullscreen: false},
+  {title: '消费分布', data: props.trList, isFullscreen: false},
+]);
+
+const colSpan = computed(() => {
+  const cols = props.columns;
+  if (cols <= 0 || 24 % cols !== 0) {
+    console.warn(`columns 应为 24 的约数（如 1,2,3,4,6,8,12,24），当前值: ${cols}，回退到 2 列`);
+    return 12;
+  }
+  return 24 / cols;
 });
 </script>
-
-<style scoped>
-.billadm-chart-display {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* 响应式：小屏幕下变为单列 */
-@media (max-width: 768px) {
-  .charts-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-</style>
