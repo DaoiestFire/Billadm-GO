@@ -12,7 +12,7 @@
       </div>
     </a-layout-header>
     <a-layout-content :style="contentStyle">
-      <a-space direction="vertical" style="padding: 16px">
+      <div class="card-grid">
         <a-card v-for="ledger in ledgerStore.ledgers"
                 :key:="ledger.id"
                 hoverable
@@ -27,12 +27,11 @@
                 <a-button type="text" :style="deleteButtonStyle">删除</a-button>
               </a-popconfirm>
             </template>
-            <a-descriptions-item label="账本ID">{{ ledger.id }}</a-descriptions-item>
             <a-descriptions-item label="创建时间">{{ formatTimestamp(ledger.createdAt) }}</a-descriptions-item>
             <a-descriptions-item label="更新时间">{{ formatTimestamp(ledger.updatedAt) }}</a-descriptions-item>
           </a-descriptions>
         </a-card>
-      </a-space>
+      </div>
     </a-layout-content>
   </a-layout>
 </template>
@@ -97,5 +96,12 @@ const formatTimestamp = (ts: number) => {
 .right-groups {
   display: flex;
   gap: 8px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 16px;
+  padding: 16px;
 }
 </style>
