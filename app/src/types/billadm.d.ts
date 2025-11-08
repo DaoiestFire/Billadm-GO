@@ -126,3 +126,5 @@ export interface WorkspaceStatus {
 type RangeValue = [Dayjs, Dayjs];
 type TimeRangeTypeValue = 'date' | 'month' | 'year';
 type TimeRangeTypeLabel = '日' | '月' | '年';
+
+type TransactionType = 'income' | 'expense' | 'transfer';
