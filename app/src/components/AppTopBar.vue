@@ -16,7 +16,7 @@
       <a-button type="text" @click="onMaximize">
         <BorderOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
       </a-button>
-      <a-button type="text" @click="onClose">
+      <a-button class="closeButton" type="text" @click="onClose">
         <CloseOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
       </a-button>
     </div>
@@ -90,5 +90,10 @@ const onClose = () => {
   justify-content: center;
   gap: 8px;
   margin-right: 8px;
+}
+
+.closeButton.ant-btn:hover {
+  background-color: #f5222d;
+  color: white;
 }
 </style>
