@@ -1,40 +1,97 @@
 -- 创建账本表
 CREATE TABLE IF NOT EXISTS tbl_billadm_ledger
 (
-    id         TEXT PRIMARY KEY,
-    name       TEXT    NOT NULL,
-    created_at INTEGER NOT NULL,
-    updated_at INTEGER NOT NULL
+    id
+    TEXT
+    PRIMARY
+    KEY,
+    name
+    TEXT
+    NOT
+    NULL,
+    created_at
+    INTEGER
+    NOT
+    NULL,
+    updated_at
+    INTEGER
+    NOT
+    NULL
 );
 
 -- 创建交易记录表
 CREATE TABLE IF NOT EXISTS tbl_billadm_transaction_record
 (
-    transaction_id   TEXT PRIMARY KEY,
-    ledger_id        TEXT    NOT NULL,
-    price            REAL    NOT NULL,
-    transaction_type TEXT    NOT NULL,
-    category         TEXT    NOT NULL,
-    description      TEXT,
-    transaction_at   INTEGER NOT NULL,
-    created_at       INTEGER NOT NULL,
-    updated_at       INTEGER NOT NULL
+    transaction_id
+    TEXT
+    PRIMARY
+    KEY,
+    ledger_id
+    TEXT
+    NOT
+    NULL,
+    price
+    REAL
+    NOT
+    NULL,
+    transaction_type
+    TEXT
+    NOT
+    NULL,
+    category
+    TEXT
+    NOT
+    NULL,
+    description
+    TEXT,
+    transaction_at
+    INTEGER
+    NOT
+    NULL,
+    created_at
+    INTEGER
+    NOT
+    NULL,
+    updated_at
+    INTEGER
+    NOT
+    NULL
 );
 
 -- 创建交易记录标签表
 CREATE TABLE IF NOT EXISTS tbl_billadm_transaction_record_tag
 (
-    ledger_id      TEXT NOT NULL,
-    transaction_id TEXT NOT NULL,
-    tag            TEXT NOT NULL
+    ledger_id
+    TEXT
+    NOT
+    NULL,
+    transaction_id
+    TEXT
+    NOT
+    NULL,
+    tag
+    TEXT
+    NOT
+    NULL
 );
 
 -- 创建消费分类表
 CREATE TABLE IF NOT EXISTS tbl_billadm_category
 (
-    name             TEXT PRIMARY KEY,
-    scope            TEXT NOT NULL,
-    transaction_type TEXT NOT NULL DEFAULT ''
+    name
+    TEXT
+    PRIMARY
+    KEY,
+    scope
+    TEXT
+    NOT
+    NULL,
+    transaction_type
+    TEXT
+    NOT
+    NULL
+    DEFAULT
+    ''
 );
 
 -- 更新内置消费分类
@@ -49,6 +106,7 @@ WHERE name in ('餐饮美食',
                '人情往来',
                '教育学习',
                '工资奖金',
+               '补贴补助',
                '退税退款',
                '二手转卖',
                '彩票收入',
@@ -67,6 +125,7 @@ VALUES ('餐饮美食', 'system', 'expense'),
        ('人情往来', 'system', 'expense'),
        ('教育学习', 'system', 'expense'),
        ('工资奖金', 'system', 'income'),
+       ('补贴补助', 'system', 'income'),
        ('退税退款', 'system', 'income'),
        ('二手转卖', 'system', 'income'),
        ('彩票收入', 'system', 'income'),
@@ -78,11 +137,26 @@ VALUES ('餐饮美食', 'system', 'expense'),
 -- 创建消费标签表
 CREATE TABLE IF NOT EXISTS tbl_billadm_tag
 (
-    name     TEXT NOT NULL,
-    scope    TEXT NOT NULL,
-    category TEXT NOT NULL DEFAULT '',
-    UNIQUE (name, scope, category)
-);
+    name
+    TEXT
+    NOT
+    NULL,
+    scope
+    TEXT
+    NOT
+    NULL,
+    category
+    TEXT
+    NOT
+    NULL
+    DEFAULT
+    '',
+    UNIQUE
+(
+    name,
+    scope,
+    category
+) );
 
 -- 更新内置的消费标签
 DELETE
@@ -106,6 +180,7 @@ WHERE name in ('三餐',
                '家居',
                '书籍',
                '礼物',
+               '玩具',
                '宠物',
                '游戏',
                '快递',
@@ -155,6 +230,7 @@ VALUES ('三餐', 'system', '餐饮美食'),
        ('家居', 'system', '购物消费'),
        ('书籍', 'system', '购物消费'),
        ('礼物', 'system', '购物消费'),
+       ('玩具', 'system', '购物消费'),
        ('宠物', 'system', '购物消费'),
        ('游戏', 'system', '购物消费'),
        ('快递', 'system', '购物消费'),
