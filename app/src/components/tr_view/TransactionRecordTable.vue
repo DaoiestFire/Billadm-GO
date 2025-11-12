@@ -6,7 +6,9 @@
       </template>
 
       <template v-else-if="column.dataIndex==='transactionType'">
-        {{ formatTransactionType(record.transactionType) }}
+        <a-typography-text :style="{color: TransactionTypeToColor.get(record.transactionType)}">
+          {{ formatTransactionType(record.transactionType) }}
+        </a-typography-text>
       </template>
 
       <template v-else-if="column.dataIndex === 'tags'">
@@ -40,6 +42,7 @@ import {formatTimestamp} from "@/backend/functions.ts";
 import {useCssVariables} from "@/backend/css.ts";
 import type {CSSProperties} from "vue";
 import type {ColumnsType} from "ant-design-vue/es/table";
+import {TransactionTypeToColor} from "@/backend/constant.ts";
 
 const {positiveColor, negativeColor} = useCssVariables();
 const editButtonStyle: CSSProperties = {
