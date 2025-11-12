@@ -201,8 +201,9 @@ export function buildOptionForTransactionDistribution(trList: TransactionRecord[
             avoidLabelOverlap: false,
             label: {
                 show: true,
-                formatter: '{b}\n{c} ({d}%)',
-                fontSize: 12,
+                alignTo: 'labelLine',
+                formatter: '{b}\n{c}\n({d}%)',
+                fontSize: 12
             },
             emphasis: {
                 label: {
@@ -213,9 +214,8 @@ export function buildOptionForTransactionDistribution(trList: TransactionRecord[
             },
             labelLine: {
                 show: true,
-                smooth: true,
-                length: 8,
-                length2: 10
+                length: 20,
+                length2: 50
             },
             data: seriesData
         }]
