@@ -49,9 +49,11 @@ const {majorBgColor, positiveColor, negativeColor} = useCssVariables();
 const editButtonStyle: CSSProperties = {
   color: positiveColor.value,
 };
+
 const deleteButtonStyle: CSSProperties = {
   color: negativeColor.value,
 };
+
 const contentStyle: CSSProperties = {
   backgroundColor: majorBgColor.value,
   "overflow-y": "auto",
@@ -60,12 +62,9 @@ const contentStyle: CSSProperties = {
 
 const ledgerStore = useLedgerStore();
 
-
 const formatTimestamp = (ts: number) => {
   return dayjs(ts * 1000).format('YYYY-MM-DD HH:mm:ss');
 }
-
-
 </script>
 
 <style scoped>
