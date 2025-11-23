@@ -13,11 +13,7 @@
 
       <template v-else-if="column.dataIndex === 'tags'">
         <span>
-          <a-tag
-              v-for="tag in record.tags"
-              :key="tag"
-              :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-          >
+          <a-tag v-for="tag in record.tags" :key="tag" color="geekblue">
             {{ tag }}
           </a-tag>
         </span>
