@@ -115,17 +115,22 @@ const trTotal = ref<number>(0);
 
 const refreshTable = async () => {
   if (!ledgerStore.currentLedgerId) return;
+
   const trTotalCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
-    tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange)
   };
+  if (trQueryConditionStore.timeRange) {
+    trTotalCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
+  }
   trTotal.value = await getTrTotalOnCondition(trTotalCondition);
   const trCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
-    tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange),
     offset: pageSize.value * (currentPage.value - 1),
     limit: pageSize.value
   };
+  if (trQueryConditionStore.timeRange) {
+    trCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
+  }
   tableData.value = await getTrOnCondition(trCondition);
 }
 

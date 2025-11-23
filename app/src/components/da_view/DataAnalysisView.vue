@@ -45,7 +45,9 @@ const refreshData = async () => {
   if (!ledgerStore.currentLedgerId) return;
   const trCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
-    tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange),
+  }
+  if (trQueryConditionStore.timeRange) {
+    trCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
   }
   trs.value = await getTrOnCondition(trCondition);
 };

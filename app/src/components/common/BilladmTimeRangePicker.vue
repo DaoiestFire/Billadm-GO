@@ -49,11 +49,13 @@ const timeRangeTypeLabel = computed({
 
 // 上一周期
 const goToPrevious = () => {
+  if (!timeRange.value) return;
   timeRange.value = getPrevPeriod(timeRange.value[0], timeRange.value[1], timeRangeTypeValue.value);
 };
 
 // 下一周期
 const goToNext = () => {
+  if (!timeRange.value) return;
   timeRange.value = getNextPeriod(timeRange.value[0], timeRange.value[1], timeRangeTypeValue.value);
 };
 
@@ -63,6 +65,10 @@ const handleSegmentChange = (val: SegmentedValue) => {
 };
 
 const handleTimeRangeChange = (val: [string, string] | [Dayjs, Dayjs], _: [string, string]) => {
+  if (!val) {
+    timeRange.value = undefined;
+    return;
+  }
   timeRange.value = normalizeTimeRange(val as RangeValue, timeRangeTypeLabel.value);
 }
 </script>

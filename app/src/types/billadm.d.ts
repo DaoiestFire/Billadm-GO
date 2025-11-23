@@ -123,7 +123,7 @@ export interface WorkspaceStatus {
 /**
  * 时间范围类型 时间范围标签类型 时间范围值类型
  */
-type RangeValue = [Dayjs, Dayjs];
+type RangeValue = [Dayjs, Dayjs] | undefined;
 type TimeRangeTypeValue = 'date' | 'month' | 'year';
 type TimeRangeTypeLabel = '日' | '月' | '年';
 

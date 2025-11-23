@@ -184,7 +184,8 @@ export function convertToUnixTimeRange(timeRange: [Dayjs, Dayjs]): [number, numb
 /**
  * 规范化时间范围：先向前再向后，确保对齐到标准周期
  */
-export function normalizeTimeRange(timeRange: RangeValue, timeRangeType: TimeRangeTypeLabel): [Dayjs, Dayjs] {
+export function normalizeTimeRange(timeRange: RangeValue, timeRangeType: TimeRangeTypeLabel): [Dayjs, Dayjs] | undefined {
+    if (!timeRange) return undefined;
     let start: Dayjs = timeRange[0], end: Dayjs = timeRange[1];
     switch (timeRangeType) {
         case '日':
