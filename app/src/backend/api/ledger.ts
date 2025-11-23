@@ -15,6 +15,12 @@ export async function createLedgerByName(name: string): Promise<string> {
     return resp.data;
 }
 
+export async function modifyLedgerNameById(id: string, name: string): Promise<string> {
+    const resp: Result<string> = await api_client.post('/v1/ledger/modify-ledger-name', {id, name});
+    api_client.isRespSuccess(resp, 'modifyLedgerNameById错误: ');
+    return resp.data;
+}
+
 export async function deleteLedgerById(id: string): Promise<void> {
     const resp: Result = await api_client.post('/v1/ledger/delete-ledger', {
         'ledgerId': id,

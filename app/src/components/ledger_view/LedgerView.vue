@@ -17,17 +17,27 @@
         >
           <a-descriptions :title="ledger.name" layout="vertical">
             <template #extra>
-              <a-button type="text" :style="editButtonStyle" @click="modifyLedgerName(ledger.name)">编辑</a-button>
-              <a-popconfirm title="确认删除吗"
-                            ok-text="确认"
-                            :showCancel="false"
-                            @confirm="ledgerStore.deleteLedger(ledger.id)"
+              <a-button
+                  type="text"
+                  :style="editButtonStyle"
+                  @click="modifyLedgerName(ledger.id,ledger.name)">
+                编辑
+              </a-button>
+              <a-popconfirm
+                  title="确认删除吗"
+                  ok-text="确认"
+                  :showCancel="false"
+                  @confirm="ledgerStore.deleteLedger(ledger.id)"
               >
                 <a-button type="text" :style="deleteButtonStyle">删除</a-button>
               </a-popconfirm>
             </template>
-            <a-descriptions-item label="创建时间">{{ formatTimestamp(ledger.createdAt) }}</a-descriptions-item>
-            <a-descriptions-item label="更新时间">{{ formatTimestamp(ledger.updatedAt) }}</a-descriptions-item>
+            <a-descriptions-item label="创建时间">
+              {{ formatTimestamp(ledger.createdAt) }}
+            </a-descriptions-item>
+            <a-descriptions-item label="更新时间">
+              {{ formatTimestamp(ledger.updatedAt) }}
+            </a-descriptions-item>
           </a-descriptions>
         </a-card>
       </div>
@@ -76,6 +86,7 @@ const formatTimestamp = (ts: number) => {
 
 const showModal = ref<boolean>(false);
 const modalTitle = ref<string>("");
+const ledgerId = ref<string>("");
 const ledgerName = ref<string>("");
 
 const createLedger = () => {
@@ -84,8 +95,9 @@ const createLedger = () => {
   showModal.value = true;
 };
 
-const modifyLedgerName = (name: string) => {
+const modifyLedgerName = (id: string, name: string) => {
   modalTitle.value = "修改账本名称";
+  ledgerId.value = id;
   ledgerName.value = name;
   showModal.value = true;
 };
@@ -95,7 +107,7 @@ const handleOk = async () => {
   if (modalTitle.value === "创建账本") {
     await ledgerStore.createLedger(ledgerName.value);
   } else if (modalTitle.value === "修改账本名称") {
-
+    await ledgerStore.modifyLedgerName(ledgerId.value, ledgerName.value);
   }
   showModal.value = false;
 };

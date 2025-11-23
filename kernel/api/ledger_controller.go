@@ -103,8 +103,42 @@ func createLedger(c *gin.Context) {
 	ret.Data = ledgerId
 }
 
-func updateLedger(c *gin.Context) {
+func modifyLedgerName(c *gin.Context) {
+	ret := models.NewResult()
+	defer c.JSON(http.StatusOK, ret)
 
+	ws := workspace.Manager.OpenedWorkspace()
+	if ws == nil {
+		ret.Code = -1
+		ret.Msg = workspace.ErrOpenedWorkspaceNotFound
+		return
+	}
+
+	arg, ok := JsonArg(c, ret)
+	if !ok {
+		return
+	}
+
+	ledgerId, ok := arg["id"].(string)
+	if !ok {
+		ret.Code = -1
+		ret.Msg = "id在请求体中不存在"
+		return
+	}
+
+	ledgerName, ok := arg["name"].(string)
+	if !ok {
+		ret.Code = -1
+		ret.Msg = "name在请求体中不存在"
+		return
+	}
+
+	err := service.GetLedgerService().ModifyLedgerName(ws, ledgerId, ledgerName)
+	if err != nil {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	}
 }
 
 func deleteLedger(c *gin.Context) {

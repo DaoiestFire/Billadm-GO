@@ -32,6 +32,7 @@ func GetLedgerService() LedgerService {
 
 type LedgerService interface {
 	CreateLedger(ws *workspace.Workspace, ledgerName string) (string, error)
+	ModifyLedgerName(ws *workspace.Workspace, ledgerId, ledgerName string) error
 	ListAllLedger(ws *workspace.Workspace) ([]models.Ledger, error)
 	QueryLedgerById(ws *workspace.Workspace, ledgerId string) (*models.Ledger, error)
 	DeleteLedgerById(ws *workspace.Workspace, ledgerId string) error
@@ -61,6 +62,24 @@ func (l *ledgerServiceImpl) CreateLedger(ws *workspace.Workspace, ledgerName str
 
 	ws.GetLogger().Infof("create ledger success, name: %s", ledgerName)
 	return ledger.ID, nil
+}
+
+// ModifyLedgerName 修改指定账本的名称
+func (l *ledgerServiceImpl) ModifyLedgerName(ws *workspace.Workspace, ledgerId, ledgerName string) error {
+	ws.GetLogger().Infof("start to modify ledger name, id: %s, new name: %s", ledgerId, ledgerName)
+
+	ledger := &models.Ledger{
+		ID:   ledgerId,
+		Name: ledgerName,
+	}
+
+	if err := l.ledgerDao.ModifyLedgerName(ws, ledger); err != nil {
+		ws.GetLogger().Errorf("modify ledger name failed, id: %s, err: %v", ledgerId, err)
+		return err
+	}
+
+	ws.GetLogger().Infof("modify ledger name success")
+	return nil
 }
 
 // ListAllLedger 查询所有账本

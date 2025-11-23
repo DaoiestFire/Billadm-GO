@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import {createLedgerByName, deleteLedgerById, queryAllLedgers} from "@/backend/api/ledger.ts"
+import {createLedgerByName, deleteLedgerById, modifyLedgerNameById, queryAllLedgers} from "@/backend/api/ledger.ts"
 import NotificationUtil from "@/backend/notification"
 import {hasOpenedWorkspace} from "@/backend/api/workspace.ts"
 import type {Ledger, WorkspaceStatus} from "@/types/billadm"
@@ -62,11 +62,22 @@ export const useLedgerStore = defineStore('ledger', () => {
     // 删除账本
     const deleteLedger = async (id: string) => {
         try {
-            await deleteLedgerById(id)
-            await refreshLedgers()
-            NotificationUtil.success(`删除账本成功`)
+            await deleteLedgerById(id);
+            await refreshLedgers();
+            NotificationUtil.success(`删除账本成功`);
         } catch (error) {
-            NotificationUtil.error(`删除账本失败`)
+            NotificationUtil.error(`删除账本失败`);
+        }
+    }
+
+    // 修改账本名称
+    const modifyLedgerName = async (id: string, name: string) => {
+        try {
+            await modifyLedgerNameById(id, name);
+            await refreshLedgers();
+            NotificationUtil.success(`修改账本名称为 ${name} 成功`);
+        } catch (error) {
+            NotificationUtil.error(`修改账本名称为 ${name} 成功`, `${error}`);
         }
     }
 
@@ -102,6 +113,7 @@ export const useLedgerStore = defineStore('ledger', () => {
         refreshLedgers,
         createLedger,
         deleteLedger,
+        modifyLedgerName,
         setCurrentLedger,
         refreshWorkspaceStatus,
     }
