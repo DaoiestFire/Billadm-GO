@@ -19,8 +19,7 @@
         >
           <a-descriptions :title="ledger.name" layout="vertical">
             <template #extra>
-              <a-button type="text" :style="editButtonStyle">编辑
-              </a-button>
+              <a-button type="text" :style="editButtonStyle">编辑</a-button>
               <a-popconfirm title="确认删除吗"
                             ok-text="确认"
                             :showCancel="false"
