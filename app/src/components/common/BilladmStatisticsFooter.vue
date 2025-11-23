@@ -42,8 +42,10 @@ const refreshStatisticsData = async () => {
   if (!ledgerStore.currentLedgerId) return;
   const statisticsCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
-    tsRange: convertToUnixTimeRange(trQueryConditionStore.timeRange)
   };
+  if (trQueryConditionStore.timeRange) {
+    statisticsCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
+  }
   data.value = await getStatisticsOnCondition(statisticsCondition);
 }
 
