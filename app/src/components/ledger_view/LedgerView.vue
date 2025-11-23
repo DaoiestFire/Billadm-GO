@@ -23,7 +23,9 @@
               </a-button>
               <a-popconfirm title="确认删除吗"
                             ok-text="确认"
-                            :showCancel="false">
+                            :showCancel="false"
+                            @confirm="ledgerStore.deleteLedger(ledger.id)"
+              >
                 <a-button type="text" :style="deleteButtonStyle">删除</a-button>
               </a-popconfirm>
             </template>
