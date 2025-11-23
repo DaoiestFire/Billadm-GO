@@ -10,13 +10,13 @@ export async function queryAllLedgers(): Promise<Ledger[]> {
 }
 
 export async function createLedgerByName(name: string): Promise<string> {
-    const resp: Result<string> = await api_client.post('/v1/ledger/post', {name});
+    const resp: Result<string> = await api_client.post('/v1/ledger/create-ledger', {name});
     api_client.isRespSuccess(resp, 'createLedgerByName错误: ');
     return resp.data;
 }
 
 export async function deleteLedgerById(id: string): Promise<void> {
-    const resp: Result = await api_client.post('/v1/ledger/delete', {
+    const resp: Result = await api_client.post('/v1/ledger/delete-ledger', {
         'ledgerId': id,
     });
     api_client.isRespSuccess(resp, 'deleteLedgerById错误: ');

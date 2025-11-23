@@ -13,9 +13,9 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/app/exit-app", exitApp)
 	// ledger
 	ginServer.POST("/api/v1/ledger/query-all", queryAllLedgers)
-	ginServer.POST("/api/v1/ledger/post", createLedger)
+	ginServer.POST("/api/v1/ledger/create-ledger", createLedger)
 	ginServer.POST("/api/v1/ledger/put", updateLedger)
-	ginServer.POST("/api/v1/ledger/delete", deleteLedger)
+	ginServer.POST("/api/v1/ledger/delete-ledger", deleteLedger)
 	// transaction record
 	ginServer.POST("/api/v1/tr/query", queryTrOnCondition)
 	ginServer.POST("/api/v1/tr/query-count", queryTrCountOnCondition)
