@@ -7,22 +7,22 @@
 
 账本管理页面
 <div style="text-align: center;">
-  <img alt="账本管理页面" style="width: 50%;" src="./doc/images/账本管理页面.png"/>
+  <img alt="账本管理页面" style="width: 80%;" src="./doc/images/账本管理页面.png"/>
 </div>
 
 消费记录页面
 <div style="text-align: center;">
-  <img alt="消费记录页面" style="width: 50%;" src="./doc/images/消费记录页面.png"/>
+  <img alt="消费记录页面" style="width: 80%;" src="./doc/images/消费记录页面.png"/>
 </div>
 
 数据分析页面
 <div style="text-align: center;">
-  <img alt="数据分析页面" style="width: 50%;" src="./doc/images/数据分析页面.png"/>
+  <img alt="数据分析页面" style="width: 80%;" src="./doc/images/数据分析页面.png"/>
 </div>
 
 设置页面
 <div style="text-align: center;">
-  <img alt="设置页面" style="width: 50%;" src="./doc/images/设置页面.png"/>
+  <img alt="设置页面" style="width: 80%;" src="./doc/images/设置页面.png"/>
 </div>
 
 # 安装
