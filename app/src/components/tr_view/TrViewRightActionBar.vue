@@ -74,8 +74,8 @@ const trFilterForm = ref<TrFilterCondition>({
 });
 
 // ===== 临时输入状态 =====
-const tempCategory = ref(undefined)
-const tempTags = ref([])
+const tempCategory = ref(undefined);
+const tempTags = ref([]);
 
 // 交易类型选项
 const transactionTypeOptions = [
@@ -94,9 +94,7 @@ const tags = ref<DefaultOptionType[]>([]);
 watch(() => trFilterForm.value.transactionTypes, async () => {
       if (!trFilterForm.value.transactionTypes) return;
       const types: string[] = trFilterForm.value.transactionTypes;
-      const promises = types.map(type =>
-          getCategoryByType(type)
-      );
+      const promises = types.map(type => getCategoryByType(type));
       const results = await Promise.all(promises);
       const categoryList: Category[] = results.flat();
       categories.value = categoryList.map(category => {
@@ -126,38 +124,39 @@ const conditions = ref<Condition[]>([])
  * 监听 conditions 变化，同步到过滤条件中
  */
 watch(conditions, () => {
-  const newRecord: Record<string, string[]> = {}
-  conditions.value.forEach(cond => {
-    newRecord[cond.category] = [...cond.tags]
-  })
-  trFilterForm.value.categoryTags = newRecord
-}, {deep: true})
+      const newRecord: Record<string, string[]> = {};
+      conditions.value.forEach(cond => {
+        newRecord[cond.category] = [...cond.tags];
+      })
+      trFilterForm.value.categoryTags = newRecord;
+    }, {deep: true}
+);
 
 // 切换分类时清空标签
 function onCategoryChange() {
-  tempTags.value = []
+  tempTags.value = [];
 }
 
 // 添加条件
 function addCondition() {
-  if (!tempCategory.value) return
+  if (!tempCategory.value) return;
 
-  const category = tempCategory.value
-  const tags = [...tempTags.value] // 深拷贝
+  const category = tempCategory.value;
+  const tags = [...tempTags.value];
 
-  const exists = conditions.value.some(c => c.category === category)
+  const exists = conditions.value.some(c => c.category === category);
   if (exists) {
-    const idx = conditions.value.findIndex(c => c.category === category)
+    const idx = conditions.value.findIndex(c => c.category === category);
     if (conditions.value[idx]) {
-      conditions.value[idx].tags = tags
+      conditions.value[idx].tags = tags;
     }
   } else {
-    conditions.value.push({category, tags})
+    conditions.value.push({category, tags});
   }
 
   // 清空输入
-  tempCategory.value = undefined
-  tempTags.value = []
+  tempCategory.value = undefined;
+  tempTags.value = [];
 }
 </script>
 
