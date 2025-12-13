@@ -32,19 +32,23 @@
       <!-- 分类标签 -->
       <a-divider orientation="left">分类标签</a-divider>
       <a-form-item>
-        <a-button type="primary" @click="addCondition" :disabled="!tempCategory">
-          添加
-        </a-button>
-      </a-form-item>
-      <a-form-item>
-        <a-select
-            v-model:value="tempCategory"
-            :options="categories"
-            placeholder="选择分类"
-            @change="onCategoryChange"
-            style="width: 100%"
-            allow-clear
-        />
+        <a-row :gutter="8" justify="space-between">
+          <a-col :span="18">
+            <a-select
+                v-model:value="tempCategory"
+                :options="categories"
+                placeholder="选择分类"
+                @change="onCategoryChange"
+                style="width: 100%"
+                allow-clear
+            />
+          </a-col>
+          <a-col :span="6">
+            <a-button style="width: 100%" type="primary" @click="addCondition" :disabled="!tempCategory">
+              添加
+            </a-button>
+          </a-col>
+        </a-row>
       </a-form-item>
       <a-form-item>
         <a-select
