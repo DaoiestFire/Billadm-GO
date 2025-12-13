@@ -11,13 +11,19 @@
     </div>
     <div class="right-groups">
       <a-button type="text" @click="onMinimize">
-        <LineOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        <template #icon>
+          <LineOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        </template>
       </a-button>
       <a-button type="text" @click="onMaximize">
-        <BorderOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        <template #icon>
+          <BorderOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        </template>
       </a-button>
       <a-button class="closeButton" type="text" @click="onClose">
-        <CloseOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        <template #icon>
+          <CloseOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+        </template>
       </a-button>
     </div>
   </div>

@@ -1,43 +1,19 @@
 <template>
   <div class="menu-bar">
     <div class="top-groups">
-      <a-button :type="route.path==='/ledger_view' ? 'primary': 'text'" @click="navigate('ledger_view')">
+      <a-button type="primary">
         <template #icon>
-          <BookOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
-        </template>
-      </a-button>
-      <a-button :type="route.path==='/tr_view' ? 'primary': 'text'" @click="navigate('tr_view')">
-        <template #icon>
-          <TransactionOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
-        </template>
-      </a-button>
-      <a-button :type="route.path==='/da_view' ? 'primary': 'text'" @click="navigate('da_view')">
-        <template #icon>
-          <LineChartOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+          <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
         </template>
       </a-button>
     </div>
     <div class="bottom-groups">
-      <a-button :type="route.path==='/settings_view' ? 'primary': 'text'" @click="navigate('settings_view')">
-        <template #icon>
-          <SettingOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
-        </template>
-      </a-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {useRoute, useRouter} from 'vue-router';
-import {BookOutlined, LineChartOutlined, SettingOutlined, TransactionOutlined} from "@ant-design/icons-vue";
-
-
-const router = useRouter()
-const route = useRoute()
-
-const navigate = (path: string) => {
-  router.push(path)
-}
+import {FilterOutlined} from "@ant-design/icons-vue";
 </script>
 
 <style scoped>
