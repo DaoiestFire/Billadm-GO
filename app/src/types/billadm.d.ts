@@ -107,9 +107,17 @@ export interface TrStatistics {
 export interface TrQueryCondition {
     ledgerId: string;
     tsRange?: number[];
-    transactionType?: string[];
+    transactionTypes?: string[];
     offset?: number;
     limit?: number;
+}
+
+/**
+ * 消费记录筛选条件
+ */
+export interface TrFilterCondition {
+    transactionTypes?: string[];
+    categoryTags?: Record<string, string[]>;
 }
 
 /**
