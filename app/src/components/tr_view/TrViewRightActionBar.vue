@@ -1,7 +1,7 @@
 <template>
   <div class="menu-bar">
     <div class="top-groups">
-      <a-button type="primary" @click="openFilterDrawer=true">
+      <a-button :type="conditionLen?'primary':'text'" @click="openFilterDrawer=true">
         <template #icon>
           <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
         </template>
@@ -65,16 +65,30 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 import {FilterOutlined} from "@ant-design/icons-vue";
 import type {Category, TrFilterCondition} from "@/types/billadm";
 import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
 import {getCategoryByType, getTagsByCategory} from "@/backend/functions.ts";
 
+interface Condition {
+  category: string,
+  tags: string[]
+}
+
+const conditions = ref<Condition[]>([])
 const openFilterDrawer = ref(false);
 const trFilterForm = ref<TrFilterCondition>({
   transactionTypes: [],
   categoryTags: {}
+});
+const conditionLen = computed(() => {
+  let cnt = 0;
+  if (trFilterForm.value.transactionTypes) {
+    cnt += trFilterForm.value.transactionTypes.length;
+  }
+  cnt += conditions.value.length;
+  return cnt;
 });
 
 // ===== 临时输入状态 =====
@@ -117,13 +131,6 @@ watch(() => tempCategory.value, async () => {
       });
     }
 );
-
-interface Condition {
-  category: string,
-  tags: string[]
-}
-
-const conditions = ref<Condition[]>([])
 /**
  * 监听 conditions 变化，同步到过滤条件中
  */
