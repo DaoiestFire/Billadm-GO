@@ -76,7 +76,6 @@ const onClose = () => {
 
 /* 左边按钮 将它与后面的元素隔开 */
 .left-groups {
-  margin-left: 8px;
   margin-right: auto;
   display: flex;
   align-items: center;
