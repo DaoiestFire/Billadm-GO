@@ -1,11 +1,13 @@
 <template>
   <div class="menu-bar">
     <div class="top-groups">
-      <a-button :type="conditionLen?'primary':'text'" @click="openFilterDrawer=true">
-        <template #icon>
-          <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
-        </template>
-      </a-button>
+      <a-badge :count="conditionLen" dot>
+        <a-button :type="conditionLen?'primary':'text'" @click="openFilterDrawer=true">
+          <template #icon>
+            <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
+          </template>
+        </a-button>
+      </a-badge>
     </div>
     <div class="bottom-groups">
     </div>
