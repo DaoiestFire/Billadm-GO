@@ -1,7 +1,7 @@
 <template>
   <div class="menu-bar">
     <div class="top-groups">
-      <a-button type="primary">
+      <a-button type="primary" @click="openFilterDrawer=true">
         <template #icon>
           <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
         </template>
@@ -10,10 +10,23 @@
     <div class="bottom-groups">
     </div>
   </div>
+  <a-drawer
+      title="筛选消费记录"
+      :open="openFilterDrawer"
+      @close="openFilterDrawer=false"
+      :body-style="{ paddingBottom: '80px' }"
+      :footer-style="{ textAlign: 'right' }"
+      :closable="false"
+  >
+  </a-drawer>
 </template>
 
 <script setup lang="ts">
+import {ref} from 'vue';
 import {FilterOutlined} from "@ant-design/icons-vue";
+
+const openFilterDrawer = ref(false);
+
 </script>
 
 <style scoped>
