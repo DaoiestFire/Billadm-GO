@@ -3,24 +3,24 @@
     <div class="top-groups">
       <a-button :type="route.path==='/ledger_view' ? 'primary': 'text'" @click="navigate('ledger_view')">
         <template #icon>
-          <BookOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+          <BookOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
         </template>
       </a-button>
       <a-button :type="route.path==='/tr_view' ? 'primary': 'text'" @click="navigate('tr_view')">
         <template #icon>
-          <TransactionOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+          <TransactionOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
         </template>
       </a-button>
       <a-button :type="route.path==='/da_view' ? 'primary': 'text'" @click="navigate('da_view')">
         <template #icon>
-          <LineChartOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+          <LineChartOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
         </template>
       </a-button>
     </div>
     <div class="bottom-groups">
       <a-button :type="route.path==='/settings_view' ? 'primary': 'text'" @click="navigate('settings_view')">
         <template #icon>
-          <SettingOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+          <SettingOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
         </template>
       </a-button>
     </div>

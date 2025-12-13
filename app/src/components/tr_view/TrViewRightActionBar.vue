@@ -3,7 +3,7 @@
     <div class="top-groups">
       <a-button type="primary">
         <template #icon>
-          <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: large"/>
+          <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
         </template>
       </a-button>
     </div>
