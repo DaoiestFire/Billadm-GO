@@ -21,6 +21,9 @@
           <billadm-statistics-footer/>
         </a-layout-footer>
       </a-layout>
+      <a-layout-sider v-if="route.path==='/tr_view'" :style="siderStyle" :width="siderWidthSize">
+        <TrViewRightActionBar/>
+      </a-layout-sider>
     </a-layout>
   </a-layout>
 </template>

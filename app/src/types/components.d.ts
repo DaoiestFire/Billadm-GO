@@ -56,13 +56,16 @@ declare module 'vue' {
     BilladmLedgerSelect: typeof import('./../components/BilladmLedgerSelect.vue')['default']
     BilladmStatisticsFooter: typeof import('./../components/common/BilladmStatisticsFooter.vue')['default']
     BilladmTimeRangePicker: typeof import('./../components/common/BilladmTimeRangePicker.vue')['default']
+    Chart: typeof import('./../components/da_view/Chart.vue')['default']
     DataAnalysisView: typeof import('./../components/da_view/DataAnalysisView.vue')['default']
     Layout: typeof import('./../components/Layout.vue')['default']
     LedgerView: typeof import('./../components/ledger_view/LedgerView.vue')['default']
+    RightActionBar: typeof import('./../components/tr_view/RightActionBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SettingsView: typeof import('./../components/settings_view/SettingsView.vue')['default']
     TransactionRecordTable: typeof import('./../components/tr_view/TransactionRecordTable.vue')['default']
     TransactionRecordView: typeof import('./../components/tr_view/TransactionRecordView.vue')['default']
+    TrViewRightActionBar: typeof import('./../components/tr_view/TrViewRightActionBar.vue')['default']
   }
 }
