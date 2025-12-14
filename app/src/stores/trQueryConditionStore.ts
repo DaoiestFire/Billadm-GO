@@ -7,9 +7,13 @@ export const useTrQueryConditionStore = defineStore('trQueryCondition', () => {
 
     const timeRange = ref<RangeValue>(getThisMonthRange()); // 时间范围
     const timeRangeType = ref('date' as TimeRangeTypeValue); // 时间类型标签
+    const transactionTypes = ref([]);
+    const categoryTags = ref<Record<string, string[]>>({});
 
     return {
         timeRange,
         timeRangeType,
+        transactionTypes,
+        categoryTags
     }
 })
