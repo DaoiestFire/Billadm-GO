@@ -15,7 +15,7 @@
   <a-drawer
       title="筛选消费记录"
       :open="openFilterDrawer"
-      @close="openFilterDrawer=false"
+      @close="closeDrawer"
       :body-style="{ paddingBottom: '80px' }"
       :footer-style="{ textAlign: 'right' }"
       :closable="false"
@@ -84,11 +84,14 @@ import {FilterOutlined} from "@ant-design/icons-vue";
 import type {Category, TrFilterCondition} from "@/types/billadm";
 import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
 import {getCategoryByType, getTagsByCategory} from "@/backend/functions.ts";
+import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 
 interface Condition {
   category: string,
   tags: string[]
 }
+
+const trQueryConditionStore = useTrQueryConditionStore();
 
 const conditions = ref<Condition[]>([])
 const openFilterDrawer = ref(false);
@@ -155,6 +158,16 @@ watch(conditions, () => {
       trFilterForm.value.categoryTags = newRecord;
     }, {deep: true}
 );
+
+function closeDrawer() {
+  if (trFilterForm.value.transactionTypes) {
+    trQueryConditionStore.transactionTypes = trFilterForm.value.transactionTypes;
+  }
+  if (trFilterForm.value.categoryTags) {
+    trQueryConditionStore.categoryTags = trFilterForm.value.categoryTags;
+  }
+  openFilterDrawer.value = false;
+}
 
 // 切换分类时清空标签
 function onCategoryChange() {
