@@ -113,6 +113,14 @@ export interface TrQueryCondition {
 }
 
 /**
+ * 查询消费记录时分类标签条件
+ */
+interface categoryTagsCondition {
+    category: string,
+    tags: string[]
+}
+
+/**
  * 消费记录筛选条件
  */
 export interface TrFilterCondition {

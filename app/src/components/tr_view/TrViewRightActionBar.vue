@@ -62,8 +62,8 @@
             style="width: 100%"
         />
       </a-form-item>
-      <a-form-item v-if="conditions.length>0">
-        <a-list size="small" bordered :data-source="conditions">
+      <a-form-item v-if="trQueryConditionStore.cateTagsConditions.length>0">
+        <a-list size="small" bordered :data-source="trQueryConditionStore.cateTagsConditions">
           <template #renderItem="{ item }">
             <a-list-item>
               <template #actions>
@@ -86,14 +86,8 @@ import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
 import {getCategoryByType, getTagsByCategory} from "@/backend/functions.ts";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 
-interface Condition {
-  category: string,
-  tags: string[]
-}
-
 const trQueryConditionStore = useTrQueryConditionStore();
 
-const conditions = ref<Condition[]>([])
 const openFilterDrawer = ref(false);
 const trFilterForm = ref<TrFilterCondition>({
   transactionTypes: [],
@@ -104,7 +98,7 @@ const conditionLen = computed(() => {
   if (trFilterForm.value.transactionTypes) {
     cnt += trFilterForm.value.transactionTypes.length;
   }
-  cnt += conditions.value.length;
+  cnt += trQueryConditionStore.cateTagsConditions.length;
   return cnt;
 });
 // ===== 临时输入状态 =====
@@ -147,25 +141,8 @@ watch(() => tempCategory.value, async () => {
       });
     }
 );
-/**
- * 监听 conditions 变化，同步到过滤条件中
- */
-watch(conditions, () => {
-      const newRecord: Record<string, string[]> = {};
-      conditions.value.forEach(cond => {
-        newRecord[cond.category] = [...cond.tags];
-      })
-      trFilterForm.value.categoryTags = newRecord;
-    }, {deep: true}
-);
 
 function closeDrawer() {
-  if (trFilterForm.value.transactionTypes) {
-    trQueryConditionStore.transactionTypes = trFilterForm.value.transactionTypes;
-  }
-  if (trFilterForm.value.categoryTags) {
-    trQueryConditionStore.categoryTags = trFilterForm.value.categoryTags;
-  }
   openFilterDrawer.value = false;
 }
 
@@ -181,14 +158,14 @@ function addCondition() {
   const category = tempCategory.value;
   const tags = [...tempTags.value];
 
-  const exists = conditions.value.some(c => c.category === category);
+  const exists = trQueryConditionStore.cateTagsConditions.some(c => c.category === category);
   if (exists) {
-    const idx = conditions.value.findIndex(c => c.category === category);
-    if (conditions.value[idx]) {
-      conditions.value[idx].tags = tags;
+    const idx = trQueryConditionStore.cateTagsConditions.findIndex(c => c.category === category);
+    if (trQueryConditionStore.cateTagsConditions[idx]) {
+      trQueryConditionStore.cateTagsConditions[idx].tags = tags;
     }
   } else {
-    conditions.value.push({category, tags});
+    trQueryConditionStore.cateTagsConditions.push({category, tags});
   }
 
   // 清空输入
@@ -198,9 +175,9 @@ function addCondition() {
 
 // 删除条件
 function deleteCondition(category: string) {
-  const idx = conditions.value.findIndex(c => c.category === category);
-  if (conditions.value[idx]) {
-    conditions.value.splice(idx, 1);
+  const idx = trQueryConditionStore.cateTagsConditions.findIndex(c => c.category === category);
+  if (trQueryConditionStore.cateTagsConditions[idx]) {
+    trQueryConditionStore.cateTagsConditions.splice(idx, 1);
   }
 }
 </script>
