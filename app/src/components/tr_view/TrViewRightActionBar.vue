@@ -20,12 +20,12 @@
       :footer-style="{ textAlign: 'right' }"
       :closable="false"
   >
-    <a-form :model="trFilterForm" layout="vertical">
+    <a-form layout="vertical">
       <!-- 交易类型 -->
       <a-divider orientation="left">交易类型</a-divider>
       <a-form-item>
         <a-select
-            v-model:value="trFilterForm.transactionTypes"
+            v-model:value="transactionTypes"
             :options="transactionTypeOptions"
             mode="multiple"
             placeholder="请选择交易类型"
@@ -62,8 +62,8 @@
             style="width: 100%"
         />
       </a-form-item>
-      <a-form-item v-if="trQueryConditionStore.cateTagsConditions.length>0">
-        <a-list size="small" bordered :data-source="trQueryConditionStore.cateTagsConditions">
+      <a-form-item v-if="cateTagsConditions.length>0">
+        <a-list size="small" bordered :data-source="cateTagsConditions">
           <template #renderItem="{ item }">
             <a-list-item>
               <template #actions>
@@ -81,7 +81,7 @@
 <script setup lang="ts">
 import {computed, ref, watch} from 'vue';
 import {FilterOutlined} from "@ant-design/icons-vue";
-import type {Category, TrFilterCondition} from "@/types/billadm";
+import type {Category, categoryTagsCondition} from "@/types/billadm";
 import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
 import {getCategoryByType, getTagsByCategory} from "@/backend/functions.ts";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
@@ -89,16 +89,14 @@ import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 const trQueryConditionStore = useTrQueryConditionStore();
 
 const openFilterDrawer = ref(false);
-const trFilterForm = ref<TrFilterCondition>({
-  transactionTypes: [],
-  categoryTags: {}
-});
+const transactionTypes = ref<string[]>([]);
+const cateTagsConditions = ref<categoryTagsCondition[]>([]);
 const conditionLen = computed(() => {
   let cnt = 0;
-  if (trFilterForm.value.transactionTypes) {
-    cnt += trFilterForm.value.transactionTypes.length;
+  if (transactionTypes.value) {
+    cnt += transactionTypes.value.length;
   }
-  cnt += trQueryConditionStore.cateTagsConditions.length;
+  cnt += cateTagsConditions.value.length;
   return cnt;
 });
 // ===== 临时输入状态 =====
@@ -119,10 +117,9 @@ const tags = ref<DefaultOptionType[]>([]);
  * 交易类型变化时要重新刷新分类列表
  * 如果当前分类不为空则选择查看分类是否在列表中，不在列表中则需要选择第一个分类作为分类
  */
-watch(() => trFilterForm.value.transactionTypes, async () => {
-      if (!trFilterForm.value.transactionTypes) return;
-      const types: string[] = trFilterForm.value.transactionTypes;
-      const promises = types.map(type => getCategoryByType(type));
+watch(() => transactionTypes.value, async () => {
+      if (!transactionTypes.value) return;
+      const promises = transactionTypes.value.map(type => getCategoryByType(type));
       const results = await Promise.all(promises);
       const categoryList: Category[] = results.flat();
       categories.value = categoryList.map(category => {
@@ -143,6 +140,9 @@ watch(() => tempCategory.value, async () => {
 );
 
 function closeDrawer() {
+  trQueryConditionStore.transactionTypes = transactionTypes.value;
+  trQueryConditionStore.cateTagsConditions = cateTagsConditions.value;
+  console.log(trQueryConditionStore.categoryTags);
   openFilterDrawer.value = false;
 }
 
@@ -158,14 +158,14 @@ function addCondition() {
   const category = tempCategory.value;
   const tags = [...tempTags.value];
 
-  const exists = trQueryConditionStore.cateTagsConditions.some(c => c.category === category);
+  const exists = cateTagsConditions.value.some(c => c.category === category);
   if (exists) {
-    const idx = trQueryConditionStore.cateTagsConditions.findIndex(c => c.category === category);
-    if (trQueryConditionStore.cateTagsConditions[idx]) {
-      trQueryConditionStore.cateTagsConditions[idx].tags = tags;
+    const idx = cateTagsConditions.value.findIndex(c => c.category === category);
+    if (cateTagsConditions.value[idx]) {
+      cateTagsConditions.value[idx].tags = tags;
     }
   } else {
-    trQueryConditionStore.cateTagsConditions.push({category, tags});
+    cateTagsConditions.value.push({category, tags});
   }
 
   // 清空输入
@@ -175,9 +175,9 @@ function addCondition() {
 
 // 删除条件
 function deleteCondition(category: string) {
-  const idx = trQueryConditionStore.cateTagsConditions.findIndex(c => c.category === category);
-  if (trQueryConditionStore.cateTagsConditions[idx]) {
-    trQueryConditionStore.cateTagsConditions.splice(idx, 1);
+  const idx = cateTagsConditions.value.findIndex(c => c.category === category);
+  if (cateTagsConditions.value[idx]) {
+    cateTagsConditions.value.splice(idx, 1);
   }
 }
 </script>

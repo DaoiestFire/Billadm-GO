@@ -14,7 +14,6 @@ export const useTrQueryConditionStore = defineStore('trQueryCondition', () => {
         cateTagsConditions.value.forEach(cond => {
             newRecord[cond.category] = [...cond.tags];
         })
-        console.log(newRecord)
         return newRecord;
     })
 
