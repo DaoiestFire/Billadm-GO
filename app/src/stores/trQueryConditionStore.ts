@@ -9,6 +9,7 @@ export const useTrQueryConditionStore = defineStore('trQueryCondition', () => {
     const timeRangeType = ref('date' as TimeRangeTypeValue); // 时间类型标签
     const transactionTypes = ref<string[]>([]);
     const cateTagsConditions = ref<categoryTagsCondition[]>([]);
+
     const categoryTags = computed(() => {
         const newRecord: Record<string, string[]> = {};
         cateTagsConditions.value.forEach(cond => {
@@ -17,11 +18,21 @@ export const useTrQueryConditionStore = defineStore('trQueryCondition', () => {
         return newRecord;
     })
 
+    const conditionLen = computed(() => {
+        let cnt = 0;
+        if (transactionTypes.value) {
+            cnt += transactionTypes.value.length;
+        }
+        cnt += cateTagsConditions.value.length;
+        return cnt;
+    });
+
     return {
         timeRange,
         timeRangeType,
         transactionTypes,
         cateTagsConditions,
-        categoryTags
+        categoryTags,
+        conditionLen
     }
 })

@@ -1,8 +1,8 @@
 <template>
   <div class="menu-bar">
     <div class="top-groups">
-      <a-badge :count="conditionLen" dot>
-        <a-button :type="conditionLen?'primary':'text'" @click="openFilterDrawer=true">
+      <a-badge :count="trQueryConditionStore.conditionLen" dot>
+        <a-button :type="trQueryConditionStore.conditionLen?'primary':'text'" @click="openFilterDrawer=true">
           <template #icon>
             <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
           </template>
@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref, watch} from 'vue';
+import {ref, watch} from 'vue';
 import {FilterOutlined} from "@ant-design/icons-vue";
 import type {Category, categoryTagsCondition} from "@/types/billadm";
 import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
@@ -91,14 +91,6 @@ const trQueryConditionStore = useTrQueryConditionStore();
 const openFilterDrawer = ref(false);
 const transactionTypes = ref<string[]>([]);
 const cateTagsConditions = ref<categoryTagsCondition[]>([]);
-const conditionLen = computed(() => {
-  let cnt = 0;
-  if (transactionTypes.value) {
-    cnt += transactionTypes.value.length;
-  }
-  cnt += cateTagsConditions.value.length;
-  return cnt;
-});
 // ===== 临时输入状态 =====
 const tempCategory = ref(undefined);
 const tempTags = ref([]);
@@ -138,6 +130,16 @@ watch(() => tempCategory.value, async () => {
       });
     }
 );
+/**
+ * 监听打开操作，赋值表单
+ */
+watch(openFilterDrawer, (newVal) => {
+  if (newVal) {
+    // 每次打开抽屉时，从 store 加载最新筛选条件
+    transactionTypes.value = [...(trQueryConditionStore.transactionTypes || [])];
+    cateTagsConditions.value = [...(trQueryConditionStore.cateTagsConditions || [])];
+  }
+});
 
 function closeDrawer() {
   trQueryConditionStore.transactionTypes = transactionTypes.value;
