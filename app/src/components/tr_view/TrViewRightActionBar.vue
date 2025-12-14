@@ -62,6 +62,18 @@
             style="width: 100%"
         />
       </a-form-item>
+      <a-form-item v-if="conditions.length>0">
+        <a-list size="small" bordered :data-source="conditions">
+          <template #renderItem="{ item }">
+            <a-list-item>
+              <template #actions>
+                <a @click="deleteCondition(item.category)">删除</a>
+              </template>
+              {{ item.category }} : [{{ item.tags.join(",") }}]
+            </a-list-item>
+          </template>
+        </a-list>
+      </a-form-item>
     </a-form>
   </a-drawer>
 </template>
@@ -92,7 +104,6 @@ const conditionLen = computed(() => {
   cnt += conditions.value.length;
   return cnt;
 });
-
 // ===== 临时输入状态 =====
 const tempCategory = ref(undefined);
 const tempTags = ref([]);
@@ -170,6 +181,14 @@ function addCondition() {
   // 清空输入
   tempCategory.value = undefined;
   tempTags.value = [];
+}
+
+// 删除条件
+function deleteCondition(category: string) {
+  const idx = conditions.value.findIndex(c => c.category === category);
+  if (conditions.value[idx]) {
+    conditions.value.splice(idx, 1);
+  }
 }
 </script>
 
