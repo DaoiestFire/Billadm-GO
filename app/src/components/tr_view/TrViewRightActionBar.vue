@@ -144,7 +144,6 @@ watch(openFilterDrawer, (newVal) => {
 function closeDrawer() {
   trQueryConditionStore.transactionTypes = transactionTypes.value;
   trQueryConditionStore.cateTagsConditions = cateTagsConditions.value;
-  console.log(trQueryConditionStore.categoryTags);
   openFilterDrawer.value = false;
 }
 

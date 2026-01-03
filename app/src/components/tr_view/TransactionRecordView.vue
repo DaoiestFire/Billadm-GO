@@ -124,6 +124,12 @@ const refreshTable = async () => {
   if (trQueryConditionStore.timeRange) {
     trTotalCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
   }
+  if (trQueryConditionStore.transactionTypes) {
+    trTotalCondition.transactionTypes = trQueryConditionStore.transactionTypes;
+  }
+  if (trQueryConditionStore.categoryTags) {
+    trTotalCondition.categoryTags = trQueryConditionStore.categoryTags;
+  }
   trTotal.value = await getTrTotalOnCondition(trTotalCondition);
   const trCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
@@ -132,6 +138,12 @@ const refreshTable = async () => {
   };
   if (trQueryConditionStore.timeRange) {
     trCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
+  }
+  if (trQueryConditionStore.transactionTypes) {
+    trCondition.transactionTypes = trQueryConditionStore.transactionTypes;
+  }
+  if (trQueryConditionStore.categoryTags) {
+    trCondition.categoryTags = trQueryConditionStore.categoryTags;
   }
   tableData.value = await getTrOnCondition(trCondition);
 }
@@ -199,7 +211,12 @@ const onConfirm = async () => {
 }
 
 // 查询条件变化 → 重置分页 + 刷新
-watch(() => [trQueryConditionStore.timeRange, ledgerStore.currentLedgerId], async () => {
+watch(() => [
+      ledgerStore.currentLedgerId,
+      trQueryConditionStore.timeRange,
+      trQueryConditionStore.transactionTypes,
+      trQueryConditionStore.cateTagsConditions
+    ], async () => {
       if (currentPage.value !== 1) {
         currentPage.value = 1;
         return;

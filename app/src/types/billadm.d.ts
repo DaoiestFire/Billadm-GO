@@ -108,6 +108,7 @@ export interface TrQueryCondition {
     ledgerId: string;
     tsRange?: number[];
     transactionTypes?: string[];
+    categoryTags?: Record<string, string[]>
     offset?: number;
     limit?: number;
 }
@@ -118,14 +119,6 @@ export interface TrQueryCondition {
 interface categoryTagsCondition {
     category: string,
     tags: string[]
-}
-
-/**
- * 消费记录筛选条件
- */
-export interface TrFilterCondition {
-    transactionTypes?: string[];
-    categoryTags?: Record<string, string[]>;
 }
 
 /**
