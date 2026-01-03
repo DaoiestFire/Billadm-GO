@@ -27,6 +27,7 @@ import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 import {useCssVariables} from "@/backend/css.ts";
 import {convertToUnixTimeRange} from "@/backend/timerange.ts";
 import {getTrOnCondition} from "@/backend/functions.ts";
+import {useAppDataStore} from "@/stores/appDataStore.ts";
 
 const {majorBgColor} = useCssVariables();
 
@@ -38,6 +39,7 @@ const contentStyle: CSSProperties = {
 
 const ledgerStore = useLedgerStore();
 const trQueryConditionStore = useTrQueryConditionStore();
+const appDataStore = useAppDataStore();
 
 const trs = ref<TransactionRecord[]>([]);
 
@@ -49,12 +51,25 @@ const refreshData = async () => {
   if (trQueryConditionStore.timeRange) {
     trCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
   }
-  trs.value = await getTrOnCondition(trCondition);
+  if (trQueryConditionStore.transactionTypes) {
+    trCondition.transactionTypes = trQueryConditionStore.transactionTypes;
+  }
+  if (trQueryConditionStore.categoryTags) {
+    trCondition.categoryTags = trQueryConditionStore.categoryTags;
+  }
+  let trQueryResult = await getTrOnCondition(trCondition);
+  trs.value = trQueryResult.items;
+  appDataStore.setStatistics(trQueryResult.trStatistics);
 };
 /**
  * 查询条件，账本改变都需要刷新数据
  */
-watch(() => [trQueryConditionStore.timeRange, ledgerStore.currentLedgerId,], async () => {
+watch(() => [
+      ledgerStore.currentLedgerId,
+      trQueryConditionStore.timeRange,
+      trQueryConditionStore.transactionTypes,
+      trQueryConditionStore.cateTagsConditions
+    ], async () => {
       await refreshData();
     },
     {immediate: true}

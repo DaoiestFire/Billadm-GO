@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import type {Category, Tag, TransactionRecord, TrQueryCondition, TrQueryResult, TrStatistics} from "@/types/billadm";
-import {createTrForLedger, deleteTrById, queryTrOnCondition, queryTrStatisticsOnCondition} from "@/backend/api/tr.ts";
+import type {Category, Tag, TransactionRecord, TrQueryCondition, TrQueryResult} from "@/types/billadm";
+import {createTrForLedger, deleteTrById, queryTrOnCondition} from "@/backend/api/tr.ts";
 import NotificationUtil from "@/backend/notification.ts";
 import {queryCategory} from "@/backend/api/category.ts";
 import {queryTags} from "@/backend/api/tag.ts";
@@ -29,7 +29,12 @@ export async function getTrOnCondition(condition: TrQueryCondition): Promise<TrQ
         NotificationUtil.error('查询消费记录失败', `${error}`);
         return {
             items: [],
-            total: 0
+            total: 0,
+            trStatistics: {
+                income: 0,
+                expense: 0,
+                transfer: 0,
+            }
         };
     }
 }
@@ -77,17 +82,5 @@ export async function getTagsByCategory(category: string): Promise<Tag[]> {
     } catch (error) {
         NotificationUtil.error(`查询 ${category} 消费标签失败`, `${error}`);
         return [];
-    }
-}
-
-/**
- * 统计指标
- */
-export async function getStatisticsOnCondition(condition: TrQueryCondition): Promise<TrStatistics> {
-    try {
-        return await queryTrStatisticsOnCondition(condition);
-    } catch (error) {
-        NotificationUtil.error('查询统计数据失败', `${error}`);
-        return {income: 0, expense: 0, transfer: 0};
     }
 }
