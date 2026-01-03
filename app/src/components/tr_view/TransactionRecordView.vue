@@ -95,6 +95,7 @@ import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 import dayjs from "dayjs";
 import {trDtoToTrForm, trFormToTrDto} from "@/backend/dto-utils.ts";
 import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
+import {useAppDataStore} from "@/stores/appDataStore.ts";
 
 const {majorBgColor} = useCssVariables();
 
@@ -106,6 +107,7 @@ const contentStyle: CSSProperties = {
 
 const ledgerStore = useLedgerStore();
 const trQueryConditionStore = useTrQueryConditionStore();
+const appDataStore = useAppDataStore();
 
 // 消费记录
 const tableData = ref<TransactionRecord[]>([]);
@@ -134,6 +136,7 @@ const refreshTable = async () => {
   let trQueryResult = await getTrOnCondition(trCondition);
   tableData.value = trQueryResult.items
   trTotal.value = trQueryResult.total
+  appDataStore.setStatistics(trQueryResult.trStatistics);
 }
 
 const openTrDrawer = ref(false);

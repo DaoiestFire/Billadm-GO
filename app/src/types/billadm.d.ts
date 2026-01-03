@@ -54,6 +54,7 @@ export interface Result<T = any> {
 export interface TrQueryResult {
     items: TransactionRecord[];
     total: number;
+    trStatistics: TrStatistics;
 }
 
 /**
