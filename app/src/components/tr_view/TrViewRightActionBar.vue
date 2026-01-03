@@ -74,7 +74,10 @@
               <template #actions>
                 <a @click="deleteCondition(item.category)">删除</a>
               </template>
-              {{ item.category }} : [{{ item.tags.join(",") }}]
+              <span>{{ item.category }}</span>
+              <div style="width: auto">
+                <a-tag v-for="tag in item.tags" :key="tag" style="margin-right: 4px">{{ tag }}</a-tag>
+              </div>
             </a-list-item>
           </template>
         </a-list>
