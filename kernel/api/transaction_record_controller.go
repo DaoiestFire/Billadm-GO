@@ -39,33 +39,6 @@ func queryTrOnCondition(c *gin.Context) {
 	ret.Data = trs
 }
 
-func queryTrCountOnCondition(c *gin.Context) {
-	ret := models.NewResult()
-	defer c.JSON(http.StatusOK, ret)
-
-	ws := workspace.Manager.OpenedWorkspace()
-	if ws == nil {
-		ret.Code = -1
-		ret.Msg = workspace.ErrOpenedWorkspaceNotFound
-		return
-	}
-
-	queryCondition, ok := dto.JsonQueryCondition(c, ret)
-	if !ok {
-		return
-	}
-	logrus.Debugf("query condition: %v", queryCondition)
-
-	cnt, err := service.GetTrService().QueryTrCountOnCondition(ws, queryCondition)
-	if err != nil {
-		ret.Code = -1
-		ret.Msg = err.Error()
-		return
-	}
-
-	ret.Data = cnt
-}
-
 func createTransactionRecord(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
@@ -96,10 +69,6 @@ func createTransactionRecord(c *gin.Context) {
 	}
 
 	ret.Data = trId
-}
-
-func updateTransactionRecord(c *gin.Context) {
-
 }
 
 func deleteTransactionRecordById(c *gin.Context) {

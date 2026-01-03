@@ -33,8 +33,6 @@ func GetTrService() TransactionRecordService {
 type TransactionRecordService interface {
 	CreateTr(ws *workspace.Workspace, dto *dto.TransactionRecordDto) (string, error)
 	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*dto.TransactionRecordDto, error)
-	QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (int64, error)
-	QueryTrStatisticsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (*dto.TrStatistics, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 }
 
@@ -105,49 +103,6 @@ func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspa
 
 	ws.GetLogger().Infof("query trs by page success, len: %d", len(trs))
 	return trDtos, err
-}
-
-func (t *transactionRecordServiceImpl) QueryTrCountOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (int64, error) {
-	ws.GetLogger().Infof("start to query count of transaction records")
-	cnt, err := t.trDao.QueryCountOnCondition(ws, condition)
-	if err != nil {
-		return 0, err
-	}
-
-	ws.GetLogger().Infof("query count of transaction records success, len: %d", cnt)
-	return cnt, nil
-}
-
-func (t *transactionRecordServiceImpl) QueryTrStatisticsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (*dto.TrStatistics, error) {
-	ws.GetLogger().Infof("start to query tr statistics")
-
-	ret := &dto.TrStatistics{}
-	// 收入
-	condition.TransactionTypes = []string{models.Income}
-	val, err := t.trDao.QueryPriceOnCondition(ws, condition)
-	if err != nil {
-		return ret, err
-	}
-	ret.Income = val
-
-	// 支出
-	condition.TransactionTypes = []string{models.Expense}
-	val, err = t.trDao.QueryPriceOnCondition(ws, condition)
-	if err != nil {
-		return ret, err
-	}
-	ret.Expense = val
-
-	// 转账
-	condition.TransactionTypes = []string{models.Transfer}
-	val, err = t.trDao.QueryPriceOnCondition(ws, condition)
-	if err != nil {
-		return ret, err
-	}
-	ret.Transfer = val
-
-	ws.GetLogger().Infof("query tr statistics, statistics: %v %v %v", ret.Income, ret.Expense, ret.Transfer)
-	return ret, nil
 }
 
 func (t *transactionRecordServiceImpl) DeleteTrById(ws *workspace.Workspace, trId string) error {

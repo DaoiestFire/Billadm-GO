@@ -30,8 +30,6 @@ type TransactionRecordDao interface {
 	CreateTr(ws *workspace.Workspace, record *models.TransactionRecord) error
 	ListAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) ([]*models.TransactionRecord, error)
 	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*models.TransactionRecord, error)
-	QueryCountOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (int64, error)
-	QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (float64, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 	CountTrByLedgerId(ws *workspace.Workspace, ledgerId string) (int64, error)
 	DeleteAllTrByLedgerId(ws *workspace.Workspace, ledgerId string) error

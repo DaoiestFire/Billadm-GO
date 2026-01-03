@@ -18,9 +18,7 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/ledger/delete-ledger", deleteLedger)
 	// transaction record
 	ginServer.POST("/api/v1/tr/query", queryTrOnCondition)
-	ginServer.POST("/api/v1/tr/query-count", queryTrCountOnCondition)
 	ginServer.POST("/api/v1/tr/create", createTransactionRecord)
-	ginServer.POST("/api/v1/tr/put", updateTransactionRecord)
 	ginServer.POST("/api/v1/tr/delete-by-id", deleteTransactionRecordById)
 	// category
 	ginServer.GET("/api/v1/category/query/:type", queryCategoryByType)
@@ -29,8 +27,6 @@ func ServeAPI(ginServer *gin.Engine) {
 	// workspace
 	ginServer.POST("/api/v1/workspace/open", openWorkspace)
 	ginServer.POST("/api/v1/workspace/is-opened", hasOpenedWorkspace)
-	// statistics
-	ginServer.POST("/api/v1/statistics/tr", getTrStatistics)
 }
 
 func JsonArg(c *gin.Context, result *models.Result) (arg map[string]interface{}, ok bool) {
