@@ -71,8 +71,8 @@ func (t *transactionRecordDaoImpl) QueryTrsOnCondition(ws *workspace.Workspace, 
 	if len(condition.TsRange) == 2 {
 		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
 	}
-	if len(condition.TransactionType) > 0 {
-		db = db.Where("transaction_type IN (?)", condition.TransactionType)
+	if len(condition.TransactionTypes) > 0 {
+		db = db.Where("transaction_type IN (?)", condition.TransactionTypes)
 	}
 	db = db.Find(&trs)
 	if err := db.Error; err != nil {
@@ -106,8 +106,8 @@ func (t *transactionRecordDaoImpl) QueryPriceOnCondition(ws *workspace.Workspace
 	if len(condition.TsRange) == 2 {
 		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
 	}
-	if len(condition.TransactionType) > 0 {
-		db = db.Where("transaction_type IN (?)", condition.TransactionType)
+	if len(condition.TransactionTypes) > 0 {
+		db = db.Where("transaction_type IN (?)", condition.TransactionTypes)
 	}
 	db = db.Select("SUM(price)").Scan(&price)
 	if err := db.Error; err != nil {

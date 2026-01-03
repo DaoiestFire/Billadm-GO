@@ -10,10 +10,11 @@ import (
 
 func JsonQueryCondition(c *gin.Context, result *models.Result) (*TrQueryCondition, bool) {
 	ret := &TrQueryCondition{
-		Offset:          -1,
-		Limit:           -1,
-		TsRange:         make([]int64, 0),
-		TransactionType: make([]string, 0),
+		Offset:           -1,
+		Limit:            -1,
+		TsRange:          make([]int64, 0),
+		TransactionTypes: make([]string, 0),
+		CategoryTags:     make(map[string][]string),
 	}
 	if err := c.BindJSON(ret); nil != err {
 		result.Code = -1
@@ -24,11 +25,12 @@ func JsonQueryCondition(c *gin.Context, result *models.Result) (*TrQueryConditio
 }
 
 type TrQueryCondition struct {
-	LedgerID        string   `json:"ledgerId"`
-	Offset          int      `json:"offset"`
-	Limit           int      `json:"limit"`
-	TsRange         []int64  `json:"tsRange"`
-	TransactionType []string `json:"transactionType"`
+	LedgerID         string              `json:"ledgerId"`
+	Offset           int                 `json:"offset"`
+	Limit            int                 `json:"limit"`
+	TsRange          []int64             `json:"tsRange"`
+	TransactionTypes []string            `json:"transactionTypes"`
+	CategoryTags     map[string][]string `json:"categoryTags"`
 }
 
 func (qc *TrQueryCondition) Validate(result *models.Result) bool {

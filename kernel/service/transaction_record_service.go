@@ -123,7 +123,7 @@ func (t *transactionRecordServiceImpl) QueryTrStatisticsOnCondition(ws *workspac
 
 	ret := &dto.TrStatistics{}
 	// 收入
-	condition.TransactionType = []string{models.Income}
+	condition.TransactionTypes = []string{models.Income}
 	val, err := t.trDao.QueryPriceOnCondition(ws, condition)
 	if err != nil {
 		return ret, err
@@ -131,7 +131,7 @@ func (t *transactionRecordServiceImpl) QueryTrStatisticsOnCondition(ws *workspac
 	ret.Income = val
 
 	// 支出
-	condition.TransactionType = []string{models.Expense}
+	condition.TransactionTypes = []string{models.Expense}
 	val, err = t.trDao.QueryPriceOnCondition(ws, condition)
 	if err != nil {
 		return ret, err
@@ -139,7 +139,7 @@ func (t *transactionRecordServiceImpl) QueryTrStatisticsOnCondition(ws *workspac
 	ret.Expense = val
 
 	// 转账
-	condition.TransactionType = []string{models.Transfer}
+	condition.TransactionTypes = []string{models.Transfer}
 	val, err = t.trDao.QueryPriceOnCondition(ws, condition)
 	if err != nil {
 		return ret, err
