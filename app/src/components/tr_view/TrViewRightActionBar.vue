@@ -20,6 +20,11 @@
       :footer-style="{ textAlign: 'right' }"
       :closable="false"
   >
+    <template #extra>
+      <a-space>
+        <a-button type="primary" @click="clearAllConditions">清除条件</a-button>
+      </a-space>
+    </template>
     <a-form layout="vertical">
       <!-- 交易类型 -->
       <a-divider orientation="left">交易类型</a-divider>
@@ -140,6 +145,11 @@ watch(openFilterDrawer, (newVal) => {
     cateTagsConditions.value = [...(trQueryConditionStore.cateTagsConditions || [])];
   }
 });
+
+function clearAllConditions() {
+  transactionTypes.value = [];
+  cateTagsConditions.value = [];
+}
 
 function closeDrawer() {
   trQueryConditionStore.transactionTypes = transactionTypes.value;
