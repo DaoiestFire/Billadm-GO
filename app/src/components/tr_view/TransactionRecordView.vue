@@ -88,7 +88,6 @@ import {
   getCategoryByType,
   getTagsByCategory,
   getTrOnCondition,
-  getTrTotalOnCondition,
   updateTransactionRecord
 } from "@/backend/functions.ts";
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
@@ -118,19 +117,6 @@ const trTotal = ref<number>(0);
 const refreshTable = async () => {
   if (!ledgerStore.currentLedgerId) return;
 
-  const trTotalCondition: TrQueryCondition = {
-    ledgerId: ledgerStore.currentLedgerId,
-  };
-  if (trQueryConditionStore.timeRange) {
-    trTotalCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
-  }
-  if (trQueryConditionStore.transactionTypes) {
-    trTotalCondition.transactionTypes = trQueryConditionStore.transactionTypes;
-  }
-  if (trQueryConditionStore.categoryTags) {
-    trTotalCondition.categoryTags = trQueryConditionStore.categoryTags;
-  }
-  trTotal.value = await getTrTotalOnCondition(trTotalCondition);
   const trCondition: TrQueryCondition = {
     ledgerId: ledgerStore.currentLedgerId,
     offset: pageSize.value * (currentPage.value - 1),
@@ -145,7 +131,9 @@ const refreshTable = async () => {
   if (trQueryConditionStore.categoryTags) {
     trCondition.categoryTags = trQueryConditionStore.categoryTags;
   }
-  tableData.value = await getTrOnCondition(trCondition);
+  let trQueryResult = await getTrOnCondition(trCondition);
+  tableData.value = trQueryResult.items
+  trTotal.value = trQueryResult.total
 }
 
 const openTrDrawer = ref(false);

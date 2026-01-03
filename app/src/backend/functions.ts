@@ -1,12 +1,6 @@
 import dayjs from "dayjs";
-import type {Category, Tag, TransactionRecord, TrQueryCondition, TrStatistics} from "@/types/billadm";
-import {
-    createTrForLedger,
-    deleteTrById,
-    queryTrCountOnCondition,
-    queryTrOnCondition,
-    queryTrStatisticsOnCondition
-} from "@/backend/api/tr.ts";
+import type {Category, Tag, TransactionRecord, TrQueryCondition, TrQueryResult, TrStatistics} from "@/types/billadm";
+import {createTrForLedger, deleteTrById, queryTrOnCondition, queryTrStatisticsOnCondition} from "@/backend/api/tr.ts";
 import NotificationUtil from "@/backend/notification.ts";
 import {queryCategory} from "@/backend/api/category.ts";
 import {queryTags} from "@/backend/api/tag.ts";
@@ -28,21 +22,15 @@ export function formatTimestamp(timestamp: number, format: string = 'YYYY-MM-DD'
 /**
  * 消费记录
  */
-export async function getTrTotalOnCondition(condition: TrQueryCondition): Promise<number> {
-    try {
-        return await queryTrCountOnCondition(condition);
-    } catch (error) {
-        NotificationUtil.error('查询消费记录数量失败', `${error}`);
-        return 0;
-    }
-}
-
-export async function getTrOnCondition(condition: TrQueryCondition): Promise<TransactionRecord[]> {
+export async function getTrOnCondition(condition: TrQueryCondition): Promise<TrQueryResult> {
     try {
         return await queryTrOnCondition(condition);
     } catch (error) {
         NotificationUtil.error('查询消费记录失败', `${error}`);
-        return [];
+        return {
+            items: [],
+            total: 0
+        };
     }
 }
 

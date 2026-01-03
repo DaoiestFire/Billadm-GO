@@ -36,6 +36,12 @@ func (t *TrOperator) FilterByCategoryTags(categoryTags map[string][]string) *TrO
 			continue // 分类不在筛选条件中，跳过
 		}
 
+		if len(tagsToMatch) == 0 {
+			// 如果没有标签则判定为选中
+			filtered = append(filtered, tr)
+			continue
+		}
+
 		// 将当前记录的 tags 转为 map 便于查找（避免 O(n*m) 嵌套循环）
 		recordTagSet := make(map[string]bool)
 		for _, tag := range tr.Tags {

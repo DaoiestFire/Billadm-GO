@@ -51,6 +51,11 @@ export interface Result<T = any> {
     data: T;
 }
 
+export interface TrQueryResult {
+    items: TransactionRecord[];
+    total: number;
+}
+
 /**
  * 账本
  */
