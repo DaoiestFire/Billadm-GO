@@ -63,9 +63,6 @@ func (t *transactionRecordDaoImpl) QueryTrsOnCondition(ws *workspace.Workspace, 
 	trs := make([]*models.TransactionRecord, 0)
 	db := ws.GetDb().Where("ledger_id = ?", condition.LedgerID)
 	db = db.Order("transaction_at desc, transaction_type asc, category desc, price desc")
-	if condition.Offset != -1 && condition.Limit != -1 {
-		db = db.Offset(condition.Offset).Limit(condition.Limit)
-	}
 	if len(condition.TsRange) == 2 {
 		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
 	}

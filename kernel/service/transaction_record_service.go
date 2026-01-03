@@ -6,6 +6,7 @@ import (
 	"github.com/billadm/dao"
 	"github.com/billadm/models"
 	"github.com/billadm/models/dto"
+	"github.com/billadm/pkg/operator"
 	"github.com/billadm/util"
 	"github.com/billadm/workspace"
 )
@@ -32,7 +33,7 @@ func GetTrService() TransactionRecordService {
 
 type TransactionRecordService interface {
 	CreateTr(ws *workspace.Workspace, dto *dto.TransactionRecordDto) (string, error)
-	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*dto.TransactionRecordDto, error)
+	QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (*dto.TrQueryResult, error)
 	DeleteTrById(ws *workspace.Workspace, trId string) error
 }
 
@@ -76,17 +77,16 @@ func (t *transactionRecordServiceImpl) CreateTr(ws *workspace.Workspace, trDto *
 	return transactionID, nil
 }
 
-func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) ([]*dto.TransactionRecordDto, error) {
+func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (*dto.TrQueryResult, error) {
 	ws.GetLogger().Infof("start to query trs, condition: %#v", condition)
 
 	var err error
-	// 先查询到所有的tr
+	// 根据时间范围和交易类型查询到所有的tr
 	trs, err := t.trDao.QueryTrsOnCondition(ws, condition)
 	if err != nil {
 		return nil, err
 	}
-
-	// 再查询tr的tags进行组装
+	// 查询tr的tags进行组装
 	trDtos := make([]*dto.TransactionRecordDto, 0, len(trs))
 	for _, tr := range trs {
 		trTags, err := t.trTagDao.QueryTrTagsByTrId(ws, tr.TransactionID)
@@ -100,9 +100,22 @@ func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspa
 		}
 		trDtos = append(trDtos, trDto)
 	}
+	// 根据分类标签进行过滤
+	sortFields := []operator.SortField{
+		{
+			Field: "transactionAt",
+			Order: operator.Desc,
+		},
+	}
+	summary := operator.NewTrOperator().
+		Add(trDtos).
+		FilterByCategoryTags(condition.CategoryTags).
+		Sort(sortFields).
+		Page(condition.Offset, condition.Limit).
+		Summary()
 
-	ws.GetLogger().Infof("query trs by page success, len: %d", len(trs))
-	return trDtos, err
+	ws.GetLogger().Infof("query trs by page success, len: %d", len(summary.Items))
+	return summary, err
 }
 
 func (t *transactionRecordServiceImpl) DeleteTrById(ws *workspace.Workspace, trId string) error {

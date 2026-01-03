@@ -1,12 +1,12 @@
 package server
 
 import (
-	"github.com/billadm/workspace"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 
+	"github.com/billadm/workspace"
 	"github.com/sirupsen/logrus"
 )
 
