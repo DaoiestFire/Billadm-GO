@@ -25,7 +25,7 @@
             v-model:pageSize="pageSize"
             :total="trTotal"
             :show-total="total => `共${total}记录`"
-            :pageSizeOptions="[15,30,50,100]"
+            :pageSizeOptions="['15','30','50','100']"
             show-size-changer
         />
       </a-layout-footer>
