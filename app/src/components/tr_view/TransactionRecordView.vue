@@ -25,6 +25,7 @@
             v-model:pageSize="pageSize"
             :total="trTotal"
             :show-total="total => `共${total}记录`"
+            :pageSizeOptions="[15,30,50,100]"
             show-size-changer
         />
       </a-layout-footer>
@@ -113,7 +114,7 @@ const appDataStore = useAppDataStore();
 const tableData = ref<TransactionRecord[]>([]);
 // 分页
 const currentPage = ref<number>(1);
-const pageSize = ref<number>(20);
+const pageSize = ref<number>(15);
 const trTotal = ref<number>(0);
 
 const refreshTable = async () => {
