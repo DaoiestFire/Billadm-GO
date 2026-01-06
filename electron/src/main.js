@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, dialog} = require('electron');
+const {app, BrowserWindow, ipcMain, dialog, net} = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -7,14 +7,19 @@ const {spawn} = require('child_process');
 process.noAsar = false;
 
 const isDev = !app.isPackaged;
-const localServer = isDev ? 'http://localhost' : 'http://127.0.0.1';
-const kernelPort = isDev ? 31945 : 31943;
-const urlPath = isDev ? '/static' : '/static/index.html';
 const appPath = isDev ? path.dirname(__dirname) : app.getAppPath();
 
-const getServer = (port = kernelPort) => {
-    return localServer + ':' + port;
+const getServer = () => {
+    return "http://127.0.0.1:31943"
 };
+
+const getUiServer = () => {
+    if (isDev) {
+        return "http://localhost:31945/static"
+    } else {
+        return "http://127.0.0.1:31943/static/index.html"
+    }
+}
 
 
 // 应用日志
@@ -32,12 +37,11 @@ const log = (message) => {
 };
 
 let billadmCfg = {
-    width: 1600,
-    height: 1000,
-    workspaceDir: '',
+    width: 1600, height: 1000, workspaceDir: '',
 };
 
 function readBilladmFile() {
+    if (isDev) return;
     const homeDir = os.homedir();
     const filePath = path.join(homeDir, '.billadm');
     let tmpObj;
@@ -45,8 +49,7 @@ function readBilladmFile() {
         const fileContent = fs.readFileSync(filePath, 'utf8');
         tmpObj = JSON.parse(fileContent);
         billadmCfg = {
-            ...billadmCfg,
-            ...tmpObj,
+            ...billadmCfg, ...tmpObj,
         }
     } catch (err) {
         log(`读取 .billadm 文件时发生错误:', ${err.message}`);
@@ -56,6 +59,7 @@ function readBilladmFile() {
 }
 
 function saveBilladmConfig() {
+    if (isDev) return;
     const homeDir = os.homedir();
     const filePath = path.join(homeDir, '.billadm');
 
@@ -80,10 +84,11 @@ function saveBilladmConfig() {
 let kernelProcess = null;
 
 const startKernel = () => {
+    if (isDev) return;
     const kernelExe = path.join(appPath, 'Billadm-Kernel.exe');
     log(`Starting kernel: ${kernelExe}`);
 
-    kernelProcess = spawn(kernelExe, ['-port', kernelPort, '-mode', 'release', '-workspace', billadmCfg.workspaceDir]);
+    kernelProcess = spawn(kernelExe, ['-mode', 'release', '-workspace', billadmCfg.workspaceDir]);
 
     // 捕获标准输出
     kernelProcess.stdout.on('data', (data) => {
@@ -111,23 +116,18 @@ const startKernel = () => {
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: billadmCfg.width,
-        height: billadmCfg.height,
-        frame: false,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'),
+        width: billadmCfg.width, height: billadmCfg.height, frame: false, webPreferences: {
+            nodeIntegration: false, contextIsolation: true, preload: path.join(__dirname, 'preload.js'),
         },
     });
 
-    mainWindow.loadURL(getServer() + urlPath);
+    mainWindow.loadURL(getUiServer());
 
     if (isDev) {
         mainWindow.webContents.openDevTools();
     }
 
-    ipcMain.on('window-control', (event, command) => {
+    ipcMain.on('window-control', async (event, command) => {
         switch (command) {
             case 'minimize':
                 mainWindow.minimize();
@@ -136,6 +136,11 @@ const createWindow = () => {
                 mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
                 break;
             case 'close':
+                try {
+                    await net.fetch(getServer() + "/api/v1/app/exit", {method: "POST"});
+                } catch (e) {
+                    log(`请求kernel关闭失败 ${e}`)
+                }
                 mainWindow.close();
                 break;
         }
@@ -144,8 +149,7 @@ const createWindow = () => {
     ipcMain.handle('dialog:open', async (event, options) => {
         try {
             return await dialog.showOpenDialog({
-                properties: ['openFile'],
-                ...options,
+                properties: ['openFile'], ...options,
             });
         } catch (err) {
             log(`Dialog error: ${err.message}`);
