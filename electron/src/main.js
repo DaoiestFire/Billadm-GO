@@ -2,7 +2,6 @@ const {app, BrowserWindow, ipcMain, dialog, net} = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const {spawn} = require('child_process');
 
 process.noAsar = false;
 
@@ -87,8 +86,10 @@ const startKernel = () => {
     if (isDev) return;
     const kernelExe = path.join(appPath, 'Billadm-Kernel.exe');
     log(`Starting kernel: ${kernelExe}`);
-
-    kernelProcess = spawn(kernelExe, ['-mode', 'release', '-workspace', billadmCfg.workspaceDir]);
+    const cp = require("child_process");
+    kernelProcess = cp.spawn(kernelExe, ['-mode', 'release', '-workspace', billadmCfg.workspaceDir], {
+        detached: false,
+    });
 
     // 捕获标准输出
     kernelProcess.stdout.on('data', (data) => {
@@ -102,11 +103,8 @@ const startKernel = () => {
 
     // 进程关闭
     kernelProcess.on('close', (code) => {
-        log(`[Kernel Process] exited with code ${code}`);
+        log(`[Kernel Process] kernel [pid=${kernelProcess.pid}] closed with code ${code}`);
         kernelProcess = null;
-        if (code !== 0) {
-            log(`Backend process exited unexpectedly code ${code}. `);
-        }
     });
 
     kernelProcess.on('error', (err) => {
