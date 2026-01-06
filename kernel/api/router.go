@@ -10,7 +10,7 @@ import (
 
 func ServeAPI(ginServer *gin.Engine) {
 	// app
-	ginServer.POST("/api/v1/app/exit-app", exitApp)
+	ginServer.POST("/api/v1/app/exit", exitApp)
 	// ledger
 	ginServer.POST("/api/v1/ledger/query-all", queryAllLedgers)
 	ginServer.POST("/api/v1/ledger/create-ledger", createLedger)

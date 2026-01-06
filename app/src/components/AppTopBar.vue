@@ -31,7 +31,6 @@
 
 <script setup lang="ts">
 import {useRoute} from 'vue-router'
-import {exitApp} from "@/backend/api/app.ts"
 import {BorderOutlined, CloseOutlined, LineOutlined} from "@ant-design/icons-vue";
 import IconBilladm from '@/assets/icons/billadm.svg';
 
@@ -48,7 +47,6 @@ const onMaximize = () => {
 }
 
 const onClose = () => {
-  exitApp();
   window.electronAPI.closeWindow();
 }
 </script>

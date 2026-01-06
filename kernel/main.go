@@ -33,8 +33,6 @@ func main() {
 			logrus.Errorf("启动时打开工作空间失败 %v", err)
 		}
 	}
-	// 启动优雅退出
-	server.NewExitManager().Start()
 	// 启动服务器
 	logrus.Info("--------- 启动Billadm ---------")
 	gin.SetMode(util.Config.Mode)
