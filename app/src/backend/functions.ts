@@ -5,8 +5,39 @@ import NotificationUtil from "@/backend/notification.ts";
 import {queryCategory} from "@/backend/api/category.ts";
 import {queryTags} from "@/backend/api/tag.ts";
 
-export function formatFloat(num: number): number {
-    return parseFloat(num.toFixed(2));
+export function centsToYuan(cents: number): string {
+    // 确保是整数
+    if (!Number.isInteger(cents)) {
+        console.warn('传入的不是整数分值:', cents);
+    }
+    // 转为带两位小数的字符串
+    return (cents / 100).toLocaleString('zh-CN', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+export function yuanToCents(yuanStr: string): number {
+    // 去除空格
+    yuanStr = yuanStr.trim();
+
+    // 支持负号
+    const isNegative = yuanStr.startsWith('-');
+    if (isNegative) yuanStr = yuanStr.slice(1);
+
+    // 拆分整数和小数部分
+    let [integerPart = '0', decimalPart = '00'] = yuanStr.split('.');
+
+    // 小数部分最多取两位，不足补零，超过截断
+    decimalPart = (decimalPart + '00').substring(0, 2);
+
+    // 防止非数字字符
+    if (!/^\d+$/.test(integerPart) || !/^\d{2}$/.test(decimalPart)) {
+        throw new Error('无效的金额格式');
+    }
+
+    const totalCents = parseInt(integerPart, 10) * 100 + parseInt(decimalPart, 10);
+    return isNegative ? -totalCents : totalCents;
 }
 
 /**

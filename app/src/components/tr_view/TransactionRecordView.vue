@@ -63,7 +63,7 @@
           </a-form-item>
 
           <a-form-item label="金额" name="price">
-            <a-input-number v-model:value="trForm.price" prefix="￥" :controls="false" :min="0" style="width: 100%"/>
+            <a-input v-model:value="trForm.price" prefix="￥" style="width: 100%"/>
           </a-form-item>
         </a-form>
         <template #extra>
@@ -144,7 +144,7 @@ const openTrDrawer = ref(false);
 const drawerTitle = ref('');
 const trForm = ref<TrForm>({
   id: '',
-  price: 0,
+  price: '',
   type: '',
   category: '',
   description: '',
@@ -177,7 +177,7 @@ const deleteTr = async (tr: TransactionRecord) => {
 const closeTrDrawer = () => {
   trForm.value = {
     id: '',
-    price: 0,
+    price: '',
     type: '',
     category: '',
     description: '',

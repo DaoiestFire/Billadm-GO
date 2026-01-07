@@ -1,5 +1,6 @@
 import type {TransactionRecord, TrForm} from "@/types/billadm";
 import dayjs from "dayjs";
+import {centsToYuan, yuanToCents} from "@/backend/functions.ts";
 
 /**
  * 构造符合后端 TransactionRecordDto 的请求对象 表单数据转化为dto
@@ -8,7 +9,7 @@ export function trFormToTrDto(data: TrForm, ledgerId: string = ''): TransactionR
     return {
         ledgerId: ledgerId,
         transactionId: data.id,
-        price: data.price,
+        price: yuanToCents(data.price),
         transactionType: data.type,
         category: data.category,
         description: data.description,
@@ -23,7 +24,7 @@ export function trFormToTrDto(data: TrForm, ledgerId: string = ''): TransactionR
 export function trDtoToTrForm(dto: TransactionRecord): TrForm {
     return {
         id: dto.transactionId,
-        price: dto.price,
+        price: centsToYuan(dto.price),
         type: dto.transactionType,
         category: dto.category,
         description: dto.description,

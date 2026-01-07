@@ -1,8 +1,8 @@
 import type {TransactionRecord} from '@/types/billadm'
 import type {EChartsOption, LegendComponentOption} from "echarts"
 import {TransactionTypeToColor, TransactionTypeToLabel} from '@/backend/constant'
-import {formatFloat} from '@/backend/functions'
-import {trDtoToTrForm} from "@/backend/dto-utils.ts";
+import {centsToYuan} from '@/backend/functions'
+import dayjs from "dayjs";
 
 /**
  * 根据交易记录数据生成 ECharts 折线图配置项，展示按月分类的收入、支出、转账金额趋势。
@@ -10,9 +10,7 @@ import {trDtoToTrForm} from "@/backend/dto-utils.ts";
  */
 export function buildOptionForTradingTrend(trList: TransactionRecord[], displayTypes: string[]): EChartsOption {
 
-    const data = trList.map(tr => trDtoToTrForm(tr));
-
-    const filteredData = data.filter(item => displayTypes.includes(item.type))
+    const filteredData = trList.filter(item => displayTypes.includes(item.transactionType))
 
     if (!filteredData || filteredData.length === 0) {
         return {
@@ -41,7 +39,7 @@ export function buildOptionForTradingTrend(trList: TransactionRecord[], displayT
     let maxYear = -Infinity, maxMonth = -Infinity
 
     filteredData.forEach(item => {
-        const date = item.time
+        const date = dayjs(item.transactionAt * 1000)
         const year = date.year()
         const month = date.month() + 1
 
@@ -74,9 +72,9 @@ export function buildOptionForTradingTrend(trList: TransactionRecord[], displayT
     })
 
     filteredData.forEach(item => {
-        const date = item.time
+        const date = dayjs(item.transactionAt * 1000)
         const key = `${date.year()}-${String(date.month() + 1).padStart(2, '0')}`
-        const type = item.type
+        const type = item.transactionType
         const amount = item.price
 
         if (!monthlyData.has(key)) {
@@ -99,19 +97,19 @@ export function buildOptionForTradingTrend(trList: TransactionRecord[], displayT
     })
 
     const xAxisData = totalMonths
-    const seriesDataMap = new Map<string, number[]>(
+    const seriesDataMap = new Map<string, string[]>(
         displayTypes.map(type => [type, xAxisData.map(month => {
             const data = monthlyData.get(month);
-            if (!data) return 0;
+            if (!data) return "0";
             switch (type) {
                 case 'income':
-                    return formatFloat(data.income);
+                    return (data.income / 100).toFixed(2);
                 case 'expense':
-                    return formatFloat(data.expense);
+                    return (data.expense / 100).toFixed(2);
                 case 'transfer':
-                    return formatFloat(data.transfer);
+                    return (data.transfer / 100).toFixed(2);
                 default:
-                    return 0;
+                    return "0";
             }
         })])
     )
@@ -149,8 +147,7 @@ export function buildOptionForTradingTrend(trList: TransactionRecord[], displayT
  * 根据交易记录数据生成 ECharts 饼图配置项，展示指定交易类型下各消费类别的金额分布。
  */
 export function buildOptionForTransactionDistribution(trList: TransactionRecord[], transactionType: string): EChartsOption {
-    const data = trList.map(tr => trDtoToTrForm(tr));
-    const filteredData = data.filter(item => item.type === transactionType)
+    const filteredData = trList.filter(item => item.transactionType === transactionType)
 
     const categoryMap = new Map<string, number>()
 
@@ -162,7 +159,7 @@ export function buildOptionForTransactionDistribution(trList: TransactionRecord[
 
     const seriesData = Array.from(categoryMap, ([name, value]) => ({
         name,
-        value: formatFloat(value)
+        value: centsToYuan(value)
     }))
 
     if (seriesData.length === 0) {

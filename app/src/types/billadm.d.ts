@@ -11,7 +11,7 @@ export interface TrForm {
     /**
      * 金额. 对应 price.
      */
-    price: number;
+    price: string;
     /**
      * 交易类型 (e.g., 'income', 'expense', 'transfer'). 对应 transaction_type.
      */

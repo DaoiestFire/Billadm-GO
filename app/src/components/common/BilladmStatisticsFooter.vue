@@ -4,25 +4,25 @@
       收入
     </a-typography-text>
     <a-typography-text>
-      {{ formatFloat(appDataStore.income) }}
+      {{ centsToYuan(appDataStore.income) }}
     </a-typography-text>
     <a-typography-text type="secondary">
       支出
     </a-typography-text>
     <a-typography-text>
-      {{ formatFloat(appDataStore.expense) }}
+      {{ centsToYuan(appDataStore.expense) }}
     </a-typography-text>
     <a-typography-text type="secondary">
       转账
     </a-typography-text>
     <a-typography-text>
-      {{ formatFloat(appDataStore.transfer) }}
+      {{ centsToYuan(appDataStore.transfer) }}
     </a-typography-text>
   </div>
 </template>
 
 <script setup lang="ts">
-import {formatFloat} from "@/backend/functions.ts";
+import {centsToYuan} from "@/backend/functions.ts";
 import {useAppDataStore} from "@/stores/appDataStore.ts";
 
 const appDataStore = useAppDataStore();

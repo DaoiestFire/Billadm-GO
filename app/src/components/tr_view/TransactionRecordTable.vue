@@ -17,6 +17,10 @@
         </a-tag>
       </template>
 
+      <template v-else-if="column.dataIndex === 'price'">
+        {{ centsToYuan(record.price) }}
+      </template>
+
       <template v-else-if="column.dataIndex === 'action'">
         <a-button type="text" @click="handleEdit(record as TransactionRecord)" :style="editButtonStyle">编辑</a-button>
         <a-popconfirm title="确认删除吗"
@@ -32,7 +36,7 @@
 
 <script setup lang="ts">
 import type {TransactionRecord} from '@/types/billadm';
-import {formatTimestamp} from "@/backend/functions.ts";
+import {centsToYuan, formatTimestamp} from "@/backend/functions.ts";
 import {useCssVariables} from "@/backend/css.ts";
 import type {CSSProperties} from "vue";
 import type {ColumnsType} from "ant-design-vue/es/table";
