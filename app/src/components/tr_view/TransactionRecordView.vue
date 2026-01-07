@@ -97,6 +97,7 @@ import dayjs from "dayjs";
 import {trDtoToTrForm, trFormToTrDto} from "@/backend/dto-utils.ts";
 import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
 import {useAppDataStore} from "@/stores/appDataStore.ts";
+import type {Rule} from "ant-design-vue/es/form";
 
 const {majorBgColor} = useCssVariables();
 
@@ -111,7 +112,7 @@ const trQueryConditionStore = useTrQueryConditionStore();
 const appDataStore = useAppDataStore();
 
 // 表单校验规则
-const rules = {
+const rules: Record<string, Rule[]> = {
   price: [
     {
       required: true,

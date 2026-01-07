@@ -1,7 +1,6 @@
 import type {TransactionRecord} from '@/types/billadm'
-import type {EChartsOption, LegendComponentOption} from "echarts"
+import {type EChartsOption, type LegendComponentOption, type PieSeriesOption} from "echarts"
 import {TransactionTypeToColor, TransactionTypeToLabel} from '@/backend/constant'
-import {centsToYuan} from '@/backend/functions'
 import dayjs from "dayjs";
 
 /**
@@ -159,7 +158,7 @@ export function buildOptionForTransactionDistribution(trList: TransactionRecord[
 
     const seriesData = Array.from(categoryMap, ([name, value]) => ({
         name,
-        value: centsToYuan(value)
+        value: (value / 100).toFixed(2)
     }))
 
     if (seriesData.length === 0) {
@@ -177,6 +176,33 @@ export function buildOptionForTransactionDistribution(trList: TransactionRecord[
         }
     }
 
+    const series = [{
+        name: TransactionTypeToLabel.get(transactionType) || transactionType,
+        type: 'pie',
+        radius: ['40%', '70%'],
+        center: ['40%', '50%'],
+        avoidLabelOverlap: false,
+        label: {
+            show: true,
+            // alignTo: 'labelLine',
+            formatter: '{b}\n{c}\n({d}%)',
+            fontSize: 12
+        },
+        emphasis: {
+            label: {
+                show: true,
+                fontSize: 14,
+                fontWeight: 'bold'
+            }
+        },
+        labelLine: {
+            show: true,
+            length: 20,
+            length2: 50
+        },
+        data: seriesData
+    }];
+
     return {
         title: {text: ''},
         tooltip: {
@@ -190,31 +216,6 @@ export function buildOptionForTransactionDistribution(trList: TransactionRecord[
             top: 20,
             bottom: 20
         },
-        series: [{
-            name: TransactionTypeToLabel.get(transactionType) || transactionType,
-            type: 'pie',
-            radius: ['40%', '70%'],
-            center: ['40%', '50%'],
-            avoidLabelOverlap: false,
-            label: {
-                show: true,
-                alignTo: 'labelLine',
-                formatter: '{b}\n{c}\n({d}%)',
-                fontSize: 12
-            },
-            emphasis: {
-                label: {
-                    show: true,
-                    fontSize: 14,
-                    fontWeight: 'bold'
-                }
-            },
-            labelLine: {
-                show: true,
-                length: 20,
-                length2: 50
-            },
-            data: seriesData
-        }]
+        series: series as PieSeriesOption
     }
 }
