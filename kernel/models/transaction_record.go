@@ -12,8 +12,8 @@ type TransactionRecord struct {
 	LedgerID      string `gorm:"not null;comment:关联账本ID" json:"ledger_id"`
 
 	// 交易核心信息
-	Price           float64 `gorm:"not null;comment:交易金额" json:"price"`
-	TransactionType string  `gorm:"not null;comment:交易类型" json:"transaction_type"`
+	Price           int64  `gorm:"not null;comment:交易金额" json:"price"`
+	TransactionType string `gorm:"not null;comment:交易类型" json:"transaction_type"`
 
 	// 分类与描述
 	Category    string `gorm:"not null;comment:分类ID" json:"category"`

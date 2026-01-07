@@ -1,119 +1,41 @@
 -- 创建账本表
 CREATE TABLE IF NOT EXISTS tbl_billadm_ledger
 (
-    id
-    TEXT
-    PRIMARY
-    KEY,
-    name
-    TEXT
-    NOT
-    NULL,
-    created_at
-    INTEGER
-    NOT
-    NULL,
-    updated_at
-    INTEGER
-    NOT
-    NULL
+    id         TEXT PRIMARY KEY,
+    name       TEXT    NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
 );
 
 -- 创建交易记录表
 CREATE TABLE IF NOT EXISTS tbl_billadm_transaction_record
 (
-    transaction_id
-    TEXT
-    PRIMARY
-    KEY,
-    ledger_id
-    TEXT
-    NOT
-    NULL,
-    price
-    REAL
-    NOT
-    NULL,
-    transaction_type
-    TEXT
-    NOT
-    NULL,
-    category
-    TEXT
-    NOT
-    NULL,
-    description
-    TEXT,
-    transaction_at
-    INTEGER
-    NOT
-    NULL,
-    created_at
-    INTEGER
-    NOT
-    NULL,
-    updated_at
-    INTEGER
-    NOT
-    NULL
+    transaction_id   TEXT PRIMARY KEY,
+    ledger_id        TEXT    NOT NULL,
+    price            INTEGER NOT NULL,
+    transaction_type TEXT    NOT NULL,
+    category         TEXT    NOT NULL,
+    description      TEXT,
+    transaction_at   INTEGER NOT NULL,
+    created_at       INTEGER NOT NULL,
+    updated_at       INTEGER NOT NULL
 );
 
 -- 创建交易记录标签表
 CREATE TABLE IF NOT EXISTS tbl_billadm_transaction_record_tag
 (
-    ledger_id
-    TEXT
-    NOT
-    NULL,
-    transaction_id
-    TEXT
-    NOT
-    NULL,
-    tag
-    TEXT
-    NOT
-    NULL
+    ledger_id      TEXT NOT NULL,
+    transaction_id TEXT NOT NULL,
+    tag            TEXT NOT NULL
 );
 
 -- 创建消费分类表
 CREATE TABLE IF NOT EXISTS tbl_billadm_category
 (
-    name
-    TEXT
-    PRIMARY
-    KEY,
-    scope
-    TEXT
-    NOT
-    NULL,
-    transaction_type
-    TEXT
-    NOT
-    NULL
-    DEFAULT
-    ''
+    name             TEXT PRIMARY KEY,
+    scope            TEXT NOT NULL,
+    transaction_type TEXT NOT NULL DEFAULT ''
 );
-
--- 更新内置消费分类
-DELETE
-FROM tbl_billadm_category
-WHERE name in ('餐饮美食',
-               '交通出行',
-               '购物消费',
-               '娱乐休闲',
-               '生活缴费',
-               '医疗健康',
-               '人情往来',
-               '教育学习',
-               '工资奖金',
-               '补贴补助',
-               '退税退款',
-               '二手转卖',
-               '彩票收入',
-               '投资理财',
-               '借贷借款',
-               '五险一金',
-               '税费党费');
 
 INSERT INTO tbl_billadm_category (name, scope, transaction_type)
 VALUES ('餐饮美食', 'system', 'expense'),
@@ -137,78 +59,11 @@ VALUES ('餐饮美食', 'system', 'expense'),
 -- 创建消费标签表
 CREATE TABLE IF NOT EXISTS tbl_billadm_tag
 (
-    name
-    TEXT
-    NOT
-    NULL,
-    scope
-    TEXT
-    NOT
-    NULL,
-    category
-    TEXT
-    NOT
-    NULL
-    DEFAULT
-    '',
-    UNIQUE
-(
-    name,
-    scope,
-    category
-) );
-
--- 更新内置的消费标签
-DELETE
-FROM tbl_billadm_tag
-WHERE name in ('三餐',
-               '商场',
-               '外卖',
-               '奶茶',
-               '零食',
-               '水果',
-               '打车',
-               '地铁',
-               '公交',
-               '高铁',
-               '油费',
-               '停车',
-               'ETC',
-               '车险',
-               '衣物',
-               '数码',
-               '家居',
-               '书籍',
-               '礼物',
-               '玩具',
-               '宠物',
-               '游戏',
-               '快递',
-               '彩票',
-               '电影',
-               '健身',
-               '酒店',
-               '烟酒',
-               '充值',
-               '汽车',
-               '还款',
-               '房租',
-               '物业',
-               '水电',
-               '燃气',
-               '通讯',
-               '人险',
-               '还款',
-               '医药',
-               '医险',
-               '红包',
-               '请客',
-               '养老',
-               '医疗',
-               '失业',
-               '住房',
-               '团费',
-               '交税');
+    name     TEXT NOT NULL,
+    scope    TEXT NOT NULL,
+    category TEXT NOT NULL DEFAULT '',
+    UNIQUE (name, scope, category)
+);
 
 INSERT INTO tbl_billadm_tag (name, scope, category)
 VALUES ('三餐', 'system', '餐饮美食'),

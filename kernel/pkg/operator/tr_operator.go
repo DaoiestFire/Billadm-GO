@@ -97,10 +97,10 @@ func (t *TrOperator) Summary() *dto.TrQueryResult {
 	total := int64(len(t.trDtos))
 
 	// 初始化 trStatistics
-	trStatistics := map[string]float64{
-		"income":   0.0,
-		"expense":  0.0,
-		"transfer": 0.0,
+	trStatistics := map[string]int64{
+		"income":   0,
+		"expense":  0,
+		"transfer": 0,
 	}
 
 	// 遍历所有记录（分页前）进行金额汇总

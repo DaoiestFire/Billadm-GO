@@ -19,20 +19,14 @@ func JsonTransactionRecordDto(c *gin.Context, result *models.Result) (*Transacti
 }
 
 type TransactionRecordDto struct {
-	LedgerID      string `json:"ledgerId"`
-	TransactionID string `json:"transactionId"`
-
-	// 交易核心信息
-	Price           float64 `json:"price"`
-	TransactionType string  ` json:"transactionType"`
-
-	// 分类与描述
-	Category    string   ` json:"category"`
-	Description string   ` json:"description"`
-	Tags        []string ` json:"tags"`
-
-	// 时间信息
-	TransactionAt int64 `json:"transactionAt"`
+	LedgerID        string   `json:"ledgerId"`
+	TransactionID   string   `json:"transactionId"`
+	Price           int64    `json:"price"`
+	TransactionType string   `json:"transactionType"`
+	Category        string   `json:"category"`
+	Description     string   `json:"description"`
+	Tags            []string `json:"tags"`
+	TransactionAt   int64    `json:"transactionAt"`
 }
 
 func (dto *TransactionRecordDto) Validate(result *models.Result) bool {
