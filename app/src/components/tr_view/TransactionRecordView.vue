@@ -37,7 +37,7 @@
           @close="closeTrDrawer"
           :closable="false"
       >
-        <a-form :model="trForm">
+        <a-form :model="trForm" :rules="rules">
           <a-form-item label="时间" name="time">
             <a-date-picker v-model:value="trForm.time" style="width: 100%"/>
           </a-form-item>
@@ -109,6 +109,34 @@ const contentStyle: CSSProperties = {
 const ledgerStore = useLedgerStore();
 const trQueryConditionStore = useTrQueryConditionStore();
 const appDataStore = useAppDataStore();
+
+// 表单校验规则
+const rules = {
+  price: [
+    {
+      required: true,
+      message: '请输入价格',
+      trigger: 'blur',
+    },
+    {
+      validator: (_: any, value: string) => {
+        if (!value) return Promise.reject(new Error('请输入价格'));
+
+        // 必须是非负数，且最多两位小数
+        const regex = /^(0|[1-9]\d*)(\.\d{1,2})?$/;
+        // 允许 "0", "0.00", "123", "123.4", "123.45"
+        // 不允许 ".5", "01.23", "123.456"
+
+        if (!regex.test(value)) {
+          return Promise.reject(new Error('请输入 ≥0 的有效金额，最多两位小数'));
+        }
+
+        return Promise.resolve();
+      },
+      trigger: 'blur',
+    },
+  ],
+};
 
 // 消费记录
 const tableData = ref<TransactionRecord[]>([]);
