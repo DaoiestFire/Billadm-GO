@@ -36,7 +36,7 @@ const log = (message) => {
 };
 
 let billadmCfg = {
-    width: 1600, height: 1000, workspaceDir: '',
+    width: 1600, height: 1000, x: undefined, y: undefined, workspaceDir: '',
 };
 
 function readBilladmFile() {
@@ -114,7 +114,12 @@ const startKernel = () => {
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: billadmCfg.width, height: billadmCfg.height, frame: false, webPreferences: {
+        width: billadmCfg.width,
+        height: billadmCfg.height,
+        x: billadmCfg.x,
+        y: billadmCfg.y,
+        frame: false,
+        webPreferences: {
             nodeIntegration: false, contextIsolation: true, preload: path.join(__dirname, 'preload.js'),
         },
     });
@@ -139,6 +144,8 @@ const createWindow = () => {
                 } catch (e) {
                     log(`请求kernel关闭失败 ${e}`)
                 }
+                const bounds = mainWindow.getBounds();
+                billadmCfg = {...billadmCfg, ...bounds}
                 mainWindow.close();
                 break;
         }
