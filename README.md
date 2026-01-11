@@ -4,7 +4,6 @@
 
 # 简介
 
-
 账本管理页面
 <div style="text-align: center;">
   <img alt="账本管理页面" style="width: 80%;" src="./doc/images/账本管理页面.png"/>
@@ -35,7 +34,7 @@
 
 ### 自行打包
 
-下载项目后，进入`build`目录，执行ps1脚本`package_app.ps1`
+下载项目后，进入`build`目录，执行ps1脚本`build.ps1`
 
 在`electron`目录下会生成`out`目录，其中存在打包后的安装程序
 
