@@ -4,7 +4,7 @@
       <a-avatar shape="square" :src="IconBilladm"/>
     </div>
     <div class="left-groups">
-      <billadm-ledger-select/>
+      <billadm-ledger-select v-if="route.path!='/ledger_view'"/>
     </div>
     <div class="center-groups">
       Billadm-{{ route.name }}
