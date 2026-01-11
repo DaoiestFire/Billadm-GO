@@ -30,10 +30,10 @@ func queryAllLedgers(c *gin.Context) {
 		return
 	}
 
-	ledgerId, ok := arg["ledgerId"].(string)
+	ledgerId, ok := arg["id"].(string)
 	if !ok {
 		ret.Code = -1
-		ret.Msg = "ledgerId在请求体中不存在"
+		ret.Msg = "'id'在请求体中不存在"
 		return
 	}
 
