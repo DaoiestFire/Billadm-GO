@@ -13,7 +13,8 @@ export function centsToYuan(cents: number): string {
     // 转为带两位小数的字符串
     return (cents / 100).toLocaleString('zh-CN', {
         minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+        maximumFractionDigits: 2,
+        useGrouping: false
     });
 }
 
