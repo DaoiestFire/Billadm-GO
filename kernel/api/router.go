@@ -13,17 +13,17 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/app/exit", exitApp)
 	// ledger
 	ginServer.POST("/api/v1/ledger/query-all", queryAllLedgers)
-	ginServer.POST("/api/v1/ledger/create-ledger", createLedger)
-	ginServer.POST("/api/v1/ledger/modify-ledger-name", modifyLedgerName)
-	ginServer.POST("/api/v1/ledger/delete-ledger", deleteLedger)
+	ginServer.POST("/api/v1/ledger/create-one", createLedger)
+	ginServer.POST("/api/v1/ledger/modify-name", modifyLedgerName)
+	ginServer.POST("/api/v1/ledger/delete-one", deleteLedger)
 	// transaction record
 	ginServer.POST("/api/v1/tr/query", queryTrOnCondition)
-	ginServer.POST("/api/v1/tr/create", createTransactionRecord)
+	ginServer.POST("/api/v1/tr/create-one", createTransactionRecord)
 	ginServer.POST("/api/v1/tr/delete-by-id", deleteTransactionRecordById)
 	// category
-	ginServer.GET("/api/v1/category/query/:type", queryCategoryByType)
+	ginServer.POST("/api/v1/category/query/:type", queryCategoryByType)
 	// tag
-	ginServer.GET("/api/v1/tag/query/:category", queryTagsByCategory)
+	ginServer.POST("/api/v1/tag/query/:category", queryTagsByCategory)
 	// workspace
 	ginServer.POST("/api/v1/workspace/open", openWorkspace)
 	ginServer.POST("/api/v1/workspace/is-opened", hasOpenedWorkspace)

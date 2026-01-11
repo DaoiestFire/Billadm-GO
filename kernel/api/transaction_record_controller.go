@@ -29,14 +29,14 @@ func queryTrOnCondition(c *gin.Context) {
 	}
 	logrus.Debugf("query condition: %v", queryCondition)
 
-	trs, err := service.GetTrService().QueryTrsOnCondition(ws, queryCondition)
+	result, err := service.GetTrService().QueryTrsOnCondition(ws, queryCondition)
 	if err != nil {
 		ret.Code = -1
 		ret.Msg = err.Error()
 		return
 	}
 
-	ret.Data = trs
+	ret.Data = result
 }
 
 func createTransactionRecord(c *gin.Context) {

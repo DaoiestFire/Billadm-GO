@@ -8,7 +8,7 @@ export async function queryTrOnCondition(condition: TrQueryCondition): Promise<T
 }
 
 export async function createTrForLedger(data: TransactionRecord): Promise<string> {
-    const resp: Result<string> = await api_client.post('/v1/tr/create', data);
+    const resp: Result<string> = await api_client.post('/v1/tr/create-one', data);
     api_client.isRespSuccess(resp, 'createTrForLedger错误: ');
     return resp.data;
 }

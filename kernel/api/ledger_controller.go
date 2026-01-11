@@ -158,10 +158,10 @@ func deleteLedger(c *gin.Context) {
 		return
 	}
 
-	trId, ok := arg["ledgerId"].(string)
+	trId, ok := arg["id"].(string)
 	if !ok {
 		ret.Code = -1
-		ret.Msg = "ledgerId在请求体中不存在"
+		ret.Msg = "id在请求体中不存在"
 		return
 	}
 
