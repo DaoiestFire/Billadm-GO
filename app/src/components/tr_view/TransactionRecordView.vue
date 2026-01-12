@@ -30,9 +30,9 @@
         />
       </a-layout-footer>
       <a-modal
-          :open="openTrDrawer"
-          width="800px"
           :title="trModalTitle"
+          :open="openTrModal"
+          width="800px"
           @ok="confirmTrModal"
           ok-text="确认"
           @cancel="closeTrModal"
@@ -163,7 +163,7 @@ const refreshTable = async () => {
   appDataStore.setStatistics(trQueryResult.trStatistics);
 }
 
-const openTrDrawer = ref(false);
+const openTrModal = ref(false);
 const trModalTitle = ref('');
 const trForm = ref<TrForm>({
   id: '',
@@ -183,13 +183,13 @@ const createTr = () => {
     trForm.value.time = trQueryConditionStore.timeRange[1];
   }
   trModalTitle.value = '新增消费记录';
-  openTrDrawer.value = true;
+  openTrModal.value = true;
 }
 
 const updateTr = (tr: TransactionRecord) => {
   trModalTitle.value = '编辑消费记录';
   trForm.value = trDtoToTrForm(tr);
-  openTrDrawer.value = true;
+  openTrModal.value = true;
 }
 
 const deleteTr = async (tr: TransactionRecord) => {
@@ -207,7 +207,7 @@ const closeTrModal = () => {
     tags: [],
     time: dayjs()
   };
-  openTrDrawer.value = false;
+  openTrModal.value = false;
 }
 
 const confirmTrModal = async () => {

@@ -2,7 +2,7 @@
   <div class="menu-bar">
     <div class="top-groups">
       <a-badge :count="trQueryConditionStore.conditionLen" dot>
-        <a-button :type="trQueryConditionStore.conditionLen?'primary':'text'" @click="openFilterDrawer=true">
+        <a-button :type="trQueryConditionStore.conditionLen?'primary':'text'" @click="openFilterModal=true">
           <template #icon>
             <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
           </template>
@@ -12,18 +12,17 @@
     <div class="bottom-groups">
     </div>
   </div>
-  <a-drawer
+  <a-modal
       title="筛选消费记录"
-      :open="openFilterDrawer"
-      @close="closeDrawer"
-      :body-style="{ paddingBottom: '80px' }"
-      :footer-style="{ textAlign: 'right' }"
+      :open="openFilterModal"
+      width="800px"
+      @cancel="confirmFilterModal"
+      centered
       :closable="false"
   >
-    <template #extra>
-      <a-space>
-        <a-button type="primary" @click="clearAllConditions">清除条件</a-button>
-      </a-space>
+    <template #footer>
+      <a-button key="clear" @click="clearAllConditions">清除条件</a-button>
+      <a-button key="confirm" type="primary" @click="confirmFilterModal">确认</a-button>
     </template>
     <a-form layout="vertical">
       <!-- 交易类型 -->
@@ -83,7 +82,7 @@
         </a-list>
       </a-form-item>
     </a-form>
-  </a-drawer>
+  </a-modal>
 </template>
 
 <script setup lang="ts">
@@ -96,7 +95,7 @@ import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 
 const trQueryConditionStore = useTrQueryConditionStore();
 
-const openFilterDrawer = ref(false);
+const openFilterModal = ref(false);
 const transactionTypes = ref<string[]>([]);
 const cateTagsConditions = ref<categoryTagsCondition[]>([]);
 // ===== 临时输入状态 =====
@@ -141,7 +140,7 @@ watch(() => tempCategory.value, async () => {
 /**
  * 监听打开操作，赋值表单
  */
-watch(openFilterDrawer, (newVal) => {
+watch(openFilterModal, (newVal) => {
   if (newVal) {
     // 每次打开抽屉时，从 store 加载最新筛选条件
     transactionTypes.value = [...(trQueryConditionStore.transactionTypes || [])];
@@ -154,10 +153,10 @@ function clearAllConditions() {
   cateTagsConditions.value = [];
 }
 
-function closeDrawer() {
+function confirmFilterModal() {
   trQueryConditionStore.transactionTypes = transactionTypes.value;
   trQueryConditionStore.cateTagsConditions = cateTagsConditions.value;
-  openFilterDrawer.value = false;
+  openFilterModal.value = false;
 }
 
 // 切换分类时清空标签
