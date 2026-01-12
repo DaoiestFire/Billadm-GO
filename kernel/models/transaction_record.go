@@ -19,6 +19,9 @@ type TransactionRecord struct {
 	Category    string `gorm:"not null;comment:分类ID" json:"category"`
 	Description string `gorm:"comment:交易描述" json:"description"`
 
+	// 标记
+	Flags string `gorm:"comment:标记集" json:"flags"`
+
 	// 时间信息
 	TransactionAt int64 `gorm:"not null;comment:交易时间" json:"transaction_at"`
 	CreatedAt     int64 `gorm:"autoCreateTime:unix;not null;comment:创建时间" json:"created_at"`

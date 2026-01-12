@@ -1,6 +1,7 @@
 package dto
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -27,6 +28,7 @@ type TransactionRecordDto struct {
 	Description     string   `json:"description"`
 	Tags            []string `json:"tags"`
 	TransactionAt   int64    `json:"transactionAt"`
+	Outlier         bool     `json:"outlier"`
 }
 
 func (dto *TransactionRecordDto) Validate(result *models.Result) bool {
@@ -50,6 +52,11 @@ func (dto *TransactionRecordDto) ToTransactionRecord() *models.TransactionRecord
 	tr.Category = dto.Category
 	tr.Description = dto.Description
 	tr.TransactionAt = dto.TransactionAt
+	flags := models.TransactionRecordFlags{
+		Outlier: dto.Outlier,
+	}
+	flagsStr, _ := json.Marshal(flags)
+	tr.Flags = string(flagsStr)
 	return tr
 }
 
@@ -62,4 +69,7 @@ func (dto *TransactionRecordDto) FromTransactionRecord(tr *models.TransactionRec
 	dto.Description = tr.Description
 	dto.Tags = make([]string, 0)
 	dto.TransactionAt = tr.TransactionAt
+	flags := models.TransactionRecordFlags{}
+	json.Unmarshal([]byte(tr.Flags), &flags)
+	dto.Outlier = flags.Outlier
 }

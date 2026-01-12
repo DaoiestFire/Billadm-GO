@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS tbl_billadm_transaction_record
     transaction_type TEXT    NOT NULL,
     category         TEXT    NOT NULL,
     description      TEXT,
+    flags            TEXT    NOT NULL DEFAULT '',
     transaction_at   INTEGER NOT NULL,
     created_at       INTEGER NOT NULL,
     updated_at       INTEGER NOT NULL
