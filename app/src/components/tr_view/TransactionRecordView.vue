@@ -29,13 +29,15 @@
             show-size-changer
         />
       </a-layout-footer>
-      <a-drawer
-          :title="drawerTitle"
+      <a-modal
           :open="openTrDrawer"
-          :body-style="{ paddingBottom: '80px' }"
-          :footer-style="{ textAlign: 'right' }"
-          @close="closeTrDrawer"
-          :closable="false"
+          width="800px"
+          :title="trModalTitle"
+          @ok="confirmTrModal"
+          ok-text="确认"
+          @cancel="closeTrModal"
+          cancel-text="取消"
+          centered
       >
         <a-form :model="trForm" :rules="rules">
           <a-form-item label="时间" name="time">
@@ -66,13 +68,7 @@
             <a-input v-model:value="trForm.price" prefix="￥" style="width: 100%"/>
           </a-form-item>
         </a-form>
-        <template #extra>
-          <a-space>
-            <a-button @click="closeTrDrawer">取消</a-button>
-            <a-button type="primary" @click="onConfirm">确认</a-button>
-          </a-space>
-        </template>
-      </a-drawer>
+      </a-modal>
     </a-layout>
   </a-layout>
 </template>
@@ -170,7 +166,7 @@ const refreshTable = async () => {
 }
 
 const openTrDrawer = ref(false);
-const drawerTitle = ref('');
+const trModalTitle = ref('');
 const trForm = ref<TrForm>({
   id: '',
   price: '',
@@ -188,12 +184,12 @@ const createTr = () => {
   if (trQueryConditionStore.timeRange) {
     trForm.value.time = trQueryConditionStore.timeRange[1];
   }
-  drawerTitle.value = '新增消费记录';
+  trModalTitle.value = '新增消费记录';
   openTrDrawer.value = true;
 }
 
 const updateTr = (tr: TransactionRecord) => {
-  drawerTitle.value = '编辑消费记录';
+  trModalTitle.value = '编辑消费记录';
   trForm.value = trDtoToTrForm(tr);
   openTrDrawer.value = true;
 }
@@ -203,7 +199,7 @@ const deleteTr = async (tr: TransactionRecord) => {
   await refreshTable();
 }
 
-const closeTrDrawer = () => {
+const closeTrModal = () => {
   trForm.value = {
     id: '',
     price: '',
@@ -216,7 +212,7 @@ const closeTrDrawer = () => {
   openTrDrawer.value = false;
 }
 
-const onConfirm = async () => {
+const confirmTrModal = async () => {
   trForm.value.time = trForm.value.time.hour(12).minute(0).second(0);
   const tr = trFormToTrDto(trForm.value, ledgerStore.currentLedgerId);
   if (tr.transactionId === '') {
@@ -228,7 +224,7 @@ const onConfirm = async () => {
     await updateTransactionRecord(tr);
   }
   await refreshTable();
-  closeTrDrawer();
+  closeTrModal();
 }
 
 // 查询条件变化 → 重置分页 + 刷新
