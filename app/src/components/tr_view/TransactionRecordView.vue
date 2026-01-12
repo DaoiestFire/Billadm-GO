@@ -111,8 +111,6 @@ const appDataStore = useAppDataStore();
 const rules: Record<string, Rule[]> = {
   price: [
     {
-      required: true,
-      message: '请输入价格',
       trigger: 'blur',
     },
     {
