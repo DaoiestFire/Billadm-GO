@@ -55,19 +55,19 @@ const columns: ColumnsType = [
   {
     title: '消费时间',
     dataIndex: 'transactionAt',
-    width: 150,
+    width: 120,
     align: 'center'
   },
   {
     title: '交易类型',
     dataIndex: 'transactionType',
-    width: 150,
+    width: 120,
     align: 'center'
   },
   {
     title: '消费类型',
     dataIndex: 'category',
-    width: 150,
+    width: 120,
     align: 'center'
   },
   {

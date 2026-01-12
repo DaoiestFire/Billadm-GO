@@ -36,7 +36,7 @@ const log = (message) => {
 };
 
 let billadmCfg = {
-    width: 1600, height: 1000, x: undefined, y: undefined, workspaceDir: '',
+    width: 1400, height: 1000, x: undefined, y: undefined, workspaceDir: '',
 };
 
 function readBilladmFile() {
