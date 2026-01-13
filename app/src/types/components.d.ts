@@ -68,6 +68,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SettingsView: typeof import('./../components/settings_view/SettingsView.vue')['default']
+    TransactionRecordFilter: typeof import('./../components/common/TransactionRecordFilter.vue')['default']
     TransactionRecordTable: typeof import('./../components/tr_view/TransactionRecordTable.vue')['default']
     TransactionRecordView: typeof import('./../components/tr_view/TransactionRecordView.vue')['default']
     TrViewRightActionBar: typeof import('./../components/tr_view/TrViewRightActionBar.vue')['default']

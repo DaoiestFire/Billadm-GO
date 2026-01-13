@@ -1,4 +1,14 @@
 <template>
+  <a-float-button
+      style="right: 110px;bottom: 80px"
+      @click="openTrFilterModal=true"
+      :badge="{ count: trQueryConditionStore.conditionLen, color: 'blue' }"
+  >
+    <template #icon>
+      <FilterOutlined/>
+    </template>
+  </a-float-button>
+  <TransactionRecordFilter v-model="openTrFilterModal"/>
   <a-layout style="height: 100%">
     <a-layout-header class="headerStyle">
       <div class="left-groups">
@@ -28,6 +38,7 @@ import {useCssVariables} from "@/backend/css.ts";
 import {convertToUnixTimeRange} from "@/backend/timerange.ts";
 import {getTrOnCondition} from "@/backend/functions.ts";
 import {useAppDataStore} from "@/stores/appDataStore.ts";
+import {FilterOutlined} from "@ant-design/icons-vue";
 
 const {majorBgColor} = useCssVariables();
 
@@ -41,6 +52,8 @@ const ledgerStore = useLedgerStore();
 const trQueryConditionStore = useTrQueryConditionStore();
 const appDataStore = useAppDataStore();
 
+// modal
+const openTrFilterModal = ref<boolean>()
 const trs = ref<TransactionRecord[]>([]);
 
 const refreshData = async () => {

@@ -1,20 +1,7 @@
 <template>
-  <div class="menu-bar">
-    <div class="top-groups">
-      <a-badge :count="trQueryConditionStore.conditionLen" dot>
-        <a-button :type="trQueryConditionStore.conditionLen?'primary':'text'" @click="openFilterModal=true">
-          <template #icon>
-            <FilterOutlined style="display: flex;justify-content: center;align-items: center;font-size: medium"/>
-          </template>
-        </a-button>
-      </a-badge>
-    </div>
-    <div class="bottom-groups">
-    </div>
-  </div>
   <a-modal
       title="筛选消费记录"
-      :open="openFilterModal"
+      v-model:open="open"
       width="800px"
       @cancel="confirmFilterModal"
       centered
@@ -87,15 +74,13 @@
 
 <script setup lang="ts">
 import {ref, watch} from 'vue';
-import {FilterOutlined} from "@ant-design/icons-vue";
 import type {Category, categoryTagsCondition} from "@/types/billadm";
 import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
 import {getCategoryByType, getTagsByCategory} from "@/backend/functions.ts";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 
+const open = defineModel<boolean>()
 const trQueryConditionStore = useTrQueryConditionStore();
-
-const openFilterModal = ref(false);
 const transactionTypes = ref<string[]>([]);
 const cateTagsConditions = ref<categoryTagsCondition[]>([]);
 // ===== 临时输入状态 =====
@@ -140,7 +125,7 @@ watch(() => tempCategory.value, async () => {
 /**
  * 监听打开操作，赋值表单
  */
-watch(openFilterModal, (newVal) => {
+watch(open, (newVal) => {
   if (newVal) {
     // 每次打开抽屉时，从 store 加载最新筛选条件
     transactionTypes.value = [...(trQueryConditionStore.transactionTypes || [])];
@@ -156,7 +141,7 @@ function clearAllConditions() {
 function confirmFilterModal() {
   trQueryConditionStore.transactionTypes = transactionTypes.value;
   trQueryConditionStore.cateTagsConditions = cateTagsConditions.value;
-  openFilterModal.value = false;
+  open.value = false;
 }
 
 // 切换分类时清空标签
@@ -194,28 +179,3 @@ function deleteCondition(category: string) {
   }
 }
 </script>
-
-<style scoped>
-.menu-bar {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 0;
-}
-
-.top-groups {
-  margin-bottom: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.bottom-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-</style>

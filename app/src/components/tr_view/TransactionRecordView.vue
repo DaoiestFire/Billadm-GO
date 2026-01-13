@@ -1,19 +1,22 @@
 <template>
   <a-float-button
       type="primary"
-      style="right: 100px;bottom: 80px"
+      style="right: 50px;bottom: 80px"
       @click="createTr">
     <template #icon>
       <PlusOutlined/>
     </template>
   </a-float-button>
   <a-float-button
-      style="right: 150px;bottom: 80px"
-      @click="createTr">
+      style="right: 110px;bottom: 80px"
+      @click="openTrFilterModal=true"
+      :badge="{ count: trQueryConditionStore.conditionLen, color: 'blue' }"
+  >
     <template #icon>
       <FilterOutlined/>
     </template>
   </a-float-button>
+  <TransactionRecordFilter v-model="openTrFilterModal"/>
   <a-layout style="height: 100%">
     <a-layout>
       <a-layout-header class="headerStyle">
@@ -146,6 +149,8 @@ const rules: Record<string, Rule[]> = {
   ],
 };
 
+// modal
+const openTrFilterModal = ref<boolean>()
 // 消费记录
 const tableData = ref<TransactionRecord[]>([]);
 // 分页

@@ -21,12 +21,6 @@
           <billadm-statistics-footer/>
         </a-layout-footer>
       </a-layout>
-      <a-layout-sider v-if="route.path==='/tr_view'" :style="siderStyle" :width="siderWidthSize">
-        <TrViewRightActionBar/>
-      </a-layout-sider>
-      <a-layout-sider v-else-if="route.path==='/da_view'" :style="siderStyle" :width="siderWidthSize">
-        <TrViewRightActionBar/>
-      </a-layout-sider>
     </a-layout>
   </a-layout>
 </template>
@@ -41,7 +35,6 @@ import BilladmStatisticsFooter from "@/components/common/BilladmStatisticsFooter
 import {useRoute} from "vue-router";
 
 const route = useRoute();
-
 
 const {minorBgColor, siderWidthSize} = useCssVariables();
 

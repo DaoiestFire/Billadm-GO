@@ -1,12 +1,24 @@
 <template>
   <a-float-button
       type="primary"
-      style="right: 100px;bottom: 80px"
+      style="right: 50px;bottom: 80px"
       @click="openLedgerModal">
     <template #icon>
       <PlusOutlined/>
     </template>
   </a-float-button>
+  <a-modal
+      :title="modalTitle"
+      :open="ledgerModal"
+      width="800px"
+      @ok="confirmLedgerModal"
+      ok-text="确认"
+      @cancel="ledgerModal=false"
+      cancel-text="取消"
+      centered
+  >
+    <a-input v-model:value.lazy="ledgerName" placeholder="输入账本名称"/>
+  </a-modal>
   <a-layout style="height: 100%">
     <a-layout-header class="headerStyle">
       <div class="left-groups">
@@ -50,18 +62,6 @@
       </div>
     </a-layout-content>
   </a-layout>
-  <a-modal
-      :title="modalTitle"
-      :open="showModal"
-      width="800px"
-      @ok="confirmLedgerModal"
-      ok-text="确认"
-      @cancel="showModal=false"
-      cancel-text="取消"
-      centered
-  >
-    <a-input v-model:value.lazy="ledgerName" placeholder="输入账本名称"/>
-  </a-modal>
 </template>
 
 <script setup lang="ts">
@@ -90,26 +90,26 @@ const contentStyle: CSSProperties = {
 
 const ledgerStore = useLedgerStore();
 
-const formatTimestamp = (ts: number) => {
-  return dayjs(ts * 1000).format('YYYY-MM-DD HH:mm:ss');
-}
-
-const showModal = ref<boolean>(false);
+const ledgerModal = ref<boolean>(false);
 const modalTitle = ref<string>("");
 const ledgerId = ref<string>("");
 const ledgerName = ref<string>("");
 
+const formatTimestamp = (ts: number) => {
+  return dayjs(ts * 1000).format('YYYY-MM-DD HH:mm:ss');
+}
+
 const openLedgerModal = () => {
   modalTitle.value = "创建账本";
   ledgerName.value = "";
-  showModal.value = true;
+  ledgerModal.value = true;
 };
 
 const modifyLedgerName = (id: string, name: string) => {
   modalTitle.value = "修改账本名称";
   ledgerId.value = id;
   ledgerName.value = name;
-  showModal.value = true;
+  ledgerModal.value = true;
 };
 
 const confirmLedgerModal = async () => {
@@ -119,7 +119,7 @@ const confirmLedgerModal = async () => {
   } else if (modalTitle.value === "修改账本名称") {
     await ledgerStore.modifyLedgerName(ledgerId.value, ledgerName.value);
   }
-  showModal.value = false;
+  ledgerModal.value = false;
 };
 </script>
 
