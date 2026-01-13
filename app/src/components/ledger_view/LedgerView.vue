@@ -1,4 +1,12 @@
 <template>
+  <a-float-button
+      type="primary"
+      style="right: 100px;bottom: 80px"
+      @click="openLedgerModal">
+    <template #icon>
+      <PlusOutlined/>
+    </template>
+  </a-float-button>
   <a-layout style="height: 100%">
     <a-layout-header class="headerStyle">
       <div class="left-groups">
@@ -6,7 +14,6 @@
       <div class="center-groups">
       </div>
       <div class="right-groups">
-        <a-button type="primary" @click="createLedger">新增账本</a-button>
       </div>
     </a-layout-header>
     <a-layout-content :style="contentStyle">
@@ -44,12 +51,14 @@
     </a-layout-content>
   </a-layout>
   <a-modal
-      v-model:open="showModal"
       :title="modalTitle"
+      :open="showModal"
+      width="800px"
+      @ok="confirmLedgerModal"
       ok-text="确认"
+      @cancel="showModal=false"
       cancel-text="取消"
-      style="top: 250px"
-      @ok="handleOk"
+      centered
   >
     <a-input v-model:value.lazy="ledgerName" placeholder="输入账本名称"/>
   </a-modal>
@@ -61,6 +70,7 @@ import {ref} from 'vue';
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import dayjs from "dayjs";
 import {useCssVariables} from "@/backend/css.ts";
+import {PlusOutlined} from "@ant-design/icons-vue";
 
 const {majorBgColor, positiveColor, negativeColor} = useCssVariables();
 
@@ -89,7 +99,7 @@ const modalTitle = ref<string>("");
 const ledgerId = ref<string>("");
 const ledgerName = ref<string>("");
 
-const createLedger = () => {
+const openLedgerModal = () => {
   modalTitle.value = "创建账本";
   ledgerName.value = "";
   showModal.value = true;
@@ -102,7 +112,7 @@ const modifyLedgerName = (id: string, name: string) => {
   showModal.value = true;
 };
 
-const handleOk = async () => {
+const confirmLedgerModal = async () => {
   if (!ledgerName) return;
   if (modalTitle.value === "创建账本") {
     await ledgerStore.createLedger(ledgerName.value);

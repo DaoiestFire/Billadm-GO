@@ -1,4 +1,19 @@
 <template>
+  <a-float-button
+      type="primary"
+      style="right: 100px;bottom: 80px"
+      @click="createTr">
+    <template #icon>
+      <PlusOutlined/>
+    </template>
+  </a-float-button>
+  <a-float-button
+      style="right: 150px;bottom: 80px"
+      @click="createTr">
+    <template #icon>
+      <FilterOutlined/>
+    </template>
+  </a-float-button>
   <a-layout style="height: 100%">
     <a-layout>
       <a-layout-header class="headerStyle">
@@ -11,9 +26,6 @@
         <div class="center-groups">
         </div>
         <div class="right-groups">
-          <a-button type="primary" @click="createTr">
-            新增记录
-          </a-button>
         </div>
       </a-layout-header>
       <a-layout-content :style="contentStyle">
@@ -94,6 +106,7 @@ import {trDtoToTrForm, trFormToTrDto} from "@/backend/dto-utils.ts";
 import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
 import {useAppDataStore} from "@/stores/appDataStore.ts";
 import type {Rule} from "ant-design-vue/es/form";
+import {FilterOutlined, PlusOutlined} from "@ant-design/icons-vue";
 
 const {majorBgColor} = useCssVariables();
 
