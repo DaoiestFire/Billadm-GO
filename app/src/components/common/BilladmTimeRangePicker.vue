@@ -8,19 +8,19 @@
     />
     <a-button type="text" @click="goToPrevious">
       <template #icon>
-        <LeftOutlined style="display: flex; justify-content: center; align-items: center; font-size: large"/>
+        <LeftOutlined/>
       </template>
     </a-button>
     <a-range-picker
         v-model:value="timeRange"
         :picker="timeRangeTypeValue"
-        :presets="TimeRangePresets"
+        :presets="getTimeRangePresets()"
         inputReadOnly
         @change="handleTimeRangeChange"
     />
     <a-button type="text" @click="goToNext">
       <template #icon>
-        <RightOutlined style="display: flex; justify-content: center; align-items: center; font-size: large"/>
+        <RightOutlined/>
       </template>
     </a-button>
   </div>
@@ -28,8 +28,18 @@
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import {TimeRangeLabelToValue, TimeRangePresets, TimeRangeValueToLabel} from '@/backend/constant.ts';
-import {getNextPeriod, getPrevPeriod, normalizeTimeRange} from '@/backend/timerange.ts';
+import {TimeRangeLabelToValue, TimeRangeValueToLabel} from '@/backend/constant.ts';
+import {
+  getLastMonthRange,
+  getLastWeekRange,
+  getNextPeriod,
+  getPrevPeriod,
+  getThisMonthRange,
+  getThisWeekRange,
+  getThisYearRange,
+  getTodayRange,
+  normalizeTimeRange
+} from '@/backend/timerange.ts';
 import {LeftOutlined, RightOutlined} from '@ant-design/icons-vue';
 import type {RangeValue, TimeRangeTypeLabel, TimeRangeTypeValue} from '@/types/billadm';
 import type {SegmentedValue} from "ant-design-vue/es/segmented/src/segmented";
@@ -46,6 +56,35 @@ const timeRangeTypeLabel = computed({
     timeRangeTypeValue.value = TimeRangeLabelToValue[val];
   }
 });
+
+const getTimeRangePresets = () => {
+  return [
+    {
+      label: '今天',
+      value: getTodayRange(),
+    },
+    {
+      label: '本周',
+      value: getThisWeekRange(),
+    },
+    {
+      label: '本月',
+      value: getThisMonthRange(),
+    },
+    {
+      label: '上周',
+      value: getLastWeekRange(),
+    },
+    {
+      label: '上月',
+      value: getLastMonthRange(),
+    },
+    {
+      label: '今年',
+      value: getThisYearRange(),
+    }
+  ];
+}
 
 // 上一周期
 const goToPrevious = () => {
