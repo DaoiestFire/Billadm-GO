@@ -12,13 +12,13 @@
       </template>
 
       <template v-else-if="column.dataIndex === 'tags'">
-        <a-tag v-for="tag in record.tags" :key="tag" color="geekblue">
+        <a-tag v-for="tag in record.tags" :key="tag" color="green">
           {{ tag }}
         </a-tag>
       </template>
 
       <template v-else-if="column.dataIndex === 'flags'">
-        <a-tag v-if="record.outlier" key="outlier" color="geekblue">
+        <a-tag v-if="record.outlier" key="outlier" color="orange">
           离群值
         </a-tag>
       </template>
