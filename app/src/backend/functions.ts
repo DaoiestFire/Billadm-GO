@@ -54,7 +54,7 @@ export function formatTimestamp(timestamp: number, format: string = 'YYYY-MM-DD'
 /**
  * 消费记录
  */
-export async function getTrOnCondition(condition: TrQueryCondition): Promise<TrQueryResult> {
+export async function queryTrFunc(condition: TrQueryCondition): Promise<TrQueryResult> {
     try {
         return await queryTrOnCondition(condition);
     } catch (error) {
@@ -71,7 +71,7 @@ export async function getTrOnCondition(condition: TrQueryCondition): Promise<TrQ
     }
 }
 
-export async function createTransactionRecord(tr: TransactionRecord) {
+export async function createTrFunc(tr: TransactionRecord) {
     try {
         await createTrForLedger(tr);
     } catch (error) {
@@ -79,7 +79,7 @@ export async function createTransactionRecord(tr: TransactionRecord) {
     }
 }
 
-export async function deleteTransactionRecord(trId: string) {
+export async function deleteTrByIdFunc(trId: string) {
     try {
         await deleteTrById(trId);
     } catch (error) {
@@ -87,7 +87,7 @@ export async function deleteTransactionRecord(trId: string) {
     }
 }
 
-export async function updateTransactionRecord(tr: TransactionRecord) {
+export async function updateTrFunc(tr: TransactionRecord) {
     try {
         await deleteTrById(tr.transactionId);
         await createTrForLedger(tr);

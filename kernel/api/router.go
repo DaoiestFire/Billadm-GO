@@ -17,7 +17,7 @@ func ServeAPI(ginServer *gin.Engine) {
 	ginServer.POST("/api/v1/ledger/modify-name", modifyLedgerName)
 	ginServer.POST("/api/v1/ledger/delete-one", deleteLedger)
 	// transaction record
-	ginServer.POST("/api/v1/tr/query", queryTrOnCondition)
+	ginServer.POST("/api/v1/tr/query", queryTransactionRecord)
 	ginServer.POST("/api/v1/tr/create-one", createTransactionRecord)
 	ginServer.POST("/api/v1/tr/delete-by-id", deleteTransactionRecordById)
 	// category

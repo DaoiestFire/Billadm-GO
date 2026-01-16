@@ -79,6 +79,7 @@ export interface TransactionRecord {
     description: string;
     tags: string[];
     transactionAt: number;
+    outlier: boolean;
 }
 
 /**

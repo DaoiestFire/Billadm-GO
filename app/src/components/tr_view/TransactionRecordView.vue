@@ -2,7 +2,7 @@
   <a-float-button
       type="primary"
       style="right: 50px;bottom: 80px"
-      @click="createTr">
+      @click="createTrFunc">
     <template #icon>
       <PlusOutlined/>
     </template>
@@ -95,12 +95,12 @@ import type {TransactionRecord, TrForm, TrQueryCondition} from "@/types/billadm"
 import {useCssVariables} from "@/backend/css.ts";
 import {convertToUnixTimeRange} from "@/backend/timerange.ts";
 import {
-  createTransactionRecord,
-  deleteTransactionRecord,
+  createTrFunc,
+  deleteTrByIdFunc,
   getCategoryByType,
   getTagsByCategory,
-  getTrOnCondition,
-  updateTransactionRecord
+  queryTrFunc,
+  updateTrFunc
 } from "@/backend/functions.ts";
 import {useLedgerStore} from "@/stores/ledgerStore.ts";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
@@ -175,7 +175,7 @@ const refreshTable = async () => {
   if (trQueryConditionStore.categoryTags) {
     trCondition.categoryTags = trQueryConditionStore.categoryTags;
   }
-  let trQueryResult = await getTrOnCondition(trCondition);
+  let trQueryResult = await queryTrFunc(trCondition);
   tableData.value = trQueryResult.items
   trTotal.value = trQueryResult.total
   appDataStore.setStatistics(trQueryResult.trStatistics);
@@ -211,7 +211,7 @@ const updateTr = (tr: TransactionRecord) => {
 }
 
 const deleteTr = async (tr: TransactionRecord) => {
-  await deleteTransactionRecord(tr.transactionId);
+  await deleteTrByIdFunc(tr.transactionId);
   await refreshTable();
 }
 
@@ -234,10 +234,10 @@ const confirmTrModal = async () => {
   if (tr.transactionId === '') {
     // 新建
     if (!tr.description) tr.description = '-';
-    await createTransactionRecord(tr);
+    await createTr(tr);
   } else {
     // 更新
-    await updateTransactionRecord(tr);
+    await updateTrFunc(tr);
   }
   await refreshTable();
   closeTrModal();
