@@ -36,7 +36,7 @@ import type {TransactionRecord, TrQueryCondition} from "@/types/billadm";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 import {useCssVariables} from "@/backend/css.ts";
 import {convertToUnixTimeRange} from "@/backend/timerange.ts";
-import {queryTrFunc} from "@/backend/functions.ts";
+import {getTrOnCondition} from "@/backend/functions.ts";
 import {useAppDataStore} from "@/stores/appDataStore.ts";
 import {FilterOutlined} from "@ant-design/icons-vue";
 
@@ -70,7 +70,7 @@ const refreshData = async () => {
   if (trQueryConditionStore.categoryTags) {
     trCondition.categoryTags = trQueryConditionStore.categoryTags;
   }
-  let trQueryResult = await queryTrFunc(trCondition);
+  let trQueryResult = await getTrOnCondition(trCondition);
   trs.value = trQueryResult.items;
   appDataStore.setStatistics(trQueryResult.trStatistics);
 };

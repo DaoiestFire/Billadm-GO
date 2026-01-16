@@ -12,7 +12,7 @@ import (
 	"github.com/billadm/workspace"
 )
 
-func queryTransactionRecord(c *gin.Context) {
+func queryTrOnCondition(c *gin.Context) {
 	ret := models.NewResult()
 	defer c.JSON(http.StatusOK, ret)
 
