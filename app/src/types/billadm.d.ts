@@ -29,6 +29,10 @@ export interface TrForm {
      */
     tags: string[];
     /**
+     * 标记. 对应 flags.
+     */
+    flags: string[];
+    /**
      * 交易时间. 对应 transaction_at. 时间戳转 Date 对象.
      */
     time: Dayjs;
@@ -79,6 +83,7 @@ export interface TransactionRecord {
     description: string;
     tags: string[];
     transactionAt: number;
+    outlier: boolean;
 }
 
 /**

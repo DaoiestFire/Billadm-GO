@@ -75,6 +75,10 @@
             <a-select v-model:value="trForm.tags" :options="tags" mode="multiple" placeholder="选择一个或多个标签"/>
           </a-form-item>
 
+          <a-form-item label="标记" name="flags">
+            <a-checkbox-group v-model:value="trForm.flags" :options="flagOptions"/>
+          </a-form-item>
+
           <a-form-item label="描述" name="description">
             <a-input v-model:value="trForm.description" placeholder="描述消费内容" allowClear/>
           </a-form-item>
@@ -158,29 +162,6 @@ const currentPage = ref<number>(1);
 const pageSize = ref<number>(15);
 const trTotal = ref<number>(0);
 
-const refreshTable = async () => {
-  if (!ledgerStore.currentLedgerId) return;
-
-  const trCondition: TrQueryCondition = {
-    ledgerId: ledgerStore.currentLedgerId,
-    offset: pageSize.value * (currentPage.value - 1),
-    limit: pageSize.value
-  };
-  if (trQueryConditionStore.timeRange) {
-    trCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
-  }
-  if (trQueryConditionStore.transactionTypes) {
-    trCondition.transactionTypes = trQueryConditionStore.transactionTypes;
-  }
-  if (trQueryConditionStore.categoryTags) {
-    trCondition.categoryTags = trQueryConditionStore.categoryTags;
-  }
-  let trQueryResult = await getTrOnCondition(trCondition);
-  tableData.value = trQueryResult.items
-  trTotal.value = trQueryResult.total
-  appDataStore.setStatistics(trQueryResult.trStatistics);
-}
-
 const openTrModal = ref(false);
 const trModalTitle = ref('');
 const trForm = ref<TrForm>({
@@ -190,10 +171,14 @@ const trForm = ref<TrForm>({
   category: '',
   description: '',
   tags: [],
+  flags: [],
   time: dayjs()
 });
 const categories = ref<DefaultOptionType[]>([]);
 const tags = ref<DefaultOptionType[]>([]);
+const flagOptions = [
+  {label: '离群值', value: 'outlier'}
+]
 
 const createTr = () => {
   trForm.value.type = 'expense';
@@ -223,6 +208,7 @@ const closeTrModal = () => {
     category: '',
     description: '',
     tags: [],
+    flags: [],
     time: dayjs()
   };
   openTrModal.value = false;
@@ -241,6 +227,29 @@ const confirmTrModal = async () => {
   }
   await refreshTable();
   closeTrModal();
+}
+
+const refreshTable = async () => {
+  if (!ledgerStore.currentLedgerId) return;
+
+  const trCondition: TrQueryCondition = {
+    ledgerId: ledgerStore.currentLedgerId,
+    offset: pageSize.value * (currentPage.value - 1),
+    limit: pageSize.value
+  };
+  if (trQueryConditionStore.timeRange) {
+    trCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
+  }
+  if (trQueryConditionStore.transactionTypes) {
+    trCondition.transactionTypes = trQueryConditionStore.transactionTypes;
+  }
+  if (trQueryConditionStore.categoryTags) {
+    trCondition.categoryTags = trQueryConditionStore.categoryTags;
+  }
+  let trQueryResult = await getTrOnCondition(trCondition);
+  tableData.value = trQueryResult.items
+  trTotal.value = trQueryResult.total
+  appDataStore.setStatistics(trQueryResult.trStatistics);
 }
 
 // 查询条件变化 → 重置分页 + 刷新
