@@ -33,7 +33,7 @@ import {getNextPeriod, getPrevPeriod, normalizeTimeRange} from '@/backend/timera
 import {LeftOutlined, RightOutlined} from '@ant-design/icons-vue';
 import type {RangeValue, TimeRangeTypeLabel, TimeRangeTypeValue} from '@/types/billadm';
 import type {SegmentedValue} from "ant-design-vue/es/segmented/src/segmented";
-import type {Dayjs} from "dayjs";
+import dayjs, {type Dayjs} from "dayjs";
 
 const timeRange = defineModel<RangeValue>('timeRange', {required: true});
 const timeRangeTypeValue = defineModel<TimeRangeTypeValue>('timeRangeType', {required: true});
@@ -49,13 +49,17 @@ const timeRangeTypeLabel = computed({
 
 // 上一周期
 const goToPrevious = () => {
-  if (!timeRange.value) return;
+  if (!timeRange.value) {
+    timeRange.value = [dayjs(), dayjs()];
+  }
   timeRange.value = getPrevPeriod(timeRange.value[0], timeRange.value[1], timeRangeTypeValue.value);
 };
 
 // 下一周期
 const goToNext = () => {
-  if (!timeRange.value) return;
+  if (!timeRange.value) {
+    timeRange.value = [dayjs(), dayjs()];
+  }
   timeRange.value = getNextPeriod(timeRange.value[0], timeRange.value[1], timeRangeTypeValue.value);
 };
 
