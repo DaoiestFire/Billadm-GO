@@ -17,6 +17,12 @@
         </a-tag>
       </template>
 
+      <template v-else-if="column.dataIndex === 'flags'">
+        <a-tag v-if="record.outlier" key="outlier" color="geekblue">
+          离群值
+        </a-tag>
+      </template>
+
       <template v-else-if="column.dataIndex === 'price'">
         {{ centsToYuan(record.price) }}
       </template>
@@ -50,7 +56,6 @@ const deleteButtonStyle: CSSProperties = {
   color: negativeColor.value,
 };
 
-
 const columns: ColumnsType = [
   {
     title: '消费时间',
@@ -73,6 +78,10 @@ const columns: ColumnsType = [
   {
     title: '标签',
     dataIndex: 'tags'
+  },
+  {
+    title: '标记',
+    dataIndex: 'flags'
   },
   {
     title: '描述',
