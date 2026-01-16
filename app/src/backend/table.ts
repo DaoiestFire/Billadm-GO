@@ -9,7 +9,7 @@ import dayjs from "dayjs";
  */
 export function buildOptionForTradingTrend(trList: TransactionRecord[], displayTypes: string[]): EChartsOption {
 
-    const filteredData = trList.filter(item => displayTypes.includes(item.transactionType))
+    const filteredData = trList.filter(item => displayTypes.includes(item.transactionType)).filter(item => !item.outlier);
 
     if (!filteredData || filteredData.length === 0) {
         return {
