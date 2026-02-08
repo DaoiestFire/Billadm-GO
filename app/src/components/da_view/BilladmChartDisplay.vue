@@ -105,6 +105,38 @@ const chartConfigs: ChartConfig[] = [
     } as ChartOptions
   },
   {
+    title: '年度工资收入',
+    chartType: 'Line',
+    conditions: [{
+      transactionType: 'income',
+      category: '工资奖金',
+      tags: ['工资'],
+      tagPolicy: 'all',
+      tagNot: false,
+      description: '-'
+    }],
+    chartOptions: {
+      granularity: "year",
+      lineDisplayTypes: ['income'],
+    } as ChartOptions
+  },
+  {
+    title: '年度奖金收入',
+    chartType: 'Line',
+    conditions: [{
+      transactionType: 'income',
+      category: '工资奖金',
+      tags: ['奖金'],
+      tagPolicy: 'all',
+      tagNot: false,
+      description: '年奖金'
+    }],
+    chartOptions: {
+      granularity: "year",
+      lineDisplayTypes: ['income'],
+    } as ChartOptions
+  },
+  {
     title: '消费分布-支出',
     chartType: 'Pie',
     conditions: [],
