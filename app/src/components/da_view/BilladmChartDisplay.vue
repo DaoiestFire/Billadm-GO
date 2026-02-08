@@ -1,6 +1,11 @@
 <template>
   <a-row :gutter="16" style="width: 100%;padding: 16px">
-    <a-col v-for="(chart, index) in chartsWithData" :key="index" :span="colSpan">
+    <a-col
+        v-for="(chart, index) in chartsWithData"
+        :key="index"
+        :span="colSpan"
+        style="margin-bottom: 16px"
+    >
       <billadm-fullscreen v-model="chart.isFullscreen" :dblclick="true">
         <billadm-chart-panel
             :title="chart.title"

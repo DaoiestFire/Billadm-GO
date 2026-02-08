@@ -1,5 +1,8 @@
 <template>
-  <a-card :title="title" :body-style="bodyCss" hoverable>
+  <a-card
+      :title="title"
+      :body-style="bodyCss"
+      hoverable>
     <BilladmChart :option="option"/>
   </a-card>
 </template>
