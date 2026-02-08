@@ -1,21 +1,20 @@
-<!-- components/da_view/BilladmChartPanel.vue -->
 <template>
   <a-card :title="title" :body-style="bodyCss" hoverable>
-    <template #extra>
-      <a-radio-group v-if="title=== '消费分布'"
-                     v-model:value="transactionTypeChecked"
-                     :options="transactionTypeOptions"
-      />
-    </template>
     <BilladmChart :option="option"/>
   </a-card>
 </template>
 
 <script setup lang="ts">
-import {computed, type CSSProperties, ref} from 'vue';
+import {computed, type CSSProperties} from 'vue';
 import BilladmChart from "@/components/da_view/BilladmChart.vue";
-import {buildOptionForTradingTrend, buildOptionForTransactionDistribution} from "@/backend/table.ts";
 import type {TransactionRecord} from "@/types/billadm";
+import {buildLineChart, buildPieChart} from "@/backend/table.ts";
+
+interface ChartOptions {
+  granularity?: 'year' | 'month'
+  includeOutlier?: boolean
+  transactionType?: string
+}
 
 const bodyCss: CSSProperties = {
   aspectRatio: 3 / 2,
@@ -25,25 +24,24 @@ const bodyCss: CSSProperties = {
 const props = defineProps<{
   title: string
   data: TransactionRecord[]
+  chartType: string
+  chartOptions: ChartOptions
 }>();
 
-const transactionTypeOptions = [
-  {label: '收入', value: 'income'},
-  {label: '支出', value: 'expense'},
-  {label: '转账', value: 'transfer'},
-];
-
-const tradingTrendChecked = ref(['income', 'expense', 'transfer'])
-const transactionTypeChecked = ref('expense')
-
 const option = computed(() => {
-  switch (props.title) {
-    case '交易走势':
-      return buildOptionForTradingTrend(props.data, tradingTrendChecked.value);
-    case '消费分布':
-      return buildOptionForTransactionDistribution(props.data, transactionTypeChecked.value);
+  switch (props.chartType) {
+    case 'Line':
+      return buildLineChart(props.data, {
+        granularity: props.chartOptions.granularity || 'month',
+        includeOutlier: props.chartOptions.includeOutlier === undefined,
+      });
+    case 'Pie':
+      return buildPieChart(props.data, {transactionType: props.chartOptions.transactionType || 'expense'})
     default:
-      return buildOptionForTradingTrend(props.data, tradingTrendChecked.value);
+      return buildLineChart(props.data, {
+        granularity: props.chartOptions.granularity || 'month',
+        includeOutlier: props.chartOptions.includeOutlier === undefined,
+      });
   }
 });
 </script>

@@ -1,21 +1,29 @@
 <template>
   <a-row :gutter="16" style="width: 100%;padding: 16px">
-    <a-col v-for="(chart, index) in charts" :key="index" :span="colSpan">
+    <a-col v-for="(chart, index) in chartsWithData" :key="index" :span="colSpan">
       <billadm-fullscreen v-model="chart.isFullscreen" :dblclick="true">
-        <billadm-chart-panel :title="chart.title" :data="chart.data"/>
+        <billadm-chart-panel
+            :title="chart.title"
+            :data="chart.data"
+            :chart-type="chart.chartType"
+            :chart-options="chart.chartOptions"
+        />
       </billadm-fullscreen>
     </a-col>
   </a-row>
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import BilladmChartPanel from '@/components/da_view/BilladmChartPanel.vue';
 import BilladmFullscreen from '@/components/common/BilladmFullScreen.vue';
-import type {TransactionRecord} from '@/types/billadm';
+import {useLedgerStore} from "@/stores/ledgerStore.ts";
+import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
+import type {TransactionRecord, TrQueryConditionItem} from "@/types/billadm";
+import {convertToUnixTimeRange} from "@/backend/timerange.ts";
+import {getTrOnCondition} from "@/backend/functions.ts";
 
 interface Props {
-  trList: TransactionRecord[];
   columns?: number;
 }
 
@@ -23,10 +31,69 @@ const props = withDefaults(defineProps<Props>(), {
   columns: 2,
 });
 
-const charts = computed(() => [
-  {title: '交易走势', data: props.trList, isFullscreen: false},
-  {title: '消费分布', data: props.trList, isFullscreen: false},
-]);
+interface ChartOptions {
+  granularity?: 'year' | 'month'
+  transactionType?: string
+}
+
+interface ChartConfig {
+  title: string
+  chartType: 'Line' | 'Pie'
+  conditions: TrQueryConditionItem[]
+  chartOptions: ChartOptions
+}
+
+interface ChartInstance {
+  title: string
+  chartType: 'Line' | 'Pie'
+  data: TransactionRecord[]
+  chartOptions: ChartOptions
+  isFullscreen: boolean
+}
+
+const ledgerStore = useLedgerStore();
+const trQueryConditionStore = useTrQueryConditionStore();
+
+const queryTrs = async (conditions: TrQueryConditionItem[]): Promise<TransactionRecord[]> => {
+  if (!ledgerStore.currentLedgerId) return []
+  const trCondition = {
+    ledgerId: ledgerStore.currentLedgerId,
+    tsRange: trQueryConditionStore.timeRange
+        ? convertToUnixTimeRange(trQueryConditionStore.timeRange)
+        : undefined,
+    items: conditions.length > 0 ? conditions : undefined,
+  }
+  const result = await getTrOnCondition(trCondition)
+  return result.items || []
+};
+
+const chartConfigs: ChartConfig[] = [
+  {
+    title: '消费趋势(不含离群值)',
+    chartType: 'Line',
+    conditions: [],
+    chartOptions: {
+      granularity: "month",
+      includeOutlier: false,
+    } as ChartOptions
+  },
+  {
+    title: '消费分布-支出',
+    chartType: 'Pie',
+    conditions: [],
+    chartOptions: {
+      transactionType: "expense"
+    } as ChartOptions
+  },
+  {
+    title: '消费分布-收入',
+    chartType: 'Pie',
+    conditions: [],
+    chartOptions: {
+      transactionType: "income"
+    } as ChartOptions
+  },
+];
 
 const colSpan = computed(() => {
   const cols = props.columns;
@@ -36,4 +103,36 @@ const colSpan = computed(() => {
   }
   return 24 / cols;
 });
+
+// 图表实例列表（带 data）
+const chartsWithData = ref<ChartInstance[]>([])
+
+// 加载所有图表数据
+const loadChartsData = async () => {
+  const promises = chartConfigs.map(async (config) => {
+    const data = await queryTrs(config.conditions)
+    return {
+      title: config.title,
+      chartType: config.chartType,
+      data,
+      chartOptions: config.chartOptions,
+      isFullscreen: false,
+    }
+  })
+
+  chartsWithData.value = await Promise.all(promises)
+}
+
+onMounted(() => {
+  loadChartsData()
+})
+
+// 监听查询条件或账本变化，重新加载
+watch(
+    () => [ledgerStore.currentLedgerId, trQueryConditionStore.timeRange],
+    () => {
+      loadChartsData()
+    },
+    {deep: true}
+)
 </script>
