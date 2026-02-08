@@ -115,22 +115,7 @@ export function buildLineChart(
 
         if (timeDataMap.has(label) && lineDisplayTypes.includes(type)) {
             const record = timeDataMap.get(label)!
-            record[type] += amount
-        }
-    })
-
-    // 构造 series 数据（单位：元，保留两位小数）
-    const series = lineDisplayTypes.map((type) => {
-        const data = timeLabels.map((label) => {
-            const value = timeDataMap.get(label)?.[type] ?? 0
-            return (value / 100).toFixed(2)
-        })
-        return {
-            name: TransactionTypeToLabel.get(type),
-            type: 'line',
-            data,
-            emphasis: {focus: 'series'},
-            color: TransactionTypeToColor.get(type),
+            record[type]! += amount
         }
     })
 
@@ -151,7 +136,19 @@ export function buildLineChart(
                 formatter: '{value}',
             },
         },
-        series,
+        series: lineDisplayTypes.map((type) => {
+            const data = timeLabels.map((label) => {
+                const value = timeDataMap.get(label)?.[type] ?? 0
+                return (value / 100).toFixed(2)
+            })
+            return {
+                name: TransactionTypeToLabel.get(type),
+                type: 'line',
+                data,
+                emphasis: {focus: 'series'},
+                color: TransactionTypeToColor.get(type),
+            }
+        }),
     }
 }
 
@@ -177,7 +174,7 @@ export function buildPieChart(
 
     const seriesData = Array.from(categoryMap, ([name, value]) => ({
         name,
-        value: (value / 100).toFixed(2),
+        value: value / 100,
     }))
 
     if (seriesData.length === 0) {

@@ -1,14 +1,4 @@
 <template>
-  <a-float-button
-      style="right: 110px;bottom: 80px"
-      @click="openTrFilterModal=true"
-      :badge="{ count: trQueryConditionStore.conditionLen, color: 'blue' }"
-  >
-    <template #icon>
-      <FilterOutlined/>
-    </template>
-  </a-float-button>
-  <TransactionRecordFilter v-model="openTrFilterModal"/>
   <a-layout style="height: 100%">
     <a-layout-header class="headerStyle">
       <div class="left-groups">
@@ -29,11 +19,10 @@
 </template>
 
 <script setup lang="ts">
-import {type CSSProperties, ref} from 'vue';
+import {type CSSProperties} from 'vue';
 import BilladmChartDisplay from "@/components/da_view/BilladmChartDisplay.vue";
 import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
 import {useCssVariables} from "@/backend/css.ts";
-import {FilterOutlined} from "@ant-design/icons-vue";
 
 const {majorBgColor} = useCssVariables();
 
@@ -44,9 +33,6 @@ const contentStyle: CSSProperties = {
 };
 
 const trQueryConditionStore = useTrQueryConditionStore();
-
-// modal
-const openTrFilterModal = ref<boolean>()
 </script>
 
 <style scoped>
