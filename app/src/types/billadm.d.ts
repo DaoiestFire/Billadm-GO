@@ -118,18 +118,21 @@ export interface TrStatistics {
 export interface TrQueryCondition {
     ledgerId: string;
     tsRange?: number[];
-    transactionTypes?: string[];
-    categoryTags?: Record<string, string[]>
+    items?: QueryConditionItem[];
     offset?: number;
     limit?: number;
 }
 
 /**
- * 查询消费记录时分类标签条件
+ * 消费记录条件项
  */
-interface categoryTagsCondition {
-    category: string,
-    tags: string[]
+export interface QueryConditionItem {
+    transactionType: string;
+    category: string;
+    tags: string[];
+    tagPolicy: string;
+    tagNot: boolean;
+    description: string;
 }
 
 /**

@@ -64,11 +64,8 @@ const refreshData = async () => {
   if (trQueryConditionStore.timeRange) {
     trCondition.tsRange = convertToUnixTimeRange(trQueryConditionStore.timeRange);
   }
-  if (trQueryConditionStore.transactionTypes) {
-    trCondition.transactionTypes = trQueryConditionStore.transactionTypes;
-  }
-  if (trQueryConditionStore.categoryTags) {
-    trCondition.categoryTags = trQueryConditionStore.categoryTags;
+  if (trQueryConditionStore.trQueryConditionItems) {
+    trCondition.items = trQueryConditionStore.trQueryConditionItems
   }
   let trQueryResult = await getTrOnCondition(trCondition);
   trs.value = trQueryResult.items;
@@ -80,8 +77,7 @@ const refreshData = async () => {
 watch(() => [
       ledgerStore.currentLedgerId,
       trQueryConditionStore.timeRange,
-      trQueryConditionStore.transactionTypes,
-      trQueryConditionStore.cateTagsConditions
+      trQueryConditionStore.trQueryConditionItems,
     ], async () => {
       await refreshData();
     },

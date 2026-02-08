@@ -1,38 +1,25 @@
 import {computed, ref} from "vue"
 import {defineStore} from 'pinia'
 import {getThisMonthRange} from "@/backend/timerange.ts"
-import type {categoryTagsCondition, RangeValue, TimeRangeTypeValue} from "@/types/billadm"
+import type {QueryConditionItem, RangeValue, TimeRangeTypeValue} from "@/types/billadm"
 
 export const useTrQueryConditionStore = defineStore('trQueryCondition', () => {
 
     const timeRange = ref<RangeValue>(getThisMonthRange()); // 时间范围
     const timeRangeType = ref('date' as TimeRangeTypeValue); // 时间类型标签
     const transactionTypes = ref<string[]>([]);
-    const cateTagsConditions = ref<categoryTagsCondition[]>([]);
+    const trQueryConditionItems = ref<QueryConditionItem[]>([]);
 
-    const categoryTags = computed(() => {
-        const newRecord: Record<string, string[]> = {};
-        cateTagsConditions.value.forEach(cond => {
-            newRecord[cond.category] = [...cond.tags];
-        })
-        return newRecord;
-    })
 
     const conditionLen = computed(() => {
-        let cnt = 0;
-        if (transactionTypes.value) {
-            cnt += transactionTypes.value.length;
-        }
-        cnt += cateTagsConditions.value.length;
-        return cnt;
+        return trQueryConditionItems.value.length;
     });
 
     return {
         timeRange,
         timeRangeType,
         transactionTypes,
-        cateTagsConditions,
-        categoryTags,
+        trQueryConditionItems,
         conditionLen
     }
 })
