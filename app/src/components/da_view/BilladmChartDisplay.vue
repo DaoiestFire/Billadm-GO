@@ -71,7 +71,7 @@ const queryTrs = async (conditions: TrQueryConditionItem[]): Promise<Transaction
 
 const chartConfigs: ChartConfig[] = [
   {
-    title: '消费趋势(不含离群值)',
+    title: '月度消费趋势(不含离群值)',
     chartType: 'Line',
     conditions: [],
     chartOptions: {
@@ -80,7 +80,16 @@ const chartConfigs: ChartConfig[] = [
     } as ChartOptions
   },
   {
-    title: '每月加油开销',
+    title: '年度消费趋势(含离群值)',
+    chartType: 'Line',
+    conditions: [],
+    chartOptions: {
+      granularity: "year",
+      includeOutlier: true,
+    } as ChartOptions
+  },
+  {
+    title: '月度加油开销',
     chartType: 'Line',
     conditions: [{
       transactionType: 'expense',

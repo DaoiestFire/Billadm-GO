@@ -35,7 +35,7 @@ const option = computed(() => {
       return buildLineChart(props.data, {
         granularity: props.chartOptions.granularity || 'month',
         lineDisplayTypes: props.chartOptions.lineDisplayTypes || ['income', 'expense', 'transfer'],
-        includeOutlier: props.chartOptions.includeOutlier === undefined,
+        includeOutlier: props.chartOptions.includeOutlier === undefined ? true : props.chartOptions.includeOutlier,
       });
     case 'Pie':
       return buildPieChart(props.data, {transactionType: props.chartOptions.transactionType || 'expense'})
