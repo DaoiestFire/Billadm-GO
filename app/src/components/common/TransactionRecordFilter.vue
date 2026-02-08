@@ -11,171 +11,242 @@
       <a-button key="clear" @click="clearAllConditions">清除条件</a-button>
       <a-button key="confirm" type="primary" @click="confirmFilterModal">确认</a-button>
     </template>
+
+    <!-- 输入区域 -->
     <a-form layout="vertical">
-      <!-- 交易类型 -->
-      <a-divider orientation="left">交易类型</a-divider>
-      <a-form-item>
-        <a-select
-            v-model:value="transactionTypes"
-            :options="transactionTypeOptions"
-            mode="multiple"
-            placeholder="请选择交易类型"
-        />
-      </a-form-item>
-      <!-- 分类标签 -->
-      <a-divider orientation="left">分类标签</a-divider>
-      <a-form-item>
-        <a-row :gutter="8" justify="space-between">
-          <a-col :span="18">
+      <a-row :gutter="16">
+        <!-- 交易类型 -->
+        <a-col :span="4">
+          <a-form-item label="交易类型">
+            <a-select
+                v-model:value="tempTransactionType"
+                placeholder="请选择交易类型"
+                allow-clear
+            >
+              <a-select-option
+                  v-for="opt in transactionTypeOptions"
+                  :key="opt.value"
+                  :value="opt.value"
+              >
+                {{ opt.label }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+
+        <!-- 分类 -->
+        <a-col :span="4">
+          <a-form-item label="分类">
             <a-select
                 v-model:value="tempCategory"
+                placeholder="请选择分类"
                 :options="categories"
-                placeholder="选择分类"
+                allow-clear
                 @change="onCategoryChange"
-                style="width: 100%"
+            />
+          </a-form-item>
+        </a-col>
+
+        <!-- 标签 -->
+        <a-col :span="8">
+          <a-form-item label="标签">
+            <a-select
+                v-model:value="tempTags"
+                mode="multiple"
+                placeholder="请选择标签"
+                :options="tags"
                 allow-clear
             />
-          </a-col>
-          <a-col :span="6">
-            <a-button style="width: 100%" type="primary" @click="addCondition" :disabled="!tempCategory">
-              添加
-            </a-button>
-          </a-col>
-        </a-row>
+          </a-form-item>
+        </a-col>
+
+        <!-- 标签策略 -->
+        <a-col :span="4">
+          <a-form-item label="标签匹配策略">
+            <a-select v-model:value="tempTagPolicy" placeholder="策略">
+              <a-select-option value="any">任意</a-select-option>
+              <a-select-option value="all">全部</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+
+        <!-- 标签取反 -->
+        <a-col :span="4">
+          <a-form-item label="是否取反">
+            <a-select v-model:value="tempTagNot" placeholder="策略">
+              <a-select-option value="yes">是</a-select-option>
+              <a-select-option value="no">否</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+      </a-row>
+
+      <!-- 描述关键词 -->
+      <a-form-item label="描述包含">
+        <a-input v-model:value="tempDescription" placeholder="输入关键词"/>
       </a-form-item>
+
+      <!-- 添加按钮 -->
       <a-form-item>
-        <a-select
-            v-model:value="tempTags"
-            :options="tags"
-            placeholder="选择标签（可选）"
-            mode="multiple"
-            :disabled="!tempCategory"
-            style="width: 100%"
-        />
+        <a-button type="dashed" @click="addCondition" block>
+          + 添加筛选条件
+        </a-button>
       </a-form-item>
-      <a-form-item v-if="cateTagsConditions.length>0">
-        <a-list size="small" bordered :data-source="cateTagsConditions">
-          <template #renderItem="{ item }">
-            <a-list-item>
-              <template #actions>
-                <a @click="deleteCondition(item.category)">删除</a>
-              </template>
-              <span>{{ item.category }}</span>
-              <div style="width: auto">
-                <a-tag v-for="tag in item.tags" :key="tag" style="margin-right: 4px">{{ tag }}</a-tag>
-              </div>
-            </a-list-item>
+
+      <!-- 已添加条件列表 -->
+      <a-divider orientation="left">已添加条件 ({{ trQueryConditionItems.length }})</a-divider>
+      <div v-if="trQueryConditionItems.length === 0" style="color: #999; padding: 12px 0;">
+        暂无筛选条件
+      </div>
+      <a-space direction="vertical" style="width: 100%">
+        <a-card
+            v-for="(item, index) in trQueryConditionItems"
+            :key="index"
+            size="small"
+            style="border: 1px solid #ddd; border-radius: 4px"
+        >
+          <template #title>
+            <span style="font-weight: normal">
+              {{ getTransactionTypeLabel(item.transactionType) }}
+              {{ item.category ? ` · ${item.category}` : '' }}
+              {{ item.tags && item.tags.length ? ` · 标签(${item.tags.join(', ')})` : '' }}
+              {{ item.description ? ` · "${item.description}"` : '' }}
+            </span>
           </template>
-        </a-list>
-      </a-form-item>
+          <template #extra>
+            <a-button type="text" danger @click="deleteCondition(index)">删除</a-button>
+          </template>
+          <div>
+            <a-tag color="blue" v-if="item.tagPolicy === 'all'">全部标签匹配</a-tag>
+            <a-tag color="green" v-else>任意标签匹配</a-tag>
+            <a-tag color="red" v-if="item.tagNot">标签取反</a-tag>
+          </div>
+        </a-card>
+      </a-space>
     </a-form>
   </a-modal>
 </template>
 
 <script setup lang="ts">
 import {ref, watch} from 'vue';
-import type {Category, categoryTagsCondition} from "@/types/billadm";
-import type {DefaultOptionType} from "ant-design-vue/es/vc-cascader";
-import {getCategoryByType, getTagsByCategory} from "@/backend/functions.ts";
-import {useTrQueryConditionStore} from "@/stores/trQueryConditionStore.ts";
+import type {Category, TrQueryConditionItem} from '@/types/billadm';
+import type {DefaultOptionType} from 'ant-design-vue/es/vc-cascader';
+import {getCategoryByType, getTagsByCategory} from '@/backend/functions.ts';
+import {useTrQueryConditionStore} from '@/stores/trQueryConditionStore.ts';
 
-const open = defineModel<boolean>()
+// 双向绑定 modal 开关
+const open = defineModel<boolean>();
+
 const trQueryConditionStore = useTrQueryConditionStore();
-const transactionTypes = ref<string[]>([]);
-const cateTagsConditions = ref<categoryTagsCondition[]>([]);
-// ===== 临时输入状态 =====
-const tempCategory = ref(undefined);
-const tempTags = ref([]);
+const trQueryConditionItems = ref<TrQueryConditionItem[]>([]);
+
+// 临时输入状态
+const tempTransactionType = ref<string | undefined>(undefined);
+const tempCategory = ref<string | undefined>(undefined);
+const tempTags = ref<string[]>([]);
+const tempTagPolicy = ref<'any' | 'all'>('any');
+const tempTagNot = ref<'yes' | 'no'>("no");
+const tempDescription = ref<string>('');
 
 // 交易类型选项
 const transactionTypeOptions = [
   {label: '收入', value: 'income'},
   {label: '支出', value: 'expense'},
-  {label: '转账', value: 'transfer'}
-]
+  {label: '转账', value: 'transfer'},
+];
 
-// 根据选中的交易类型
+// 分类 & 标签选项
 const categories = ref<DefaultOptionType[]>([]);
 const tags = ref<DefaultOptionType[]>([]);
-/**
- * 交易类型变化时要重新刷新分类列表
- * 如果当前分类不为空则选择查看分类是否在列表中，不在列表中则需要选择第一个分类作为分类
- */
-watch(() => transactionTypes.value, async () => {
-      if (!transactionTypes.value) return;
-      const promises = transactionTypes.value.map(type => getCategoryByType(type));
-      const results = await Promise.all(promises);
-      const categoryList: Category[] = results.flat();
-      categories.value = categoryList.map(category => {
-        return {value: category.name};
-      });
-    }
-);
-/**
- * 分类变化时要重新刷新标签列表
- */
-watch(() => tempCategory.value, async () => {
-      if (!tempCategory.value) return;
-      const tagList = await getTagsByCategory(tempCategory.value);
-      tags.value = tagList.map(tag => {
-        return {value: tag.name};
-      });
-    }
-);
-/**
- * 监听打开操作，赋值表单
- */
+
+// 交易类型变化 → 刷新分类
+watch(() => tempTransactionType.value, async (newVal) => {
+  if (!newVal) {
+    categories.value = [];
+    tempCategory.value = undefined;
+    return;
+  }
+  const categoryList: Category[] = await getCategoryByType(newVal);
+  categories.value = categoryList.map((c) => ({value: c.name}));
+});
+
+// 分类变化 → 刷新标签
+watch(() => tempCategory.value, async (newVal) => {
+  if (!newVal) {
+    tags.value = [];
+    tempTags.value = [];
+    return;
+  }
+  const tagList = await getTagsByCategory(newVal);
+  tags.value = tagList.map((t) => ({value: t.name}));
+});
+
+// 打开时加载 store 中的条件
 watch(open, (newVal) => {
   if (newVal) {
-    // 每次打开抽屉时，从 store 加载最新筛选条件
-    transactionTypes.value = [...(trQueryConditionStore.transactionTypes || [])];
-    cateTagsConditions.value = [...(trQueryConditionStore.cateTagsConditions || [])];
+    trQueryConditionItems.value = [...(trQueryConditionStore.trQueryConditionItems || [])];
+    // 重置临时输入
+    resetTempInputs();
   }
 });
 
+function resetTempInputs() {
+  tempTransactionType.value = undefined;
+  tempCategory.value = undefined;
+  tempTags.value = [];
+  tempTagPolicy.value = 'any';
+  tempTagNot.value = "no";
+  tempDescription.value = '';
+}
+
+function getTransactionTypeLabel(type: string): string {
+  const map: Record<string, string> = {
+    income: '收入',
+    expense: '支出',
+    transfer: '转账',
+  };
+  return map[type] || type;
+}
+
+function addCondition() {
+  // 至少需要一个有效字段
+  if (
+      !tempTransactionType.value &&
+      !tempCategory.value &&
+      tempTags.value.length === 0 &&
+      !tempDescription.value.trim()
+  ) {
+    // 可选：提示用户
+    return;
+  }
+
+  const newItem: TrQueryConditionItem = {
+    transactionType: tempTransactionType.value || '',
+    category: tempCategory.value || '',
+    tags: [...tempTags.value],
+    tagPolicy: tempTagPolicy.value,
+    tagNot: tempTagNot.value === "yes",
+    description: tempDescription.value.trim(),
+  };
+
+  trQueryConditionItems.value.push(newItem);
+  resetTempInputs();
+}
+
+function deleteCondition(index: number) {
+  trQueryConditionItems.value.splice(index, 1);
+}
+
 function clearAllConditions() {
-  transactionTypes.value = [];
-  cateTagsConditions.value = [];
+  trQueryConditionItems.value = [];
 }
 
 function confirmFilterModal() {
-  trQueryConditionStore.transactionTypes = transactionTypes.value;
-  trQueryConditionStore.cateTagsConditions = cateTagsConditions.value;
+  trQueryConditionStore.trQueryConditionItems = trQueryConditionItems.value;
   open.value = false;
 }
 
-// 切换分类时清空标签
 function onCategoryChange() {
   tempTags.value = [];
-}
-
-// 添加条件
-function addCondition() {
-  if (!tempCategory.value) return;
-
-  const category = tempCategory.value;
-  const tags = [...tempTags.value];
-
-  const exists = cateTagsConditions.value.some(c => c.category === category);
-  if (exists) {
-    const idx = cateTagsConditions.value.findIndex(c => c.category === category);
-    if (cateTagsConditions.value[idx]) {
-      cateTagsConditions.value[idx].tags = tags;
-    }
-  } else {
-    cateTagsConditions.value.push({category, tags});
-  }
-
-  // 清空输入
-  tempCategory.value = undefined;
-  tempTags.value = [];
-}
-
-// 删除条件
-function deleteCondition(category: string) {
-  const idx = cateTagsConditions.value.findIndex(c => c.category === category);
-  if (cateTagsConditions.value[idx]) {
-    cateTagsConditions.value.splice(idx, 1);
-  }
 }
 </script>

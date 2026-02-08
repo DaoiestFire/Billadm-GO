@@ -118,7 +118,7 @@ export interface TrStatistics {
 export interface TrQueryCondition {
     ledgerId: string;
     tsRange?: number[];
-    items?: QueryConditionItem[];
+    items?: TrQueryConditionItem[];
     offset?: number;
     limit?: number;
 }
@@ -126,7 +126,7 @@ export interface TrQueryCondition {
 /**
  * 消费记录条件项
  */
-export interface QueryConditionItem {
+export interface TrQueryConditionItem {
     transactionType: string;
     category: string;
     tags: string[];
