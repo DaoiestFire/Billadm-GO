@@ -109,7 +109,7 @@ func (t *transactionRecordServiceImpl) QueryTrsOnCondition(ws *workspace.Workspa
 	}
 	summary := operator.NewTrOperator().
 		Add(trDtos).
-		FilterByCategoryTags(condition.CategoryTags).
+		Filter(condition.Items).
 		Sort(sortFields).
 		Page(condition.Offset, condition.Limit).
 		Summary()

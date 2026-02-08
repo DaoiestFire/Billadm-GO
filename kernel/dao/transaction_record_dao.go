@@ -2,6 +2,7 @@ package dao
 
 import (
 	"database/sql"
+	"github.com/billadm/util/set"
 	"sync"
 
 	"github.com/billadm/models"
@@ -66,8 +67,12 @@ func (t *transactionRecordDaoImpl) QueryTrsOnCondition(ws *workspace.Workspace, 
 	if len(condition.TsRange) == 2 {
 		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
 	}
-	if len(condition.TransactionTypes) > 0 {
-		db = db.Where("transaction_type IN (?)", condition.TransactionTypes)
+	ttSet := set.New[string]()
+	for _, item := range condition.Items {
+		ttSet.Add(item.TransactionType)
+	}
+	if ttSet.Size() > 0 {
+		db = db.Where("transaction_type IN (?)", ttSet.Values())
 	}
 	db = db.Find(&trs)
 	if err := db.Error; err != nil {

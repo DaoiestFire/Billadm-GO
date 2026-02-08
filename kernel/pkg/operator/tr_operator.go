@@ -2,6 +2,7 @@ package operator
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/billadm/models/dto"
 )
@@ -23,35 +24,19 @@ func (t *TrOperator) Add(trDtos []*dto.TransactionRecordDto) *TrOperator {
 	return t
 }
 
-func (t *TrOperator) FilterByCategoryTags(categoryTags map[string][]string) *TrOperator {
-	if len(categoryTags) == 0 {
-		return t
+func (t *TrOperator) Filter(items []dto.QueryConditionItem) *TrOperator {
+	if len(items) == 0 {
+		return t // 无条件，不过滤
 	}
 
 	var filtered []*dto.TransactionRecordDto
 
 	for _, tr := range t.trDtos {
-		tagsToMatch, exists := categoryTags[tr.Category]
-		if !exists {
-			continue // 分类不在筛选条件中，跳过
-		}
-
-		if len(tagsToMatch) == 0 {
-			// 如果没有标签则判定为选中
-			filtered = append(filtered, tr)
-			continue
-		}
-
-		// 将当前记录的 tags 转为 map 便于查找（避免 O(n*m) 嵌套循环）
-		recordTagSet := make(map[string]bool)
-		for _, tag := range tr.Tags {
-			recordTagSet[tag] = true
-		}
-
-		// 检查是否包含至少一个目标标签
 		matched := false
-		for _, requiredTag := range tagsToMatch {
-			if recordTagSet[requiredTag] {
+
+		// 多个 QueryConditionItem 是 OR 关系
+		for _, cond := range items {
+			if t.matchCondition(tr, cond) {
 				matched = true
 				break
 			}
@@ -61,8 +46,79 @@ func (t *TrOperator) FilterByCategoryTags(categoryTags map[string][]string) *TrO
 			filtered = append(filtered, tr)
 		}
 	}
+
 	t.trDtos = filtered
 	return t
+}
+
+// matchCondition 判断单条记录是否匹配一个 QueryConditionItem（内部字段为 AND 关系）
+func (t *TrOperator) matchCondition(tr *dto.TransactionRecordDto, cond dto.QueryConditionItem) bool {
+	// TransactionType
+	if cond.TransactionType != "" && tr.TransactionType != cond.TransactionType {
+		return false
+	}
+
+	// Category
+	if cond.Category != "" && tr.Category != cond.Category {
+		return false
+	}
+
+	// Description（模糊包含）
+	if cond.Description != "" && !strings.Contains(tr.Description, cond.Description) {
+		return false
+	}
+
+	// Tags
+	if len(cond.Tags) > 0 {
+		tagMatch := t.matchTags(tr.Tags, cond.Tags, cond.TagPolicy)
+		if cond.TagNot {
+			tagMatch = !tagMatch
+		}
+		if !tagMatch {
+			return false
+		}
+	}
+
+	return true
+}
+
+// matchTags 根据策略判断记录的 tags 是否匹配条件 tags
+func (t *TrOperator) matchTags(recordTags, condTags []string, policy string) bool {
+	if len(recordTags) == 0 {
+		return false
+	}
+
+	recordTagSet := make(map[string]bool)
+	for _, tag := range recordTags {
+		recordTagSet[tag] = true
+	}
+
+	switch policy {
+	case "all":
+		// 必须包含所有 condTags
+		for _, tag := range condTags {
+			if !recordTagSet[tag] {
+				return false
+			}
+		}
+		return true
+	case "any", "":
+		// 包含任意一个即可
+		for _, tag := range condTags {
+			if recordTagSet[tag] {
+				return true
+			}
+		}
+		return false
+	default:
+		// 未知策略，默认按 "any" 处理
+		for _, tag := range condTags {
+			if recordTagSet[tag] {
+				return true
+			}
+		}
+		return false
+	}
 }
 
 func (t *TrOperator) Sort(sortFields []SortField) *TrOperator {
