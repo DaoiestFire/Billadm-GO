@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"database/sql"
 	"github.com/billadm/util/set"
 	"sync"
 
@@ -79,45 +78,6 @@ func (t *transactionRecordDaoImpl) QueryTrsOnCondition(ws *workspace.Workspace, 
 		return nil, err
 	}
 	return trs, nil
-}
-
-func (t *transactionRecordDaoImpl) QueryCountOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (int64, error) {
-	var count int64
-	db := ws.GetDb().Model(&models.TransactionRecord{})
-	db = db.Where("ledger_id = ?", condition.LedgerID)
-	if len(condition.TsRange) == 2 {
-		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
-	}
-	db = db.Count(&count)
-	if err := db.Error; err != nil {
-		return 0, err
-	}
-	return count, nil
-}
-
-func (t *transactionRecordDaoImpl) QueryPriceOnCondition(ws *workspace.Workspace, condition *dto.TrQueryCondition) (float64, error) {
-	var price sql.NullFloat64
-	db := ws.GetDb().Model(&models.TransactionRecord{})
-	db = db.Where("ledger_id = ?", condition.LedgerID)
-	db = db.Order("transaction_at desc, transaction_type asc, category desc, price desc")
-	if condition.Offset != -1 && condition.Limit != -1 {
-		db = db.Offset(condition.Offset).Limit(condition.Limit)
-	}
-	if len(condition.TsRange) == 2 {
-		db = db.Where("transaction_at >= ?", condition.TsRange[0]).Where("transaction_at <= ?", condition.TsRange[1])
-	}
-	ttSet := set.New[string]()
-	for _, item := range condition.Items {
-		ttSet.Add(item.TransactionType)
-	}
-	if ttSet.Size() > 0 {
-		db = db.Where("transaction_type IN (?)", ttSet.Values())
-	}
-	db = db.Select("SUM(price)").Scan(&price)
-	if err := db.Error; err != nil {
-		return 0, err
-	}
-	return price.Float64, nil
 }
 
 func (t *transactionRecordDaoImpl) DeleteTrById(ws *workspace.Workspace, trId string) error {
