@@ -28,11 +28,13 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  columns: 2,
+  columns: 3,
 });
 
 interface ChartOptions {
   granularity?: 'year' | 'month'
+  lineDisplayTypes?: string[]
+  includeOutlier?: boolean
   transactionType?: string
 }
 
@@ -78,11 +80,27 @@ const chartConfigs: ChartConfig[] = [
     } as ChartOptions
   },
   {
+    title: '每月加油开销',
+    chartType: 'Line',
+    conditions: [{
+      transactionType: 'expense',
+      category: '交通出行',
+      tags: ['油费'],
+      tagPolicy: 'all',
+      tagNot: false,
+      description: ''
+    }],
+    chartOptions: {
+      granularity: "month",
+      lineDisplayTypes: ['expense'],
+    } as ChartOptions
+  },
+  {
     title: '消费分布-支出',
     chartType: 'Pie',
     conditions: [],
     chartOptions: {
-      transactionType: "expense"
+      transactionType: "expense",
     } as ChartOptions
   },
   {
@@ -90,7 +108,7 @@ const chartConfigs: ChartConfig[] = [
     chartType: 'Pie',
     conditions: [],
     chartOptions: {
-      transactionType: "income"
+      transactionType: "income",
     } as ChartOptions
   },
 ];

@@ -12,6 +12,7 @@ import {buildLineChart, buildPieChart} from "@/backend/table.ts";
 
 interface ChartOptions {
   granularity?: 'year' | 'month'
+  lineDisplayTypes?: string[]
   includeOutlier?: boolean
   transactionType?: string
 }
@@ -33,15 +34,13 @@ const option = computed(() => {
     case 'Line':
       return buildLineChart(props.data, {
         granularity: props.chartOptions.granularity || 'month',
+        lineDisplayTypes: props.chartOptions.lineDisplayTypes || ['income', 'expense', 'transfer'],
         includeOutlier: props.chartOptions.includeOutlier === undefined,
       });
     case 'Pie':
       return buildPieChart(props.data, {transactionType: props.chartOptions.transactionType || 'expense'})
     default:
-      return buildLineChart(props.data, {
-        granularity: props.chartOptions.granularity || 'month',
-        includeOutlier: props.chartOptions.includeOutlier === undefined,
-      });
+      return buildPieChart(props.data, {transactionType: props.chartOptions.transactionType || 'expense'})
   }
 });
 </script>

@@ -10,15 +10,15 @@ export function buildLineChart(
     trList: TransactionRecord[],
     options: {
         granularity: 'year' | 'month'
+        lineDisplayTypes: string[]
         includeOutlier: boolean
     }
 ): EChartsOption {
-    const displayTypes = ['income', 'expense', 'transfer'];
-    const {granularity, includeOutlier} = options
+    const {granularity, lineDisplayTypes, includeOutlier} = options
 
     // 过滤非异常且类型匹配的数据
     let filteredData = trList
-        .filter((item) => displayTypes.includes(item.transactionType))
+        .filter((item) => lineDisplayTypes.includes(item.transactionType))
 
     if (!includeOutlier) {
         filteredData = filteredData.filter((item) => !item.outlier)
@@ -28,7 +28,7 @@ export function buildLineChart(
         return {
             tooltip: {trigger: 'axis'},
             legend: {
-                data: displayTypes.map((type) => TransactionTypeToLabel.get(type)),
+                data: lineDisplayTypes.map((type) => TransactionTypeToLabel.get(type)),
             } as LegendComponentOption,
             xAxis: {
                 type: 'category',
@@ -39,7 +39,7 @@ export function buildLineChart(
                 type: 'value',
                 name: '金额',
             },
-            series: displayTypes.map((type) => ({
+            series: lineDisplayTypes.map((type) => ({
                 name: TransactionTypeToLabel.get(type),
                 type: 'line',
                 data: [],
@@ -89,7 +89,7 @@ export function buildLineChart(
 
     // 初始化每月/每年数据结构
     const initData = () =>
-        displayTypes.reduce(
+        lineDisplayTypes.reduce(
             (acc, type) => {
                 acc[type] = 0
                 return acc
@@ -113,14 +113,14 @@ export function buildLineChart(
         const type = item.transactionType
         const amount = item.price
 
-        if (timeDataMap.has(label) && displayTypes.includes(type)) {
+        if (timeDataMap.has(label) && lineDisplayTypes.includes(type)) {
             const record = timeDataMap.get(label)!
             record[type] += amount
         }
     })
 
     // 构造 series 数据（单位：元，保留两位小数）
-    const series = displayTypes.map((type) => {
+    const series = lineDisplayTypes.map((type) => {
         const data = timeLabels.map((label) => {
             const value = timeDataMap.get(label)?.[type] ?? 0
             return (value / 100).toFixed(2)
@@ -137,7 +137,7 @@ export function buildLineChart(
     return {
         tooltip: {trigger: 'axis'},
         legend: {
-            data: displayTypes.map((type) => TransactionTypeToLabel.get(type)),
+            data: lineDisplayTypes.map((type) => TransactionTypeToLabel.get(type)),
         } as LegendComponentOption,
         xAxis: {
             type: 'category',
