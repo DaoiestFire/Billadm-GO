@@ -126,6 +126,13 @@ const chartConfigs: ChartConfig[] = [
       tagPolicy: 'all',
       tagNot: false,
       description: '年奖金'
+    }, {
+      transactionType: 'income',
+      category: '投资理财',
+      tags: [],
+      tagPolicy: 'all',
+      tagNot: false,
+      description: '年分红'
     }],
     chartOptions: {
       granularity: "year",
@@ -158,6 +165,21 @@ const chartConfigs: ChartConfig[] = [
       tagPolicy: 'all',
       tagNot: false,
       description: '年奖金'
+    }],
+    chartOptions: {
+      granularity: "year",
+      lineDisplayTypes: ['income'],
+    } as ChartOptions
+  }, {
+    title: '年度分红收入',
+    chartType: 'Line',
+    conditions: [{
+      transactionType: 'income',
+      category: '投资理财',
+      tags: [],
+      tagPolicy: 'all',
+      tagNot: false,
+      description: '年分红'
     }],
     chartOptions: {
       granularity: "year",
