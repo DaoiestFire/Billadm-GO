@@ -17,7 +17,7 @@
             <router-view/>
           </a-card>
         </a-layout-content>
-        <a-layout-footer v-if="route.path==='/tr_view' || route.path==='/da_view'" class="footerStyle">
+        <a-layout-footer v-if="route.path==='/tr_view'" class="footerStyle">
           <billadm-statistics-footer/>
         </a-layout-footer>
       </a-layout>
